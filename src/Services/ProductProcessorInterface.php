@@ -144,62 +144,6 @@ interface ProductProcessorInterface
     public function getStockStatusAction();
 
     /**
-     * Return's the repository to access categories.
-     *
-     * @return \TechDivision\Import\Product\Repositories\CategoryRepository The repository instance
-     */
-    public function getCategoryRepository();
-
-    /**
-     * Return's the repository to access category varchar values.
-     *
-     * @return \TechDivision\Import\Product\Repositories\CategoryVarcharRepository The repository instance
-     */
-    public function getCategoryVarcharRepository();
-
-    /**
-     * Return's the repository to access EAV attribute option values.
-     *
-     * @return \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository The repository instance
-     */
-    public function getEavAttributeOptionValueRepository();
-
-    /**
-     * Return's the repository to access EAV attributes.
-     *
-     * @return \TechDivision\Import\Product\Repositories\EavAttributeRepository The repository instance
-     */
-    public function getEavAttributeRepository();
-
-    /**
-     * Return's the repository to access EAV attribute sets.
-     *
-     * @return \TechDivision\Import\Product\Repositories\EavAttributeSetRepository The repository instance
-     */
-    public function getEavAttributeSetRepository();
-
-    /**
-     * Return's the repository to access stores.
-     *
-     * @return \TechDivision\Import\Product\Repositories\StoreRepository The repository instance
-     */
-    public function getStoreRepository();
-
-    /**
-     * Return's the repository to access store websites.
-     *
-     * @return \TechDivision\Import\Product\Repositories\StoreWebsiteRepository The repository instance
-     */
-    public function getStoreWebsiteRepository();
-
-    /**
-     * Return's the repository to access tax classes.
-     *
-     * @return \TechDivision\Import\Product\Repositories\TaxClassRepository The repository instance
-     */
-    public function getTaxClassRepository();
-
-    /**
      * Persist's the passed product data and return's the ID.
      *
      * @param array $product The product data to persist
@@ -290,54 +234,6 @@ interface ProductProcessorInterface
     public function persistStockStatus($stockStatus);
 
     /**
-     * Return's the EAV attribute set with the passed ID.
-     *
-     * @param integer $id The ID of the EAV attribute set to load
-     *
-     * @return array The EAV attribute set
-     */
-    public function getEavAttributeSet($id);
-
-    /**
-     * Return's the attribute sets for the passed entity type ID.
-     *
-     * @param mixed $entityTypeId The entity type ID to return the attribute sets for
-     *
-     * @return array|boolean The attribute sets for the passed entity type ID
-     */
-    public function getEavAttributeSetsByEntityTypeId($entityTypeId);
-
-    /**
-     * Return's an array with the EAV attributes for the passed entity type ID and attribute set name.
-     *
-     * @param integer $entityTypeId     The entity type ID of the EAV attributes to return
-     * @param string  $attributeSetName The attribute set name of the EAV attributes to return
-     *
-     * @return array The
-     */
-    public function getEavAttributesByEntityTypeIdAndAttributeSetName($entityTypeId, $attributeSetName);
-
-    /**
-     * Return's an array with the available EAV attributes for the passed option value and store ID.
-     *
-     * @param string $optionValue The option value of the EAV attributes
-     * @param string $storeId     The store ID of the EAV attribues
-     *
-     * @return array The array with all available EAV attributes
-     */
-    public function getEavAttributesByOptionValueAndStoreId($optionValue, $storeId);
-
-    /**
-     * Return's the first EAV attribute for the passed option value and store ID.
-     *
-     * @param string $optionValue The option value of the EAV attributes
-     * @param string $storeId     The store ID of the EAV attribues
-     *
-     * @return array The array with the EAV attribute
-     */
-    public function getEavAttributeByOptionValueAndStoreId($optionValue, $storeId);
-
-    /**
      * Return's the attribute option value with the passed value and store ID.
      *
      * @param mixed   $value   The option value
@@ -346,42 +242,4 @@ interface ProductProcessorInterface
      * @return array|boolean The attribute option value instance
      */
     public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
-
-    /**
-     * Return's an array with the available stores.
-     *
-     * @return array The array with the available stores
-     */
-    public function getStores();
-
-    /**
-     * Return's an array with the available store websites.
-     *
-     * @return array The array with the available store websites
-     */
-    public function getStoreWebsites();
-
-    /**
-     * Return's an array with the available tax classes.
-     *
-     * @return array The array with the available tax classes
-     */
-    public function getTaxClasses();
-
-    /**
-     * Return's an array with all available categories.
-     *
-     * @return array The available categories
-     */
-    public function getCategories();
-
-    /**
-     * Returns the category varchar values for the categories with
-     * the passed with the passed entity IDs.
-     *
-     * @param array $entityIds The array with the category IDs
-     *
-     * @return mixed The category varchar values
-     */
-    public function getCategoryVarcharsByEntityIds(array $entityIds);
 }

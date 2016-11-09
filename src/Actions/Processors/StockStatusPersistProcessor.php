@@ -20,8 +20,6 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
-
 /**
  * The stock status persist processor implementation.
  *
@@ -31,7 +29,7 @@ use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class StockStatusPersistProcessor extends AbstractPersistProcessor
+class StockStatusPersistProcessor extends AbstractProductPersistProcessor
 {
 
     /**

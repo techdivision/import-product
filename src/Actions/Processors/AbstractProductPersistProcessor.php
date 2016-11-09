@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductIntPersistProcessor
+ * TechDivision\Import\Product\Actions\Processors\AbstractProductPersistProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,8 +20,11 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
+use TechDivision\Import\Product\Utils\SqlStatements;
+use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
+
 /**
- * The product integer attribute persist processor implementation.
+ * The product category persist processor implementation.
  *
  * @author    Tim Wagner <tw@appserver.io>
  * @copyright 2015 TechDivision GmbH <info@appserver.io>
@@ -29,16 +32,17 @@ namespace TechDivision\Import\Product\Actions\Processors;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductIntPersistProcessor extends AbstractProductPersistProcessor
+abstract class AbstractProductPersistProcessor extends AbstractPersistProcessor
 {
 
     /**
-     * {@inheritDoc}
-     * @see \TechDivision\Import\Product\Actions\Processors\AbstractPersistProcessor::getStatement()
+     * Return's the passed statement from the Magento specific
+     * utility class.
+     *
+     * @return string The utility class name
      */
-    protected function getStatement()
+    protected function getUtilityClassName()
     {
-        $utilityClassName = $this->getUtilityClassName();
-        return $utilityClassName::CREATE_PRODUCT_INT;
+        return SqlStatements::getUtilityClassName($this->getMagentoEdition(), $this->getMagentoVersion());
     }
 }

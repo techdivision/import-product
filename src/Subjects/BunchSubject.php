@@ -27,6 +27,7 @@ use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Services\RegistryProcessor;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
+use TechDivision\Import\Product\Services\ProductProcessorInterface;
 
 /**
  * A SLSB that handles the process to import product bunches.
@@ -39,6 +40,13 @@ use TechDivision\Import\Product\Utils\VisibilityKeys;
  */
 class BunchSubject extends AbstractSubject
 {
+
+    /**
+     * The processor to read/write the necessary product data.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductProcessorInterface
+     */
+    protected $productProcessor;
 
     /**
      * The mapping for the supported backend types (for the product entity) => persist methods.
@@ -201,6 +209,28 @@ class BunchSubject extends AbstractSubject
      * @var string
      */
     protected $storeViewCode;
+
+    /**
+     * Set's the product processor instance.
+     *
+     * @param \TechDivision\Import\Product\Services\ProductProcessorInterface $productProcessor The product processor instance
+     *
+     * @return void
+     */
+    public function setProductProcessor(ProductProcessorInterface $productProcessor)
+    {
+        $this->productProcessor = $productProcessor;
+    }
+
+    /**
+     * Return's the product processor instance.
+     *
+     * @return \TechDivision\Import\Services\ProductProcessorInterface The product processor instance
+     */
+    public function getProductProcessor()
+    {
+        return $this->productProcessor;
+    }
 
     /**
      * Set's the SKU of the last imported product.

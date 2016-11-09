@@ -33,18 +33,18 @@ class ProductProcessor implements ProductProcessorInterface
 {
 
     /**
-     * The Doctrine EntityManager instance.
-     *
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
      * A PDO connection initialized with the values from the Doctrine EntityManager.
      *
      * @var \PDO
      */
     protected $connection;
+
+    /**
+     * The repository to access EAV attribute option values.
+     *
+     * @var \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository
+     */
+    protected $eavAttributeOptionValueRepository;
 
     /**
      * The action for product CRUD methods.
@@ -117,62 +117,6 @@ class ProductProcessor implements ProductProcessorInterface
     protected $stockStatusAction;
 
     /**
-     * The repository to access categories.
-     *
-     * @var \TechDivision\Import\Product\Repositories\CategoryRepository
-     */
-    protected $categoryRepository;
-
-    /**
-     * The repository to access category varchar values.
-     *
-     * @var \TechDivision\Import\Product\Repositories\CategoryVarcharRepository
-     */
-    protected $categoryVarcharRepository;
-
-    /**
-     * The repository to access EAV attribute option values.
-     *
-     * @var \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository
-     */
-    protected $eavAttributeOptionValueRepository;
-
-    /**
-     * The repository to access EAV attributes.
-     *
-     * @var \TechDivision\Import\Product\Repositories\EavAttributeRepository
-     */
-    protected $eavAttributeRepository;
-
-    /**
-     * The repository to access EAV attribute set.
-     *
-     * @var \TechDivision\Import\Product\Repositories\EavAttributeSetRepository
-     */
-    protected $eavAttributeSetRepository;
-
-    /**
-     * The repository to access stores.
-     *
-     * @var \TechDivision\Import\Product\Repositories\StoreRepository
-     */
-    protected $storeRepository;
-
-    /**
-     * The repository to access store websites.
-     *
-     * @var \TechDivision\Import\Product\Repositories\StoreWebsiteRepository
-     */
-    protected $storeWebsiteRepository;
-
-    /**
-     * The repository to access tax classes.
-     *
-     * @var \TechDivision\Import\Product\Repositories\TaxClassRepository
-     */
-    protected $taxClassRepository;
-
-    /**
      * Set's the passed connection.
      *
      * @param \PDO $connection The connection to set
@@ -236,6 +180,28 @@ class ProductProcessor implements ProductProcessorInterface
     public function rollBack()
     {
         return $this->connection->rollBack();
+    }
+
+    /**
+     * Set's the repository to access EAV attribute option values.
+     *
+     * @param \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository $eavAttributeOptionValueRepository The repository to access EAV attribute option values
+     *
+     * @return void
+     */
+    public function setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository)
+    {
+        $this->eavAttributeOptionValueRepository = $eavAttributeOptionValueRepository;
+    }
+
+    /**
+     * Return's the repository to access EAV attribute option values.
+     *
+     * @return \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository The repository instance
+     */
+    public function getEavAttributeOptionValueRepository()
+    {
+        return $this->eavAttributeOptionValueRepository;
     }
 
     /**
@@ -459,179 +425,16 @@ class ProductProcessor implements ProductProcessorInterface
     }
 
     /**
-     * Set's the repository to access categories.
+     * Return's the attribute option value with the passed value and store ID.
      *
-     * @param \TechDivision\Import\Product\Repositories\CategoryRepository $categoryRepository The repository to access categories
+     * @param mixed   $value   The option value
+     * @param integer $storeId The ID of the store
      *
-     * @return void
+     * @return array|boolean The attribute option value instance
      */
-    public function setCategoryRepository($categoryRepository)
+    public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId)
     {
-        $this->categoryRepository = $categoryRepository;
-    }
-
-    /**
-     * Return's the repository to access categories.
-     *
-     * @return \TechDivision\Import\Product\Repositories\CategoryRepository The repository instance
-     */
-    public function getCategoryRepository()
-    {
-        return $this->categoryRepository;
-    }
-
-    /**
-     * Return's the repository to access category varchar values.
-     *
-     * @param \TechDivision\Import\Product\Repositories\CategoryVarcharRepository $categoryVarcharRepository The repository instance
-     *
-     * @return void
-     */
-    public function setCategoryVarcharRepository($categoryVarcharRepository)
-    {
-        $this->categoryVarcharRepository = $categoryVarcharRepository;
-    }
-
-    /**
-     * Return's the repository to access category varchar values.
-     *
-     * @return \TechDivision\Import\Product\Repositories\CategoryVarcharRepository The repository instance
-     */
-    public function getCategoryVarcharRepository()
-    {
-        return $this->categoryVarcharRepository;
-    }
-
-    /**
-     * Set's the repository to access EAV attribute option values.
-     *
-     * @param \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository $eavAttributeOptionValueRepository The repository to access EAV attribute option values
-     *
-     * @return void
-     */
-    public function setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository)
-    {
-        $this->eavAttributeOptionValueRepository = $eavAttributeOptionValueRepository;
-    }
-
-    /**
-     * Return's the repository to access EAV attribute option values.
-     *
-     * @return \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository The repository instance
-     */
-    public function getEavAttributeOptionValueRepository()
-    {
-        return $this->eavAttributeOptionValueRepository;
-    }
-
-    /**
-     * Set's the repository to access EAV attributes.
-     *
-     * @param \TechDivision\Import\Product\Repositories\EavAttributeRepository $eavAttributeRepository The repository to access EAV attributes
-     *
-     * @return void
-     */
-    public function setEavAttributeRepository($eavAttributeRepository)
-    {
-        $this->eavAttributeRepository = $eavAttributeRepository;
-    }
-
-    /**
-     * Return's the repository to access EAV attributes.
-     *
-     * @return \TechDivision\Import\Product\Repositories\EavAttributeRepository The repository instance
-     */
-    public function getEavAttributeRepository()
-    {
-        return $this->eavAttributeRepository;
-    }
-
-    /**
-     * Set's the repository to access EAV attribute sets.
-     *
-     * @param \TechDivision\Import\Product\Repositories\EavAttributeSetRepository $eavAttributeSetRepository The repository the access EAV attribute sets
-     *
-     * @return void
-     */
-    public function setEavAttributeSetRepository($eavAttributeSetRepository)
-    {
-        $this->eavAttributeSetRepository = $eavAttributeSetRepository;
-    }
-
-    /**
-     * Return's the repository to access EAV attribute sets.
-     *
-     * @return \TechDivision\Import\Product\Repositories\EavAttributeSetRepository The repository instance
-     */
-    public function getEavAttributeSetRepository()
-    {
-        return $this->eavAttributeSetRepository;
-    }
-
-    /**
-     * Set's the repository to access stores.
-     *
-     * @param \TechDivision\Import\Product\Repositories\StoreRepository $storeRepository The repository the access stores
-     *
-     * @return void
-     */
-    public function setStoreRepository($storeRepository)
-    {
-        $this->storeRepository = $storeRepository;
-    }
-
-    /**
-     * Return's the repository to access stores.
-     *
-     * @return \TechDivision\Import\Product\Repositories\StoreRepository The repository instance
-     */
-    public function getStoreRepository()
-    {
-        return $this->storeRepository;
-    }
-
-    /**
-     * Set's the repository to access store websites.
-     *
-     * @param \TechDivision\Import\Product\Repositories\StoreWebsiteRepository $storeWebsiteRepository The repository the access store websites
-     *
-     * @return void
-     */
-    public function setStoreWebsiteRepository($storeWebsiteRepository)
-    {
-        $this->storeWebsiteRepository = $storeWebsiteRepository;
-    }
-
-    /**
-     * Return's the repository to access store websites.
-     *
-     * @return \TechDivision\Import\Product\Repositories\StoreWebsiteRepository The repository instance
-     */
-    public function getStoreWebsiteRepository()
-    {
-        return $this->storeWebsiteRepository;
-    }
-
-    /**
-     * Set's the repository to access tax classes.
-     *
-     * @param \TechDivision\Import\Product\Repositories\TaxClassRepository $taxClassRepository The repository the access stores
-     *
-     * @return void
-     */
-    public function setTaxClassRepository($taxClassRepository)
-    {
-        $this->taxClassRepository = $taxClassRepository;
-    }
-
-    /**
-     * Return's the repository to access tax classes.
-     *
-     * @return \TechDivision\Import\Product\Repositories\TaxClassRepository The repository instance
-     */
-    public function getTaxClassRepository()
-    {
-        return $this->taxClassRepository;
+        return $this->getEavAttributeOptionValueRepository()->findEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
     }
 
     /**
@@ -752,134 +555,5 @@ class ProductProcessor implements ProductProcessorInterface
     public function persistStockStatus($stockStatus)
     {
         $this->getStockStatusAction()->persist($stockStatus);
-    }
-
-    /**
-     * Return's the EAV attribute set with the passed ID.
-     *
-     * @param integer $id The ID of the EAV attribute set to load
-     *
-     * @return array The EAV attribute set
-     */
-    public function getEavAttributeSet($id)
-    {
-        return $this->getEavAttributeSetRepository()->load($id);
-    }
-
-    /**
-     * Return's the attribute sets for the passed entity type ID.
-     *
-     * @param mixed $entityTypeId The entity type ID to return the attribute sets for
-     *
-     * @return array|boolean The attribute sets for the passed entity type ID
-     */
-    public function getEavAttributeSetsByEntityTypeId($entityTypeId)
-    {
-        return $this->getEavAttributeSetRepository()->findAllByEntityTypeId($entityTypeId);
-    }
-
-    /**
-     * Return's an array with the EAV attributes for the passed entity type ID and attribute set name.
-     *
-     * @param integer $entityTypeId     The entity type ID of the EAV attributes to return
-     * @param string  $attributeSetName The attribute set name of the EAV attributes to return
-     *
-     * @return array The
-     */
-    public function getEavAttributesByEntityTypeIdAndAttributeSetName($entityTypeId, $attributeSetName)
-    {
-        return $this->getEavAttributeRepository()->findAllByEntityTypeIdAndAttributeSetName($entityTypeId, $attributeSetName);
-    }
-
-    /**
-     * Return's an array with the available EAV attributes for the passed option value and store ID.
-     *
-     * @param string $optionValue The option value of the EAV attributes
-     * @param string $storeId     The store ID of the EAV attribues
-     *
-     * @return array The array with all available EAV attributes
-     */
-    public function getEavAttributesByOptionValueAndStoreId($optionValue, $storeId)
-    {
-        return $this->getEavAttributeRepository()->findAllByOptionValueAndStoreId($optionValue, $storeId);
-    }
-
-    /**
-     * Return's the first EAV attribute for the passed option value and store ID.
-     *
-     * @param string $optionValue The option value of the EAV attributes
-     * @param string $storeId     The store ID of the EAV attribues
-     *
-     * @return array The array with the EAV attribute
-     */
-    public function getEavAttributeByOptionValueAndStoreId($optionValue, $storeId)
-    {
-        return $this->getEavAttributeRepository()->findOneByOptionValueAndStoreId($optionValue, $storeId);
-    }
-
-    /**
-     * Return's the attribute option value with the passed value and store ID.
-     *
-     * @param mixed   $value   The option value
-     * @param integer $storeId The ID of the store
-     *
-     * @return array|boolean The attribute option value instance
-     */
-    public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId)
-    {
-        return $this->getEavAttributeOptionValueRepository()->findEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
-    }
-
-    /**
-     * Return's an array with the available stores.
-     *
-     * @return array The array with the available stores
-     */
-    public function getStores()
-    {
-        return $this->getStoreRepository()->findAll();
-    }
-
-    /**
-     * Return's an array with the available store websites.
-     *
-     * @return array The array with the available store websites
-     */
-    public function getStoreWebsites()
-    {
-        return $this->getStoreWebsiteRepository()->findAll();
-    }
-
-    /**
-     * Return's an array with the available tax classes.
-     *
-     * @return array The array with the available tax classes
-     */
-    public function getTaxClasses()
-    {
-        return $this->getTaxClassRepository()->findAll();
-    }
-
-    /**
-     * Return's an array with all available categories.
-     *
-     * @return array The available categories
-     */
-    public function getCategories()
-    {
-        return $this->getCategoryRepository()->findAll();
-    }
-
-    /**
-     * Returns the category varchar values for the categories with
-     * the passed with the passed entity IDs.
-     *
-     * @param array $entityIds The array with the category IDs
-     *
-     * @return mixed The category varchar values
-     */
-    public function getCategoryVarcharsByEntityIds(array $entityIds)
-    {
-        return $this->getCategoryVarcharRepository()->findAllByEntityIds($entityIds);
     }
 }
