@@ -3,7 +3,7 @@
 	"description" : "A library supporting generic Magento 2 import functionality",
 	"version" : "0.1.0",
 	"require" : {
-		"techdivision/import" : "dev-master",
+		"techdivision/import" : "dev-master"
 	},
 	"authors" : [{
 			"name" : "Tim Wagner",
