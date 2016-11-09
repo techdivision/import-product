@@ -20,17 +20,13 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
-
-use Goodby\CSV\Import\Standard\Lexer;
-use Goodby\CSV\Import\Standard\Interpreter;
-use Goodby\CSV\Import\Standard\LexerConfig;
 use Goodby\CSV\Export\Standard\Exporter;
 use Goodby\CSV\Export\Standard\ExporterConfig;
+use TechDivision\Import\Subjects\AbstractSubject;
+use TechDivision\Import\Utils\RegistryKeys;
+use TechDivision\Import\Services\RegistryProcessor;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Utils\RegistryKeys;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
-use TechDivision\Import\Product\Utils\ColumnKeys;
-use TechDivision\Import\Product\Services\RegistryProcessor;
 
 /**
  * A SLSB that handles the process to import product bunches.
@@ -364,7 +360,7 @@ class BunchSubject extends AbstractSubject
         // iterate over the artefacts and export them
         foreach ($this->artefacs as $artefactType => $artefacts) {
 
-            foreach ($artefacts as $entityId => $entityArtefacts) {
+            foreach ($artefacts as $entityArtefacts) {
 
                 // initialize the the exporter
                 $exporter = new Exporter(new ExporterConfig());

@@ -19,6 +19,7 @@
  */
 
 namespace TechDivision\Import\Product\Callbacks;
+use TechDivision\Import\Callbacks\AbstractCallback;
 
 /**
  * A SLSB that handles the process to import product bunches.
@@ -31,7 +32,7 @@ namespace TechDivision\Import\Product\Callbacks;
  *
  * @Stateless
  */
-class TaxClassCallback extends AbstractProductImportCallback
+class TaxClassCallback extends AbstractCallback
 {
 
     /**

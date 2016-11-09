@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Product\Observers\ObserverInterface;
+use TechDivision\Import\Observers\ObserverInterface;
 
 /**
  * A SLSB that handles the process to import product bunches.

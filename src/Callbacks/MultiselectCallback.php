@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Callbacks;
 
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Callbacks\AbstractCallback;
 
 /**
  * A SLSB that handles the process to import product bunches.
@@ -31,7 +32,7 @@ use TechDivision\Import\Product\Utils\MemberNames;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class MultiselectCallback extends AbstractProductImportCallback
+class MultiselectCallback extends AbstractCallback
 {
 
     /**
