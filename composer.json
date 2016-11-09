@@ -17,7 +17,7 @@
 	},
     "repositories" : [{
             "type" : "git",
-            "url" : "git@gitlab.tdintern.de:wagnert/techdivision-import",
+            "url" : "https://gitlab.tdintern.de/wagnert/techdivision-import.git",
             "name" : "techdivision/import"
         }
     ]
