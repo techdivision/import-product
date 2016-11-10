@@ -387,16 +387,14 @@ class BunchSubject extends AbstractSubject
         $targetDir = $this->getConfiguration()->getTargetDir();
         $timestamp = date('Ymd-His');
 
+        // initialize the counter
+        $counter = 0;
+
         // iterate over the artefacts and export them
-        foreach ($this->artefacs as $artefactType => $artefacts) {
-
+        foreach ($this->getArtefacts() as $artefactType => $artefacts) {
             foreach ($artefacts as $entityArtefacts) {
-
                 // initialize the the exporter
                 $exporter = new Exporter(new ExporterConfig());
-
-                // initialize the counter
-                $counter = 0;
 
                 // initialize the bunch
                 $bunch = array();
@@ -404,13 +402,13 @@ class BunchSubject extends AbstractSubject
                 // set the bunch header and append the artefact data
                 $bunch[] = array_keys(reset(reset($entityArtefacts)));
 
-                // export the arte
+                // export the artefacts
                 foreach ($entityArtefacts as $entityArtefact) {
                     $bunch = array_merge($bunch, $entityArtefact);
                 }
 
                 // export the artefact (bunch)
-                $exporter->export(sprintf('%s/%s-%s_%d.csv', $targetDir, $artefactType, $timestamp, $counter++), $bunch);
+                $exporter->export($filename = sprintf('%s/%s-%s_%d.csv', $targetDir, $artefactType, $timestamp, $counter++), $bunch);
             }
         }
     }
@@ -484,6 +482,16 @@ class BunchSubject extends AbstractSubject
 
         // throw an exception, if not
         throw new \Exception(sprintf('Found invalid attribute set name %s', $attributeSetName));
+    }
+
+    /**
+     * Return's the artefacts for post-processing.
+     *
+     * @return array The artefacts
+     */
+    public function getArtefacts()
+    {
+        return $this->artefacs;
     }
 
     /**
