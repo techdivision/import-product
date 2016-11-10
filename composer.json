@@ -3,7 +3,7 @@
 	"description" : "A library supporting generic Magento 2 import functionality",
 	"require" : {
         "goodby/csv" : "~1.0",
-		"techdivision/import" : "~0.6"
+		"techdivision/import" : "0.6.*"
 	},
 	"authors" : [{
 			"name" : "Tim Wagner",
