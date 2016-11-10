@@ -1,10 +1,9 @@
 {
 	"name" : "techdivision/import-product",
 	"description" : "A library supporting generic Magento 2 import functionality",
-	"version" : "0.1.0",
 	"require" : {
         "goodby/csv" : "~1.0",
-		"techdivision/import" : "0.6.0"
+		"techdivision/import" : "~0.6"
 	},
 	"authors" : [{
 			"name" : "Tim Wagner",
