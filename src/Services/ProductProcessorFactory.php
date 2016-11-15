@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Services;
 
 use Psr\Log\LoggerInterface;
+use TechDivision\Import\ConfigurationInterface;
 use TechDivision\Import\Configuration\SubjectInterface;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepository;
 use TechDivision\Import\Product\Actions\ProductAction;
@@ -33,6 +34,7 @@ use TechDivision\Import\Product\Actions\ProductTextAction;
 use TechDivision\Import\Product\Actions\ProductIntAction;
 use TechDivision\Import\Product\Actions\ProductDecimalAction;
 use TechDivision\Import\Product\Actions\ProductDatetimeAction;
+use TechDivision\Import\Product\Actions\Processors\ProductRemoveProcessor;
 use TechDivision\Import\Product\Actions\Processors\ProductPersistProcessor;
 use TechDivision\Import\Product\Actions\Processors\ProductCategoryPersistProcessor;
 use TechDivision\Import\Product\Actions\Processors\ProductDatetimePersistProcessor;
@@ -43,7 +45,6 @@ use TechDivision\Import\Product\Actions\Processors\ProductVarcharPersistProcesso
 use TechDivision\Import\Product\Actions\Processors\ProductWebsitePersistProcessor;
 use TechDivision\Import\Product\Actions\Processors\StockItemPersistProcessor;
 use TechDivision\Import\Product\Actions\Processors\StockStatusPersistProcessor;
-use TechDivision\Import\ConfigurationInterface;
 
 /**
  * A SLSB providing methods to load product data using a PDO connection.
@@ -121,8 +122,14 @@ class ProductProcessorFactory
         $productPersistProcessor->setMagentoVersion($magentoVersion);
         $productPersistProcessor->setConnection($connection);
         $productPersistProcessor->init();
+        $productRemoveProcessor = new ProductRemoveProcessor();
+        $productRemoveProcessor->setMagentoEdition($magentoEdition);
+        $productRemoveProcessor->setMagentoVersion($magentoVersion);
+        $productRemoveProcessor->setConnection($connection);
+        $productRemoveProcessor->init();
         $productAction = new ProductAction();
         $productAction->setPersistProcessor($productPersistProcessor);
+        $productAction->setRemoveProcessor($productRemoveProcessor);
 
         // initialize the action that provides product text attribute CRUD functionality
         $productTextPersistProcessor = new ProductTextPersistProcessor();

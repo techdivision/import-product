@@ -144,6 +144,16 @@ interface ProductProcessorInterface
     public function getStockStatusAction();
 
     /**
+     * Return's the attribute option value with the passed value and store ID.
+     *
+     * @param mixed   $value   The option value
+     * @param integer $storeId The ID of the store
+     *
+     * @return array|boolean The attribute option value instance
+     */
+    public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
+
+    /**
      * Persist's the passed product data and return's the ID.
      *
      * @param array $product The product data to persist
@@ -234,12 +244,11 @@ interface ProductProcessorInterface
     public function persistStockStatus($stockStatus);
 
     /**
-     * Return's the attribute option value with the passed value and store ID.
+     * Remove's the entity with the passed attributes.
      *
-     * @param mixed   $value   The option value
-     * @param integer $storeId The ID of the store
+     * @param array $row The attributes of the entity to remove
      *
-     * @return array|boolean The attribute option value instance
+     * @return void
      */
-    public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
+    public function removeProduct($row);
 }

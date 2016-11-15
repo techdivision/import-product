@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\ProductAction
+ * TechDivision\Import\Product\Actions\Processors\ProductRemoveProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -18,12 +18,10 @@
  * @link      http://www.appserver.io
  */
 
-namespace TechDivision\Import\Product\Actions;
-
-use TechDivision\Import\Actions\AbstractAction;
+namespace TechDivision\Import\Product\Actions\Processors;
 
 /**
- * A SLSB providing repository functionality for product CRUD actions.
+ * The product remove processor implementation.
  *
  * @author    Tim Wagner <tw@appserver.io>
  * @copyright 2015 TechDivision GmbH <info@appserver.io>
@@ -31,30 +29,16 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductAction extends AbstractAction
+class ProductRemoveProcessor extends AbstractProductRemoveProcessor
 {
 
     /**
-     * Persist's the passed row.
-     *
-     * @param array $row The row to persist
-     *
-     * @return string The last inserted ID
+     * {@inheritDoc}
+     * @see \TechDivision\Import\Product\Actions\Processors\AbstractRemoveProcessor::getStatement()
      */
-    public function persist($row)
+    protected function getStatement()
     {
-        return $this->getPersistProcessor()->execute($row);
-    }
-
-    /**
-     * Remove's the entity with the passed attributes.
-     *
-     * @param array $row The attributes of the entity to remove
-     *
-     * @return void
-     */
-    public function remove($row)
-    {
-        return $this->getRemoveProcessor()->execute($row);
+        $utilityClassName = $this->getUtilityClassName();
+        return $utilityClassName::REMOVE_PRODUCT;
     }
 }

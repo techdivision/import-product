@@ -556,4 +556,16 @@ class ProductProcessor implements ProductProcessorInterface
     {
         $this->getStockStatusAction()->persist($stockStatus);
     }
+
+    /**
+     * Remove's the entity with the passed attributes.
+     *
+     * @param array $row The attributes of the entity to remove
+     *
+     * @return void
+     */
+    public function removeProduct($row)
+    {
+        $this->getProductAction()->remove($row);
+    }
 }

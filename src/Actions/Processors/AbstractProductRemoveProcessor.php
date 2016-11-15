@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\ProductAction
+ * TechDivision\Import\Product\Actions\Processors\AbstractProductRemoveProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -18,12 +18,13 @@
  * @link      http://www.appserver.io
  */
 
-namespace TechDivision\Import\Product\Actions;
+namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\AbstractAction;
+use TechDivision\Import\Product\Utils\SqlStatements;
+use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
 
 /**
- * A SLSB providing repository functionality for product CRUD actions.
+ * The product category persist processor implementation.
  *
  * @author    Tim Wagner <tw@appserver.io>
  * @copyright 2015 TechDivision GmbH <info@appserver.io>
@@ -31,30 +32,17 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductAction extends AbstractAction
+abstract class AbstractProductRemoveProcessor extends AbstractRemoveProcessor
 {
 
     /**
-     * Persist's the passed row.
+     * Return's the passed statement from the Magento specific
+     * utility class.
      *
-     * @param array $row The row to persist
-     *
-     * @return string The last inserted ID
+     * @return string The utility class name
      */
-    public function persist($row)
+    protected function getUtilityClassName()
     {
-        return $this->getPersistProcessor()->execute($row);
-    }
-
-    /**
-     * Remove's the entity with the passed attributes.
-     *
-     * @param array $row The attributes of the entity to remove
-     *
-     * @return void
-     */
-    public function remove($row)
-    {
-        return $this->getRemoveProcessor()->execute($row);
+        return SqlStatements::getUtilityClassName($this->getMagentoEdition(), $this->getMagentoVersion());
     }
 }

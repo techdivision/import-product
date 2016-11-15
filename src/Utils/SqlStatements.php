@@ -235,4 +235,13 @@ class SqlStatements
                                           is_decimal_divided
                                       )
                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+    /**
+     * The SQL statement to remove a existing product.
+     *
+     * @var string
+     */
+    const REMOVE_PRODUCT = 'DELETE
+                              FROM catalog_product_entity
+                             WHERE sku = ?';
 }

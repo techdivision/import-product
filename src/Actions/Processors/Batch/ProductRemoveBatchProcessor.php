@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\ProductAction
+ * TechDivision\Import\Product\Actions\Processors\Batch\ProductRemoveBatchProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -18,12 +18,13 @@
  * @link      http://www.appserver.io
  */
 
-namespace TechDivision\Import\Product\Actions;
+namespace TechDivision\Import\Product\Actions\Processors\Batch;
 
-use TechDivision\Import\Actions\AbstractAction;
+use TechDivision\Import\Product\Utils\SqlStatements;
+use TechDivision\Import\Actions\Processors\Batch\AbstractRemoveBatchProcessor;
 
 /**
- * A SLSB providing repository functionality for product CRUD actions.
+ * The product remove batch processor implementation.
  *
  * @author    Tim Wagner <tw@appserver.io>
  * @copyright 2015 TechDivision GmbH <info@appserver.io>
@@ -31,30 +32,24 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductAction extends AbstractAction
+class ProductRemoveBatchProcessor extends AbstractRemoveBatchProcessor
 {
 
     /**
-     * Persist's the passed row.
-     *
-     * @param array $row The row to persist
-     *
-     * @return string The last inserted ID
+     * {@inheritDoc}
+     * @see \TechDivision\Import\Product\Actions\Processors\Batch\AbstractRemoveBatchProcessor::getNumberOfPlaceholders()
      */
-    public function persist($row)
+    protected function getNumberOfPlaceholders()
     {
-        return $this->getPersistProcessor()->execute($row);
+        return 1;
     }
 
     /**
-     * Remove's the entity with the passed attributes.
-     *
-     * @param array $row The attributes of the entity to remove
-     *
-     * @return void
+     * {@inheritDoc}
+     * @see \TechDivision\Import\Product\Actions\Processors\Batch\AbstractRemoveBatchProcessor::getStatement()
      */
-    public function remove($row)
+    protected function getStatement()
     {
-        return $this->getRemoveProcessor()->execute($row);
+        return SqlStatements::REMOVE_PRODUCT;
     }
 }
