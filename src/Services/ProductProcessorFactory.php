@@ -20,9 +20,7 @@
 
 namespace TechDivision\Import\Product\Services;
 
-use Psr\Log\LoggerInterface;
 use TechDivision\Import\ConfigurationInterface;
-use TechDivision\Import\Configuration\SubjectInterface;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepository;
 use TechDivision\Import\Product\Actions\ProductAction;
 use TechDivision\Import\Product\Actions\ProductCategoryAction;

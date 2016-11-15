@@ -408,7 +408,7 @@ class BunchSubject extends AbstractSubject
                 }
 
                 // export the artefact (bunch)
-                $exporter->export($filename = sprintf('%s/%s-%s_%d.csv', $targetDir, $artefactType, $timestamp, $counter++), $bunch);
+                $exporter->export(sprintf('%s/%s-%s_%d.csv', $targetDir, $artefactType, $timestamp, $counter++), $bunch);
             }
         }
     }
