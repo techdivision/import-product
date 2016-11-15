@@ -645,6 +645,13 @@ class BunchSubject extends AbstractSubject
      */
     public function addArtefacts($type, array $artefacts)
     {
+
+        // query whether or not, any artefacts are available
+        if (sizeof($artefacts) === 0) {
+            return;
+        }
+
+        // append the artefacts to the stack
         $this->artefacs[$type][$this->getLastEntityId()][] = $artefacts;
     }
 
