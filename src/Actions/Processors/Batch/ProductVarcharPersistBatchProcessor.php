@@ -50,6 +50,7 @@ class ProductVarcharPersistBatchProcessor extends AbstractPersistBatchProcessor
      */
     protected function getStatement()
     {
-        return SqlStatements::CREATE_PRODUCT_VARCHAR;
+        $utilityClassName = $this->getUtilityClassName();
+        return $utilityClassName::CREATE_PRODUCT_VARCHAR;
     }
 }

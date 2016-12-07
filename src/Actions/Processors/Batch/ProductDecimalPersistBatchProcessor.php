@@ -50,6 +50,7 @@ class ProductDecimalPersistBatchProcessor extends AbstractPersistBatchProcessor
      */
     protected function getStatement()
     {
-        return SqlStatements::CREATE_PRODUCT_DECIMAL;
+        $utilityClassName = $this->getUtilityClassName();
+        return $utilityClassName::CREATE_PRODUCT_DECIMAL;
     }
 }

@@ -20,6 +20,8 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
+use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
+
 /**
  * The product remove processor implementation.
  *
@@ -29,7 +31,7 @@ namespace TechDivision\Import\Product\Actions\Processors;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductRemoveProcessor extends AbstractProductRemoveProcessor
+class ProductRemoveProcessor extends AbstractRemoveProcessor
 {
 
     /**

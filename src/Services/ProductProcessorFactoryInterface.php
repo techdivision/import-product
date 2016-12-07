@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\AbstractProductRemoveProcessor
+ * TechDivision\Import\Product\Services\ProductProcessorFactoryInterface
  *
  * NOTICE OF LICENSE
  *
@@ -18,13 +18,12 @@
  * @link      http://www.appserver.io
  */
 
-namespace TechDivision\Import\Product\Actions\Processors;
+namespace TechDivision\Import\Product\Services;
 
-use TechDivision\Import\Product\Utils\SqlStatements;
-use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
+use TechDivision\Import\Configuration\SubjectInterface;
 
 /**
- * The product category persist processor implementation.
+ * The interface for new product processor instances.
  *
  * @author    Tim Wagner <tw@appserver.io>
  * @copyright 2015 TechDivision GmbH <info@appserver.io>
@@ -32,17 +31,16 @@ use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-abstract class AbstractProductRemoveProcessor extends AbstractRemoveProcessor
+interface ProductProcessorFactoryInterface
 {
 
     /**
-     * Return's the passed statement from the Magento specific
-     * utility class.
+     * Factory method to create a new product processor instance.
      *
-     * @return string The utility class name
+     * @param \PDO                                               $connection    The PDO connection to use
+     * @param TechDivision\Import\Configuration\SubjectInterface $configuration The subject configuration
+     *
+     * @return object The processor instance
      */
-    protected function getUtilityClassName()
-    {
-        return SqlStatements::getUtilityClassName($this->getMagentoEdition(), $this->getMagentoVersion());
-    }
+    public static function factory(\PDO $connection, SubjectInterface $configuration);
 }

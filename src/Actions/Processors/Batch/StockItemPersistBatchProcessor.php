@@ -50,6 +50,7 @@ class StockItemPersistBatchProcessor extends AbstractPersistBatchProcessor
      */
     protected function getStatement()
     {
-        return SqlStatements::CREATE_STOCK_ITEM;
+        $utilityClassName = $this->getUtilityClassName();
+        return $utilityClassName::CREATE_STOCK_ITEM;
     }
 }

@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Services;
 
-use TechDivision\Import\ConfigurationInterface;
+use TechDivision\Import\Configuration\SubjectInterface;
 use TechDivision\Import\Services\AbstractProcessorFactory;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepository;
 use TechDivision\Import\Product\Actions\ProductAction;
@@ -54,7 +54,7 @@ use TechDivision\Import\Product\Actions\Processors\StockStatusPersistProcessor;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductProcessorFactory extends AbstractProcessorFactory
+class ProductProcessorFactory extends AbstractProductProcessorFactory
 {
 
     /**
@@ -70,29 +70,26 @@ class ProductProcessorFactory extends AbstractProcessorFactory
     /**
      * Factory method to create a new product processor instance.
      *
-     * @param \PDO                                       $connection    The PDO connection to use
-     * @param TechDivision\Import\ConfigurationInterface $configuration The subject configuration
+     * @param \PDO                                               $connection    The PDO connection to use
+     * @param TechDivision\Import\Configuration\SubjectInterface $configuration The subject configuration
      *
      * @return \TechDivision\Import\Product\Services\ProductProcessor The processor instance
      */
-    public function factory(\PDO $connection, ConfigurationInterface $configuration)
+    public static function factory(\PDO $connection, SubjectInterface $configuration)
     {
 
-        // extract Magento edition/version
-        $magentoEdition = $configuration->getMagentoEdition();
-        $magentoVersion = $configuration->getMagentoVersion();
+        // load the utility class name
+        $utilityClassName = $configuration->getUtilityClassName();
 
         // initialize the repository that provides EAV attribute option value query functionality
         $eavAttributeOptionValueRepository = new EavAttributeOptionValueRepository();
-        $eavAttributeOptionValueRepository->setMagentoEdition($magentoEdition);
-        $eavAttributeOptionValueRepository->setMagentoVersion($magentoVersion);
+        $eavAttributeOptionValueRepository->setUtilityClassName($utilityClassName);
         $eavAttributeOptionValueRepository->setConnection($connection);
         $eavAttributeOptionValueRepository->init();
 
         // initialize the action that provides product category CRUD functionality
         $productCategoryPersistProcessor = new ProductCategoryPersistProcessor();
-        $productCategoryPersistProcessor->setMagentoEdition($magentoEdition);
-        $productCategoryPersistProcessor->setMagentoVersion($magentoVersion);
+        $productCategoryPersistProcessor->setUtilityClassName($utilityClassName);
         $productCategoryPersistProcessor->setConnection($connection);
         $productCategoryPersistProcessor->init();
         $productCategoryAction = new ProductCategoryAction();
@@ -100,8 +97,7 @@ class ProductProcessorFactory extends AbstractProcessorFactory
 
         // initialize the action that provides product datetime attribute CRUD functionality
         $productDatetimePersistProcessor = new ProductDatetimePersistProcessor();
-        $productDatetimePersistProcessor->setMagentoEdition($magentoEdition);
-        $productDatetimePersistProcessor->setMagentoVersion($magentoVersion);
+        $productDatetimePersistProcessor->setUtilityClassName($utilityClassName);
         $productDatetimePersistProcessor->setConnection($connection);
         $productDatetimePersistProcessor->init();
         $productDatetimeAction = new ProductDatetimeAction();
@@ -109,8 +105,7 @@ class ProductProcessorFactory extends AbstractProcessorFactory
 
         // initialize the action that provides product decimal attribute CRUD functionality
         $productDecimalPersistProcessor = new ProductDecimalPersistProcessor();
-        $productDecimalPersistProcessor->setMagentoEdition($magentoEdition);
-        $productDecimalPersistProcessor->setMagentoVersion($magentoVersion);
+        $productDecimalPersistProcessor->setUtilityClassName($utilityClassName);
         $productDecimalPersistProcessor->setConnection($connection);
         $productDecimalPersistProcessor->init();
         $productDecimalAction = new ProductDecimalAction();
@@ -118,8 +113,7 @@ class ProductProcessorFactory extends AbstractProcessorFactory
 
         // initialize the action that provides product integer attribute CRUD functionality
         $productIntPersistProcessor = new ProductIntPersistProcessor();
-        $productIntPersistProcessor->setMagentoEdition($magentoEdition);
-        $productIntPersistProcessor->setMagentoVersion($magentoVersion);
+        $productIntPersistProcessor->setUtilityClassName($utilityClassName);
         $productIntPersistProcessor->setConnection($connection);
         $productIntPersistProcessor->init();
         $productIntAction = new ProductIntAction();
@@ -127,13 +121,11 @@ class ProductProcessorFactory extends AbstractProcessorFactory
 
         // initialize the action that provides product CRUD functionality
         $productPersistProcessor = new ProductPersistProcessor();
-        $productPersistProcessor->setMagentoEdition($magentoEdition);
-        $productPersistProcessor->setMagentoVersion($magentoVersion);
+        $productPersistProcessor->setUtilityClassName($utilityClassName);
         $productPersistProcessor->setConnection($connection);
         $productPersistProcessor->init();
         $productRemoveProcessor = new ProductRemoveProcessor();
-        $productRemoveProcessor->setMagentoEdition($magentoEdition);
-        $productRemoveProcessor->setMagentoVersion($magentoVersion);
+        $productRemoveProcessor->setUtilityClassName($utilityClassName);
         $productRemoveProcessor->setConnection($connection);
         $productRemoveProcessor->init();
         $productAction = new ProductAction();
@@ -142,8 +134,7 @@ class ProductProcessorFactory extends AbstractProcessorFactory
 
         // initialize the action that provides product text attribute CRUD functionality
         $productTextPersistProcessor = new ProductTextPersistProcessor();
-        $productTextPersistProcessor->setMagentoEdition($magentoEdition);
-        $productTextPersistProcessor->setMagentoVersion($magentoVersion);
+        $productTextPersistProcessor->setUtilityClassName($utilityClassName);
         $productTextPersistProcessor->setConnection($connection);
         $productTextPersistProcessor->init();
         $productTextAction = new ProductTextAction();
@@ -151,8 +142,7 @@ class ProductProcessorFactory extends AbstractProcessorFactory
 
         // initialize the action that provides product varchar attribute CRUD functionality
         $productVarcharPersistProcessor = new ProductVarcharPersistProcessor();
-        $productVarcharPersistProcessor->setMagentoEdition($magentoEdition);
-        $productVarcharPersistProcessor->setMagentoVersion($magentoVersion);
+        $productVarcharPersistProcessor->setUtilityClassName($utilityClassName);
         $productVarcharPersistProcessor->setConnection($connection);
         $productVarcharPersistProcessor->init();
         $productVarcharAction = new ProductVarcharAction();
@@ -160,8 +150,7 @@ class ProductProcessorFactory extends AbstractProcessorFactory
 
         // initialize the action that provides provides product website CRUD functionality
         $productWebsitePersistProcessor = new ProductWebsitePersistProcessor();
-        $productWebsitePersistProcessor->setMagentoEdition($magentoEdition);
-        $productWebsitePersistProcessor->setMagentoVersion($magentoVersion);
+        $productWebsitePersistProcessor->setUtilityClassName($utilityClassName);
         $productWebsitePersistProcessor->setConnection($connection);
         $productWebsitePersistProcessor->init();
         $productWebsiteAction = new ProductWebsiteAction();
@@ -169,8 +158,7 @@ class ProductProcessorFactory extends AbstractProcessorFactory
 
         // initialize the action that provides stock item CRUD functionality
         $stockItemPersistProcessor = new StockItemPersistProcessor();
-        $stockItemPersistProcessor->setMagentoEdition($magentoEdition);
-        $stockItemPersistProcessor->setMagentoVersion($magentoVersion);
+        $stockItemPersistProcessor->setUtilityClassName($utilityClassName);
         $stockItemPersistProcessor->setConnection($connection);
         $stockItemPersistProcessor->init();
         $stockItemAction = new StockItemAction();
@@ -178,15 +166,14 @@ class ProductProcessorFactory extends AbstractProcessorFactory
 
         // initialize the action that provides stock status CRUD functionality
         $stockStatusPersistProcessor = new StockStatusPersistProcessor();
-        $stockStatusPersistProcessor->setMagentoEdition($magentoEdition);
-        $stockStatusPersistProcessor->setMagentoVersion($magentoVersion);
+        $stockStatusPersistProcessor->setUtilityClassName($utilityClassName);
         $stockStatusPersistProcessor->setConnection($connection);
         $stockStatusPersistProcessor->init();
         $stockStatusAction = new StockStatusAction();
         $stockStatusAction->setPersistProcessor($stockStatusPersistProcessor);
 
         // initialize the product processor
-        $processorType = ProductProcessorFactory::getProcessorType();
+        $processorType = static::getProcessorType();
         $productProcessor = new $processorType();
         $productProcessor->setConnection($connection);
         $productProcessor->setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository);

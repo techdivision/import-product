@@ -50,6 +50,7 @@ class ProductRemoveBatchProcessor extends AbstractRemoveBatchProcessor
      */
     protected function getStatement()
     {
-        return SqlStatements::REMOVE_PRODUCT;
+        $utilityClassName = $this->getUtilityClassName();
+        return $utilityClassName::REMOVE_PRODUCT;
     }
 }

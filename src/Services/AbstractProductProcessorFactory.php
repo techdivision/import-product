@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\AbstractProductPersistProcessor
+ * TechDivision\Import\Services\AbstractProductProcessorFactory
  *
  * NOTICE OF LICENSE
  *
@@ -18,13 +18,10 @@
  * @link      http://www.appserver.io
  */
 
-namespace TechDivision\Import\Product\Actions\Processors;
-
-use TechDivision\Import\Product\Utils\SqlStatements;
-use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
+namespace TechDivision\Import\Product\Services;
 
 /**
- * The product category persist processor implementation.
+ * Abstract processor factory implementation.
  *
  * @author    Tim Wagner <tw@appserver.io>
  * @copyright 2015 TechDivision GmbH <info@appserver.io>
@@ -32,17 +29,13 @@ use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-abstract class AbstractProductPersistProcessor extends AbstractPersistProcessor
+abstract class AbstractProductProcessorFactory implements ProductProcessorFactoryInterface
 {
 
     /**
-     * Return's the passed statement from the Magento specific
-     * utility class.
+     * Return's the processor class name.
      *
-     * @return string The utility class name
+     * @return string The processor class name
      */
-    protected function getUtilityClassName()
-    {
-        return SqlStatements::getUtilityClassName($this->getMagentoEdition(), $this->getMagentoVersion());
-    }
+    protected abstract static function getProcessorType();
 }

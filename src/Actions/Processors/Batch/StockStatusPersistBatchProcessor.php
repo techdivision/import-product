@@ -50,6 +50,7 @@ class StockStatusPersistBatchProcessor extends AbstractPersistBatchProcessor
      */
     protected function getStatement()
     {
-        return SqlStatements::CREATE_STOCK_STATUS;
+        $utilityClassName = $this->getUtilityClassName();
+        return $utilityClassName::CREATE_STOCK_STATUS;
     }
 }
