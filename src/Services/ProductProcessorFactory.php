@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Services;
 
 use TechDivision\Import\ConfigurationInterface;
+use TechDivision\Import\Services\AbstractProcessorFactory;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepository;
 use TechDivision\Import\Product\Actions\ProductAction;
 use TechDivision\Import\Product\Actions\ProductCategoryAction;
@@ -53,8 +54,18 @@ use TechDivision\Import\Product\Actions\Processors\StockStatusPersistProcessor;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductProcessorFactory
+class ProductProcessorFactory extends AbstractProcessorFactory
 {
+
+    /**
+     * Return's the processor class name.
+     *
+     * @return string The processor class name
+     */
+    protected static function getProcessorType()
+    {
+        return 'TechDivision\Import\Product\Services\ProductProcessor';
+    }
 
     /**
      * Factory method to create a new product processor instance.
@@ -175,7 +186,8 @@ class ProductProcessorFactory
         $stockStatusAction->setPersistProcessor($stockStatusPersistProcessor);
 
         // initialize the product processor
-        $productProcessor = new ProductProcessor();
+        $processorType = ProductProcessorFactory::getProcessorType();
+        $productProcessor = new $processorType();
         $productProcessor->setConnection($connection);
         $productProcessor->setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository);
         $productProcessor->setProductCategoryAction($productCategoryAction);
