@@ -20,7 +20,6 @@
 
 namespace TechDivision\Import\Product\Actions\Processors\Batch;
 
-use TechDivision\Import\Product\Utils\SqlStatements;
 use TechDivision\Import\Actions\Processors\Batch\AbstractRemoveBatchProcessor;
 
 /**
