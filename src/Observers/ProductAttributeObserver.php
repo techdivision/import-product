@@ -11,11 +11,11 @@
  *
  * PHP version 5
  *
- * @author    Tim Wagner <tw@appserver.io>
- * @copyright 2015 TechDivision GmbH <info@appserver.io>
+ * @author    Tim Wagner <t.wagner@techdivision.com>
+ * @copyright 2016 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @link      https://github.com/wagnert/csv-import
- * @link      http://www.appserver.io
+ * @link      https://github.com/techdivision/import-product
+ * @link      http://www.techdivision.com
  */
 
 namespace TechDivision\Import\Product\Observers;
@@ -28,11 +28,11 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 /**
  * A SLSB that handles the process to import product bunches.
  *
- * @author    Tim Wagner <tw@appserver.io>
- * @copyright 2015 TechDivision GmbH <info@appserver.io>
+ * @author    Tim Wagner <t.wagner@techdivision.com>
+ * @copyright 2016 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @link      https://github.com/wagnert/csv-import
- * @link      http://www.appserver.io
+ * @link      https://github.com/techdivision/import-product
+ * @link      http://www.techdivision.com
  */
 class ProductAttributeObserver extends AbstractProductImportObserver
 {
@@ -160,7 +160,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
         }
 
         // load the ID of the product that has been created recently
-        $lastEntityId = $this->getLastEntityId();
+        $lastEntityId = $this->getPrimaryKey();
 
         // load the ID of the attribute to create the values for
         $attributeId = $this->getAttributeId();
@@ -180,6 +180,16 @@ class ProductAttributeObserver extends AbstractProductImportObserver
         // initialize and persist the entity attribute
         $persistMethod = $this->getPersistMethod();
         $this->$persistMethod($attribute);
+    }
+
+    /**
+     * Return's the PK to create the product => attribute relation.
+     *
+     * @return integer The PK to create the relation with
+     */
+    public function getPrimaryKey()
+    {
+        return $this->getLastEntityId();
     }
 
     /**
