@@ -333,22 +333,22 @@ class BunchSubject extends AbstractSubject
         $status = $this->getRegistryProcessor()->getAttribute($this->serial);
 
         // load the attribute set we've prepared intially
-        $this->attributeSets = $status['globalData'][RegistryKeys::ATTRIBUTE_SETS];
+        $this->attributeSets = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ATTRIBUTE_SETS];
 
         // load the store websites we've prepare initially
-        $this->storeWebsites =  $status['globalData'][RegistryKeys::STORE_WEBSITES];
+        $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
 
         // load the EAV attributes we've prepared initially
-        $this->attributes = $status['globalData'][RegistryKeys::EAV_ATTRIBUTES];
+        $this->attributes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::EAV_ATTRIBUTES];
 
         // load the stores we've initialized before
-        $this->stores = $status['globalData'][RegistryKeys::STORES];
+        $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
 
         // load the stores we've initialized before
-        $this->taxClasses = $status['globalData'][RegistryKeys::TAX_CLASSES];
+        $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
 
         // load the categories we've initialized before
-        $this->categories = $status['globalData'][RegistryKeys::CATEGORIES];
+        $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
 
         // prepare the callbacks
         parent::setUp();
@@ -369,12 +369,8 @@ class BunchSubject extends AbstractSubject
         $registryProcessor = $this->getRegistryProcessor();
 
         // update the status up the actual import with the found variations, bundles, SKU => entity ID mapping and the imported files
-        /*
-        $registryProcessor->mergeAttributesRecursive($this->serial, array('variations'         => $this->variations));
-        $registryProcessor->mergeAttributesRecursive($this->serial, array('bundles'            => $this->bundles));
-        */
-        $registryProcessor->mergeAttributesRecursive($this->serial, array('skuEntityIdMapping' => $this->skuEntityIdMapping));
-        $registryProcessor->mergeAttributesRecursive($this->serial, array('files'              => array($this->uid => array('status' => 1))));
+        $registryProcessor->mergeAttributesRecursive($this->serial, array(RegistryKeys::SKU_ENTITY_ID_MAPPING => $this->skuEntityIdMapping));
+        $registryProcessor->mergeAttributesRecursive($this->serial, array(RegistryKeys::FILES                 => array($this->uid => array(RegistryKeys::STATUS => 1))));
     }
 
     /**
