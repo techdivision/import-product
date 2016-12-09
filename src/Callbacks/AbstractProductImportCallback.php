@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Callbacks;
 
-use TechDivision\Import\Callbacks\CallbackInterface;
+use TechDivision\Import\Callbacks\AbstractCallback;
 
 /**
  * Abstract product import callback implementation.
@@ -31,6 +31,6 @@ use TechDivision\Import\Callbacks\CallbackInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-abstract class AbstractProductImportCallback implements ProductImportCallbackInterface
+abstract class AbstractProductImportCallback extends AbstractCallback implements ProductImportCallbackInterface
 {
 }
