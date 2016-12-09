@@ -21,7 +21,7 @@
 namespace TechDivision\Import\Product\Callbacks;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * A callback implementation that converts the passed boolean value.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>

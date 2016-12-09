@@ -21,15 +21,13 @@
 namespace TechDivision\Import\Product\Callbacks;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * A callback implementation that converts the passed tax class.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
- *
- * @Stateless
  */
 class TaxClassCallback extends AbstractProductImportCallback
 {
