@@ -1,13 +1,3 @@
-# Version 1.0.0-alpha3
-
-## Bugfixes
-
-* None
-
-## Features
-
-* Type fixes
-
 # Version 1.0.0-alpha2
 
 ## Bugfixes
@@ -16,7 +6,7 @@
 
 ## Features
 
-* Let AbstractProductImportCallback extend AbstractCallback
+* Let AbstractProductImportCallback extend AbstractCallback + Typo fixes
 
 # Version 1.0.0-alpha1
 
