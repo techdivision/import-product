@@ -35,8 +35,10 @@ class ProductRemoveProcessor extends AbstractRemoveProcessor
 {
 
     /**
-     * {@inheritDoc}
-     * @see \TechDivision\Import\Product\Actions\Processors\AbstractRemoveProcessor::getStatement()
+     * Return's the SQL statement that has to be prepared.
+     *
+     * @return string The SQL statement
+     * @see \TechDivision\Import\Actions\Processors\AbstractBaseProcessor::getStatement()
      */
     protected function getStatement()
     {

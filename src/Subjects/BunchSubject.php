@@ -374,7 +374,9 @@ class BunchSubject extends AbstractSubject
     }
 
     /**
-     * Export's the artefacts
+     * Export's the artefacts to CSV files.
+     *
+     * @return void
      */
     public function exportArtefacts()
     {
@@ -412,8 +414,8 @@ class BunchSubject extends AbstractSubject
     /**
      * Cast's the passed value based on the backend type information.
      *
-     * @param string $backendType   The backend type to cast to
-     * @param mixed  $value         The value to be casted
+     * @param string $backendType The backend type to cast to
+     * @param mixed  $value       The value to be casted
      *
      * @return mixed The casted value
      */
@@ -593,7 +595,7 @@ class BunchSubject extends AbstractSubject
     /**
      * Return's the category with the passed path.
      *
-     * @param string The path of the category to return
+     * @param string $path The path of the category to return
      *
      * @return array The category
      * @throws \Exception Is thrown, if the requested category is not available
@@ -634,7 +636,8 @@ class BunchSubject extends AbstractSubject
      * Add the passed product type artefacts to the product with the
      * last entity ID.
      *
-     * @param array $artefacts The product type artefacts
+     * @param string $type      The artefact type, e. g. configurable
+     * @param array  $artefacts The product type artefacts
      *
      * @return void
      * @uses \TechDivision\Import\Product\Subjects\BunchSubject::getLastEntityId()
@@ -764,7 +767,7 @@ class BunchSubject extends AbstractSubject
     /**
      * Persist's the passed product category data and return's the ID.
      *
-     * @param array $productWebsite The product category data to persist
+     * @param array $productCategory The product category data to persist
      *
      * @return void
      */
@@ -788,7 +791,7 @@ class BunchSubject extends AbstractSubject
     /**
      * Persist's the passed stock status data and return's the ID.
      *
-     * @param array $stockItem The stock status data to persist
+     * @param array $stockStatus The stock status data to persist
      *
      * @return void
      */

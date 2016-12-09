@@ -219,7 +219,7 @@ interface ProductProcessorInterface
     /**
      * Persist's the passed product category data and return's the ID.
      *
-     * @param array $productWebsite The product category data to persist
+     * @param array $productCategory The product category data to persist
      *
      * @return void
      */
@@ -237,7 +237,7 @@ interface ProductProcessorInterface
     /**
      * Persist's the passed stock status data and return's the ID.
      *
-     * @param array $stockItem The stock status data to persist
+     * @param array $stockStatus The stock status data to persist
      *
      * @return void
      */

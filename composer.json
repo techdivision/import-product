@@ -1,10 +1,21 @@
 {
 	"name" : "techdivision/import-product",
 	"description" : "A library supporting generic Magento 2 import functionality",
+	"minimum-stability" : "alpha",
 	"require" : {
-        "goodby/csv" : "~1.0",
-        "league/flysystem" : "~1.0",
-		"techdivision/import" : "0.6.*"
+		"php" : ">=5.6.0",
+		"goodby/csv" : "~1.0",
+		"league/flysystem" : "~1.0",
+		"techdivision/import" : "~1.0"
+	},
+	"require-dev" : {
+		"phpmd/phpmd" : "2.1.*",
+		"phploc/phploc" : "2.0.*",
+		"pdepend/pdepend" : "2.0.*",
+		"phpunit/phpunit" : "4.4.*",
+		"sebastian/phpcpd" : "2.0.*",
+		"squizlabs/php_codesniffer" : "2.2.*",
+		"phpdocumentor/phpdocumentor" : "2.8.*"
 	},
 	"authors" : [{
 			"name" : "Tim Wagner",
@@ -13,13 +24,10 @@
 	],
 	"autoload" : {
 		"psr-4" : {
-			"TechDivision\\Import\\Product\\" : [ "src/", "tests/" ]
+			"TechDivision\\Import\\Product\\" : [
+				"src/",
+				"tests/"
+			]
 		}
-	},
-    "repositories" : [{
-            "type" : "git",
-            "url" : "https://gitlab.tdintern.de/wagnert/techdivision-import.git",
-            "name" : "techdivision/import"
-        }
-    ]
+	}
 }

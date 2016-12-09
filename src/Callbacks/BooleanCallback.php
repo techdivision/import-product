@@ -20,8 +20,6 @@
 
 namespace TechDivision\Import\Product\Callbacks;
 
-use TechDivision\Import\Callbacks\AbstractCallback;
-
 /**
  * A SLSB that handles the process to import product bunches.
  *
@@ -31,7 +29,7 @@ use TechDivision\Import\Callbacks\AbstractCallback;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class BooleanCallback extends AbstractCallback
+class BooleanCallback extends AbstractProductImportCallback
 {
 
     /**
@@ -49,8 +47,12 @@ class BooleanCallback extends AbstractCallback
     );
 
     /**
-     * {@inheritDoc}
-     * @see \TechDivision\Import\Product\Callbacks\Product\ImportCallbackInterface::handle()
+     * Will be invoked by a observer it has been registered for.
+     *
+     * @param mixed $value The value to handle
+     *
+     * @return mixed The modified value
+     * @see \TechDivision\Import\Product\Callbacks\ProductImportCallbackInterface::handle()
      */
     public function handle($value)
     {

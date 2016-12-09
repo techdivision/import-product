@@ -35,8 +35,10 @@ class ProductTextPersistBatchProcessor extends AbstractPersistBatchProcessor
 {
 
     /**
-     * {@inheritDoc}
-     * @see \TechDivision\Import\Product\Actions\Processors\Batch\AbstractPersistBatchProcessor::getNumberOfPlaceholders()
+     * The number of placeholders of the prepared statement.
+     *
+     * @return integer The number of placeholers
+     * @see \TechDivision\Import\Actions\Processors\Batch\AbstractBatchBaseProcessor::getNumberOfPlaceholders()
      */
     protected function getNumberOfPlaceholders()
     {
@@ -44,8 +46,10 @@ class ProductTextPersistBatchProcessor extends AbstractPersistBatchProcessor
     }
 
     /**
-     * {@inheritDoc}
-     * @see \TechDivision\Import\Product\Actions\Processors\Batch\AbstractPersistBatchProcessor::getStatement()
+     * Return's the SQL statement that has to be prepared.
+     *
+     * @return string The SQL statement
+     * @see \TechDivision\Import\Actions\Processors\Batch\AbstractBatchBaseProcessor::getStatement()
      */
     protected function getStatement()
     {

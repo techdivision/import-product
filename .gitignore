@@ -1,5 +1,7 @@
 .buildpath
 .project
 .settings
+build.properties
 composer.lock
 /vendor
+/target

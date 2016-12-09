@@ -35,8 +35,10 @@ class ProductRemoveBatchProcessor extends AbstractRemoveBatchProcessor
 {
 
     /**
-     * {@inheritDoc}
-     * @see \TechDivision\Import\Product\Actions\Processors\Batch\AbstractRemoveBatchProcessor::getNumberOfPlaceholders()
+     * The number of placeholders of the prepared statement.
+     *
+     * @return integer The number of placeholers
+     * @see \TechDivision\Import\Actions\Processors\Batch\AbstractBatchBaseProcessor::getNumberOfPlaceholders()
      */
     protected function getNumberOfPlaceholders()
     {
@@ -44,8 +46,10 @@ class ProductRemoveBatchProcessor extends AbstractRemoveBatchProcessor
     }
 
     /**
-     * {@inheritDoc}
-     * @see \TechDivision\Import\Product\Actions\Processors\Batch\AbstractRemoveBatchProcessor::getStatement()
+     * Return's the SQL statement that has to be prepared.
+     *
+     * @return string The SQL statement
+     * @see \TechDivision\Import\Actions\Processors\Batch\AbstractBatchBaseProcessor::getStatement()
      */
     protected function getStatement()
     {

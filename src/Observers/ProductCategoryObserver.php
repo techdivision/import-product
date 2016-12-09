@@ -37,8 +37,12 @@ class ProductCategoryObserver extends AbstractProductImportObserver
 {
 
     /**
-     * {@inheritDoc}
-     * @see \Importer\Csv\Actions\Listeners\Row\ListenerInterface::handle()
+     * Will be invoked by the action on the events the listener has been registered for.
+     *
+     * @param array $row The row to handle
+     *
+     * @return array The modified row
+     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
      */
     public function handle(array $row)
     {
@@ -70,7 +74,7 @@ class ProductCategoryObserver extends AbstractProductImportObserver
     /**
      * Persist's the passed product category data and return's the ID.
      *
-     * @param array $productWebsite The product category data to persist
+     * @param array $productCategory The product category data to persist
      *
      * @return void
      */
@@ -82,7 +86,7 @@ class ProductCategoryObserver extends AbstractProductImportObserver
     /**
      * Return's the category with the passed path.
      *
-     * @param string The path of the category to return
+     * @param string $path The path of the category to return
      *
      * @return array The category
      */

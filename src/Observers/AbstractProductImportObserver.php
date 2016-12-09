@@ -38,6 +38,8 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      * Set's the array containing header row.
      *
      * @param array $headers The array with the header row
+     *
+     * @return void
      */
     public function setHeaders(array $headers)
     {
@@ -89,8 +91,8 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     /**
      * Cast's the passed value based on the backend type information.
      *
-     * @param string $backendType   The backend type to cast to
-     * @param mixed  $value         The value to be casted
+     * @param string $backendType The backend type to cast to
+     * @param mixed  $value       The value to be casted
      *
      * @return mixed The casted value
      */

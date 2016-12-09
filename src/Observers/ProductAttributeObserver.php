@@ -66,8 +66,12 @@ class ProductAttributeObserver extends AbstractProductImportObserver
     protected $persistMethod;
 
     /**
-     * {@inheritDoc}
-     * @see \Importer\Csv\Actions\Listeners\Row\ListenerInterface::handle()
+     * Will be invoked by the action on the events the listener has been registered for.
+     *
+     * @param array $row The row to handle
+     *
+     * @return array The modified row
+     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
      */
     public function handle(array $row)
     {

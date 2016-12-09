@@ -36,8 +36,12 @@ class ClearProductObserver extends AbstractProductImportObserver
 {
 
     /**
-     * {@inheritDoc}
-     * @see \Importer\Csv\Actions\Listeners\Row\ListenerInterface::handle()
+     * Will be invoked by the action on the events the listener has been registered for.
+     *
+     * @param array $row The row to handle
+     *
+     * @return array The modified row
+     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
      */
     public function handle(array $row)
     {
@@ -46,7 +50,7 @@ class ClearProductObserver extends AbstractProductImportObserver
         $headers = $this->getHeaders();
 
         // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku( $sku = $row[$headers[ColumnKeys::SKU]])) {
+        if ($this->isLastSku($sku = $row[$headers[ColumnKeys::SKU]])) {
             return $row;
         }
 

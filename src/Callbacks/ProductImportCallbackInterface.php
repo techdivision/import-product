@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Observers\ImportObserverInterface
+ * TechDivision\Import\Product\Callbacks\ProductImportCallbackInterface
  *
  * NOTICE OF LICENSE
  *
@@ -18,12 +18,12 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Observers;
+namespace TechDivision\Import\Product\Callbacks;
 
-use TechDivision\Import\Observers\ObserverInterface;
+use TechDivision\Import\Callbacks\CallbackInterface;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * The interface for all callbacks.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,15 +31,15 @@ use TechDivision\Import\Observers\ObserverInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-interface ProductImportObserverInterface extends ObserverInterface
+interface ProductImportCallbackInterface extends CallbackInterface
 {
 
     /**
-     * Will be invoked by the action on the events the listener has been registered for.
+     * Will be invoked by a observer it has been registered for.
      *
-     * @param array $row The row to handle
+     * @param mixed $value The value to handle
      *
-     * @return array The modified row
+     * @return mixed The modified value
      */
-    public function handle(array $row);
+    public function handle($value);
 }
