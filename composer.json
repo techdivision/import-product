@@ -1,6 +1,6 @@
 {
 	"name" : "techdivision/import-product",
-	"description" : "A library supporting generic Magento 2 import functionality",
+	"description" : "M2IF library providing basic Magento 2 product import functionality",
 	"minimum-stability" : "alpha",
 	"license" : "OSL-3.0",
 	"require" : {
