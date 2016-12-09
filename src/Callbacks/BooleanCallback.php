@@ -20,8 +20,6 @@
 
 namespace TechDivision\Import\Product\Callbacks;
 
-use TechDivision\Import\Product\Callbacks\AbstractProductImportCallback;
-
 /**
  * A SLSB that handles the process to import product bunches.
  *

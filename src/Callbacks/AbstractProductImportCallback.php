@@ -21,7 +21,6 @@
 namespace TechDivision\Import\Product\Callbacks;
 
 use TechDivision\Import\Callbacks\AbstractCallback;
-use TechDivision\Import\Callbacks\CallbackInterface;
 
 /**
  * Abstract product import callback implementation.
