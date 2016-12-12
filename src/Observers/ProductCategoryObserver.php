@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Importer\Csv\Actions\Observers\Product\ProductCategoryObserver
+ * TechDivision\Import\Product\Observers\ProductCategoryObserver
  *
  * NOTICE OF LICENSE
  *
@@ -25,7 +25,7 @@ use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * Observer that creates/updates the product's category relations.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>

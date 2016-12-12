@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Observers\ProductWebsiteObserver
+ * TechDivision\Import\Product\Observers\ProductUrlRewriteObserver
  *
  * NOTICE OF LICENSE
  *
@@ -20,11 +20,11 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
+use TechDivision\Import\Product\Utils\ColumnKeys;
 
 /**
- * Observer that creates/updates the product's website relations.
+ * Observer that creates/updates the product's URL rewrites.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -32,7 +32,7 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductWebsiteObserver extends AbstractProductImportObserver
+class ProductUrlRewriteObserver extends AbstractProductImportObserver
 {
 
     /**
@@ -54,44 +54,44 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
             return $row;
         }
 
-        // load the ID of the product that has been created recently
-        $lastEntityId = $this->getLastEntityId();
-
-        // append the websites found
-        $codes = explode(',', $row[$headers[ColumnKeys::PRODUCT_WEBSITES]]);
-        foreach ($codes as $code) {
-            // load the website ID to relate the product with
-            $websiteId = $this->getStoreWebsiteIdByCode($code);
-
-            // create the product website relation
-            $this->persistProductWebsite(array($lastEntityId, $websiteId));
-        }
-
         // returns the row
         return $row;
     }
 
     /**
-     * Persist's the passed product website data and return's the ID.
+     * Return's the URL rewrites for the passed URL entity type and ID.
      *
-     * @param array $productWebsite The product website data to persist
+     * @param string  $entityType The entity type to load the URL rewrites for
+     * @param integer $entityId   The entity ID to laod the rewrites for
      *
-     * @return void
+     * @return array The URL rewrites
      */
-    public function persistProductWebsite($productWebsite)
+    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
     {
-        $this->getSubject()->persistProductWebsite($productWebsite);
+        return $this->getSubject()->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
     }
 
     /**
-     * Return's the store website for the passed code.
+     * Persist's the URL write with the passed data.
      *
-     * @param string $code The code of the store website to return the ID for
+     * @param array $row The URL rewrite to persist
      *
-     * @return integer The store website ID
+     * @return void
      */
-    public function getStoreWebsiteIdByCode($code)
+    public function persistUrlRewrite($row)
     {
-        return $this->getSubject()->getStoreWebsiteIdByCode($code);
+        $this->getSubject()->persistUrlRewrite($row);
+    }
+
+    /**
+     * Update's the URL rewrite with the passed data.
+     *
+     * @param array $row The URL rewrite to update
+     *
+     * @return void
+     */
+    public function updateUrlRewrite($row)
+    {
+        $this->getSubject()->updateUrlRewrite($row);
     }
 }

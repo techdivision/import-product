@@ -127,4 +127,11 @@ class ColumnKeys extends FallbackColumnKeys
      * @var string
      */
     const ATTRIBUTE_SET_CODE = 'attribute_set_code';
+
+    /**
+     * Name for the column 'url_key'.
+     *
+     * @var string
+     */
+    const URL_KEY = 'url_key';
 }

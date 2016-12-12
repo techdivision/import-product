@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Subjects\BunchHandler
+ * TechDivision\Import\Product\Subjects\BunchSubject
  *
  * NOTICE OF LICENSE
  *
@@ -30,7 +30,7 @@ use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Product\Services\ProductProcessorInterface;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * The subject implementation that handles the business logic to persist products.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -810,5 +810,42 @@ class BunchSubject extends AbstractSubject
     public function removeProduct($row)
     {
         $this->getProductProcessor()->removeProduct($row);
+    }
+
+    /**
+     * Return's the URL rewrites for the passed URL entity type and ID.
+     *
+     * @param string  $entityType The entity type to load the URL rewrites for
+     * @param integer $entityId   The entity ID to laod the rewrites for
+     *
+     * @return array The URL rewrites
+     */
+    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        // to be implemented
+    }
+
+    /**
+     * Persist's the URL write with the passed data.
+     *
+     * @param array $row The URL rewrite to persist
+     *
+     * @return void
+     */
+    public function persistUrlRewrite($row)
+    {
+        // to be implemented
+    }
+
+    /**
+     * Update's the URL rewrite with the passed data.
+     *
+     * @param array $row The URL rewrite to update
+     *
+     * @return void
+     */
+    public function updateUrlRewrite($row)
+    {
+        // to be implemented
     }
 }
