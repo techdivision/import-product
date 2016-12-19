@@ -134,4 +134,11 @@ class ColumnKeys extends FallbackColumnKeys
      * @var string
      */
     const URL_KEY = 'url_key';
+
+    /**
+     * Name for the column 'name'.
+     *
+     * @var string
+     */
+    const NAME = 'name';
 }

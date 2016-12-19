@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Actions;
 use TechDivision\Import\Actions\AbstractAction;
 
 /**
- * A SLSB providing repository functionality for product decimal attribute CRUD actions.
+ * An action implementation that provides CRUD functionality for product decimal attributes.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>

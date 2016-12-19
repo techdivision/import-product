@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\ProductWebsiteAction
+ * TechDivision\Import\Product\Actions\UrlRewriteAction
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Actions;
 use TechDivision\Import\Actions\AbstractAction;
 
 /**
- * An action implementation that provides CRUD functionality for product website relations.
+ * An action implementation that provides CRUD functionality for URL rewrites.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,6 +31,32 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductWebsiteAction extends AbstractAction
+class UrlRewriteAction extends AbstractAction
 {
+
+    /**
+     * Persist's the passed row.
+     *
+     * @param array       $row  The row to persist
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return string The last inserted ID
+     */
+    public function persist($row, $name = null)
+    {
+        return $this->getPersistProcessor()->execute($row, $name);
+    }
+
+    /**
+     * Remove's the entity with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function remove($row, $name = null)
+    {
+        return $this->getRemoveProcessor()->execute($row, $name);
+    }
 }

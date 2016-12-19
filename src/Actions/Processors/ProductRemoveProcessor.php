@@ -35,14 +35,20 @@ class ProductRemoveProcessor extends AbstractRemoveProcessor
 {
 
     /**
-     * Return's the SQL statement that has to be prepared.
+     * Return's the array with the SQL statements that has to be prepared.
      *
-     * @return string The SQL statement
-     * @see \TechDivision\Import\Actions\Processors\AbstractBaseProcessor::getStatement()
+     * @return array The SQL statements to be prepared
+     * @see \TechDivision\Import\Actions\Processors\AbstractBaseProcessor::getStatements()
      */
-    protected function getStatement()
+    protected function getStatements()
     {
+
+        // load the utility class name
         $utilityClassName = $this->getUtilityClassName();
-        return $utilityClassName::REMOVE_PRODUCT;
+
+        // return the array with the SQL statements that has to be prepared
+        return array(
+            $utilityClassName::REMOVE_PRODUCT => $utilityClassName::REMOVE_PRODUCT
+        );
     }
 }

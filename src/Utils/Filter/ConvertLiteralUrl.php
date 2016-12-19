@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\ProductWebsiteAction
+ * TechDivision\Import\Product\Utils\Filter\ConvertLiteralUrl
  *
  * NOTICE OF LICENSE
  *
@@ -18,12 +18,10 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Actions;
-
-use TechDivision\Import\Actions\AbstractAction;
+namespace TechDivision\Import\Product\Utils\Filter;
 
 /**
- * An action implementation that provides CRUD functionality for product website relations.
+ * Filter to convert URLs.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,6 +29,24 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductWebsiteAction extends AbstractAction
+class ConvertLiteralUrl extends ConvertLiteral
 {
+    /**
+     * Filter and return the value.
+     *
+     * @param string $string The value to filter
+     *
+     * @return string The filtered value
+     */
+    public function filter($string)
+    {
+
+        // replace all characters that are not numbers or simple chars
+        $string = preg_replace('#[^0-9a-z]+#i', '-', parent::filter($string));
+        $string = strtolower($string);
+        $string = trim($string, '-');
+
+        // return the converted URL
+        return $string;
+    }
 }

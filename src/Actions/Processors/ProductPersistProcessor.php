@@ -35,27 +35,34 @@ class ProductPersistProcessor extends AbstractPersistProcessor
 {
 
     /**
-     * Return's the SQL statement that has to be prepared.
+     * Return's the array with the SQL statements that has to be prepared.
      *
-     * @return string The SQL statement
-     * @see \TechDivision\Import\Actions\Processors\AbstractBaseProcessor::getStatement()
+     * @return array The SQL statements to be prepared
+     * @see \TechDivision\Import\Actions\Processors\AbstractBaseProcessor::getStatements()
      */
-    protected function getStatement()
+    protected function getStatements()
     {
+
+        // load the utility class name
         $utilityClassName = $this->getUtilityClassName();
-        return $utilityClassName::CREATE_PRODUCT;
+
+        // return the array with the SQL statements that has to be prepared
+        return array(
+            $utilityClassName::CREATE_PRODUCT => $utilityClassName::CREATE_PRODUCT
+        );
     }
 
     /**
      * Persist's the passed row.
      *
-     * @param array $row The row to persist
+     * @param array       $row  The row to persist
+     * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return string The last inserted ID
      */
-    public function execute($row)
+    public function execute($row, $name = null)
     {
-        $this->getPreparedStatement()->execute($row);
+        $this->getPreparedStatement($name)->execute($row);
         return $this->getConnection()->lastInsertId();
     }
 }
