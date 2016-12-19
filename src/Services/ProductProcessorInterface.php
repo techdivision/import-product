@@ -144,6 +144,20 @@ interface ProductProcessorInterface
     public function getStockStatusAction();
 
     /**
+     * Return's the action with the stock status CRUD methods.
+     *
+     * @return \TechDivision\Import\Product\Actions\StockStatusAction The action instance
+     */
+    public function getUrlRewriteAction();
+
+    /**
+     * Return's the repository to load the URL rewrites with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\UrlRewriteRepository The repository instance
+     */
+    public function getUrlRewriteRepository();
+
+    /**
      * Return's the attribute option value with the passed value and store ID.
      *
      * @param mixed   $value   The option value
@@ -154,101 +168,142 @@ interface ProductProcessorInterface
     public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
 
     /**
+     * Return's the URL rewrites for the passed URL entity type and ID.
+     *
+     * @param string  $entityType The entity type to load the URL rewrites for
+     * @param integer $entityId   The entity ID to laod the rewrites for
+     *
+     * @return array The URL rewrites
+     */
+    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
+
+    /**
      * Persist's the passed product data and return's the ID.
      *
-     * @param array $product The product data to persist
+     * @param array       $product The product data to persist
+     * @param string|null $name    The name of the prepared statement that has to be executed
      *
      * @return string The ID of the persisted entity
      */
-    public function persistProduct($product);
+    public function persistProduct($product, $name = null);
 
     /**
      * Persist's the passed product varchar attribute.
      *
-     * @param array $attribute The attribute to persist
+     * @param array       $attribute The attribute to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductVarcharAttribute($attribute);
+    public function persistProductVarcharAttribute($attribute, $name = null);
 
     /**
      * Persist's the passed product integer attribute.
      *
-     * @param array $attribute The attribute to persist
+     * @param array       $attribute The attribute to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductIntAttribute($attribute);
+    public function persistProductIntAttribute($attribute, $name = null);
 
     /**
      * Persist's the passed product decimal attribute.
      *
-     * @param array $attribute The attribute to persist
+     * @param array       $attribute The attribute to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductDecimalAttribute($attribute);
+    public function persistProductDecimalAttribute($attribute, $name = null);
 
     /**
      * Persist's the passed product datetime attribute.
      *
-     * @param array $attribute The attribute to persist
+     * @param array       $attribute The attribute to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductDatetimeAttribute($attribute);
+    public function persistProductDatetimeAttribute($attribute, $name = null);
 
     /**
      * Persist's the passed product text attribute.
      *
-     * @param array $attribute The attribute to persist
+     * @param array       $attribute The attribute to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductTextAttribute($attribute);
+    public function persistProductTextAttribute($attribute, $name = null);
 
     /**
      * Persist's the passed product website data and return's the ID.
      *
-     * @param array $productWebsite The product website data to persist
+     * @param array       $productWebsite The product website data to persist
+     * @param string|null $name           The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductWebsite($productWebsite);
+    public function persistProductWebsite($productWebsite, $name = null);
 
     /**
      * Persist's the passed product category data and return's the ID.
      *
-     * @param array $productCategory The product category data to persist
+     * @param array       $productCategory The product category data to persist
+     * @param string|null $name            The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductCategory($productCategory);
+    public function persistProductCategory($productCategory, $name = null);
 
     /**
      * Persist's the passed stock item data and return's the ID.
      *
-     * @param array $stockItem The stock item data to persist
+     * @param array       $stockItem The stock item data to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistStockItem($stockItem);
+    public function persistStockItem($stockItem, $name = null);
 
     /**
      * Persist's the passed stock status data and return's the ID.
      *
-     * @param array $stockStatus The stock status data to persist
+     * @param array       $stockStatus The stock status data to persist
+     * @param string|null $name        The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistStockStatus($stockStatus);
+    public function persistStockStatus($stockStatus, $name = null);
+
+    /**
+     * Persist's the URL write with the passed data.
+     *
+     * @param array       $row  The URL rewrite to persist
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function persistUrlRewrite($row, $name = null);
 
     /**
      * Remove's the entity with the passed attributes.
      *
-     * @param array $row The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProduct($row);
+    public function removeProduct($row, $name = null);
+
+    /**
+     * Delete's the URL rewrite with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeUrlRewrite($row, $name = null);
 }

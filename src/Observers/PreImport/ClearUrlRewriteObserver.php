@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Observers\ProductWebsiteObserver
+ * TechDivision\Import\Product\Observers\PreImport\ClearUrlRewriteObserver
  *
  * NOTICE OF LICENSE
  *
@@ -18,13 +18,14 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Observers;
+namespace TechDivision\Import\Product\Observers\PreImport;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
+use TechDivision\Import\Product\Utils\SqlStatements;
 
 /**
- * Observer that creates/updates the product's website relations.
+ * A SLSB that handles the process to import product bunches.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -32,7 +33,7 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductWebsiteObserver extends AbstractProductImportObserver
+class ClearUrlRewriteObserver extends AbstractProductImportObserver
 {
 
     /**
@@ -50,48 +51,27 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
         $headers = $this->getHeaders();
 
         // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($row[$headers[ColumnKeys::SKU]])) {
+        if ($this->isLastSku($sku = $row[$headers[ColumnKeys::SKU]])) {
             return $row;
         }
 
-        // load the ID of the product that has been created recently
-        $lastEntityId = $this->getLastEntityId();
+        // remove the product with the passed SKU
+        $this->removeUrlRewrite(array($sku), SqlStatements::REMOVE_URL_REWRITE_BY_SKU);
 
-        // append the websites found
-        $codes = explode(',', $row[$headers[ColumnKeys::PRODUCT_WEBSITES]]);
-        foreach ($codes as $code) {
-            // load the website ID to relate the product with
-            $websiteId = $this->getStoreWebsiteIdByCode($code);
-
-            // create the product website relation
-            $this->persistProductWebsite(array($lastEntityId, $websiteId));
-        }
-
-        // returns the row
+        // return the prepared row
         return $row;
     }
 
     /**
-     * Persist's the passed product website data and return's the ID.
+     * Remove's the entity with the passed attributes.
      *
-     * @param array $productWebsite The product website data to persist
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductWebsite($productWebsite)
+    public function removeUrlRewrite($row, $name = null)
     {
-        $this->getSubject()->persistProductWebsite($productWebsite);
-    }
-
-    /**
-     * Return's the store website for the passed code.
-     *
-     * @param string $code The code of the store website to return the ID for
-     *
-     * @return integer The store website ID
-     */
-    public function getStoreWebsiteIdByCode($code)
-    {
-        return $this->getSubject()->getStoreWebsiteIdByCode($code);
+        $this->getSubject()->removeUrlRewrite($row, $name);
     }
 }

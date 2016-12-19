@@ -117,6 +117,20 @@ class ProductProcessor implements ProductProcessorInterface
     protected $stockStatusAction;
 
     /**
+     * The action for URL rewrite CRUD methods.
+     *
+     * @var \TechDivision\Import\Product\Actions\UrlRewriteAction
+     */
+    protected $urlRewriteAction;
+
+    /**
+     * The repository to load the URL rewrites with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\UrlRewriteRepository
+     */
+    protected $urlRewriteRepository;
+
+    /**
      * Set's the passed connection.
      *
      * @param \PDO $connection The connection to set
@@ -425,6 +439,50 @@ class ProductProcessor implements ProductProcessorInterface
     }
 
     /**
+     * Set's the action with the URL rewrite CRUD methods.
+     *
+     * @param \TechDivision\Import\Product\Actions\UrlRewriteAction $urlRewriteAction The action with the URL rewrite CRUD methods
+     *
+     * @return void
+     */
+    public function setUrlRewriteAction($urlRewriteAction)
+    {
+        $this->urlRewriteAction = $urlRewriteAction;
+    }
+
+    /**
+     * Return's the action with the stock status CRUD methods.
+     *
+     * @return \TechDivision\Import\Product\Actions\StockStatusAction The action instance
+     */
+    public function getUrlRewriteAction()
+    {
+        return $this->urlRewriteAction;
+    }
+
+    /**
+     * Set's the repository to load the URL rewrites with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\UrlRewriteRepository $urlRewriteRepository The repository instance
+     *
+     * @return void
+     */
+    public function setUrlRewriteRepository($urlRewriteRepository)
+    {
+        $this->urlRewriteRepository = $urlRewriteRepository;
+    }
+
+    /**
+     * Return's the repository to load the URL rewrites with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\UrlRewriteRepository The repository instance
+     */
+    public function getUrlRewriteRepository()
+    {
+        return $this->urlRewriteRepository;
+    }
+
+    /**
      * Return's the attribute option value with the passed value and store ID.
      *
      * @param mixed   $value   The option value
@@ -438,134 +496,184 @@ class ProductProcessor implements ProductProcessorInterface
     }
 
     /**
+     * Return's the URL rewrites for the passed URL entity type and ID.
+     *
+     * @param string  $entityType The entity type to load the URL rewrites for
+     * @param integer $entityId   The entity ID to laod the rewrites for
+     *
+     * @return array The URL rewrites
+     */
+    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        return $this->getUrlRewriteRepository()->findAllByEntityTypeAndEntityId($entityType, $entityId);
+    }
+
+    /**
      * Persist's the passed product data and return's the ID.
      *
-     * @param array $product The product data to persist
+     * @param array       $product The product data to persist
+     * @param string|null $name    The name of the prepared statement that has to be executed
      *
      * @return string The ID of the persisted entity
      */
-    public function persistProduct($product)
+    public function persistProduct($product, $name = null)
     {
-        return $this->getProductAction()->persist($product);
+        return $this->getProductAction()->persist($product, $name);
     }
 
     /**
      * Persist's the passed product varchar attribute.
      *
-     * @param array $attribute The attribute to persist
+     * @param array       $attribute The attribute to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductVarcharAttribute($attribute)
+    public function persistProductVarcharAttribute($attribute, $name = null)
     {
-        $this->getProductVarcharAction()->persist($attribute);
+        $this->getProductVarcharAction()->persist($attribute, $name);
     }
 
     /**
      * Persist's the passed product integer attribute.
      *
-     * @param array $attribute The attribute to persist
+     * @param array       $attribute The attribute to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductIntAttribute($attribute)
+    public function persistProductIntAttribute($attribute, $name = null)
     {
-        $this->getProductIntAction()->persist($attribute);
+        $this->getProductIntAction()->persist($attribute, $name);
     }
 
     /**
      * Persist's the passed product decimal attribute.
      *
-     * @param array $attribute The attribute to persist
+     * @param array       $attribute The attribute to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductDecimalAttribute($attribute)
+    public function persistProductDecimalAttribute($attribute, $name = null)
     {
-        $this->getProductDecimalAction()->persist($attribute);
+        $this->getProductDecimalAction()->persist($attribute, $name);
     }
 
     /**
      * Persist's the passed product datetime attribute.
      *
-     * @param array $attribute The attribute to persist
+     * @param array       $attribute The attribute to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductDatetimeAttribute($attribute)
+    public function persistProductDatetimeAttribute($attribute, $name = null)
     {
-        $this->getProductDatetimeAction()->persist($attribute);
+        $this->getProductDatetimeAction()->persist($attribute, $name);
     }
 
     /**
      * Persist's the passed product text attribute.
      *
-     * @param array $attribute The attribute to persist
+     * @param array       $attribute The attribute to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductTextAttribute($attribute)
+    public function persistProductTextAttribute($attribute, $name = null)
     {
-        $this->getProductTextAction()->persist($attribute);
+        $this->getProductTextAction()->persist($attribute, $name);
     }
 
     /**
      * Persist's the passed product website data and return's the ID.
      *
-     * @param array $productWebsite The product website data to persist
+     * @param array       $productWebsite The product website data to persist
+     * @param string|null $name           The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductWebsite($productWebsite)
+    public function persistProductWebsite($productWebsite, $name = null)
     {
-        $this->getProductWebsiteAction()->persist($productWebsite);
+        $this->getProductWebsiteAction()->persist($productWebsite, $name);
     }
 
     /**
      * Persist's the passed product category data and return's the ID.
      *
-     * @param array $productCategory The product category data to persist
+     * @param array       $productCategory The product category data to persist
+     * @param string|null $name            The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductCategory($productCategory)
+    public function persistProductCategory($productCategory, $name = null)
     {
-        $this->getProductCategoryAction()->persist($productCategory);
+        $this->getProductCategoryAction()->persist($productCategory, $name);
     }
 
     /**
      * Persist's the passed stock item data and return's the ID.
      *
-     * @param array $stockItem The stock item data to persist
+     * @param array       $stockItem The stock item data to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistStockItem($stockItem)
+    public function persistStockItem($stockItem, $name = null)
     {
-        $this->getStockItemAction()->persist($stockItem);
+        $this->getStockItemAction()->persist($stockItem, $name);
     }
 
     /**
      * Persist's the passed stock status data and return's the ID.
      *
-     * @param array $stockStatus The stock status data to persist
+     * @param array       $stockStatus The stock status data to persist
+     * @param string|null $name        The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistStockStatus($stockStatus)
+    public function persistStockStatus($stockStatus, $name = null)
     {
-        $this->getStockStatusAction()->persist($stockStatus);
+        $this->getStockStatusAction()->persist($stockStatus, $name);
+    }
+
+    /**
+     * Persist's the URL write with the passed data.
+     *
+     * @param array       $row  The URL rewrite to persist
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function persistUrlRewrite($row, $name = null)
+    {
+        $this->getUrlRewriteAction()->persist($row, $name);
     }
 
     /**
      * Remove's the entity with the passed attributes.
      *
-     * @param array $row The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProduct($row)
+    public function removeProduct($row, $name = null)
     {
-        $this->getProductAction()->remove($row);
+        $this->getProductAction()->remove($row, $name);
+    }
+
+    /**
+     * Delete's the URL rewrite with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeUrlRewrite($row, $name = null)
+    {
+        $this->getUrlRewriteAction()->remove($row, $name);
     }
 }

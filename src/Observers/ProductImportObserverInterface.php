@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Observers\ImportObserverInterface
+ * TechDivision\Import\Product\Observers\ProductImportObserverInterface
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Observers\ObserverInterface;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * Interface for all product import observers.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>

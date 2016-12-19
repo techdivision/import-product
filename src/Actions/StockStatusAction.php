@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Actions;
 use TechDivision\Import\Actions\AbstractAction;
 
 /**
- * A SLSB providing repository functionality for stock status CRUD actions.
+ * An action implementation that provides CRUD functionality for the stock status.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductDecimalPersistProcessor
+ * TechDivision\Import\Product\Actions\Processors\UrlRewriteRemoveProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
+use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
 
 /**
- * The product decimal attribute persist processor implementation.
+ * The URL rewrite remove processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductDecimalPersistProcessor extends AbstractPersistProcessor
+class UrlRewriteRemoveProcessor extends AbstractRemoveProcessor
 {
 
     /**
@@ -48,7 +48,22 @@ class ProductDecimalPersistProcessor extends AbstractPersistProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_DECIMAL => $utilityClassName::CREATE_PRODUCT_DECIMAL
+            $utilityClassName::REMOVE_URL_REWRITE => $utilityClassName::REMOVE_URL_REWRITE,
+            $utilityClassName::REMOVE_URL_REWRITE_BY_SKU => $utilityClassName::REMOVE_URL_REWRITE_BY_SKU
         );
+    }
+
+    /**
+     * Implements the CRUD functionality the processor is responsible for,
+     * can be one of CREATE, READ, UPDATE or DELETE a entity.
+     *
+     * @param array       $row  The data to handle
+     * @param string|null $name The name of the prepared statement to execute
+     *
+     * @return void
+     */
+    public function execute($row, $name = null)
+    {
+        $this->getPreparedStatement($name)->execute($row);
     }
 }

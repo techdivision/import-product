@@ -29,7 +29,7 @@ namespace TechDivision\Import\Product\Utils;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class MemberNames
+class MemberNames extends \TechDivision\Import\Utils\MemberNames
 {
 
     /**
@@ -167,4 +167,25 @@ class MemberNames
      * @var string
      */
     const FRONTENT_LABEL = 'frontend_label';
+
+    /**
+     * Name for the member 'category_id'.
+     *
+     * @var string
+     */
+    const CATEGORY_ID = 'category_id';
+
+    /**
+     * Name for the member 'request_path'.
+     *
+     * @var string
+     */
+    const REQUEST_PATH = 'request_path';
+
+    /**
+     * Name for the member 'url_rewrite_id'.
+     *
+     * @var string
+     */
+    const URL_REWRITE_ID = 'url_rewrite_id';
 }

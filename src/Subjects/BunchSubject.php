@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Subjects\BunchHandler
+ * TechDivision\Import\Product\Subjects\BunchSubject
  *
  * NOTICE OF LICENSE
  *
@@ -30,7 +30,7 @@ use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Product\Services\ProductProcessorInterface;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * The subject implementation that handles the business logic to persist products.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -134,6 +134,13 @@ class BunchSubject extends AbstractSubject
     protected $skuEntityIdMapping = array();
 
     /**
+     * The category IDs the product is related with.
+     *
+     * @var array
+     */
+    protected $productCategoryIds = array();
+
+    /**
      * The UID of the file to be imported.
      *
      * @var string
@@ -181,6 +188,13 @@ class BunchSubject extends AbstractSubject
      * @var array
      */
     protected $categories = array();
+
+    /**
+     * The available root categories.
+     *
+     * @var array
+     */
+    protected $rootCategories = array();
 
     /**
      * The attribute set of the product that has to be created.
@@ -349,6 +363,9 @@ class BunchSubject extends AbstractSubject
 
         // load the categories we've initialized before
         $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
+
+        // load the root categories we've initialized before
+        $this->rootCategories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ROOT_CATEGORIES];
 
         // prepare the callbacks
         parent::setUp();
@@ -668,6 +685,19 @@ class BunchSubject extends AbstractSubject
     }
 
     /**
+     * Return's the URL rewrites for the passed URL entity type and ID.
+     *
+     * @param string  $entityType The entity type to load the URL rewrites for
+     * @param integer $entityId   The entity ID to laod the rewrites for
+     *
+     * @return array The URL rewrites
+     */
+    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        return $this->getProductProcessor()->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
+    }
+
+    /**
      * Add the passed SKU => entity ID mapping.
      *
      * @param string $sku The SKU
@@ -678,6 +708,71 @@ class BunchSubject extends AbstractSubject
     public function addSkuEntityIdMapping($sku)
     {
         $this->skuEntityIdMapping[$sku] = $this->getLastEntityId();
+    }
+
+    /**
+     * Add the passed category ID to the product's category list.
+     *
+     * @param integer $categoryId The category ID to add
+     *
+     * @return void
+     */
+    public function addProductCategoryId($categoryId)
+    {
+        $this->productCategoryIds[$this->getLastEntityId()][$categoryId] = $this->getLastEntityId();
+    }
+
+    /**
+     * Return's the list with category IDs the product is related with.
+     *
+     * @return array The product's category IDs
+     */
+    public function getProductCategoryIds()
+    {
+        return $this->productCategoryIds[$this->getLastEntityId()];
+    }
+
+    /**
+     * Return's the category with the passed ID.
+     *
+     * @param integer $categoryId The ID of the category to return
+     *
+     * @return array The category data
+     * @throws \Exception Is thrown, if the category is not available
+     */
+    public function getCategory($categoryId)
+    {
+
+        // try to load the category with the passed ID
+        foreach ($this->categories as $category) {
+            if ($category[MemberNames::ENTITY_ID] == $categoryId) {
+                return $category;
+            }
+        }
+
+        // throw an exception if the category is NOT available
+        throw new \Exception(sprintf('Can\'t load category with ID %d', $categoryId));
+    }
+
+    /**
+     * Return's the root category for the actual view store.
+     *
+     * @return array The store's root category
+     * @throws \Exception Is thrown if the root category for the passed store code is NOT available
+     */
+    public function getRootCategory()
+    {
+
+        // load the actual store view code
+        $storeViewCode = $this->getStoreViewCode();
+
+        // query weather or not we've a root category or not
+        if (isset($this->rootCategories[$storeViewCode])) {
+            return $this->rootCategories[$storeViewCode];
+        }
+
+        // throw an exception if the root category is NOT available
+        throw new \Exception(sprintf('Root category for %s is not available', $storeCode));
     }
 
     /**
@@ -801,6 +896,18 @@ class BunchSubject extends AbstractSubject
     }
 
     /**
+     * Persist's the URL write with the passed data.
+     *
+     * @param array $row The URL rewrite to persist
+     *
+     * @return void
+     */
+    public function persistUrlRewrite($row)
+    {
+        $this->getProductProcessor()->persistUrlRewrite($row);
+    }
+
+    /**
      * Remove's the entity with the passed attributes.
      *
      * @param array $row The attributes of the entity to remove
@@ -810,5 +917,18 @@ class BunchSubject extends AbstractSubject
     public function removeProduct($row)
     {
         $this->getProductProcessor()->removeProduct($row);
+    }
+
+    /**
+     * Delete's the URL rewrite with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeUrlRewrite($row, $name = null)
+    {
+        $this->getProductProcessor()->removeUrlRewrite($row, $name);
     }
 }

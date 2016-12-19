@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Importer\Csv\Actions\Observers\Product\ProductCategoryObserver
+ * TechDivision\Import\Product\Observers\ProductCategoryObserver
  *
  * NOTICE OF LICENSE
  *
@@ -25,7 +25,7 @@ use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * Observer that creates/updates the product's category relations.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -64,11 +64,25 @@ class ProductCategoryObserver extends AbstractProductImportObserver
             // load the category for the found path
             $category = $this->getCategoryByPath(trim($path));
             // relate the found category with the product
-            $this->persistProductCategory(array($category[MemberNames::ENTITY_ID], $lastEntityId, 0));
+            $this->persistProductCategory(array($categoryId = $category[MemberNames::ENTITY_ID], $lastEntityId, 0));
+            // add the category ID to the list
+            $this->addProductCategoryId($categoryId);
         }
 
         // returns the row
         return $row;
+    }
+
+    /**
+     * Add the passed category ID to the product's category list.
+     *
+     * @param integer $categoryId The category ID to add
+     *
+     * @return void
+     */
+    public function addProductCategoryId($categoryId)
+    {
+        $this->getSubject()->addProductCategoryId($categoryId);
     }
 
     /**
