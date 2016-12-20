@@ -676,4 +676,56 @@ class ProductProcessor implements ProductProcessorInterface
     {
         $this->getUrlRewriteAction()->remove($row, $name);
     }
+
+    /**
+     * Delete's the stock item(s) with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeStockItem($row, $name = null)
+    {
+        $this->getStockItemAction()->remove($row, $name);
+    }
+
+    /**
+     * Delete's the stock status with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeStockStatus($row, $name = null)
+    {
+        $this->getStockStatusAction()->remove($row, $name);
+    }
+
+    /**
+     * Delete's the product website relations with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeProductWebsite($row, $name = null)
+    {
+        $this->getProductWebsiteAction()->remove($row, $name);
+    }
+
+    /**
+     * Delete's the product category relations with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeProductCategory($row, $name = null)
+    {
+        $this->getProductCategoryAction()->remove($row, $name);
+    }
 }

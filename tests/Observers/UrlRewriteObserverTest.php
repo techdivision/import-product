@@ -209,7 +209,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                 )
                             )
                             ->getMock();
-        $mockSubject->expects($this->exactly(4))
+        $mockSubject->expects($this->any())
                     ->method('getHeaders')
                     ->willReturn($headers);
         $mockSubject->expects($this->exactly(2))

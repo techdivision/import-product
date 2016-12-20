@@ -260,6 +260,50 @@ class SqlStatements extends FallbackStatements
                                           AND url_rewrite.entity_id = catalog_product_entity.entity_id';
 
     /**
+     * The SQL statement to remove all existing stock status related with the SKU passed as parameter.
+     *
+     * @var string
+     */
+    const REMOVE_STOCK_STATUS_BY_SKU = 'DELETE cataloginventory_stock_status
+                                         FROM cataloginventory_stock_status
+                                   INNER JOIN catalog_product_entity
+                                        WHERE catalog_product_entity.sku = ?
+                                          AND cataloginventory_stock_status.product_id = catalog_product_entity.entity_id';
+
+    /**
+     * The SQL statement to remove all existing stock item related with the SKU passed as parameter.
+     *
+     * @var string
+     */
+    const REMOVE_STOCK_ITEM_BY_SKU = 'DELETE cataloginventory_stock_item
+                                        FROM cataloginventory_stock_item
+                                  INNER JOIN catalog_product_entity
+                                       WHERE catalog_product_entity.sku = ?
+                                         AND cataloginventory_stock_item.product_id = catalog_product_entity.entity_id';
+
+    /**
+     * The SQL statement to remove all product website relations for the product with the SKU passed as parameter.
+     *
+     * @var string
+     */
+    const REMOVE_PRODUCT_WEBSITE_BY_SKU = 'DELETE catalog_product_website
+                                             FROM catalog_product_website
+                                       INNER JOIN catalog_product_entity
+                                            WHERE catalog_product_entity.sku = ?
+                                              AND catalog_product_website.product_id = catalog_product_entity.entity_id';
+
+    /**
+     * The SQL statement to remove all product category relations for the product with the SKU passed as parameter.
+     *
+     * @var string
+     */
+    const REMOVE_PRODUCT_CATEGORY_BY_SKU = 'DELETE catalog_category_product
+                                              FROM catalog_category_product
+                                        INNER JOIN catalog_product_entity
+                                             WHERE catalog_product_entity.sku = ?
+                                               AND catalog_category_product.product_id = catalog_product_entity.entity_id';
+
+    /**
      * The SQL statement to load the URL rewrites for the passed entity type and ID.
      *
      * @var string

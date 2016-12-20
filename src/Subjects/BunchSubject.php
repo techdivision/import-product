@@ -772,7 +772,7 @@ class BunchSubject extends AbstractSubject
         }
 
         // throw an exception if the root category is NOT available
-        throw new \Exception(sprintf('Root category for %s is not available', $storeCode));
+        throw new \Exception(sprintf('Root category for %s is not available', $storeViewCode));
     }
 
     /**
@@ -910,17 +910,18 @@ class BunchSubject extends AbstractSubject
     /**
      * Remove's the entity with the passed attributes.
      *
-     * @param array $row The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProduct($row)
+    public function removeProduct($row, $name = null)
     {
-        $this->getProductProcessor()->removeProduct($row);
+        $this->getProductProcessor()->removeProduct($row, $name);
     }
 
     /**
-     * Delete's the URL rewrite with the passed attributes.
+     * Delete's the URL rewrite(s) with the passed attributes.
      *
      * @param array       $row  The attributes of the entity to remove
      * @param string|null $name The name of the prepared statement that has to be executed
@@ -930,5 +931,57 @@ class BunchSubject extends AbstractSubject
     public function removeUrlRewrite($row, $name = null)
     {
         $this->getProductProcessor()->removeUrlRewrite($row, $name);
+    }
+
+    /**
+     * Delete's the stock item(s) with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeStockItem($row, $name = null)
+    {
+        $this->getProductProcessor()->removeStockItem($row, $name);
+    }
+
+    /**
+     * Delete's the stock status with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeStockStatus($row, $name = null)
+    {
+        $this->getProductProcessor()->removeStockStatus($row, $name);
+    }
+
+    /**
+     * Delete's the product website relations with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeProductWebsite($row, $name = null)
+    {
+        $this->getProductProcessor()->removeProductWebsite($row, $name);
+    }
+
+    /**
+     * Delete's the product category relations with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeProductCategory($row, $name = null)
+    {
+        $this->getProductProcessor()->removeProductCategory($row, $name);
     }
 }

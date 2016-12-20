@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha4
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Implement Clean-Up for products and relations
+
 # Version 1.0.0-alpha3
 
 ## Bugfixes
