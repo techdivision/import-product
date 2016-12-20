@@ -89,8 +89,8 @@ class UrlRewriteObserver extends AbstractProductImportObserver
 
         // delete/create/update the URL rewrites
         $this->deleteUrlRewrites($existingProductCategoryUrlRewrites);
-        $this->updateUrlRewrites($row, array_intersect_key($existingProductCategoryUrlRewrites, $productCategoryIds));
-        $this->createUrlRewrites($row, $productCategoryIds);
+        $this->updateUrlRewrites(array_intersect_key($existingProductCategoryUrlRewrites, $productCategoryIds));
+        $this->createUrlRewrites($productCategoryIds);
 
         // returns the row
         return $row;
@@ -240,7 +240,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         }
 
         // remove the URL rewrites
-        foreach ($existingProductCategoryUrlRewrites as $categoryId => $urlRewrite) {
+        foreach ($existingProductCategoryUrlRewrites as $urlRewrite) {
             $this->removeUrlRewrite(array(MemberNames::URL_REWRITE_ID => $urlRewrite[MemberNames::URL_REWRITE_ID]));
         }
     }
@@ -248,12 +248,11 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     /**
      * Create's the URL rewrites from the passed data.
      *
-     * @param array $row                The data to create the URL rewrite from
      * @param array $productCategoryIds The categories to create a URL rewrite for
      *
      * @return void
      */
-    protected function createUrlRewrites(array $row, array $productCategoryIds)
+    protected function createUrlRewrites(array $productCategoryIds)
     {
 
         // query whether or not if there is any category to create a URL rewrite for
@@ -261,16 +260,13 @@ class UrlRewriteObserver extends AbstractProductImportObserver
             return;
         }
 
-        // load the header information
-        $headers = $this->getHeaders();
-
         // iterate over the categories and create the URL rewrites
         foreach ($productCategoryIds as $categoryId => $entityId) {
             // load the category to create the URL rewrite for
             $category = $this->getCategory($categoryId);
 
             // initialize the values
-            $requestPath = $this->prepareRequestPath($row, $category);
+            $requestPath = $this->prepareRequestPath($category);
             $targetPath = $this->prepareTargetPath($category);
             $metadata = serialize($this->prepareMetadata($category));
 
@@ -285,21 +281,17 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     /**
      * Update's existing URL rewrites by creating 301 redirect URL rewrites for each.
      *
-     * @param array $row                                The row with the actual data
      * @param array $existingProductCategoryUrlRewrites The array with the existing URL rewrites
      *
      * @return void
      */
-    protected function updateUrlRewrites(array $row, array $existingProductCategoryUrlRewrites)
+    protected function updateUrlRewrites(array $existingProductCategoryUrlRewrites)
     {
 
         // query whether or not, we've existing URL rewrites that need to be redirected
         if (sizeof($existingProductCategoryUrlRewrites) === 0) {
             return;
         }
-
-        // load the header information
-        $headers = $this->getHeaders();
 
         // iterate over the URL redirects that have to be redirected
         foreach ($existingProductCategoryUrlRewrites as $categoryId => $urlRewrite) {
@@ -309,7 +301,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
             // initialize the values
             $entityId = $urlRewrite[MemberNames::ENTITY_ID];
             $requestPath = sprintf('%s', $urlRewrite['request_path']);
-            $targetPath = $this->prepareTargetPathForRedirect($row, $category);
+            $targetPath = $this->prepareTargetPathForRedirect($category);
             $metadata = serialize($this->prepareMetadata($category));
 
             // initialize the URL rewrite data
@@ -350,16 +342,12 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     /**
      * Prepare's the request path for a URL rewrite.
      *
-     * @param array $row      The actual row with the data
      * @param array $category The categroy with the URL path
      *
      * @return string The request path
      */
-    protected function prepareRequestPath(array $row, array $category)
+    protected function prepareRequestPath(array $category)
     {
-
-        // load the header information
-        $headers = $this->getHeaders();
 
         // initialize the request path
         $requestPath = '';
@@ -378,16 +366,12 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     /**
      * Prepare's the target path for a 301 redirect URL rewrite.
      *
-     * @param array $row      The actual row with the data
      * @param array $category The categroy with the URL path
      *
      * @return string The target path
      */
-    protected function prepareTargetPathForRedirect(array $row, array $category)
+    protected function prepareTargetPathForRedirect(array $category)
     {
-
-        // load the header information
-        $headers = $this->getHeaders();
 
         // initialize the target path
         $targetPath = '';

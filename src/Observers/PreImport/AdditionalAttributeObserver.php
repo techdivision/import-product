@@ -24,7 +24,8 @@ use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * Observer that prepares the additional product attribues found in the CSV file
+ * in the row 'additional_attributes'.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>

@@ -21,10 +21,11 @@
 namespace TechDivision\Import\Product\Observers\PreImport;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\SqlStatements;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * Observer that removes the product with the SKU found in the CSV file.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -54,6 +55,13 @@ class ClearProductObserver extends AbstractProductImportObserver
             return $row;
         }
 
+        // FIRST remove the data related with the product with the passed SKU
+        $this->removeStockItem(array($sku), SqlStatements::REMOVE_STOCK_ITEM_BY_SKU);
+        $this->removeUrlRewrite(array($sku), SqlStatements::REMOVE_URL_REWRITE_BY_SKU);
+        $this->removeStockStatus(array($sku), SqlStatements::REMOVE_STOCK_STATUS_BY_SKU);
+        $this->removeProductWebsite(array($sku), SqlStatements::REMOVE_PRODUCT_WEBSITE_BY_SKU);
+        $this->removeProductCategory(array($sku), SqlStatements::REMOVE_PRODUCT_CATEGORY_BY_SKU);
+
         // remove the product with the passed SKU
         $this->removeProduct(array($sku));
 
@@ -64,12 +72,78 @@ class ClearProductObserver extends AbstractProductImportObserver
     /**
      * Remove's the entity with the passed attributes.
      *
-     * @param array $row The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProduct($row)
+    public function removeProduct($row, $name = null)
     {
-        $this->getSubject()->removeProduct($row);
+        $this->getSubject()->removeProduct($row, $name);
+    }
+
+    /**
+     * Delete's the URL rewrite(s) with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeUrlRewrite($row, $name = null)
+    {
+        $this->getSubject()->removeUrlRewrite($row, $name);
+    }
+
+    /**
+     * Delete's the stock item(s) with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeStockItem($row, $name = null)
+    {
+        $this->getSubject()->removeStockItem($row, $name);
+    }
+
+    /**
+     * Delete's the stock status with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeStockStatus($row, $name = null)
+    {
+        $this->getSubject()->removeStockStatus($row, $name);
+    }
+
+    /**
+     * Delete's the product website relations with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeProductWebsite($row, $name = null)
+    {
+        $this->getSubject()->removeProductWebsite($row, $name);
+    }
+
+    /**
+     * Delete's the product category relations with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeProductCategory($row, $name = null)
+    {
+        $this->getSubject()->removeProductCategory($row, $name);
     }
 }

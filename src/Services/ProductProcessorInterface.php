@@ -306,4 +306,44 @@ interface ProductProcessorInterface
      * @return void
      */
     public function removeUrlRewrite($row, $name = null);
+
+    /**
+     * Delete's the stock item(s) with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeStockItem($row, $name = null);
+
+    /**
+     * Delete's the stock status with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeStockStatus($row, $name = null);
+
+    /**
+     * Delete's the product website relations with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeProductWebsite($row, $name = null);
+
+    /**
+     * Delete's the product category relations with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to remove
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function removeProductCategory($row, $name = null);
 }
