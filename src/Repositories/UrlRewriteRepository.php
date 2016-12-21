@@ -35,6 +35,13 @@ class UrlRewriteRepository extends AbstractRepository
 {
 
     /**
+     * The prepared statement to load the existing URL rewrites.
+     *
+     * @var \PDOStatement
+     */
+    protected $urlRewritesStmt;
+
+    /**
      * Initializes the repository's prepared statements.
      *
      * @return void
@@ -47,9 +54,7 @@ class UrlRewriteRepository extends AbstractRepository
 
         // initialize the prepared statements
         $this->urlRewritesStmt = $this->getConnection()
-                                      ->prepare(
-                                          $this->myStmt = $utilityClassName::URL_REWRITES_BY_ENTITY_TYPE_AND_ENTITY_ID
-                                      );
+                                      ->prepare($utilityClassName::URL_REWRITES_BY_ENTITY_TYPE_AND_ENTITY_ID);
     }
 
     /**
