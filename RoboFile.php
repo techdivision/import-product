@@ -30,6 +30,8 @@ use Symfony\Component\Finder\Finder;
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
+ *
+ * @SuppressWarnings(PHPMD)
  */
 class RoboFile extends \Robo\Tasks
 {

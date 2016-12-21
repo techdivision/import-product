@@ -308,7 +308,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
             // initialize the values
             $entityId = $urlRewrite[MemberNames::ENTITY_ID];
             $requestPath = sprintf('%s', $urlRewrite['request_path']);
-            $targetPath = $this->prepareTargetPathForRedirect($category);
+            $targetPath = $this->prepareRequestPath($category);
             $metadata = serialize($this->prepareMetadata($category));
 
             // initialize the URL rewrite data
@@ -332,9 +332,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         // load the actual entity ID
         $lastEntityId = $this->getLastEntityId();
 
-        // initialize the target path
-        $targetPath = '';
-
         // query whether or not, the category is the root category
         if ($this->isRootCategory($category)) {
             $targetPath = sprintf('catalog/product/view/id/%d', $lastEntityId);
@@ -347,7 +344,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Prepare's the request path for a URL rewrite.
+     * Prepare's the request path for a URL rewrite or the target path for a 301 redirect.
      *
      * @param array $category The categroy with the URL path
      *
@@ -355,9 +352,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      */
     protected function prepareRequestPath(array $category)
     {
-
-        // initialize the request path
-        $requestPath = '';
 
         // query whether or not, the category is the root category
         if ($this->isRootCategory($category)) {
@@ -368,30 +362,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
 
         // return the request path
         return $requestPath;
-    }
-
-    /**
-     * Prepare's the target path for a 301 redirect URL rewrite.
-     *
-     * @param array $category The categroy with the URL path
-     *
-     * @return string The target path
-     */
-    protected function prepareTargetPathForRedirect(array $category)
-    {
-
-        // initialize the target path
-        $targetPath = '';
-
-        // query whether or not, the category is the root category
-        if ($this->isRootCategory($category)) {
-            $targetPath = sprintf('%s.html', $this->getUrlKey());
-        } else {
-            $targetPath = sprintf('%s/%s.html', $category[MemberNames::URL_PATH], $this->getUrlKey());
-        }
-
-        // return the target path
-        return $targetPath;
     }
 
     /**
