@@ -6,7 +6,7 @@
 
 ## Features
 
-* None
+* Add Robo.li composer dependeny + task configuration
 
 # Version 1.0.0-alpha5
 
