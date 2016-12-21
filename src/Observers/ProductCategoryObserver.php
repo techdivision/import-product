@@ -55,11 +55,21 @@ class ProductCategoryObserver extends AbstractProductImportObserver
             return $row;
         }
 
+        // query whether or not, product => category relations has been specified
+        if (isset($row[$headers[ColumnKeys::CATEGORIES]])) {
+            $productCategories = $row[$headers[ColumnKeys::CATEGORIES]];
+        }
+
+        // if not, we dont do anything
+        if (empty($productCategories)) {
+            return $row;
+        }
+
         // load the ID of the product that has been created recently
         $lastEntityId = $this->getLastEntityId();
 
         // extract the category trees and try to import the data
-        $paths = explode(',', $row[$headers[ColumnKeys::CATEGORIES]]);
+        $paths = explode(',', $productCategories);
         foreach ($paths as $path) {
             // load the category for the found path
             $category = $this->getCategoryByPath(trim($path));

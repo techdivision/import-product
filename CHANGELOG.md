@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha6
+
+## Bugfixes
+
+* Fixed invalid handling on empty product website + category relations
+
+## Features
+
+* None
+
 # Version 1.0.0-alpha5
 
 ## Bugfixes
