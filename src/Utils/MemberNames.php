@@ -33,23 +33,6 @@ class MemberNames extends \TechDivision\Import\Utils\MemberNames
 {
 
     /**
-     * This is a utility class, so protect it against direct
-     * instantiation.
-     */
-    private function __construct()
-    {
-    }
-
-    /**
-     * This is a utility class, so protect it against cloning.
-     *
-     * @return void
-     */
-    private function __clone()
-    {
-    }
-
-    /**
      * Name for the member 'code'.
      *
      * @var string

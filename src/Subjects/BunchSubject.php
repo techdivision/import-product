@@ -206,7 +206,7 @@ class BunchSubject extends AbstractSubject
     /**
      * The ID of the product that has been created recently.
      *
-     * @var integer
+     * @var string
      */
     protected $lastEntityId;
 

@@ -46,6 +46,13 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     const ENTITY_TYPE = 'product';
 
     /**
+     * The URL key from the CSV file column that has to be processed by the observer.
+     *
+     * @var string
+     */
+    protected $urlKey;
+
+    /**
      * Will be invoked by the action on the events the listener has been registered for.
      *
      * @param array $row The row to handle

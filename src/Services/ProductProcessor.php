@@ -70,7 +70,7 @@ class ProductProcessor implements ProductProcessorInterface
     /**
      * The action for product int attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductTextAction
+     * @var \TechDivision\Import\Product\Actions\ProductIntAction
      */
     protected $productIntAction;
 
@@ -84,7 +84,7 @@ class ProductProcessor implements ProductProcessorInterface
     /**
      * The action for product datetime attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductDatetiemAction
+     * @var \TechDivision\Import\Product\Actions\ProductDatetimeAction
      */
     protected $productDatetimeAction;
 
@@ -453,7 +453,7 @@ class ProductProcessor implements ProductProcessorInterface
     /**
      * Return's the action with the stock status CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\StockStatusAction The action instance
+     * @return \TechDivision\Import\Product\Actions\UrlRewriteAction The action instance
      */
     public function getUrlRewriteAction()
     {
