@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha5
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Implement [Operation](https://github.com/techdivision/import-product/issues/8) functionality
+
 # Version 1.0.0-alpha4
 
 ## Bugfixes
@@ -6,7 +16,7 @@
 
 ## Features
 
-* Implement Clean-Up for products and relations
+* Implement [Clean-Up](https://github.com/techdivision/import-product/issues/9) for products and relations
 
 # Version 1.0.0-alpha3
 

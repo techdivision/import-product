@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Observers\PostImport\CleanUpObserver
+ * TechDivision\Import\Product\Observers\QuantityAndStockStatusObserver
  *
  * NOTICE OF LICENSE
  *
@@ -18,13 +18,13 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Observers\PostImport;
+namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * Observer that prepares the inventory information found in the CSV file.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -32,7 +32,7 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class CleanUpObserver extends AbstractProductImportObserver
+class QuantityAndStockStatusObserver extends AbstractProductImportObserver
 {
 
     /**
@@ -49,37 +49,32 @@ class CleanUpObserver extends AbstractProductImportObserver
         // load the header information
         $headers = $this->getHeaders();
 
-        // add the SKU => entity ID mapping
-        $this->addSkuEntityIdMapping($sku = $row[$headers[ColumnKeys::SKU]]);
+        /*
+        $qty = (float) $row[$this->headers[ColumnKeys::QTY]];
+        $isInStock = (integer) $row[$this->headers[ColumnKeys::IS_IN_STOCK]];
 
-        // temporary persist the SKU
-        $this->setLastSku($sku);
+        $this->getSystemLogger()->info("Found qty $qty and is_in_stock $isInStock");
 
-        // returns the row
+        $quantityAndStockStatus = 0;
+        if ($qty > 0 && $isInStock === 1) {
+            $quantityAndStockStatus = 1;
+        }
+        */
+
+        // try to load the appropriate key for the stock status
+        if (isset($headers[ColumnKeys::QUANTITY_AND_STOCK_STATUS])) {
+            $newKey = $headers[ColumnKeys::QUANTITY_AND_STOCK_STATUS];
+        } else {
+            $headers[ColumnKeys::QUANTITY_AND_STOCK_STATUS] = $newKey = sizeof($headers);
+        }
+
+        // append/replace the stock status
+        $row[$newKey] = 1;
+
+        // update the header information
+        $this->setHeaders($headers);
+
+        // return the prepared row
         return $row;
-    }
-
-    /**
-     * Add the passed SKU => entity ID mapping.
-     *
-     * @param string $sku The SKU
-     *
-     * @return void
-     */
-    public function addSkuEntityIdMapping($sku)
-    {
-        $this->getSubject()->addSkuEntityIdMapping($sku);
-    }
-
-    /**
-     * Set's the SKU of the last imported product.
-     *
-     * @param string $lastSku The SKU
-     *
-     * @return void
-     */
-    public function setLastSku($lastSku)
-    {
-        $this->getSubject()->setLastSku($lastSku);
     }
 }

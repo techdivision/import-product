@@ -409,7 +409,7 @@ class BunchSubject extends AbstractSubject
         foreach ($this->getArtefacts() as $artefactType => $artefacts) {
             foreach ($artefacts as $entityArtefacts) {
                 // initialize the the exporter
-                $exporter = new Exporter(new ExporterConfig());
+                $exporter = new Exporter($this->getExportConfig());
 
                 // initialize the bunch
                 $bunch = array();
@@ -426,6 +426,51 @@ class BunchSubject extends AbstractSubject
                 $exporter->export(sprintf('%s/%s-%s_%d.csv', $targetDir, $artefactType, $timestamp, $counter++), $bunch);
             }
         }
+    }
+
+    /**
+     * Initialize and return the exporter configuration.
+     *
+     * @return \Goodby\CSV\Export\Standard\ExporterConfig The exporter configuration
+     */
+    protected function getExportConfig()
+    {
+
+        // initialize the lexer configuration
+        $config = new ExporterConfig();
+
+        // query whether or not a delimiter character has been configured
+        if ($delimiter = $this->getConfiguration()->getDelimiter()) {
+            $config->setDelimiter($delimiter);
+        }
+
+        // query whether or not a custom escape character has been configured
+        if ($escape = $this->getConfiguration()->getEscape()) {
+            $config->setEscape($escape);
+        }
+
+        // query whether or not a custom enclosure character has been configured
+        if ($enclosure = $this->getConfiguration()->getEnclosure()) {
+            $config->setEnclosure($enclosure);
+        }
+
+        // query whether or not a custom source charset has been configured
+        if ($fromCharset = $this->getConfiguration()->getFromCharset()) {
+            $config->setFromCharset($fromCharset);
+        }
+
+        // query whether or not a custom target charset has been configured
+        if ($toCharset = $this->getConfiguration()->getToCharset()) {
+            $config->setToCharset($toCharset);
+        }
+
+        // query whether or not a custom file mode has been configured
+        if ($fileMode = $this->getConfiguration()->getFileMode()) {
+            $config->setFileMode($fileMode);
+        }
+
+        // return the lexer configuratio
+        return $config;
     }
 
     /**
