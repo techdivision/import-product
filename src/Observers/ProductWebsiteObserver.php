@@ -54,11 +54,21 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
             return $row;
         }
 
+        // query whether or not, product => website relations has been specified
+        if (isset($row[$headers[ColumnKeys::PRODUCT_WEBSITES]])) {
+            $productWebsites = $row[$headers[ColumnKeys::PRODUCT_WEBSITES]];
+        }
+
+        // if not, we dont do anything
+        if (empty($productWebsites)) {
+            return $row;
+        }
+
         // load the ID of the product that has been created recently
         $lastEntityId = $this->getLastEntityId();
 
-        // append the websites found
-        $codes = explode(',', $row[$headers[ColumnKeys::PRODUCT_WEBSITES]]);
+        // append the product => website relations found
+        $codes = explode(',', $productWebsites);
         foreach ($codes as $code) {
             // load the website ID to relate the product with
             $websiteId = $this->getStoreWebsiteIdByCode($code);
