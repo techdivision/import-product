@@ -6,7 +6,9 @@
 
 ## Features
 
-* None
+* Add methods to handle store view code to AbstractProductImportObserver
+* Add AbstractProductSubject for product import specific subject implementations
+* Add ProductProcessorInterface and rename ProductProcessor => ProductBunchProcessor/Interface
 
 # Version 1.0.0-alpha6
 

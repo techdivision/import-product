@@ -28,6 +28,7 @@ use TechDivision\Import\Services\RegistryProcessor;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Product\Services\ProductProcessorInterface;
+use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -38,15 +39,8 @@ use TechDivision\Import\Product\Services\ProductProcessorInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class BunchSubject extends AbstractSubject
+class BunchSubject extends AbstractProductSubject
 {
-
-    /**
-     * The processor to read/write the necessary product data.
-     *
-     * @var \TechDivision\Import\Product\Services\ProductProcessorInterface
-     */
-    protected $productProcessor;
 
     /**
      * The mapping for the supported backend types (for the product entity) => persist methods.
@@ -120,6 +114,13 @@ class BunchSubject extends AbstractSubject
     );
 
     /**
+     * The attribute set of the product that has to be created.
+     *
+     * @var array
+     */
+    protected $attributeSet = array();
+
+    /**
      * The array containing the data for product type configuration (configurables, bundles, etc).
      *
      * @var array
@@ -139,156 +140,6 @@ class BunchSubject extends AbstractSubject
      * @var array
      */
     protected $productCategoryIds = array();
-
-    /**
-     * The UID of the file to be imported.
-     *
-     * @var string
-     */
-    protected $uid;
-
-    /**
-     * The available EAV attribute sets.
-     *
-     * @var array
-     */
-    protected $attributeSets = array();
-
-    /**
-     * The available stores.
-     *
-     * @var array
-     */
-    protected $stores = array();
-
-    /**
-     * The available store websites.
-     *
-     * @var array
-     */
-    protected $storeWebsites = array();
-
-    /**
-     * The available EAV attributes, grouped by their attribute set and the attribute set name as keys.
-     *
-     * @var array
-     */
-    protected $attributes = array();
-
-    /**
-     * The available tax classes.
-     *
-     * @var array
-     */
-    protected $taxClasses = array();
-
-    /**
-     * The available categories.
-     *
-     * @var array
-     */
-    protected $categories = array();
-
-    /**
-     * The available root categories.
-     *
-     * @var array
-     */
-    protected $rootCategories = array();
-
-    /**
-     * The attribute set of the product that has to be created.
-     *
-     * @var array
-     */
-    protected $attributeSet = array();
-
-    /**
-     * The ID of the product that has been created recently.
-     *
-     * @var string
-     */
-    protected $lastEntityId;
-
-    /**
-     * The SKU of the product that has been created recently.
-     *
-     * @var string
-     */
-    protected $lastSku;
-
-    /**
-     * The store view code the create the product/attributes for.
-     *
-     * @var string
-     */
-    protected $storeViewCode;
-
-    /**
-     * Set's the product processor instance.
-     *
-     * @param \TechDivision\Import\Product\Services\ProductProcessorInterface $productProcessor The product processor instance
-     *
-     * @return void
-     */
-    public function setProductProcessor(ProductProcessorInterface $productProcessor)
-    {
-        $this->productProcessor = $productProcessor;
-    }
-
-    /**
-     * Return's the product processor instance.
-     *
-     * @return \TechDivision\Import\Services\ProductProcessorInterface The product processor instance
-     */
-    public function getProductProcessor()
-    {
-        return $this->productProcessor;
-    }
-
-    /**
-     * Set's the SKU of the last imported product.
-     *
-     * @param string $lastSku The SKU
-     *
-     * @return void
-     */
-    public function setLastSku($lastSku)
-    {
-        $this->lastSku = $lastSku;
-    }
-
-    /**
-     * Return's the SKU of the last imported product.
-     *
-     * @return string|null The SKU
-     */
-    public function getLastSku()
-    {
-        return $this->lastSku;
-    }
-
-    /**
-     * Set's the ID of the product that has been created recently.
-     *
-     * @param string $lastEntityId The entity ID
-     *
-     * @return void
-     */
-    public function setLastEntityId($lastEntityId)
-    {
-        $this->lastEntityId = $lastEntityId;
-    }
-
-    /**
-     * Return's the ID of the product that has been created recently.
-     *
-     * @return string The entity Id
-     */
-    public function getLastEntityId()
-    {
-        return $this->lastEntityId;
-    }
 
     /**
      * Set's the attribute set of the product that has to be created.
@@ -313,65 +164,6 @@ class BunchSubject extends AbstractSubject
     }
 
     /**
-     * Set's the store view code the create the product/attributes for.
-     *
-     * @param string $storeViewCode The store view code
-     *
-     * @return void
-     */
-    public function setStoreViewCode($storeViewCode)
-    {
-        $this->storeViewCode = $storeViewCode;
-    }
-
-    /**
-     * Return's the store view code the create the product/attributes for.
-     *
-     * @return string The store view code
-     */
-    public function getStoreViewCode()
-    {
-        return $this->storeViewCode;
-    }
-
-    /**
-     * Intializes the previously loaded global data for exactly one bunch.
-     *
-     * @return void
-     * @see \Importer\Csv\Actions\ProductImportAction::prepare()
-     */
-    public function setUp()
-    {
-
-        // load the status of the actual import
-        $status = $this->getRegistryProcessor()->getAttribute($this->serial);
-
-        // load the attribute set we've prepared intially
-        $this->attributeSets = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ATTRIBUTE_SETS];
-
-        // load the store websites we've prepare initially
-        $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
-
-        // load the EAV attributes we've prepared initially
-        $this->attributes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::EAV_ATTRIBUTES];
-
-        // load the stores we've initialized before
-        $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
-
-        // load the stores we've initialized before
-        $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
-
-        // load the categories we've initialized before
-        $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
-
-        // load the root categories we've initialized before
-        $this->rootCategories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ROOT_CATEGORIES];
-
-        // prepare the callbacks
-        parent::setUp();
-    }
-
-    /**
      * Clean up the global data after importing the bunch.
      *
      * @return void
@@ -379,15 +171,20 @@ class BunchSubject extends AbstractSubject
     public function tearDown()
     {
 
+        // invoke parent method
+        parent::tearDown();
+
         // export the artefacts
         $this->exportArtefacts();
 
         // load the registry processor
         $registryProcessor = $this->getRegistryProcessor();
 
-        // update the status up the actual import with the found variations, bundles, SKU => entity ID mapping and the imported files
-        $registryProcessor->mergeAttributesRecursive($this->serial, array(RegistryKeys::SKU_ENTITY_ID_MAPPING => $this->skuEntityIdMapping));
-        $registryProcessor->mergeAttributesRecursive($this->serial, array(RegistryKeys::FILES                 => array($this->uid => array(RegistryKeys::STATUS => 1))));
+        // update the status with the SKU => entity ID mapping
+        $registryProcessor->mergeAttributesRecursive(
+            $this->getSerial(),
+            array(RegistryKeys::SKU_ENTITY_ID_MAPPING => $this->skuEntityIdMapping)
+        );
     }
 
     /**
@@ -415,7 +212,9 @@ class BunchSubject extends AbstractSubject
                 $bunch = array();
 
                 // set the bunch header and append the artefact data
-                $bunch[] = array_keys(reset(reset($entityArtefacts)));
+                $first = reset($entityArtefacts);
+                $second = reset($first);
+                $bunch[] = array_keys($second);
 
                 // export the artefacts
                 foreach ($entityArtefacts as $entityArtefact) {
@@ -524,27 +323,6 @@ class BunchSubject extends AbstractSubject
     }
 
     /**
-     * Return's the attributes for the attribute set of the product that has to be created.
-     *
-     * @return array The attributes
-     * @throws \Exception Is thrown if the attributes for the actual attribute set are not available
-     */
-    public function getAttributes()
-    {
-
-        // load the attribute set of the product that has to be created.
-        $attributeSet = $this->getAttributeSet();
-
-        // query whether or not, the requested EAV attributes are available
-        if (isset($this->attributes[$attributeSetName = $attributeSet[MemberNames::ATTRIBUTE_SET_NAME]])) {
-            return $this->attributes[$attributeSetName];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(sprintf('Found invalid attribute set name %s', $attributeSetName));
-    }
-
-    /**
      * Return's the artefacts for post-processing.
      *
      * @return array The artefacts
@@ -552,67 +330,6 @@ class BunchSubject extends AbstractSubject
     public function getArtefacts()
     {
         return $this->artefacs;
-    }
-
-    /**
-     * Return's the store ID of the actual row.
-     *
-     * @return integer The ID of the actual store
-     * @throws \Exception Is thrown, if the store with the actual code is not available
-     */
-    public function getRowStoreId()
-    {
-
-        // load the store view code the create the product/attributes for
-        $storeViewCode = $this->getStoreViewCode();
-
-        // query whether or not, the requested store is available
-        if (isset($this->stores[$storeViewCode])) {
-            return (integer) $this->stores[$storeViewCode][MemberNames::STORE_ID];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(sprintf('Found invalid store view code %s', $storeViewCode));
-    }
-
-    /**
-     * Return's the tax class ID for the passed tax class name.
-     *
-     * @param string $taxClassName The tax class name to return the ID for
-     *
-     * @return integer The tax class ID
-     * @throws \Exception Is thrown, if the tax class with the requested name is not available
-     */
-    public function getTaxClassIdByTaxClassName($taxClassName)
-    {
-
-        // query whether or not, the requested tax class is available
-        if (isset($this->taxClasses[$taxClassName])) {
-            return (integer) $this->taxClasses[$taxClassName][MemberNames::CLASS_ID];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(sprintf('Found invalid tax class name %s', $taxClassName));
-    }
-
-    /**
-     * Return's the store website for the passed code.
-     *
-     * @param string $code The code of the store website to return the ID for
-     *
-     * @return integer The store website ID
-     * @throws \Exception Is thrown, if the store website with the requested code is not available
-     */
-    public function getStoreWebsiteIdByCode($code)
-    {
-
-        // query whether or not, the requested store website is available
-        if (isset($this->storeWebsites[$code])) {
-            return (integer) $this->storeWebsites[$code][MemberNames::WEBSITE_ID];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(sprintf('Found invalid website code %s', $code));
     }
 
     /**
@@ -633,45 +350,6 @@ class BunchSubject extends AbstractSubject
 
         // throw an exception, if not
         throw new \Exception(sprintf('Found invalid visibility %s', $visibility));
-    }
-
-    /**
-     * Return's the attribute set with the passed attribute set name.
-     *
-     * @param string $attributeSetName The name of the requested attribute set
-     *
-     * @return array The attribute set data
-     * @throws \Exception Is thrown, if the attribute set with the passed name is not available
-     */
-    public function getAttributeSetByAttributeSetName($attributeSetName)
-    {
-        // query whether or not, the requested attribute set is available
-        if (isset($this->attributeSets[$attributeSetName])) {
-            return $this->attributeSets[$attributeSetName];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(sprintf('Found invalid attribute set name %s', $attributeSetName));
-    }
-
-    /**
-     * Return's the category with the passed path.
-     *
-     * @param string $path The path of the category to return
-     *
-     * @return array The category
-     * @throws \Exception Is thrown, if the requested category is not available
-     */
-    public function getCategoryByPath($path)
-    {
-
-        // query whether or not the category with the passed path exists
-        if (isset($this->categories[$path])) {
-            return $this->categories[$path];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(sprintf('Found invalid category path %s', $path));
     }
 
     /**
@@ -717,32 +395,6 @@ class BunchSubject extends AbstractSubject
     }
 
     /**
-     * Return's the attribute option value with the passed value and store ID.
-     *
-     * @param mixed   $value   The option value
-     * @param integer $storeId The ID of the store
-     *
-     * @return array|boolean The attribute option value instance
-     */
-    public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId)
-    {
-        return $this->getProductProcessor()->getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
-    }
-
-    /**
-     * Return's the URL rewrites for the passed URL entity type and ID.
-     *
-     * @param string  $entityType The entity type to load the URL rewrites for
-     * @param integer $entityId   The entity ID to laod the rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
-    {
-        return $this->getProductProcessor()->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
-    }
-
-    /**
      * Add the passed SKU => entity ID mapping.
      *
      * @param string $sku The SKU
@@ -774,50 +426,43 @@ class BunchSubject extends AbstractSubject
      */
     public function getProductCategoryIds()
     {
-        return $this->productCategoryIds[$this->getLastEntityId()];
+
+        // initialize the array with the product's category IDs
+        $categoryIds = array();
+
+        // query whether or not category IDs are available for the actual product entity
+        if (isset($this->productCategoryIds[$lastEntityId = $this->getLastEntityId()])) {
+            $categoryIds = $this->productCategoryIds[$lastEntityId];
+        }
+
+        // return the array with the product's category IDs
+        return $categoryIds;
     }
 
     /**
-     * Return's the category with the passed ID.
+     * Return's the attribute option value with the passed value and store ID.
      *
-     * @param integer $categoryId The ID of the category to return
+     * @param mixed   $value   The option value
+     * @param integer $storeId The ID of the store
      *
-     * @return array The category data
-     * @throws \Exception Is thrown, if the category is not available
+     * @return array|boolean The attribute option value instance
      */
-    public function getCategory($categoryId)
+    public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId)
     {
-
-        // try to load the category with the passed ID
-        foreach ($this->categories as $category) {
-            if ($category[MemberNames::ENTITY_ID] == $categoryId) {
-                return $category;
-            }
-        }
-
-        // throw an exception if the category is NOT available
-        throw new \Exception(sprintf('Can\'t load category with ID %d', $categoryId));
+        return $this->getProductProcessor()->getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
     }
 
     /**
-     * Return's the root category for the actual view store.
+     * Return's the URL rewrites for the passed URL entity type and ID.
      *
-     * @return array The store's root category
-     * @throws \Exception Is thrown if the root category for the passed store code is NOT available
+     * @param string  $entityType The entity type to load the URL rewrites for
+     * @param integer $entityId   The entity ID to laod the rewrites for
+     *
+     * @return array The URL rewrites
      */
-    public function getRootCategory()
+    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
     {
-
-        // load the actual store view code
-        $storeViewCode = $this->getStoreViewCode();
-
-        // query weather or not we've a root category or not
-        if (isset($this->rootCategories[$storeViewCode])) {
-            return $this->rootCategories[$storeViewCode];
-        }
-
-        // throw an exception if the root category is NOT available
-        throw new \Exception(sprintf('Root category for %s is not available', $storeViewCode));
+        return $this->getProductProcessor()->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
     }
 
     /**

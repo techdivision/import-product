@@ -60,7 +60,7 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
     {
 
         // load a mock processor
-        $mockProcessor = $this->getMockBuilder($processorInterface = 'TechDivision\Import\Product\Services\ProductProcessorInterface')
+        $mockProcessor = $this->getMockBuilder($processorInterface = 'TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
                               ->setMethods(get_class_methods($processorInterface))
                               ->getMock();
         $mockProcessor->expects($this->once())
@@ -97,7 +97,7 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
     {
 
         // load a mock processor
-        $mockProcessor = $this->getMockBuilder($processorInterface = 'TechDivision\Import\Product\Services\ProductProcessorInterface')
+        $mockProcessor = $this->getMockBuilder($processorInterface = 'TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
                               ->setMethods(get_class_methods($processorInterface))
                               ->getMock();
         $mockProcessor->expects($this->once())
@@ -134,7 +134,7 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
     {
 
         // load a mock processor
-        $mockProcessor = $this->getMockBuilder($processorInterface = 'TechDivision\Import\Product\Services\ProductProcessorInterface')
+        $mockProcessor = $this->getMockBuilder($processorInterface = 'TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
                               ->setMethods(get_class_methods($processorInterface))
                               ->getMock();
         $mockProcessor->expects($this->once())
