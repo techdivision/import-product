@@ -80,7 +80,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
         $headers = $this->getHeaders();
 
         // initialize the store view code
-        $this->setStoreViewCode($row[$headers[ColumnKeys::STORE_VIEW_CODE]] ?: StoreViewCodes::ADMIN);
+        $this->prepareStoreViewCode($row);
 
         // load the attributes by the found attribute set
         $attributes = $this->getAttributes();
@@ -282,18 +282,6 @@ class ProductAttributeObserver extends AbstractProductImportObserver
     public function getAttributeId()
     {
         return $this->attributeId;
-    }
-
-    /**
-     * Set's the store view code the create the product/attributes for.
-     *
-     * @param string $storeViewCode The store view code
-     *
-     * @return void
-     */
-    public function setStoreViewCode($storeViewCode)
-    {
-        $this->getSubject()->setStoreViewCode($storeViewCode);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Services\ProductProcessor
+ * TechDivision\Import\Product\Services\ProductBunchProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -21,7 +21,7 @@
 namespace TechDivision\Import\Product\Services;
 
 /**
- * A SLSB providing methods to load product data using a PDO connection.
+ * The product bunch processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -29,7 +29,7 @@ namespace TechDivision\Import\Product\Services;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductProcessor implements ProductProcessorInterface
+class ProductBunchProcessor implements ProductBunchProcessorInterface
 {
 
     /**

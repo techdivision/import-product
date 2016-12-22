@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Observers\AbstractObserver;
+use TechDivision\Import\Product\Utils\ColumnKeys;
 
 /**
  * A SLSB that handles the process to import product bunches.
@@ -99,5 +100,54 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     public function castValueByBackendType($backendType, $value)
     {
         return $this->getSubject()->castValueByBackendType($backendType, $value);
+    }
+
+    /**
+     * Set's the store view code the create the product/attributes for.
+     *
+     * @param string $storeViewCode The store view code
+     *
+     * @return void
+     */
+    public function setStoreViewCode($storeViewCode)
+    {
+        $this->getSubject()->setStoreViewCode($storeViewCode);
+    }
+
+    /**
+     * Return's the store view code the create the product/attributes for.
+     *
+     * @param string|null $default The default value to return, if the store view code has not been set
+     *
+     * @return string The store view code
+     */
+    public function getStoreViewCode($default = null)
+    {
+        return $this->getSubject()->getStoreViewCode($default);
+    }
+
+    /**
+     * Prepare's the store view code in the subject.
+     *
+     * @param array $row The row with the data
+     *
+     * @return void
+     */
+    public function prepareStoreViewCode($row)
+    {
+
+        // load the headers
+        $headers = $this->getHeaders();
+
+        // initialize the store view code
+        $this->setStoreViewCode(null);
+
+        // initialize the store view code
+        if (isset($row[$headers[ColumnKeys::STORE_VIEW_CODE]])) {
+            $storeViewCode = $row[$headers[ColumnKeys::STORE_VIEW_CODE]];
+            if (!empty($storeViewCode)) {
+                $this->setStoreViewCode($storeViewCode);
+            }
+        }
     }
 }

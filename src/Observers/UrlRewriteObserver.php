@@ -67,7 +67,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         $headers = $this->getHeaders();
 
         // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($row[$headers[ColumnKeys::SKU]])) {
+        if ($this->isLastSku($sku = $row[$headers[ColumnKeys::SKU]])) {
             return $row;
         }
 
@@ -77,7 +77,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         }
 
         // initialize the store view code
-        $this->setStoreViewCode($row[$headers[ColumnKeys::STORE_VIEW_CODE]] ?: StoreViewCodes::DEF);
+        $this->prepareStoreViewCode($row);
 
         // load the ID of the last entity
         $lastEntityId = $this->getLastEntityId();
@@ -462,6 +462,16 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
     {
         return $this->getSubject()->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
+    }
+
+    /**
+     * Return's the default store.
+     *
+     * @return array The default store
+     */
+    public function getDefaultStore()
+    {
+        return $this->getSubject()->getDefaultStore();
     }
 
     /**
