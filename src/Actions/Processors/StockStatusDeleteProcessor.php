@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\StockItemPersistProcessor
+ * TechDivision\Import\Product\Actions\Processors\StockStatusDeleteProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
+use TechDivision\Import\Actions\Processors\AbstractDeleteProcessor;
 
 /**
- * The stock item persist processor implementation.
+ * The stock status delete processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class StockItemPersistProcessor extends AbstractPersistProcessor
+class StockStatusDeleteProcessor extends AbstractDeleteProcessor
 {
 
     /**
@@ -48,7 +48,7 @@ class StockItemPersistProcessor extends AbstractPersistProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_STOCK_ITEM => $utilityClassName::CREATE_STOCK_ITEM
+            $utilityClassName::DELETE_STOCK_STATUS_BY_SKU => $utilityClassName::DELETE_STOCK_STATUS_BY_SKU
         );
     }
 }

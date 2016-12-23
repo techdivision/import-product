@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductTextPersistProcessor
+ * TechDivision\Import\Product\Actions\Processors\StockStatusCreateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,9 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
+use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 
 /**
+ * The stock status create processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -30,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductTextPersistProcessor extends AbstractPersistProcessor
+class StockStatusCreateProcessor extends AbstractCreateProcessor
 {
 
     /**
@@ -47,7 +48,7 @@ class ProductTextPersistProcessor extends AbstractPersistProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_TEXT => $utilityClassName::CREATE_PRODUCT_TEXT
+            $utilityClassName::CREATE_STOCK_STATUS => $utilityClassName::CREATE_STOCK_STATUS
         );
     }
 }

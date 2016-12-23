@@ -35,21 +35,47 @@ class SqlStatements extends FallbackStatements
 {
 
     /**
+     * The SQL statement to load the product with the passed SKU.
+     *
+     * @var string
+     */
+    const PRODUCT = 'SELECT * FROM catalog_product_entity WHERE sku = ?';
+
+    /**
      * The SQL statement to create new products.
      *
      * @var string
      */
     const CREATE_PRODUCT = 'INSERT
-                              INTO catalog_product_entity (
-                                       sku,
-                                       created_at,
-                                       updated_at,
-                                       has_options,
-                                       required_options,
-                                       type_id,
-                                       attribute_set_id
-                                   )
-                            VALUES (?, ?, ?, ?, ?, ?, ?)';
+                              INTO catalog_product_entity (sku,
+                                                           created_at,
+                                                           updated_at,
+                                                           has_options,
+                                                           required_options,
+                                                           type_id,
+                                                           attribute_set_id)
+                            VALUES (:sku,
+                                    :created_at,
+                                    :updated_at,
+                                    :has_options,
+                                    :required_options,
+                                    :type_id,
+                                    :attribute_set_id)';
+
+    /**
+     * The SQL statement to update an existing product.
+     *
+     * @var string
+     */
+    const UPDATE_PRODUCT = 'UPDATE catalog_product_entity
+                               SET sku = :sku,
+                                   created_at = :created_at,
+                                   updated_at = :updated_at,
+                                   has_options = :has_options,
+                                   required_options = :required_options,
+                                   type_id = :type_id,
+                                   attribute_set_id = :attribute_set_id
+                             WHERE entity_id = :entity_id';
 
     /**
      * The SQL statement to create a new product website relation.
@@ -218,7 +244,7 @@ class SqlStatements extends FallbackStatements
      *
      * @var string
      */
-    const REMOVE_PRODUCT = 'DELETE
+    const DELETE_PRODUCT = 'DELETE
                               FROM catalog_product_entity
                              WHERE sku = ?';
 
@@ -227,7 +253,7 @@ class SqlStatements extends FallbackStatements
      *
      * @var string
      */
-    const REMOVE_URL_REWRITE = 'DELETE
+    const DELETE_URL_REWRITE = 'DELETE
                                   FROM url_rewrite
                                  WHERE url_rewrite_id = ?';
 
@@ -236,7 +262,7 @@ class SqlStatements extends FallbackStatements
      *
      * @var string
      */
-    const REMOVE_URL_REWRITE_BY_SKU = 'DELETE url_rewrite
+    const DELETE_URL_REWRITE_BY_SKU = 'DELETE url_rewrite
                                          FROM url_rewrite
                                    INNER JOIN catalog_product_entity
                                         WHERE catalog_product_entity.sku = ?
@@ -247,7 +273,7 @@ class SqlStatements extends FallbackStatements
      *
      * @var string
      */
-    const REMOVE_STOCK_STATUS_BY_SKU = 'DELETE cataloginventory_stock_status
+    const DELETE_STOCK_STATUS_BY_SKU = 'DELETE cataloginventory_stock_status
                                          FROM cataloginventory_stock_status
                                    INNER JOIN catalog_product_entity
                                         WHERE catalog_product_entity.sku = ?
@@ -258,7 +284,7 @@ class SqlStatements extends FallbackStatements
      *
      * @var string
      */
-    const REMOVE_STOCK_ITEM_BY_SKU = 'DELETE cataloginventory_stock_item
+    const DELETE_STOCK_ITEM_BY_SKU = 'DELETE cataloginventory_stock_item
                                         FROM cataloginventory_stock_item
                                   INNER JOIN catalog_product_entity
                                        WHERE catalog_product_entity.sku = ?
@@ -269,7 +295,7 @@ class SqlStatements extends FallbackStatements
      *
      * @var string
      */
-    const REMOVE_PRODUCT_WEBSITE_BY_SKU = 'DELETE catalog_product_website
+    const DELETE_PRODUCT_WEBSITE_BY_SKU = 'DELETE catalog_product_website
                                              FROM catalog_product_website
                                        INNER JOIN catalog_product_entity
                                             WHERE catalog_product_entity.sku = ?
@@ -280,7 +306,7 @@ class SqlStatements extends FallbackStatements
      *
      * @var string
      */
-    const REMOVE_PRODUCT_CATEGORY_BY_SKU = 'DELETE catalog_category_product
+    const DELETE_PRODUCT_CATEGORY_BY_SKU = 'DELETE catalog_category_product
                                               FROM catalog_category_product
                                         INNER JOIN catalog_product_entity
                                              WHERE catalog_product_entity.sku = ?

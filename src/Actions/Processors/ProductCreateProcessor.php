@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductCategoryRemoveProcessor
+ * TechDivision\Import\Product\Actions\Processors\ProductCreateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
+use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 
 /**
- * The product category remove processor implementation.
+ * The product create processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductCategoryRemoveProcessor extends AbstractRemoveProcessor
+class ProductCreateProcessor extends AbstractCreateProcessor
 {
 
     /**
@@ -48,7 +48,21 @@ class ProductCategoryRemoveProcessor extends AbstractRemoveProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::REMOVE_PRODUCT_CATEGORY_BY_SKU => $utilityClassName::REMOVE_PRODUCT_CATEGORY_BY_SKU
+            $utilityClassName::CREATE_PRODUCT => $utilityClassName::CREATE_PRODUCT
         );
+    }
+
+    /**
+     * Persist's the passed row.
+     *
+     * @param array       $row  The row to persist
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return string The last inserted ID
+     */
+    public function execute($row, $name = null)
+    {
+        $this->getPreparedStatement($name)->execute($row);
+        return $this->getConnection()->lastInsertId();
     }
 }

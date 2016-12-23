@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\UrlRewriteRemoveProcessor
+ * TechDivision\Import\Product\Actions\Processors\ProductDeleteProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
+use TechDivision\Import\Actions\Processors\AbstractDeleteProcessor;
 
 /**
- * The URL rewrite remove processor implementation.
+ * The product delete processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class UrlRewriteRemoveProcessor extends AbstractRemoveProcessor
+class ProductDeleteProcessor extends AbstractDeleteProcessor
 {
 
     /**
@@ -48,22 +48,7 @@ class UrlRewriteRemoveProcessor extends AbstractRemoveProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::REMOVE_URL_REWRITE => $utilityClassName::REMOVE_URL_REWRITE,
-            $utilityClassName::REMOVE_URL_REWRITE_BY_SKU => $utilityClassName::REMOVE_URL_REWRITE_BY_SKU
+            $utilityClassName::DELETE_PRODUCT => $utilityClassName::DELETE_PRODUCT
         );
-    }
-
-    /**
-     * Implements the CRUD functionality the processor is responsible for,
-     * can be one of CREATE, READ, UPDATE or DELETE a entity.
-     *
-     * @param array       $row  The data to handle
-     * @param string|null $name The name of the prepared statement to execute
-     *
-     * @return void
-     */
-    public function execute($row, $name = null)
-    {
-        $this->getPreparedStatement($name)->execute($row);
     }
 }

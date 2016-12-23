@@ -20,6 +20,8 @@
 
 namespace TechDivision\Import\Product\Services;
 
+use TechDivision\Import\Product\Utils\MemberNames;
+
 /**
  * The product bunch processor implementation.
  *
@@ -122,6 +124,13 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @var \TechDivision\Import\Product\Actions\UrlRewriteAction
      */
     protected $urlRewriteAction;
+
+    /**
+     * The repository to load the products with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\ProductRepository
+     */
+    protected $productRepository;
 
     /**
      * The repository to load the URL rewrites with.
@@ -483,6 +492,28 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
+     * Set's the repository to load the products with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\ProductRepository $productRepository The repository instance
+     *
+     * @return void
+     */
+    public function setProductRepository($productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
+    /**
+     * Return's the repository to load the products with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\ProductRepository The repository instance
+     */
+    public function getProductRepository()
+    {
+        return $this->productRepository;
+    }
+
+    /**
      * Return's the attribute option value with the passed value and store ID.
      *
      * @param mixed   $value   The option value
@@ -509,6 +540,18 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
+     * Load's and return's the product with the passed SKU.
+     *
+     * @param string $sku The SKU of the product to load
+     *
+     * @return array The product
+     */
+    public function loadProduct($sku)
+    {
+        return $this->getProductRepository()->findOneBySku($sku);
+    }
+
+    /**
      * Persist's the passed product data and return's the ID.
      *
      * @param array       $product The product data to persist
@@ -518,7 +561,14 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProduct($product, $name = null)
     {
-        return $this->getProductAction()->persist($product, $name);
+
+        // query whether or not we've to update an exsisting entity
+        if (isset($product[MemberNames::ENTITY_ID])) {
+            return $this->getProductAction()->update($product, $name);
+        }
+
+        // create a new entity
+        return $this->getProductAction()->create($product, $name);
     }
 
     /**
@@ -531,7 +581,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductVarcharAttribute($attribute, $name = null)
     {
-        $this->getProductVarcharAction()->persist($attribute, $name);
+        $this->getProductVarcharAction()->create($attribute, $name);
     }
 
     /**
@@ -544,7 +594,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductIntAttribute($attribute, $name = null)
     {
-        $this->getProductIntAction()->persist($attribute, $name);
+        $this->getProductIntAction()->create($attribute, $name);
     }
 
     /**
@@ -557,7 +607,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductDecimalAttribute($attribute, $name = null)
     {
-        $this->getProductDecimalAction()->persist($attribute, $name);
+        $this->getProductDecimalAction()->create($attribute, $name);
     }
 
     /**
@@ -570,7 +620,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductDatetimeAttribute($attribute, $name = null)
     {
-        $this->getProductDatetimeAction()->persist($attribute, $name);
+        $this->getProductDatetimeAction()->create($attribute, $name);
     }
 
     /**
@@ -583,7 +633,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductTextAttribute($attribute, $name = null)
     {
-        $this->getProductTextAction()->persist($attribute, $name);
+        $this->getProductTextAction()->create($attribute, $name);
     }
 
     /**
@@ -596,7 +646,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductWebsite($productWebsite, $name = null)
     {
-        $this->getProductWebsiteAction()->persist($productWebsite, $name);
+        $this->getProductWebsiteAction()->create($productWebsite, $name);
     }
 
     /**
@@ -609,7 +659,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductCategory($productCategory, $name = null)
     {
-        $this->getProductCategoryAction()->persist($productCategory, $name);
+        $this->getProductCategoryAction()->create($productCategory, $name);
     }
 
     /**
@@ -622,7 +672,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistStockItem($stockItem, $name = null)
     {
-        $this->getStockItemAction()->persist($stockItem, $name);
+        $this->getStockItemAction()->create($stockItem, $name);
     }
 
     /**
@@ -635,7 +685,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistStockStatus($stockStatus, $name = null)
     {
-        $this->getStockStatusAction()->persist($stockStatus, $name);
+        $this->getStockStatusAction()->create($stockStatus, $name);
     }
 
     /**
@@ -648,84 +698,84 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistUrlRewrite($row, $name = null)
     {
-        $this->getUrlRewriteAction()->persist($row, $name);
+        $this->getUrlRewriteAction()->create($row, $name);
     }
 
     /**
-     * Remove's the entity with the passed attributes.
+     * Delete's the entity with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProduct($row, $name = null)
+    public function deleteProduct($row, $name = null)
     {
-        $this->getProductAction()->remove($row, $name);
+        $this->getProductAction()->delete($row, $name);
     }
 
     /**
      * Delete's the URL rewrite with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeUrlRewrite($row, $name = null)
+    public function deleteUrlRewrite($row, $name = null)
     {
-        $this->getUrlRewriteAction()->remove($row, $name);
+        $this->getUrlRewriteAction()->delete($row, $name);
     }
 
     /**
      * Delete's the stock item(s) with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeStockItem($row, $name = null)
+    public function deleteStockItem($row, $name = null)
     {
-        $this->getStockItemAction()->remove($row, $name);
+        $this->getStockItemAction()->delete($row, $name);
     }
 
     /**
      * Delete's the stock status with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeStockStatus($row, $name = null)
+    public function deleteStockStatus($row, $name = null)
     {
-        $this->getStockStatusAction()->remove($row, $name);
+        $this->getStockStatusAction()->delete($row, $name);
     }
 
     /**
      * Delete's the product website relations with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProductWebsite($row, $name = null)
+    public function deleteProductWebsite($row, $name = null)
     {
-        $this->getProductWebsiteAction()->remove($row, $name);
+        $this->getProductWebsiteAction()->delete($row, $name);
     }
 
     /**
      * Delete's the product category relations with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProductCategory($row, $name = null)
+    public function deleteProductCategory($row, $name = null)
     {
-        $this->getProductCategoryAction()->remove($row, $name);
+        $this->getProductCategoryAction()->delete($row, $name);
     }
 }

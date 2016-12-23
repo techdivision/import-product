@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductRemoveProcessor
+ * TechDivision\Import\Product\Actions\Processors\ProductWebsiteDeleteProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
+use TechDivision\Import\Actions\Processors\AbstractDeleteProcessor;
 
 /**
- * The product remove processor implementation.
+ * The product website delete processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductRemoveProcessor extends AbstractRemoveProcessor
+class ProductWebsiteDeleteProcessor extends AbstractDeleteProcessor
 {
 
     /**
@@ -48,7 +48,7 @@ class ProductRemoveProcessor extends AbstractRemoveProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::REMOVE_PRODUCT => $utilityClassName::REMOVE_PRODUCT
+            $utilityClassName::DELETE_PRODUCT_WEBSITE_BY_SKU => $utilityClassName::DELETE_PRODUCT_WEBSITE_BY_SKU
         );
     }
 }

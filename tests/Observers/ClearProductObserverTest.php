@@ -73,12 +73,12 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                                 array(
                                     'getHeaders',
                                     'getLastSku',
-                                    'removeUrlRewrite',
-                                    'removeStockItem',
-                                    'removeStockStatus',
-                                    'removeProductWebsite',
-                                    'removeProductCategory',
-                                    'removeProduct'
+                                    'deleteUrlRewrite',
+                                    'deleteStockItem',
+                                    'deleteStockStatus',
+                                    'deleteProductWebsite',
+                                    'deleteProductCategory',
+                                    'deleteProduct'
                                 )
                             )
                             ->getMock();
@@ -89,22 +89,22 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getLastSku')
                     ->willReturn('TEST-02');
         $mockSubject->expects($this->once())
-                    ->method('removeUrlRewrite')
+                    ->method('deleteUrlRewrite')
                     ->with(array($row[$headers[ColumnKeys::SKU]]));
         $mockSubject->expects($this->once())
-                    ->method('removeStockItem')
+                    ->method('deleteStockItem')
                     ->with(array($row[$headers[ColumnKeys::SKU]]));
         $mockSubject->expects($this->once())
-                    ->method('removeStockStatus')
+                    ->method('deleteStockStatus')
                     ->with(array($row[$headers[ColumnKeys::SKU]]));
         $mockSubject->expects($this->once())
-                    ->method('removeProductWebsite')
+                    ->method('deleteProductWebsite')
                     ->with(array($row[$headers[ColumnKeys::SKU]]));
         $mockSubject->expects($this->once())
-                    ->method('removeProductCategory')
+                    ->method('deleteProductCategory')
                     ->with(array($row[$headers[ColumnKeys::SKU]]));
         $mockSubject->expects($this->once())
-                    ->method('removeProduct')
+                    ->method('deleteProduct')
                     ->with(array($row[$headers[ColumnKeys::SKU]]));
 
         // inject the subject und invoke the handle() method

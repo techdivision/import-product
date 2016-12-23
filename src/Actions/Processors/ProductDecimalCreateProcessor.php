@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductVarcharPersistProcessor
+ * TechDivision\Import\Product\Actions\Processors\ProductDecimalCreateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
+use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 
 /**
- * The product varchar attribute persist processor implementation.
+ * The product decimal attribute create processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductVarcharPersistProcessor extends AbstractPersistProcessor
+class ProductDecimalCreateProcessor extends AbstractCreateProcessor
 {
 
     /**
@@ -48,7 +48,7 @@ class ProductVarcharPersistProcessor extends AbstractPersistProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_VARCHAR => $utilityClassName::CREATE_PRODUCT_VARCHAR
+            $utilityClassName::CREATE_PRODUCT_DECIMAL => $utilityClassName::CREATE_PRODUCT_DECIMAL
         );
     }
 }

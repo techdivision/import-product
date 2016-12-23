@@ -248,7 +248,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
 
         // remove the URL rewrites
         foreach ($existingProductCategoryUrlRewrites as $urlRewrite) {
-            $this->removeUrlRewrite(array(MemberNames::URL_REWRITE_ID => $urlRewrite[MemberNames::URL_REWRITE_ID]));
+            $this->deleteUrlRewrite(array(MemberNames::URL_REWRITE_ID => $urlRewrite[MemberNames::URL_REWRITE_ID]));
         }
     }
 
@@ -489,12 +489,12 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     /**
      * Delete's the URL rewrite with the passed attributes.
      *
-     * @param array $row The attributes of the entity to remove
+     * @param array $row The attributes of the entity to delete
      *
      * @return void
      */
-    public function removeUrlRewrite($row)
+    public function deleteUrlRewrite($row)
     {
-        $this->getSubject()->removeUrlRewrite($row);
+        $this->getSubject()->deleteUrlRewrite($row);
     }
 }

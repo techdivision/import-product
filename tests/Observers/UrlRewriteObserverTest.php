@@ -150,26 +150,26 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test's the removeUrlRewrite() method successfull.
+     * Test's the deleteUrlRewrite() method successfull.
      *
      * @return void
      */
-    public function testRemoveUrlRewriteSuccessfull()
+    public function testDeleteUrlRewriteSuccessfull()
     {
 
         // create a mock subject
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
-                            ->setMethods(array('removeUrlRewrite'))
+                            ->setMethods(array('deleteUrlRewrite'))
                             ->getMock();
         $mockSubject->expects($this->once())
-                    ->method('removeUrlRewrite')
+                    ->method('deleteUrlRewrite')
                     ->with($urlRewrite = array('url_rewrite_id' => 744));
 
         // inject the subject
         $this->observer->setSubject($mockSubject);
 
         // make sure, the URL rewite will be deleted
-        $this->assertNull($this->observer->removeUrlRewrite($urlRewrite));
+        $this->assertNull($this->observer->deleteUrlRewrite($urlRewrite));
     }
 
     /**
@@ -341,7 +341,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getLastEntityId',
                                     'getProductCategoryIds',
                                     'getUrlRewritesByEntityTypeAndEntityId',
-                                    'removeUrlRewrite',
+                                    'deleteUrlRewrite',
                                     'persistUrlRewrite',
                                     'getRootCategory',
                                     'getCategory'
@@ -381,7 +381,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     ->with($entityType = 'product', $entityId)
                     ->willReturn($urlRewrites);
         $mockSubject->expects($this->exactly(4))
-                    ->method('removeUrlRewrite')
+                    ->method('deleteUrlRewrite')
                     ->withConsecutive(
                         array(array('url_rewrite_id' => 744)),
                         array(array('url_rewrite_id' => 745)),
@@ -592,7 +592,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     'getUrlRewritesByEntityTypeAndEntityId',
                     'getRootCategory',
                     'getCategory',
-                    'removeUrlRewrite',
+                    'deleteUrlRewrite',
                     'persistUrlRewrite'
                 )
             )
@@ -626,7 +626,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                 ->with($entityType = 'product', $entityId)
                 ->willReturn($urlRewrites);
             $mockSubject->expects($this->exactly(4))
-                ->method('removeUrlRewrite')
+                ->method('deleteUrlRewrite')
                 ->withConsecutive(
                     array(array('url_rewrite_id' => 744)),
                     array(array('url_rewrite_id' => 745)),

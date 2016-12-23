@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\Batch\ProductRemoveBatchProcessor
+ * TechDivision\Import\Product\Actions\Processors\StockItemDeleteProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -18,12 +18,12 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Actions\Processors\Batch;
+namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\Batch\AbstractRemoveBatchProcessor;
+use TechDivision\Import\Actions\Processors\AbstractDeleteProcessor;
 
 /**
- * The product remove batch processor implementation.
+ * The stock item delete processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,29 +31,24 @@ use TechDivision\Import\Actions\Processors\Batch\AbstractRemoveBatchProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductRemoveBatchProcessor extends AbstractRemoveBatchProcessor
+class StockItemDeleteProcessor extends AbstractDeleteProcessor
 {
 
     /**
-     * The number of placeholders of the prepared statement.
+     * Return's the array with the SQL statements that has to be prepared.
      *
-     * @return integer The number of placeholers
-     * @see \TechDivision\Import\Actions\Processors\Batch\AbstractBatchBaseProcessor::getNumberOfPlaceholders()
+     * @return array The SQL statements to be prepared
+     * @see \TechDivision\Import\Actions\Processors\AbstractBaseProcessor::getStatements()
      */
-    protected function getNumberOfPlaceholders()
+    protected function getStatements()
     {
-        return 1;
-    }
 
-    /**
-     * Return's the SQL statement that has to be prepared.
-     *
-     * @return string The SQL statement
-     * @see \TechDivision\Import\Actions\Processors\Batch\AbstractBatchBaseProcessor::getStatement()
-     */
-    protected function getStatement()
-    {
+        // load the utility class name
         $utilityClassName = $this->getUtilityClassName();
-        return $utilityClassName::REMOVE_PRODUCT;
+
+        // return the array with the SQL statements that has to be prepared
+        return array(
+            $utilityClassName::DELETE_STOCK_ITEM_BY_SKU => $utilityClassName::DELETE_STOCK_ITEM_BY_SKU
+        );
     }
 }
