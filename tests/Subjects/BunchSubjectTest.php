@@ -126,11 +126,11 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test's the removeUrlRewrite() method successfull.
+     * Test's the deleteUrlRewrite() method successfull.
      *
      * @return void
      */
-    public function testRemoveUrlRewriteSuccessufull()
+    public function testDeleteUrlRewriteSuccessufull()
     {
 
         // load a mock processor
@@ -138,7 +138,7 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
                               ->setMethods(get_class_methods($processorInterface))
                               ->getMock();
         $mockProcessor->expects($this->once())
-                      ->method('removeUrlRewrite')
+                      ->method('deleteUrlRewrite')
                       ->with($urlRewrite = array('url_rewrite_id' => 744))
                       ->willReturn(null);
 
@@ -146,6 +146,6 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
         $this->subject->setProductProcessor($mockProcessor);
 
         // make sure that the URL rewrite will be removed
-        $this->assertNull($this->subject->removeUrlRewrite($urlRewrite));
+        $this->assertNull($this->subject->deleteUrlRewrite($urlRewrite));
     }
 }

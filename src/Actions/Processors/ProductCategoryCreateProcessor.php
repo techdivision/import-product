@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\StockItemRemoveProcessor
+ * TechDivision\Import\Product\Actions\Processors\ProductCategoryCreateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
+use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 
 /**
- * The stock item remove processor implementation.
+ * The product category create processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class StockItemRemoveProcessor extends AbstractRemoveProcessor
+class ProductCategoryCreateProcessor extends AbstractCreateProcessor
 {
 
     /**
@@ -48,7 +48,7 @@ class StockItemRemoveProcessor extends AbstractRemoveProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::REMOVE_STOCK_ITEM_BY_SKU => $utilityClassName::REMOVE_STOCK_ITEM_BY_SKU
+            $utilityClassName::CREATE_PRODUCT_CATEGORY => $utilityClassName::CREATE_PRODUCT_CATEGORY
         );
     }
 }

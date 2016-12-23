@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductWebsiteRemoveProcessor
+ * TechDivision\Import\Product\Actions\Processors\ProductUpdateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
+use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
 
 /**
- * The product website remove processor implementation.
+ * The product update processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractRemoveProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductWebsiteRemoveProcessor extends AbstractRemoveProcessor
+class ProductUpdateProcessor extends AbstractUpdateProcessor
 {
 
     /**
@@ -48,7 +48,21 @@ class ProductWebsiteRemoveProcessor extends AbstractRemoveProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::REMOVE_PRODUCT_WEBSITE_BY_SKU => $utilityClassName::REMOVE_PRODUCT_WEBSITE_BY_SKU
+            $utilityClassName::UPDATE_PRODUCT => $utilityClassName::UPDATE_PRODUCT
         );
+    }
+
+    /**
+     * Update's the passed row.
+     *
+     * @param array       $row  The row to update
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return string The ID of the updated product
+     */
+    public function execute($row, $name = null)
+    {
+        $this->getPreparedStatement($name)->execute($row);
+        return $row[MemberNames::ENTITY_ID];
     }
 }

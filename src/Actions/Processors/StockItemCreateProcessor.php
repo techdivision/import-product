@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductWebsitePersistProcessor
+ * TechDivision\Import\Product\Actions\Processors\StockItemCreateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
+use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 
 /**
- * The product website persist processor implementation.
+ * The stock item create processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductWebsitePersistProcessor extends AbstractPersistProcessor
+class StockItemCreateProcessor extends AbstractCreateProcessor
 {
 
     /**
@@ -48,7 +48,7 @@ class ProductWebsitePersistProcessor extends AbstractPersistProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_WEBSITE => $utilityClassName::CREATE_PRODUCT_WEBSITE
+            $utilityClassName::CREATE_STOCK_ITEM => $utilityClassName::CREATE_STOCK_ITEM
         );
     }
 }

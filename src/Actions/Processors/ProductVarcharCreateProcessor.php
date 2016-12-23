@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductPersistProcessor
+ * TechDivision\Import\Product\Actions\Processors\ProductVarcharCreateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
+use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 
 /**
- * The product persist processor implementation.
+ * The product varchar attribute create processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductPersistProcessor extends AbstractPersistProcessor
+class ProductVarcharCreateProcessor extends AbstractCreateProcessor
 {
 
     /**
@@ -48,21 +48,7 @@ class ProductPersistProcessor extends AbstractPersistProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT => $utilityClassName::CREATE_PRODUCT
+            $utilityClassName::CREATE_PRODUCT_VARCHAR => $utilityClassName::CREATE_PRODUCT_VARCHAR
         );
-    }
-
-    /**
-     * Persist's the passed row.
-     *
-     * @param array       $row  The row to persist
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return string The last inserted ID
-     */
-    public function execute($row, $name = null)
-    {
-        $this->getPreparedStatement($name)->execute($row);
-        return $this->getConnection()->lastInsertId();
     }
 }

@@ -466,6 +466,18 @@ class BunchSubject extends AbstractProductSubject
     }
 
     /**
+     * Load's and return's the product with the passed SKU.
+     *
+     * @param string $sku The SKU of the product to load
+     *
+     * @return array The product
+     */
+    public function loadProduct($sku)
+    {
+        return $this->getProductProcessor()->loadProduct($sku);
+    }
+
+    /**
      * Persist's the passed product data and return's the ID.
      *
      * @param array $product The product data to persist
@@ -598,80 +610,80 @@ class BunchSubject extends AbstractProductSubject
     }
 
     /**
-     * Remove's the entity with the passed attributes.
+     * Delete's the entity with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProduct($row, $name = null)
+    public function deleteProduct($row, $name = null)
     {
-        $this->getProductProcessor()->removeProduct($row, $name);
+        $this->getProductProcessor()->deleteProduct($row, $name);
     }
 
     /**
      * Delete's the URL rewrite(s) with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeUrlRewrite($row, $name = null)
+    public function deleteUrlRewrite($row, $name = null)
     {
-        $this->getProductProcessor()->removeUrlRewrite($row, $name);
+        $this->getProductProcessor()->deleteUrlRewrite($row, $name);
     }
 
     /**
      * Delete's the stock item(s) with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeStockItem($row, $name = null)
+    public function deleteStockItem($row, $name = null)
     {
-        $this->getProductProcessor()->removeStockItem($row, $name);
+        $this->getProductProcessor()->deleteStockItem($row, $name);
     }
 
     /**
      * Delete's the stock status with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeStockStatus($row, $name = null)
+    public function deleteStockStatus($row, $name = null)
     {
-        $this->getProductProcessor()->removeStockStatus($row, $name);
+        $this->getProductProcessor()->deleteStockStatus($row, $name);
     }
 
     /**
      * Delete's the product website relations with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProductWebsite($row, $name = null)
+    public function deleteProductWebsite($row, $name = null)
     {
-        $this->getProductProcessor()->removeProductWebsite($row, $name);
+        $this->getProductProcessor()->deleteProductWebsite($row, $name);
     }
 
     /**
      * Delete's the product category relations with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProductCategory($row, $name = null)
+    public function deleteProductCategory($row, $name = null)
     {
-        $this->getProductProcessor()->removeProductCategory($row, $name);
+        $this->getProductProcessor()->deleteProductCategory($row, $name);
     }
 }

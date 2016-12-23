@@ -109,6 +109,13 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface
     public function getUrlRewriteAction();
 
     /**
+     * Return's the repository to load the products with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\ProductRepository The repository instance
+     */
+    public function getProductRepository();
+
+    /**
      * Return's the repository to load the URL rewrites with.
      *
      * @return \TechDivision\Import\Product\Repositories\UrlRewriteRepository The repository instance
@@ -134,6 +141,15 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface
      * @return array The URL rewrites
      */
     public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
+
+    /**
+     * Load's and return's the product with the passed SKU.
+     *
+     * @param string $sku The SKU of the product to load
+     *
+     * @return array The product
+     */
+    public function loadProduct($sku);
 
     /**
      * Persist's the passed product data and return's the ID.
@@ -246,62 +262,62 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface
     public function persistUrlRewrite($row, $name = null);
 
     /**
-     * Remove's the entity with the passed attributes.
+     * Delete's the entity with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProduct($row, $name = null);
+    public function deleteProduct($row, $name = null);
 
     /**
      * Delete's the URL rewrite with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeUrlRewrite($row, $name = null);
+    public function deleteUrlRewrite($row, $name = null);
 
     /**
      * Delete's the stock item(s) with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeStockItem($row, $name = null);
+    public function deleteStockItem($row, $name = null);
 
     /**
      * Delete's the stock status with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeStockStatus($row, $name = null);
+    public function deleteStockStatus($row, $name = null);
 
     /**
      * Delete's the product website relations with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProductWebsite($row, $name = null);
+    public function deleteProductWebsite($row, $name = null);
 
     /**
      * Delete's the product category relations with the passed attributes.
      *
-     * @param array       $row  The attributes of the entity to remove
+     * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function removeProductCategory($row, $name = null);
+    public function deleteProductCategory($row, $name = null);
 }

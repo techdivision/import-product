@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductDatetimePersistProcessor
+ * TechDivision\Import\Product\Actions\Processors\ProductCategoryDeleteProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
+use TechDivision\Import\Actions\Processors\AbstractDeleteProcessor;
 
 /**
- * The product datetime attribute persist processor implementation.
+ * The product category delete processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductDatetimePersistProcessor extends AbstractPersistProcessor
+class ProductCategoryDeleteProcessor extends AbstractDeleteProcessor
 {
 
     /**
@@ -48,7 +48,7 @@ class ProductDatetimePersistProcessor extends AbstractPersistProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_DATETIME => $utilityClassName::CREATE_PRODUCT_DATETIME
+            $utilityClassName::DELETE_PRODUCT_CATEGORY_BY_SKU => $utilityClassName::DELETE_PRODUCT_CATEGORY_BY_SKU
         );
     }
 }

@@ -25,7 +25,7 @@ use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
- * Observer that creates/updates the product's itself.
+ * Observer that create's the product itself.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -80,7 +80,7 @@ class ProductObserver extends AbstractProductImportObserver
         $attributeSetId = $attributeSet[MemberNames::ATTRIBUTE_SET_ID];
 
         // prepare the static entity values
-        $params = array($sku, $createdAt, $updatedAt, 0, 0, $productType, $attributeSetId);
+        $params = $this->initializeProduct($sku, $createdAt, $updatedAt, 0, 0, $productType, $attributeSetId);
 
         // insert the entity and set the entity ID, SKU and attribute set
         $this->setLastEntityId($this->persistProduct($params));
@@ -88,6 +88,41 @@ class ProductObserver extends AbstractProductImportObserver
 
         // returns the row
         return $row;
+    }
+
+    /**
+     * Initialize the product with the passed data and returns an instance.
+     *
+     * @param string  $sku             The product's SKU
+     * @param string  $createdAt       The product's creation date
+     * @param string  $updatedAt       The product's last update date
+     * @param integer $hasOptions      Marks the product to has options
+     * @param integer $requiredOptions Marks the product that some of the options are required
+     * @param string  $typeId          The product's type ID
+     * @param integer $attributeSetId  The product's attribute set ID
+     *
+     * @return array The initialized product
+     */
+    public function initializeProduct(
+        $sku,
+        $createdAt,
+        $updatedAt,
+        $hasOptions,
+        $requiredOptions,
+        $typeId,
+        $attributeSetId
+    ) {
+
+        // initialize and return the product
+        return array(
+            'sku'              => $sku,
+            'created_at'       => $createdAt,
+            'updated_at'       => $updatedAt,
+            'has_options'      => $hasOptions,
+            'required_options' => $requiredOptions,
+            'type_id'          => $typeId,
+            'attribute_set_id' => $attributeSetId
+        );
     }
 
     /**
