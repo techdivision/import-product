@@ -69,6 +69,6 @@ class UrlRewriteRepository extends AbstractRepository
     {
         // load and return the URL rewrites
         $this->urlRewritesStmt->execute(array($entityType, $entityId));
-        return $this->urlRewritesStmt->fetchAll();
+        return $this->urlRewritesStmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

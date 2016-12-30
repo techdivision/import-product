@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Observers\ProductUpdateObserver
+ * TechDivision\Import\Product\Observers\CategoryProductUpdateObserver
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Product\Utils\MemberNames;
 
 /**
- * Observer that add's/update's the product itself.
+ * Observer that creates/updates the category product relations.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,21 +31,21 @@ use TechDivision\Import\Product\Utils\MemberNames;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductUpdateObserver extends ProductObserver
+class CategoryProductUpdateObserver extends CategoryProductObserver
 {
 
     /**
-     * Initialize the product with the passed attributes and returns an instance.
+     * Initialize the category product with the passed attributes and returns an instance.
      *
-     * @param array $attr The product attributes
+     * @param array $attr The category product attributes
      *
-     * @return array The initialized product
+     * @return array The initialized category product
      */
-    public function initializeProduct(array $attr)
+    public function initializeCategoryProduct(array $attr)
     {
 
-        // load the product with the passed SKU and merge it with the attributes
-        if ($entity = $this->loadProduct($attr[MemberNames::SKU])) {
+        // try to load the category product relation with the passed category/product ID and merge it with the attributes
+        if ($entity = $this->loadCategoryProduct($attr[MemberNames::CATEGORY_ID], $attr[MemberNames::PRODUCT_ID])) {
             return $this->mergeEntity($entity, $attr);
         }
 
@@ -54,14 +54,15 @@ class ProductUpdateObserver extends ProductObserver
     }
 
     /**
-     * Load's and return's the product with the passed SKU.
+     * Return's the category product relation with the passed category/product ID.
      *
-     * @param string $sku The SKU of the product to load
+     * @param integer $categoryId The category ID of the category product relation to return
+     * @param integer $productId  The product ID of the category product relation to return
      *
-     * @return array The product
+     * @return array The category product relation
      */
-    public function loadProduct($sku)
+    public function loadCategoryProduct($categoryId, $productId)
     {
-        return $this->getSubject()->loadProduct($sku);
+        return $this->getSubject()->loadCategoryProduct($categoryId, $productId);
     }
 }

@@ -39,7 +39,90 @@ class SqlStatements extends FallbackStatements
      *
      * @var string
      */
-    const PRODUCT = 'SELECT * FROM catalog_product_entity WHERE sku = ?';
+    const PRODUCT = 'SELECT * FROM catalog_product_entity WHERE sku = :sku';
+
+    /**
+     * The SQL statement to load the product website relations with the passed product/website ID.
+     *
+     * @var string
+     */
+    const PRODUCT_WEBSITE = 'SELECT * FROM catalog_product_website WHERE product_id = :product_id AND website_id = :website_id';
+
+    /**
+     * The SQL statement to load the product datetime attribute with the passed entity/attribute/store ID.
+     *
+     * @var string
+     */
+    const PRODUCT_DATETIME = 'SELECT *
+                                FROM catalog_product_entity_datetime
+                               WHERE entity_id = :entity_id
+                                 AND attribute_id = :attribute_id
+                                 AND store_id = :store_id';
+
+    /**
+     * The SQL statement to load the product decimal attribute with the passed entity/attribute/store ID.
+     *
+     * @var string
+     */
+    const PRODUCT_DECIMAL = 'SELECT *
+                               FROM catalog_product_entity_decimal
+                              WHERE entity_id = :entity_id
+                                AND attribute_id = :attribute_id
+                                AND store_id = :store_id';
+
+    /**
+     * The SQL statement to load the product integer attribute with the passed entity/attribute/store ID.
+     *
+     * @var string
+     */
+    const PRODUCT_INT = 'SELECT *
+                           FROM catalog_product_entity_int
+                          WHERE entity_id = :entity_id
+                            AND attribute_id = :attribute_id
+                            AND store_id = :store_id';
+
+    /**
+     * The SQL statement to load the product text attribute with the passed entity/attribute/store ID.
+     *
+     * @var string
+     */
+    const PRODUCT_TEXT = 'SELECT *
+                            FROM catalog_product_entity_text
+                           WHERE entity_id = :entity_id
+                             AND attribute_id = :attribute_id
+                             AND store_id = :store_id';
+
+    /**
+     * The SQL statement to load the product varchar attribute with the passed entity/attribute/store ID.
+     *
+     * @var string
+     */
+    const PRODUCT_VARCHAR = 'SELECT *
+                               FROM catalog_product_entity_varchar
+                              WHERE entity_id = :entity_id
+                                AND attribute_id = :attribute_id
+                                AND store_id = :store_id';
+
+    /**
+     * The SQL statement to load the category product relations with the passed product/website ID.
+     *
+     * @var string
+     */
+    const CATEGORY_PRODUCT = 'SELECT * FROM catalog_category_product WHERE category_id = :category_id AND product_id = :product_id';
+
+    /**
+     * The SQL statement to load the stock status with the passed product/website/stock ID.
+     *
+     * @var string
+     */
+    const STOCK_STATUS = 'SELECT * FROM cataloginventory_stock_status WHERE product_id = :product_id AND website_id = :website_id AND stock_id = :stock_id';
+
+    /**
+     * The SQL statement to load the stock item with the passed product/website/stock ID.
+     *
+     * @var string
+     */
+    const STOCK_ITEM = 'SELECT * FROM cataloginventory_stock_item WHERE product_id = :product_id AND website_id = :website_id AND stock_id = :stock_id';
 
     /**
      * The SQL statement to create new products.
@@ -87,20 +170,34 @@ class SqlStatements extends FallbackStatements
                                                product_id,
                                                website_id
                                            )
-                                    VALUES (?, ?)';
+                                    VALUES (:product_id,
+                                            :website_id)';
 
     /**
-     * The SQL statement to create a new product category relation.
+     * The SQL statement to create a new category product relation.
      *
      * @var string
      */
-    const CREATE_PRODUCT_CATEGORY = 'INSERT
+    const CREATE_CATEGORY_PRODUCT = 'INSERT
                                        INTO catalog_category_product (
                                                 category_id,
                                                 product_id,
                                                 position
                                             )
-                                     VALUES (?, ?, ?)';
+                                     VALUES (:category_id,
+                                             :product_id,
+                                             :position)';
+
+    /**
+     * The SQL statement to update an existing category product relation.
+     *
+     * @var string
+     */
+    const UPDATE_CATEGORY_PRODUCT = 'UPDATE catalog_category_product
+                                        SET category_id = :category_id,
+                                            product_id = :product_id,
+                                            position = :position
+                                     WHERE  entity_id = :entity_id';
 
     /**
      * The SQL statement to create a new product datetime value.
@@ -114,7 +211,22 @@ class SqlStatements extends FallbackStatements
                                                 store_id,
                                                 value
                                             )
-                                    VALUES (?, ?, ?, ?)';
+                                    VALUES (:entity_id,
+                                            :attribute_id,
+                                            :store_id,
+                                            :value)';
+
+    /**
+     * The SQL statement to update an existing product datetime value.
+     *
+     * @var string
+     */
+    const UPDATE_PRODUCT_DATETIME = 'UPDATE catalog_product_entity_datetime
+                                        SET entity_id = :entity_id,
+                                            attribute_id = :attribute_id,
+                                            store_id = :store_id,
+                                            value = :value
+                                      WHERE value_id = :value_id';
 
     /**
      * The SQL statement to create a new product decimal value.
@@ -128,7 +240,22 @@ class SqlStatements extends FallbackStatements
                                                store_id,
                                                value
                                            )
-                                   VALUES (?, ?, ?, ?)';
+                                   VALUES (:entity_id,
+                                           :attribute_id,
+                                           :store_id,
+                                           :value)';
+
+    /**
+     * The SQL statement to update an existing product decimal value.
+     *
+     * @var string
+     */
+    const UPDATE_PRODUCT_DECIMAL = 'UPDATE catalog_product_entity_decimal
+                                       SET entity_id = :entity_id,
+                                           attribute_id = :attribute_id,
+                                           store_id = :store_id,
+                                           value = :value
+                                     WHERE value_id = :value_id';
 
     /**
      * The SQL statement to create a new product integer value.
@@ -142,7 +269,22 @@ class SqlStatements extends FallbackStatements
                                            store_id,
                                            value
                                        )
-                                VALUES (?, ?, ?, ?)';
+                                VALUES (:entity_id,
+                                        :attribute_id,
+                                        :store_id,
+                                        :value)';
+
+    /**
+     * The SQL statement to update an existing product integer value.
+     *
+     * @var string
+     */
+    const UPDATE_PRODUCT_INT = 'UPDATE catalog_product_entity_int
+                                   SET entity_id = :entity_id,
+                                       attribute_id = :attribute_id,
+                                       store_id = :store_id,
+                                       value = :value
+                                 WHERE value_id = :value_id';
 
     /**
      * The SQL statement to create a new product varchar value.
@@ -156,7 +298,22 @@ class SqlStatements extends FallbackStatements
                                                store_id,
                                                value
                                            )
-                                    VALUES (?, ?, ?, ?)';
+                                    VALUES (:entity_id,
+                                            :attribute_id,
+                                            :store_id,
+                                            :value)';
+
+    /**
+     * The SQL statement to update an existing product varchar value.
+     *
+     * @var string
+     */
+    const UPDATE_PRODUCT_VARCHAR = 'UPDATE catalog_product_entity_varchar
+                                       SET entity_id = :entity_id,
+                                           attribute_id = :attribute_id,
+                                           store_id = :store_id,
+                                           value = :value
+                                     WHERE value_id = :value_id';
 
     /**
      * The SQL statement to create a new product text value.
@@ -170,7 +327,22 @@ class SqlStatements extends FallbackStatements
                                             store_id,
                                             value
                                         )
-                                 VALUES (?, ?, ?, ?)';
+                                 VALUES (:entity_id,
+                                         :attribute_id,
+                                         :store_id,
+                                         :value)';
+
+    /**
+     * The SQL statement to update an existing product text value.
+     *
+     * @var string
+     */
+    const UPDATE_PRODUCT_TEXT = 'UPDATE catalog_product_entity_text
+                                    SET entity_id = :entity_id,
+                                        attribute_id = :attribute_id,
+                                        store_id = :store_id,
+                                        value = :value
+                                  WHERE value_id = :value_id';
 
     /**
      * The SQL statement to create a product's stock status.
@@ -185,7 +357,23 @@ class SqlStatements extends FallbackStatements
                                             qty,
                                             stock_status
                                         )
-                                 VALUES (?, ?, ?, ?, ?)';
+                                 VALUES (:product_id,
+                                         :website_id,
+                                         :stock_id,
+                                         :qty,
+                                         :stock_status)';
+
+    /**
+     * The SQL statement to update an existing stock status.
+     *
+     * @var string
+     */
+    const UPDATE_STOCK_STATUS = 'UPDATE cataloginventory_stock_status
+                                    SET qty = :qty,
+                                        stock_status = :stock_status
+                                  WHERE product_id = :product_id
+                                    AND website_id = :website_id
+                                    AND stock_id = :stock_id';
 
     /**
      * The SQL statement to create a product's stock status.
@@ -218,7 +406,62 @@ class SqlStatements extends FallbackStatements
                                           enable_qty_increments,
                                           is_decimal_divided
                                       )
-                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+                               VALUES (:product_id,
+                                       :stock_id,
+                                       :website_id,
+                                       :qty,
+                                       :min_qty,
+                                       :use_config_min_qty,
+                                       :is_qty_decimal,
+                                       :backorders,
+                                       :use_config_backorders,
+                                       :min_sale_qty,
+                                       :use_config_min_sale_qty,
+                                       :max_sale_qty,
+                                       :use_config_max_sale_qty,
+                                       :is_in_stock,
+                                       :notify_stock_qty,
+                                       :use_config_notify_stock_qty,
+                                       :manage_stock,
+                                       :use_config_manage_stock,
+                                       :use_config_qty_increments,
+                                       :qty_increments,
+                                       :use_config_enable_qty_inc,
+                                       :enable_qty_increments,
+                                       :is_decimal_divided)';
+
+    /**
+     * The SQL statement to create a product's stock status.
+     *
+     * @var string
+     */
+    const UPDATE_STOCK_ITEM = 'UPDATE cataloginventory_stock_item
+                                  SET product_id = :product_id,
+                                      stock_id = :stock_id,
+                                      website_id = :website_id,
+                                      qty = :qty,
+                                      min_qty = :min_qty,
+                                      use_config_min_qty = :use_config_min_qty,
+                                      is_qty_decimal = :is_qty_decimal,
+                                      backorders = :backorders,
+                                      use_config_backorders = :use_config_backorders,
+                                      min_sale_qty = :min_sale_qty,
+                                      use_config_min_sale_qty = :use_config_min_sale_qty,
+                                      max_sale_qty = :max_sale_qty,
+                                      use_config_max_sale_qty = :use_config_max_sale_qty,
+                                      is_in_stock = :is_in_stock,
+                                      low_stock_date = :low_stock_date,
+                                      notify_stock_qty = :notify_stock_qty,
+                                      use_config_notify_stock_qty = :use_config_notify_stock_qty,
+                                      manage_stock = :manage_stock,
+                                      use_config_manage_stock = :use_config_manage_stock,
+                                      stock_status_changed_auto = :stock_status_changed_auto,
+                                      use_config_qty_increments = :use_config_qty_increments,
+                                      qty_increments = :qty_increments,
+                                      use_config_enable_qty_inc = :use_config_enable_qty_inc,
+                                      enable_qty_increments = :enable_qty_increments,
+                                      is_decimal_divided = :is_decimal_divided
+                                WHERE item_id = :item_id';
 
     /**
      * The SQL statement to create new URL rewrites.
@@ -237,7 +480,32 @@ class SqlStatements extends FallbackStatements
                                        is_autogenerated,
                                        metadata
                                    )
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+                            VALUES (:entity_type,
+                                    :entity_id,
+                                    :request_path,
+                                    :target_path,
+                                    :redirect_type,
+                                    :store_id,
+                                    :description,
+                                    :is_autogenerated,
+                                    :metadata)';
+
+    /**
+     * The SQL statement to update an existing URL rewrite.
+     *
+     * @var string
+     */
+    const UPDATE_URL_REWRITE = 'UPDATE url_rewrite
+                                   SET entity_type = :entity_type,
+                                       entity_id = :entity_id,
+                                       request_path = :request_path,
+                                       target_path = :target_path,
+                                       redirect_type = :redirect_type,
+                                       store_id = :store_id,
+                                       description = :description,
+                                       is_autogenerated = :is_autogenerated,
+                                       metadata = :metadata
+                                 WHERE url_rewrite_id = :url_rewrite_id';
 
     /**
      * The SQL statement to remove a existing product.
@@ -255,7 +523,7 @@ class SqlStatements extends FallbackStatements
      */
     const DELETE_URL_REWRITE = 'DELETE
                                   FROM url_rewrite
-                                 WHERE url_rewrite_id = ?';
+                                 WHERE url_rewrite_id = :url_rewrite_id';
 
     /**
      * The SQL statement to remove all existing URL rewrites related with the SKU passed as parameter.
@@ -306,7 +574,7 @@ class SqlStatements extends FallbackStatements
      *
      * @var string
      */
-    const DELETE_PRODUCT_CATEGORY_BY_SKU = 'DELETE catalog_category_product
+    const DELETE_CATEGORY_PRODUCT_BY_SKU = 'DELETE catalog_category_product
                                               FROM catalog_category_product
                                         INNER JOIN catalog_product_entity
                                              WHERE catalog_product_entity.sku = ?

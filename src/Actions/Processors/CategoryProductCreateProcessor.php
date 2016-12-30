@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductCategoryCreateProcessor
+ * TechDivision\Import\Product\Actions\Processors\CategoryProductCreateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Actions\Processors;
 use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 
 /**
- * The product category create processor implementation.
+ * The category product relation create processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductCategoryCreateProcessor extends AbstractCreateProcessor
+class CategoryProductCreateProcessor extends AbstractCreateProcessor
 {
 
     /**
@@ -48,7 +48,7 @@ class ProductCategoryCreateProcessor extends AbstractCreateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_CATEGORY => $utilityClassName::CREATE_PRODUCT_CATEGORY
+            $utilityClassName::CREATE_CATEGORY_PRODUCT => $utilityClassName::CREATE_CATEGORY_PRODUCT
         );
     }
 }

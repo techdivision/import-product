@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Repositories\ProductRepository
+ * TechDivision\Import\Product\Repositories\ProductWebsiteRepository
  *
  * NOTICE OF LICENSE
  *
@@ -24,7 +24,7 @@ use TechDivision\Import\Repositories\AbstractRepository;
 use TechDivision\Import\Product\Utils\MemberNames;
 
 /**
- * Repository implementation to load product data.
+ * Repository implementation to load product website data.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -32,15 +32,15 @@ use TechDivision\Import\Product\Utils\MemberNames;
  * @link      https://github.com/techdivision/import
  * @link      http://www.techdivision.com
  */
-class ProductRepository extends AbstractRepository
+class ProductWebsiteRepository extends AbstractRepository
 {
 
     /**
-     * The prepared statement to load the existing products.
+     * The prepared statement to load the existing product website relations.
      *
      * @var \PDOStatement
      */
-    protected $productStmt;
+    protected $productWebsiteStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -54,20 +54,28 @@ class ProductRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->productStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT);
+        $this->productWebsiteStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT_WEBSITE);
     }
 
     /**
-     * Return's the product with the passed SKU.
+     * Load's and return's the product website relation with the passed product and website ID.
      *
-     * @param string $sku The SKU of the product to return
+     * @param string $productId The product ID of the relation
+     * @param string $websiteId The website ID of the relation
      *
-     * @return array The product
+     * @return array The product website
      */
-    public function findOneBySku($sku)
+    public function findOneByProductIdAndWebsite($productId, $websiteId)
     {
-        // load and return the product with the passed SKU
-        $this->productStmt->execute(array(MemberNames::SKU => $sku));
-        return $this->productStmt->fetch(\PDO::FETCH_ASSOC);
+
+        // prepare the params
+        $params = array(
+            MemberNames::PRODUCT_ID => $productId,
+            MemberNames::WEBSITE_ID => $websiteId
+        );
+
+        // load and return the product with the passed product/website ID
+        $this->productWebsiteStmt->execute($params);
+        return $this->productWebsiteStmt->fetch(\PDO::FETCH_ASSOC);
     }
 }

@@ -60,7 +60,7 @@ class ClearProductObserver extends AbstractProductImportObserver
         $this->deleteUrlRewrite(array($sku), SqlStatements::DELETE_URL_REWRITE_BY_SKU);
         $this->deleteStockStatus(array($sku), SqlStatements::DELETE_STOCK_STATUS_BY_SKU);
         $this->deleteProductWebsite(array($sku), SqlStatements::DELETE_PRODUCT_WEBSITE_BY_SKU);
-        $this->deleteProductCategory(array($sku), SqlStatements::DELETE_PRODUCT_CATEGORY_BY_SKU);
+        $this->deleteCategoryProduct(array($sku), SqlStatements::DELETE_CATEGORY_PRODUCT_BY_SKU);
 
         // delete the product with the passed SKU
         $this->deleteProduct(array($sku));
@@ -135,15 +135,15 @@ class ClearProductObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Delete's the product category relations with the passed attributes.
+     * Delete's the category product relations with the passed attributes.
      *
      * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function deleteProductCategory($row, $name = null)
+    public function deleteCategoryProduct($row, $name = null)
     {
-        $this->getSubject()->deleteProductCategory($row, $name);
+        $this->getSubject()->deleteCategoryProduct($row, $name);
     }
 }

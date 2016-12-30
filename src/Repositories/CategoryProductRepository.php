@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Repositories\ProductRepository
+ * TechDivision\Import\Product\Repositories\CategoryProductRepository
  *
  * NOTICE OF LICENSE
  *
@@ -32,15 +32,15 @@ use TechDivision\Import\Product\Utils\MemberNames;
  * @link      https://github.com/techdivision/import
  * @link      http://www.techdivision.com
  */
-class ProductRepository extends AbstractRepository
+class CategoryProductRepository extends AbstractRepository
 {
 
     /**
-     * The prepared statement to load the existing products.
+     * The prepared statement to load the existing category product relations.
      *
      * @var \PDOStatement
      */
-    protected $productStmt;
+    protected $productCategoryStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -54,20 +54,28 @@ class ProductRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->productStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT);
+        $this->productCategoryStmt = $this->getConnection()->prepare($utilityClassName::CATEGORY_PRODUCT);
     }
 
     /**
-     * Return's the product with the passed SKU.
+     * Return's the category product relation with the passed category/product ID.
      *
-     * @param string $sku The SKU of the product to return
+     * @param integer $categoryId The category ID of the category product relation to return
+     * @param integer $productId  The product ID of the category product relation to return
      *
-     * @return array The product
+     * @return array The category product relation
      */
-    public function findOneBySku($sku)
+    public function findOneByCategoryIdAndProductId($categoryId, $productId)
     {
-        // load and return the product with the passed SKU
-        $this->productStmt->execute(array(MemberNames::SKU => $sku));
-        return $this->productStmt->fetch(\PDO::FETCH_ASSOC);
+
+        // prepare the params
+        $params = array(
+            MemberNames::CATEGORY_ID => $categoryId,
+            MemberNames::PRODUCT_ID  => $productId
+        );
+
+        // load and return the product category relation with the passed category/product ID
+        $this->productCategoryStmt->execute($params);
+        return $this->productCategoryStmt->fetch(\PDO::FETCH_ASSOC);
     }
 }

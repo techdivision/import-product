@@ -47,82 +47,85 @@ class ProductObserver extends AbstractProductImportObserver
     public function handle(array $row)
     {
 
-        // load the header information
-        $headers = $this->getHeaders();
+        // initialize the row
+        $this->setRow($row);
 
         // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($row[$headers[ColumnKeys::SKU]])) {
-            return $row;
+        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
+            return $this->getRow();
         }
 
-        // prepare the date format for the created at date
-        $createdAt = date('Y-m-d H:i:s');
-        if (isset($row[$headers[ColumnKeys::CREATED_AT]])) {
-            if ($cda = \DateTime::createFromFormat($this->getSourceDateFormat(), $row[$headers[ColumnKeys::CREATED_AT]])) {
-                $createdAt = $cda->format('Y-m-d H:i:s');
-            }
-        }
+        // process the functionality and return the row
+        $this->process();
 
-        // prepare the date format for the updated at date
-        $updatedAt = date('Y-m-d H:i:s');
-        if (isset($row[$headers[ColumnKeys::UPDATED_AT]])) {
-            if ($uda = \DateTime::createFromFormat($this->getSourceDateFormat(), $row[$headers[ColumnKeys::UPDATED_AT]])) {
-                $updatedAt = $uda->format('Y-m-d H:i:s');
-            }
-        }
-
-        // load the product's attribute set
-        $attributeSet = $this->getAttributeSetByAttributeSetName($row[$headers[ColumnKeys::ATTRIBUTE_SET_CODE]]);
-
-        // initialize the product values
-        $sku = $row[$headers[ColumnKeys::SKU]];
-        $productType = $row[$headers[ColumnKeys::PRODUCT_TYPE]];
-        $attributeSetId = $attributeSet[MemberNames::ATTRIBUTE_SET_ID];
-
-        // prepare the static entity values
-        $params = $this->initializeProduct($sku, $createdAt, $updatedAt, 0, 0, $productType, $attributeSetId);
-
-        // insert the entity and set the entity ID, SKU and attribute set
-        $this->setLastEntityId($this->persistProduct($params));
-        $this->setAttributeSet($attributeSet);
-
-        // returns the row
-        return $row;
+        // return the processed row
+        return $this->getRow();
     }
 
     /**
-     * Initialize the product with the passed data and returns an instance.
+     * Process the observer's business logic.
      *
-     * @param string  $sku             The product's SKU
-     * @param string  $createdAt       The product's creation date
-     * @param string  $updatedAt       The product's last update date
-     * @param integer $hasOptions      Marks the product to has options
-     * @param integer $requiredOptions Marks the product that some of the options are required
-     * @param string  $typeId          The product's type ID
-     * @param integer $attributeSetId  The product's attribute set ID
+     * @return array The processed row
+     */
+    public function process()
+    {
+
+        // prepare the static entity values
+        $product = $this->initializeProduct($this->prepareAttributes());
+
+        // insert the entity and set the entity ID
+        $this->setLastEntityId($this->persistProduct($product));
+    }
+
+    /**
+     * Prepare the attributes of the entity that has to be persisted.
+     *
+     * @return array The prepared attributes
+     */
+    public function prepareAttributes()
+    {
+
+        // load row and headers
+        $row = $this->getRow();
+        $headers = $this->getHeaders();
+
+        // prepare the date format for the created at/updated at dates
+        $createdAt = $this->getValue(ColumnKeys::CREATED_AT, date('Y-m-d H:i:s'), array($this, 'formatDate'));
+        $updatedAt = $this->getValue(ColumnKeys::UPDATED_AT, date('Y-m-d H:i:s'), array($this, 'formatDate'));
+
+        // load the product's attribute set ID
+        $attributeSet = $this->getAttributeSetByAttributeSetName($this->getValue(ColumnKeys::ATTRIBUTE_SET_CODE));
+        $attributeSetId = $attributeSet[MemberNames::ATTRIBUTE_SET_ID];
+        $this->setAttributeSet($attributeSet);
+
+        // initialize the product values
+        $sku = $this->getValue(ColumnKeys::SKU);
+        $productType = $this->getValue(ColumnKeys::PRODUCT_TYPE);
+
+        // return the prepared product
+        return $this->initializeEntity(
+            array(
+                MemberNames::SKU              => $sku,
+                MemberNames::CREATED_AT       => $createdAt,
+                MemberNames::UPDATED_AT       => $updatedAt,
+                MemberNames::HAS_OPTIONS      => 0,
+                MemberNames::REQUIRED_OPTIONS => 0,
+                MemberNames::TYPE_ID          => $productType,
+                MemberNames::ATTRIBUTE_SET_ID => $attributeSetId
+            )
+        );
+    }
+
+    /**
+     * Initialize the product with the passed attributes and returns an instance.
+     *
+     * @param array $attr The product attributes
      *
      * @return array The initialized product
      */
-    public function initializeProduct(
-        $sku,
-        $createdAt,
-        $updatedAt,
-        $hasOptions,
-        $requiredOptions,
-        $typeId,
-        $attributeSetId
-    ) {
-
-        // initialize and return the product
-        return array(
-            'sku'              => $sku,
-            'created_at'       => $createdAt,
-            'updated_at'       => $updatedAt,
-            'has_options'      => $hasOptions,
-            'required_options' => $requiredOptions,
-            'type_id'          => $typeId,
-            'attribute_set_id' => $attributeSetId
-        );
+    public function initializeProduct(array $attr)
+    {
+        return $attr;
     }
 
     /**
@@ -147,6 +150,16 @@ class ProductObserver extends AbstractProductImportObserver
     public function setAttributeSet(array $attributeSet)
     {
         $this->getSubject()->setAttributeSet($attributeSet);
+    }
+
+    /**
+     * Return's the attribute set of the product that has to be created.
+     *
+     * @return array The attribute set
+     */
+    public function getAttributeSet()
+    {
+        $this->getSubject()->getAttributeSet();
     }
 
     /**

@@ -62,7 +62,7 @@ class ProductCreateProcessor extends AbstractCreateProcessor
      */
     public function execute($row, $name = null)
     {
-        $this->getPreparedStatement($name)->execute($row);
+        parent::execute($row, $name);
         return $this->getConnection()->lastInsertId();
     }
 }

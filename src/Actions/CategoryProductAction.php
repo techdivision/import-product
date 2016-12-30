@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\ProductCategoryAction
+ * TechDivision\Import\Product\Actions\CategoryProductAction
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Actions;
 use TechDivision\Import\Actions\AbstractAction;
 
 /**
- * An action implementation that provides CRUD functionality for product category relations.
+ * An action implementation that provides CRUD functionality for category product relations.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,6 +31,6 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductCategoryAction extends AbstractAction
+class CategoryProductAction extends AbstractAction
 {
 }
