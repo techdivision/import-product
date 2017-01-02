@@ -50,11 +50,6 @@ class ProductObserver extends AbstractProductImportObserver
         // initialize the row
         $this->setRow($row);
 
-        // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
-            return $this->getRow();
-        }
-
         // process the functionality and return the row
         $this->process();
 
@@ -67,8 +62,13 @@ class ProductObserver extends AbstractProductImportObserver
      *
      * @return array The processed row
      */
-    public function process()
+    protected function process()
     {
+
+        // query whether or not, we've found a new SKU => means we've found a new product
+        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
+            return $this->getRow();
+        }
 
         // prepare the static entity values
         $product = $this->initializeProduct($this->prepareAttributes());
@@ -82,7 +82,7 @@ class ProductObserver extends AbstractProductImportObserver
      *
      * @return array The prepared attributes
      */
-    public function prepareAttributes()
+    protected function prepareAttributes()
     {
 
         // load row and headers
@@ -123,7 +123,7 @@ class ProductObserver extends AbstractProductImportObserver
      *
      * @return array The initialized product
      */
-    public function initializeProduct(array $attr)
+    protected function initializeProduct(array $attr)
     {
         return $attr;
     }
@@ -135,7 +135,7 @@ class ProductObserver extends AbstractProductImportObserver
      *
      * @return string The ID of the persisted entity
      */
-    public function persistProduct($product)
+    protected function persistProduct($product)
     {
         return $this->getSubject()->persistProduct($product);
     }
@@ -147,7 +147,7 @@ class ProductObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function setAttributeSet(array $attributeSet)
+    protected function setAttributeSet(array $attributeSet)
     {
         $this->getSubject()->setAttributeSet($attributeSet);
     }
@@ -157,7 +157,7 @@ class ProductObserver extends AbstractProductImportObserver
      *
      * @return array The attribute set
      */
-    public function getAttributeSet()
+    protected function getAttributeSet()
     {
         $this->getSubject()->getAttributeSet();
     }
@@ -169,7 +169,7 @@ class ProductObserver extends AbstractProductImportObserver
      *
      * @return array The attribute set data
      */
-    public function getAttributeSetByAttributeSetName($attributeSetName)
+    protected function getAttributeSetByAttributeSetName($attributeSetName)
     {
         return $this->getSubject()->getAttributeSetByAttributeSetName($attributeSetName);
     }
@@ -181,7 +181,7 @@ class ProductObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function setLastEntityId($lastEntityId)
+    protected function setLastEntityId($lastEntityId)
     {
         $this->getSubject()->setLastEntityId($lastEntityId);
     }

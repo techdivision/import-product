@@ -41,7 +41,7 @@ class ProductUpdateObserver extends ProductObserver
      *
      * @return array The initialized product
      */
-    public function initializeProduct(array $attr)
+    protected function initializeProduct(array $attr)
     {
 
         // load the product with the passed SKU and merge it with the attributes
@@ -60,7 +60,7 @@ class ProductUpdateObserver extends ProductObserver
      *
      * @return array The product
      */
-    public function loadProduct($sku)
+    protected function loadProduct($sku)
     {
         return $this->getSubject()->loadProduct($sku);
     }

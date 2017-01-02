@@ -268,11 +268,11 @@ class UrlRewriteObserver extends AbstractProductImportObserver
             }
 
             // initialize the URL key with product name
-            $urlKey = $productName;
+            $urlKey = $this->convertNameToUrlKey($productName);
         }
 
         // convert and set the URL key
-        $this->setUrlKey($this->convertNameToUrlKey($urlKey));
+        $this->setUrlKey($urlKey);
 
         // return TRUE if the URL key has been prepared
         return true;

@@ -20,9 +20,9 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
-use TechDivision\Import\Subjects\AbstractSubject;
 use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
+use TechDivision\Import\Subjects\AbstractSubject;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Services\ProductProcessorInterface;
 
@@ -122,6 +122,13 @@ abstract class AbstractProductSubject extends AbstractSubject
      * @var array
      */
     protected $defaultStore;
+
+    /**
+     * The Magento 2 configuration.
+     *
+     * @var array
+     */
+    protected $coreConfigData;
 
     /**
      * Set's the product processor instance.
@@ -254,6 +261,7 @@ abstract class AbstractProductSubject extends AbstractSubject
         $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
         $this->rootCategories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ROOT_CATEGORIES];
         $this->defaultStore = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::DEFAULT_STORE];
+        $this->coreConfigData = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CORE_CONFIG_DATA];
 
         // prepare the callbacks
         parent::setUp();

@@ -1,3 +1,15 @@
+# Version 1.0.0-alpha9
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Implement add-update operation
+* Refactoring URL rewrite functionality to support add-update operation
+* Rename ProductCategory functionality to CategoryProduct to follow Magento 2 naming
+
 # Version 1.0.0-alpha8
 
 ## Bugfixes

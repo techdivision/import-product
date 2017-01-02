@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Observers\ProductCategoryObserverTest
+ * TechDivision\Import\Product\Observers\CategoryProductObserverTest
  *
  * NOTICE OF LICENSE
  *
@@ -31,13 +31,13 @@ use TechDivision\Import\Product\Utils\ColumnKeys;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductCategoryObserverTest extends \PHPUnit_Framework_TestCase
+class CategoryProductObserverTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
      * The observer we want to test.
      *
-     * @var \TechDivision\Import\Product\Observers\ProductCategoryObserver
+     * @var \TechDivision\Import\Product\Observers\CategoryProductObserver
      */
     protected $observer;
 
@@ -50,7 +50,7 @@ class ProductCategoryObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->observer = new ProductCategoryObserver();
+        $this->observer = new CategoryProductObserver();
     }
 
     /**
