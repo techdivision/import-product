@@ -20,8 +20,6 @@
 
 namespace TechDivision\Import\Product\Services;
 
-use TechDivision\Import\Product\Utils\MemberNames;
-
 /**
  * The product bunch processor implementation.
  *

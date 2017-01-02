@@ -46,7 +46,7 @@ class ProductWebsiteUpdateObserver extends ProductWebsiteObserver
     {
 
         // try to load the product website relation with the passed product/website ID
-        if ($entity = $this->loadProductWebsite($attr[MemberNames::PRODUCT_ID], $attr[MemberNames::WEBSITE_ID])) {
+        if ($this->loadProductWebsite($attr[MemberNames::PRODUCT_ID], $attr[MemberNames::WEBSITE_ID])) {
             // throw a runtime exception, if the relation already exists
             throw new \RuntimeException(
                 sprintf(

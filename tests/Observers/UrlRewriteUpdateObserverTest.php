@@ -23,7 +23,6 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Actions\UrlRewriteAction;
 
 /**
  * Test class for the product URL rewrite update observer implementation.

@@ -21,7 +21,6 @@
 namespace TechDivision\Import\Product\Subjects;
 
 use TechDivision\Import\Utils\RegistryKeys;
-use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Subjects\AbstractSubject;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Services\ProductProcessorInterface;

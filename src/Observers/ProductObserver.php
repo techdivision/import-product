@@ -85,10 +85,6 @@ class ProductObserver extends AbstractProductImportObserver
     protected function prepareAttributes()
     {
 
-        // load row and headers
-        $row = $this->getRow();
-        $headers = $this->getHeaders();
-
         // prepare the date format for the created at/updated at dates
         $createdAt = $this->getValue(ColumnKeys::CREATED_AT, date('Y-m-d H:i:s'), array($this, 'formatDate'));
         $updatedAt = $this->getValue(ColumnKeys::UPDATED_AT, date('Y-m-d H:i:s'), array($this, 'formatDate'));

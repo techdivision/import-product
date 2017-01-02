@@ -75,12 +75,12 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
 
         // create a dummy CSV file row
         $row = array(
-            0 => $sku              = '24-MB01',
-            1 => $createdAt        = '10/23/16, 5:10 PM',
-            2 => $updatedAt        = '10/23/16, 5:10 PM',
-            3 => $hasOptions       = 1,
-            4 => $requiredOptions  = 1,
-            5 => $productType      = 'simple',
+            0 => $sku = '24-MB01',
+            1 => '10/23/16, 5:10 PM',
+            2 => '10/23/16, 5:10 PM',
+            3 => 1,
+            4 => 1,
+            5 => $productType = 'simple',
             6 => $attributeSetCode = 'Bag'
         );
 
@@ -106,9 +106,6 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
             'attribute_set_id'        => $attributeSetId,
             EntityStatus::MEMBER_NAME => EntityStatus::STATUS_UPDATE
         );
-
-        // the expected product data
-        $product = $headers;
 
         // create a mock subject
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')

@@ -241,10 +241,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected function prepareUrlKey()
     {
 
-        // load header and row information
-        $row = $this->getRow();
-        $headers = $this->getHeaders();
-
         // initialize the URL key
         $urlKey = null;
 
