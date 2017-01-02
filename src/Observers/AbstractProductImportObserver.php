@@ -162,6 +162,8 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      * Set's the actual row, that has to be processed.
      *
      * @param array $row The row
+     *
+     * @return void
      */
     public function setRow(array $row)
     {
@@ -272,7 +274,7 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      * Merge's and return's the entity with the passed attributes and set's the
      * status to 'update'.
      *
-     * @param array $entity The entity to merge the attributes into
+     * @param array $entity The entity to merge the attributes into
      * @param array $attr   The attributes to be merged
      *
      * @return array The merged entity

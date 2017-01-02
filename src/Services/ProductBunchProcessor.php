@@ -687,7 +687,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to load the category product relations with.
      *
-     * @param \TechDivision\Import\Product\Repositories\CategoryProductRepository $productWebsiteRepository The repository instance
+     * @param \TechDivision\Import\Product\Repositories\CategoryProductRepository $categoryProductRepository The repository instance
      *
      * @return void
      */
