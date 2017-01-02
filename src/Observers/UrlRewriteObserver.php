@@ -20,7 +20,6 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\Filter\ConvertLiteralUrl;
@@ -53,6 +52,27 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected $urlKey;
 
     /**
+     * The actual category ID to process.
+     *
+     * @var integer
+     */
+    protected $categoryId;
+
+    /**
+     * The actual entity ID to process.
+     *
+     * @var integer
+     */
+    protected $entityId;
+
+    /**
+     * The array with the URL rewrites that has to be created.
+     *
+     * @var array
+     */
+    protected $urlRewrites = array();
+
+    /**
      * Will be invoked by the action on the events the listener has been registered for.
      *
      * @param array $row The row to handle
@@ -63,85 +83,19 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     public function handle(array $row)
     {
 
-        // load the header information
-        $headers = $this->getHeaders();
+        // initialize the row
+        $this->setRow($row);
 
         // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($sku = $row[$headers[ColumnKeys::SKU]])) {
-            return $row;
+        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
+            return $this->getRow();
         }
 
-        // prepare the URL key, return immediately if not available
-        if ($this->prepareUrlKey($row) == null) {
-            return $row;
-        }
+        // process the functionality and return the row
+        $this->process();
 
-        // initialize the store view code
-        $this->prepareStoreViewCode($row);
-
-        // load the ID of the last entity
-        $lastEntityId = $this->getLastEntityId();
-
-        // initialize the entity type to use
-        $entityType = UrlRewriteObserver::ENTITY_TYPE;
-
-        // load the product category IDs
-        $productCategoryIds = $this->getProductCategoryIds();
-
-        // load the URL rewrites for the entity type and ID
-        $urlRewrites = $this->getUrlRewritesByEntityTypeAndEntityId($entityType, $lastEntityId);
-
-        // prepare the existing URLs => unserialize the metadata
-        $existingProductCategoryUrlRewrites = $this->prepareExistingCategoryUrlRewrites($urlRewrites);
-
-        // delete/create/update the URL rewrites
-        $this->deleteUrlRewrites($existingProductCategoryUrlRewrites);
-        $this->updateUrlRewrites(array_intersect_key($existingProductCategoryUrlRewrites, $productCategoryIds));
-        $this->createUrlRewrites($productCategoryIds);
-
-        // returns the row
-        return $row;
-    }
-
-    /**
-     * Prepare's and set's the URL key from the passed row of the CSV file.
-     *
-     * @param array $row The row with the CSV data
-     *
-     * @return boolean TRUE, if the URL key has been prepared, else FALSE
-     */
-    protected function prepareUrlKey($row)
-    {
-
-        // load the header information
-        $headers = $this->getHeaders();
-
-        // query whether or not we've a URL key available in the CSV file row
-        if (isset($row[$headers[ColumnKeys::URL_KEY]])) {
-            $urlKey = $row[$headers[ColumnKeys::URL_KEY]];
-        }
-
-        // query whether or not an URL key has been specified in the CSV file
-        if (empty($urlKey)) {
-            // if not, try to use the product name
-            if (isset($row[$headers[ColumnKeys::NAME]])) {
-                $productName = $row[$headers[ColumnKeys::NAME]];
-            }
-
-            // if nor URL key AND product name are empty, return immediately
-            if (empty($productName)) {
-                return false;
-            }
-
-            // initialize the URL key with product name
-            $urlKey = $productName;
-        }
-
-        // convert and set the URL key
-        $this->setUrlKey($this->convertNameToUrlKey($urlKey));
-
-        // return TRUE if the URL key has been prepared
-        return true;
+        // return the processed row
+        return $this->getRow();
     }
 
     /**
@@ -167,156 +121,196 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Initialize's and return's the URL key filter.
+     * Set's the actual category ID to process.
      *
-     * @return \TechDivision\Import\Product\Utils\ConvertLiteralUrl The URL key filter
-     */
-    protected function getUrlKeyFilter()
-    {
-        return new ConvertLiteralUrl();
-    }
-
-    /**
-     * Convert's the passed string into a valid URL key.
-     *
-     * @param string $string The string to be converted, e. g. the product name
-     *
-     * @return string The converted string as valid URL key
-     */
-    protected function convertNameToUrlKey($string)
-    {
-        return $this->getUrlKeyFilter()->filter($string);
-    }
-
-    /**
-     * Convert's the passed URL rewrites into an array with the category ID from the
-     * metadata as key and the URL rewrite as value.
-     *
-     * If now category ID can be found in the metadata, the ID of the store's root
-     * category is used.
-     *
-     * @param array $urlRewrites The URL rewrites to convert
-     *
-     * @return array The converted array with the de-serialized category IDs as key
-     */
-    protected function prepareExistingCategoryUrlRewrites(array $urlRewrites)
-    {
-
-        // initialize the array for the existing URL rewrites
-        $existingProductCategoryUrlRewrites = array();
-
-        // load the store's root category
-        $rootCategory = $this->getRootCategory();
-
-        // iterate over the URL rewrites and convert them
-        foreach ($urlRewrites as $urlRewrite) {
-            // initialize the array with the metadata
-            $metadata = array();
-
-            // de-serialize the category ID from the metadata
-            if ($md = $urlRewrite['metadata']) {
-                $metadata = unserialize($md);
-            }
-
-            // use the store's category ID if not serialized metadata is available
-            if (!isset($metadata['category_id'])) {
-                $metadata['category_id'] = $rootCategory[MemberNames::ENTITY_ID];
-            }
-
-            // append the URL rewrite with the found category ID
-            $existingProductCategoryUrlRewrites[$metadata['category_id']] = $urlRewrite;
-        }
-
-        // return the array with the existing URL rewrites
-        return $existingProductCategoryUrlRewrites;
-    }
-
-    /**
-     * Remove's the URL rewrites with the passed data.
-     *
-     * @param array $existingProductCategoryUrlRewrites The array with the URL rewrites to remove
+     * @param integer $categoryId The category ID
      *
      * @return void
      */
-    protected function deleteUrlRewrites(array $existingProductCategoryUrlRewrites)
+    protected function setCategoryId($categoryId)
     {
-
-        // query whether or not we've any URL rewrites that have to be removed
-        if (sizeof($existingProductCategoryUrlRewrites) === 0) {
-            return;
-        }
-
-        // remove the URL rewrites
-        foreach ($existingProductCategoryUrlRewrites as $urlRewrite) {
-            $this->deleteUrlRewrite(array(MemberNames::URL_REWRITE_ID => $urlRewrite[MemberNames::URL_REWRITE_ID]));
-        }
+        $this->categoryId = $categoryId;
     }
 
     /**
-     * Create's the URL rewrites from the passed data.
+     * Return's the actual category ID to process.
      *
-     * @param array $productCategoryIds The categories to create a URL rewrite for
+     * @return integer The category ID
+     */
+    protected function getCategoryId()
+    {
+        return $this->categoryId;
+    }
+
+    /**
+     * Set's the actual entity ID to process.
+     *
+     * @param integer $entityId The entity ID
      *
      * @return void
      */
-    protected function createUrlRewrites(array $productCategoryIds)
+    protected function setEntityId($entityId)
+    {
+        $this->entityId = $entityId;
+    }
+
+    /**
+     * Return's the actual entity ID to process.
+     *
+     * @return integer The entity ID
+     */
+    protected function getEntityId()
+    {
+        return $this->entityId;
+    }
+
+    /**
+     * Process the observer's business logic.
+     *
+     * @return void
+     */
+    protected function process()
     {
 
-        // query whether or not if there is any category to create a URL rewrite for
-        if (sizeof($productCategoryIds) === 0) {
+        // try to prepare the URL key, return immediately if not possible
+        if (!$this->prepareUrlKey()) {
             return;
         }
+
+        // initialize the store view code
+        $this->prepareStoreViewCode();
+
+        // prepare the URL rewrites
+        $this->prepareUrlRewrites();
 
         // iterate over the categories and create the URL rewrites
-        foreach ($productCategoryIds as $categoryId => $entityId) {
-            // load the category to create the URL rewrite for
-            $category = $this->getCategory($categoryId);
-
-            // initialize the values
-            $requestPath = $this->prepareRequestPath($category);
-            $targetPath = $this->prepareTargetPath($category);
-            $metadata = serialize($this->prepareMetadata($category));
-
-            // initialize the URL rewrite data
-            $params = array('product', $entityId, $requestPath, $targetPath, 0, 1, null, 1, $metadata);
-
-            // create the URL rewrite
-            $this->persistUrlRewrite($params);
+        foreach ($this->urlRewrites as $urlRewrite) {
+            // initialize and persist the URL rewrite
+            if ($urlRewrite = $this->initializeUrlRewrite($urlRewrite)) {
+                $this->persistUrlRewrite($urlRewrite);
+            }
         }
     }
 
     /**
-     * Update's existing URL rewrites by creating 301 redirect URL rewrites for each.
+     * Initialize the category product with the passed attributes and returns an instance.
      *
-     * @param array $existingProductCategoryUrlRewrites The array with the existing URL rewrites
+     * @param array $attr The category product attributes
+     *
+     * @return array The initialized category product
+     */
+    protected function initializeUrlRewrite(array $attr)
+    {
+        return $attr;
+    }
+
+    /**
+     * Prepare's the URL rewrites that has to be created/updated.
      *
      * @return void
      */
-    protected function updateUrlRewrites(array $existingProductCategoryUrlRewrites)
+    protected function prepareUrlRewrites()
     {
 
-        // query whether or not, we've existing URL rewrites that need to be redirected
-        if (sizeof($existingProductCategoryUrlRewrites) === 0) {
-            return;
+        // (re-)initialize the array for the URL rewrites
+        $this->urlRewrites = array();
+
+        // load the root category, because we need that to create the default product URL rewrite
+        $rootCategory = $this->getRootCategory();
+
+        // add the root category ID to the category => product relations
+        $productCategoryIds = $this->getProductCategoryIds();
+        $productCategoryIds[$rootCategory[MemberNames::ENTITY_ID]] = $this->getLastEntityId();
+
+        // prepare the URL rewrites
+        foreach ($productCategoryIds as $categoryId => $entityId) {
+            // set category/entity ID
+            $this->setCategoryId($categoryId);
+            $this->setEntityId($entityId);
+
+            // prepare the attributes for each URL rewrite
+            $this->urlRewrites[$categoryId] = $this->prepareAttributes();
+        }
+    }
+
+    /**
+     * Prepare's and set's the URL key from the passed row of the CSV file.
+     *
+     * @return boolean TRUE, if the URL key has been prepared, else FALSE
+     */
+    protected function prepareUrlKey()
+    {
+
+        // initialize the URL key
+        $urlKey = null;
+
+        // query whether or not we've a URL key available in the CSV file row
+        if ($urlKeyFound = $this->getValue(ColumnKeys::URL_KEY)) {
+            $urlKey = $urlKeyFound;
         }
 
-        // iterate over the URL redirects that have to be redirected
-        foreach ($existingProductCategoryUrlRewrites as $categoryId => $urlRewrite) {
-            // load the category data
-            $category = $this->getCategory($categoryId);
+        // query whether or not an URL key has been specified in the CSV file
+        if (empty($urlKey)) {
+            // initialize the product name
+            $productName = null;
+            // if not, try to use the product name
+            if ($nameFound = $this->getValue(ColumnKeys::NAME)) {
+                $productName = $nameFound;
+            }
 
-            // initialize the values
-            $entityId = $urlRewrite[MemberNames::ENTITY_ID];
-            $requestPath = sprintf('%s', $urlRewrite['request_path']);
-            $targetPath = $this->prepareRequestPath($category);
-            $metadata = serialize($this->prepareMetadata($category));
+            // if nor URL key AND product name are empty, return immediately
+            if (empty($productName)) {
+                return false;
+            }
 
-            // initialize the URL rewrite data
-            $params = array('product', $entityId, $requestPath, $targetPath, 301, 1, null, 0, $metadata);
-
-            // create the 301 redirect URL rewrite
-            $this->persistUrlRewrite($params);
+            // initialize the URL key with product name
+            $urlKey = $this->convertNameToUrlKey($productName);
         }
+
+        // convert and set the URL key
+        $this->setUrlKey($urlKey);
+
+        // return TRUE if the URL key has been prepared
+        return true;
+    }
+
+    /**
+     * Prepare the attributes of the entity that has to be persisted.
+     *
+     * @return array The prepared attributes
+     */
+    protected function prepareAttributes()
+    {
+
+        // load entity/category ID
+        $entityId = $this->getEntityId();
+        $categoryId = $this->getCategoryId();
+
+        // load the store ID to use
+        $storeId = $this->getRowStoreId();
+
+        // load the category to create the URL rewrite for
+        $category = $this->getCategory($categoryId);
+
+        // initialize the values
+        $requestPath = $this->prepareRequestPath($category);
+        $targetPath = $this->prepareTargetPath($category);
+        $metadata = serialize($this->prepareMetadata($category));
+
+        // return the prepared URL rewrite
+        return $this->initializeEntity(
+            array(
+                MemberNames::ENTITY_TYPE      => UrlRewriteObserver::ENTITY_TYPE,
+                MemberNames::ENTITY_ID        => $entityId,
+                MemberNames::REQUEST_PATH     => $requestPath,
+                MemberNames::TARGET_PATH      => $targetPath,
+                MemberNames::REDIRECT_TYPE    => 0,
+                MemberNames::STORE_ID         => $storeId,
+                MemberNames::DESCRIPTION      => null,
+                MemberNames::IS_AUTOGENERATED => 1,
+                MemberNames::METADATA         => $metadata
+            )
+        );
     }
 
     /**
@@ -330,7 +324,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     {
 
         // load the actual entity ID
-        $lastEntityId = $this->getLastEntityId();
+        $lastEntityId = $this->getPrimaryKey();
 
         // query whether or not, the category is the root category
         if ($this->isRootCategory($category)) {
@@ -390,15 +384,25 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Set's the store view code the create the product/attributes for.
+     * Initialize's and return's the URL key filter.
      *
-     * @param string $storeViewCode The store view code
-     *
-     * @return void
+     * @return \TechDivision\Import\Product\Utils\ConvertLiteralUrl The URL key filter
      */
-    public function setStoreViewCode($storeViewCode)
+    protected function getUrlKeyFilter()
     {
-        $this->getSubject()->setStoreViewCode($storeViewCode);
+        return new ConvertLiteralUrl();
+    }
+
+    /**
+     * Convert's the passed string into a valid URL key.
+     *
+     * @param string $string The string to be converted, e. g. the product name
+     *
+     * @return string The converted string as valid URL key
+     */
+    protected function convertNameToUrlKey($string)
+    {
+        return $this->getUrlKeyFilter()->filter($string);
     }
 
     /**
@@ -407,7 +411,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      * @return array The store's root category
      * @throws \Exception Is thrown if the root category for the passed store code is NOT available
      */
-    public function getRootCategory()
+    protected function getRootCategory()
     {
         return $this->getSubject()->getRootCategory();
     }
@@ -419,7 +423,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      *
      * @return boolean TRUE if the passed category IS the root category
      */
-    public function isRootCategory(array $category)
+    protected function isRootCategory(array $category)
     {
 
         // load the root category
@@ -430,11 +434,25 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     }
 
     /**
+     * Return's the store ID of the actual row, or of the default store
+     * if no store view code is set in the CSV file.
+     *
+     * @param string|null $default The default store view code to use, if no store view code is set in the CSV file
+     *
+     * @return integer The ID of the actual store
+     * @throws \Exception Is thrown, if the store with the actual code is not available
+     */
+    protected function getRowStoreId($default = null)
+    {
+        return $this->getSubject()->getRowStoreId($default);
+    }
+
+    /**
      * Return's the list with category IDs the product is related with.
      *
      * @return array The product's category IDs
      */
-    public function getProductCategoryIds()
+    protected function getProductCategoryIds()
     {
         return $this->getSubject()->getProductCategoryIds();
     }
@@ -446,32 +464,9 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      *
      * @return array The category data
      */
-    public function getCategory($categoryId)
+    protected function getCategory($categoryId)
     {
         return $this->getSubject()->getCategory($categoryId);
-    }
-
-    /**
-     * Return's the URL rewrites for the passed URL entity type and ID.
-     *
-     * @param string  $entityType The entity type to load the URL rewrites for
-     * @param integer $entityId   The entity ID to laod the rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
-    {
-        return $this->getSubject()->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
-    }
-
-    /**
-     * Return's the default store.
-     *
-     * @return array The default store
-     */
-    public function getDefaultStore()
-    {
-        return $this->getSubject()->getDefaultStore();
     }
 
     /**
@@ -481,20 +476,18 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function persistUrlRewrite($row)
+    protected function persistUrlRewrite($row)
     {
         $this->getSubject()->persistUrlRewrite($row);
     }
 
     /**
-     * Delete's the URL rewrite with the passed attributes.
+     * Return's the PK to create the product => attribute relation.
      *
-     * @param array $row The attributes of the entity to delete
-     *
-     * @return void
+     * @return integer The PK to create the relation with
      */
-    public function deleteUrlRewrite($row)
+    protected function getPrimaryKey()
     {
-        $this->getSubject()->deleteUrlRewrite($row);
+        return $this->getLastEntityId();
     }
 }

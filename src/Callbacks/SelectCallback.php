@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Callbacks;
 
+use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\MemberNames;
 
 /**
@@ -45,22 +46,28 @@ class SelectCallback extends AbstractProductImportCallback
     public function handle($value)
     {
 
+        // load the store ID
+        $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
+
         // try to load the attribute option value
-        $eavAttributeOptionValue = $this->getEavAttributeOptionValueByOptionValueAndStoreId($value, $this->getRowStoreId());
+        $eavAttributeOptionValue = $this->getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
 
         // return the option ID
         return $eavAttributeOptionValue[MemberNames::OPTION_ID];
     }
 
     /**
-     * Return's the store ID of the actual row.
+     * Return's the store ID of the actual row, or of the default store
+     * if no store view code is set in the CSV file.
+     *
+     * @param string|null $default The default store view code to use, if no store view code is set in the CSV file
      *
      * @return integer The ID of the actual store
      * @throws \Exception Is thrown, if the store with the actual code is not available
      */
-    public function getRowStoreId()
+    public function getRowStoreId($default = null)
     {
-        return $this->getSubject()->getRowStoreId();
+        return $this->getSubject()->getRowStoreId($default);
     }
 
     /**

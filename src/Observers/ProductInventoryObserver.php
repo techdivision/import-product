@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
@@ -46,39 +47,117 @@ class ProductInventoryObserver extends AbstractProductImportObserver
     public function handle(array $row)
     {
 
-        // load the header information
-        $headers = $this->getHeaders();
+        // initialize the row
+        $this->setRow($row);
 
         // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($row[$headers[ColumnKeys::SKU]])) {
-            return $row;
+        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
+            return $this->getRow();
         }
+
+        // process the functionality and return the row
+        $this->process();
+
+        // return the processed row
+        return $this->getRow();
+    }
+
+    /**
+     * Process the observer's business logic.
+     *
+     * @return array The processed row
+     */
+    public function process()
+    {
+
+        // prepare, initialize and persist the stock status/item
+        $this->persistStockStatus($this->initializeStockStatus($this->prepareStockStatusAttributes()));
+        $this->persistStockItem($this->initializeStockItem($this->prepareStockItemAttributes()));
+    }
+
+    /**
+     * Prepare the stock status attributes of the entity that has to be persisted.
+     *
+     * @return array The prepared stock status attributes
+     */
+    public function prepareStockStatusAttributes()
+    {
 
         // load the ID of the product that has been created recently
         $lastEntityId = $this->getLastEntityId();
 
         // initialize the stock status data
-        $websiteId =  $row[$headers[ColumnKeys::WEBSITE_ID]];
-        $qty = $this->castValueByBackendType('float', $row[$headers[ColumnKeys::QTY]]);
+        $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID);
+        $qty = $this->castValueByBackendType('float', $this->getValue(ColumnKeys::QTY));
 
-        // initialize and persist the stock statuscreate the stock status
-        $this->persistStockStatus(array($lastEntityId, $websiteId, 1, $qty, $qty > 0 ? 1 : 0));
+        // return the prepared stock status
+        return $this->initializeEntity(
+            array(
+                MemberNames::PRODUCT_ID   => $lastEntityId,
+                MemberNames::WEBSITE_ID   => $websiteId,
+                MemberNames::STOCK_ID     => 1,
+                MemberNames::STOCK_STATUS => $qty > 0 ? 1 : 0,
+                MemberNames::QTY          => $qty
+            )
+        );
+    }
+
+    /**
+     * Initialize the stock status with the passed attributes and returns an instance.
+     *
+     * @param array $attr The stock status attributes
+     *
+     * @return array The initialized stock status
+     */
+    public function initializeStockStatus(array $attr)
+    {
+        return $attr;
+    }
+
+    /**
+     * Prepare the stock item attributes of the entity that has to be persisted.
+     *
+     * @return array The prepared stock status item
+     */
+    public function prepareStockItemAttributes()
+    {
+
+        // load the ID of the product that has been created recently
+        $lastEntityId = $this->getLastEntityId();
+
+        // initialize the stock status data
+        $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID);
 
         // initialize the stock item with the basic data
-        $stockItem = array($lastEntityId, 1, $websiteId);
+        $stockItem = $this->initializeEntity(
+            array(
+                MemberNames::PRODUCT_ID  => $lastEntityId,
+                MemberNames::WEBSITE_ID  => $websiteId,
+                MemberNames::STOCK_ID    => 1
+            )
+        );
 
         // append the row values to the stock item
         $headerStockMappings = $this->getHeaderStockMappings();
-        foreach ($headerStockMappings as $header) {
+        foreach ($headerStockMappings as $columnName => $header) {
             list ($headerName, $backendType) = $header;
-            $stockItem[] = $this->castValueByBackendType($backendType, $row[$headers[$headerName]]);
+            $stockItem[$columnName] = $this->castValueByBackendType($backendType, $this->getValue($headerName));
         }
 
-        // create the stock item
-        $this->persistStockItem($stockItem);
+        // return the prepared stock item
+        return $stockItem;
+    }
 
-        // returns the row
-        return $row;
+    /**
+     * Initialize the stock item with the passed attributes and returns an instance.
+     *
+     * @param array $attr The stock item attributes
+     *
+     * @return array The initialized stock item
+     */
+    public function initializeStockItem(array $attr)
+    {
+        return $attr;
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductUpdateProcessor
+ * TechDivision\Import\Product\Actions\Processors\StockItemUpdateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,11 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
+use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 
 /**
- * The product update processor implementation.
+ * The stock item update processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -32,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductUpdateProcessor extends AbstractUpdateProcessor
+class StockItemUpdateProcessor extends AbstractCreateProcessor
 {
 
     /**
@@ -49,21 +48,7 @@ class ProductUpdateProcessor extends AbstractUpdateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::UPDATE_PRODUCT => $utilityClassName::UPDATE_PRODUCT
+            $utilityClassName::UPDATE_STOCK_ITEM => $utilityClassName::UPDATE_STOCK_ITEM
         );
-    }
-
-    /**
-     * Update's the passed row.
-     *
-     * @param array       $row  The row to update
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return string The ID of the updated product
-     */
-    public function execute($row, $name = null)
-    {
-        parent::execute($row, $name);
-        return $row[MemberNames::ENTITY_ID];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Repositories\ProductRepository
+ * TechDivision\Import\Product\Repositories\ProductTextRepository
  *
  * NOTICE OF LICENSE
  *
@@ -20,11 +20,11 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Repositories\AbstractRepository;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
- * Repository implementation to load product data.
+ * Repository implementation to load product text attribute data.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -32,15 +32,15 @@ use TechDivision\Import\Product\Utils\MemberNames;
  * @link      https://github.com/techdivision/import
  * @link      http://www.techdivision.com
  */
-class ProductRepository extends AbstractRepository
+class ProductTextRepository extends AbstractRepository
 {
 
     /**
-     * The prepared statement to load the existing products.
+     * The prepared statement to load the existing product text attribute.
      *
      * @var \PDOStatement
      */
-    protected $productStmt;
+    protected $productTextStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -54,20 +54,30 @@ class ProductRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->productStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT);
+        $this->productTextStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT_TEXT);
     }
 
     /**
-     * Return's the product with the passed SKU.
+     * Load's and return's the text attribute with the passed entity/attribute/store ID.
      *
-     * @param string $sku The SKU of the product to return
+     * @param integer $entityId    The entity ID of the attribute
+     * @param integer $attributeId The attribute ID of the attribute
+     * @param integer $storeId     The store ID of the attribute
      *
-     * @return array The product
+     * @return array|null The text attribute
      */
-    public function findOneBySku($sku)
+    public function findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId)
     {
-        // load and return the product with the passed SKU
-        $this->productStmt->execute(array(MemberNames::SKU => $sku));
-        return $this->productStmt->fetch(\PDO::FETCH_ASSOC);
+
+        // prepare the params
+        $params = array(
+            MemberNames::STORE_ID      => $storeId,
+            MemberNames::ENTITY_ID     => $entityId,
+            MemberNames::ATTRIBUTE_ID  => $attributeId
+        );
+
+        // load and return the product text attribute with the passed store/entity/attribute ID
+        $this->productTextStmt->execute($params);
+        return $this->productTextStmt->fetch(\PDO::FETCH_ASSOC);
     }
 }

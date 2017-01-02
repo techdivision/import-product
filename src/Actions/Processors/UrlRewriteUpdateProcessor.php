@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductCategoryDeleteProcessor
+ * TechDivision\Import\Product\Actions\Processors\UrlRewriteUpdateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractDeleteProcessor;
+use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
 
 /**
- * The product category delete processor implementation.
+ * The URL rewrite update processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractDeleteProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductCategoryDeleteProcessor extends AbstractDeleteProcessor
+class UrlRewriteUpdateProcessor extends AbstractUpdateProcessor
 {
 
     /**
@@ -48,7 +48,7 @@ class ProductCategoryDeleteProcessor extends AbstractDeleteProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::DELETE_PRODUCT_CATEGORY_BY_SKU => $utilityClassName::DELETE_PRODUCT_CATEGORY_BY_SKU
+            $utilityClassName::UPDATE_URL_REWRITE => $utilityClassName::UPDATE_URL_REWRITE
         );
     }
 }

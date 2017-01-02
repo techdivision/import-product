@@ -22,13 +22,9 @@ namespace TechDivision\Import\Product\Subjects;
 
 use Goodby\CSV\Export\Standard\Exporter;
 use Goodby\CSV\Export\Standard\ExporterConfig;
-use TechDivision\Import\Subjects\AbstractSubject;
 use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Services\RegistryProcessor;
-use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
-use TechDivision\Import\Product\Services\ProductProcessorInterface;
-use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -48,11 +44,11 @@ class BunchSubject extends AbstractProductSubject
      * @var array
      */
     protected $backendTypes = array(
-        'datetime' => 'persistProductDatetimeAttribute',
-        'decimal'  => 'persistProductDecimalAttribute',
-        'int'      => 'persistProductIntAttribute',
-        'text'     => 'persistProductTextAttribute',
-        'varchar'  => 'persistProductVarcharAttribute'
+        'datetime' => array('persistProductDatetimeAttribute', 'loadProductDatetimeAttribute'),
+        'decimal'  => array('persistProductDecimalAttribute', 'loadProductDecimalAttribute'),
+        'int'      => array('persistProductIntAttribute', 'loadProductIntAttribute'),
+        'text'     => array('persistProductTextAttribute', 'loadProductTextAttribute'),
+        'varchar'  => array('persistProductVarcharAttribute', 'loadProductVarcharAttribute')
     );
 
     /**
@@ -478,6 +474,130 @@ class BunchSubject extends AbstractProductSubject
     }
 
     /**
+     * Load's and return's the product website relation with the passed product and website ID.
+     *
+     * @param string $productId The product ID of the relation
+     * @param string $websiteId The website ID of the relation
+     *
+     * @return array The product website
+     */
+    public function loadProductWebsite($productId, $websiteId)
+    {
+        return $this->getProductProcessor()->loadProductWebsite($productId, $websiteId);
+    }
+
+    /**
+     * Return's the category product relation with the passed category/product ID.
+     *
+     * @param integer $categoryId The category ID of the category product relation to return
+     * @param integer $productId  The product ID of the category product relation to return
+     *
+     * @return array The category product relation
+     */
+    public function loadCategoryProduct($categoryId, $productId)
+    {
+        return $this->getProductProcessor()->loadCategoryProduct($categoryId, $productId);
+    }
+
+    /**
+     * Load's and return's the stock status with the passed product/website/stock ID.
+     *
+     * @param integer $productId The product ID of the stock status to load
+     * @param integer $websiteId The website ID of the stock status to load
+     * @param integer $stockId   The stock ID of the stock status to load
+     *
+     * @return array The stock status
+     */
+    public function loadStockStatus($productId, $websiteId, $stockId)
+    {
+        return $this->getProductProcessor()->loadStockStatus($productId, $websiteId, $stockId);
+    }
+
+    /**
+     * Load's and return's the stock status with the passed product/website/stock ID.
+     *
+     * @param integer $productId The product ID of the stock item to load
+     * @param integer $websiteId The website ID of the stock item to load
+     * @param integer $stockId   The stock ID of the stock item to load
+     *
+     * @return array The stock item
+     */
+    public function loadStockItem($productId, $websiteId, $stockId)
+    {
+        return $this->getProductProcessor()->loadStockItem($productId, $websiteId, $stockId);
+    }
+
+    /**
+     * Load's and return's the datetime attribute with the passed entity/attribute/store ID.
+     *
+     * @param integer $entityId    The entity ID of the attribute
+     * @param integer $attributeId The attribute ID of the attribute
+     * @param integer $storeId     The store ID of the attribute
+     *
+     * @return array|null The datetime attribute
+     */
+    public function loadProductDatetimeAttribute($entityId, $attributeId, $storeId)
+    {
+        return $this->getProductProcessor()->loadProductDatetimeAttribute($entityId, $attributeId, $storeId);
+    }
+
+    /**
+     * Load's and return's the decimal attribute with the passed entity/attribute/store ID.
+     *
+     * @param integer $entityId    The entity ID of the attribute
+     * @param integer $attributeId The attribute ID of the attribute
+     * @param integer $storeId     The store ID of the attribute
+     *
+     * @return array|null The decimal attribute
+     */
+    public function loadProductDecimalAttribute($entityId, $attributeId, $storeId)
+    {
+        return $this->getProductProcessor()->loadProductDecimalAttribute($entityId, $attributeId, $storeId);
+    }
+
+    /**
+     * Load's and return's the integer attribute with the passed entity/attribute/store ID.
+     *
+     * @param integer $entityId    The entity ID of the attribute
+     * @param integer $attributeId The attribute ID of the attribute
+     * @param integer $storeId     The store ID of the attribute
+     *
+     * @return array|null The integer attribute
+     */
+    public function loadProductIntAttribute($entityId, $attributeId, $storeId)
+    {
+        return $this->getProductProcessor()->loadProductIntAttribute($entityId, $attributeId, $storeId);
+    }
+
+    /**
+     * Load's and return's the text attribute with the passed entity/attribute/store ID.
+     *
+     * @param integer $entityId    The entity ID of the attribute
+     * @param integer $attributeId The attribute ID of the attribute
+     * @param integer $storeId     The store ID of the attribute
+     *
+     * @return array|null The text attribute
+     */
+    public function loadProductTextAttribute($entityId, $attributeId, $storeId)
+    {
+        return $this->getProductProcessor()->loadProductTextAttribute($entityId, $attributeId, $storeId);
+    }
+
+    /**
+     * Load's and return's the varchar attribute with the passed entity/attribute/store ID.
+     *
+     * @param integer $entityId    The entity ID of the attribute
+     * @param integer $attributeId The attribute ID of the attribute
+     * @param integer $storeId     The store ID of the attribute
+     *
+     * @return array|null The varchar attribute
+     */
+    public function loadProductVarcharAttribute($entityId, $attributeId, $storeId)
+    {
+        return $this->getProductProcessor()->loadProductVarcharAttribute($entityId, $attributeId, $storeId);
+    }
+
+    /**
      * Persist's the passed product data and return's the ID.
      *
      * @param array $product The product data to persist
@@ -562,15 +682,15 @@ class BunchSubject extends AbstractProductSubject
     }
 
     /**
-     * Persist's the passed product category data and return's the ID.
+     * Persist's the passed category product relation.
      *
-     * @param array $productCategory The product category data to persist
+     * @param array $categoryProduct The category product relation to persist
      *
      * @return void
      */
-    public function persistProductCategory($productCategory)
+    public function persistCategoryProduct($categoryProduct)
     {
-        $this->getProductProcessor()->persistProductCategory($productCategory);
+        $this->getProductProcessor()->persistCategoryProduct($categoryProduct);
     }
 
     /**
@@ -675,15 +795,15 @@ class BunchSubject extends AbstractProductSubject
     }
 
     /**
-     * Delete's the product category relations with the passed attributes.
+     * Delete's the category product relations with the passed attributes.
      *
      * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function deleteProductCategory($row, $name = null)
+    public function deleteCategoryProduct($row, $name = null)
     {
-        $this->getProductProcessor()->deleteProductCategory($row, $name);
+        $this->getProductProcessor()->deleteCategoryProduct($row, $name);
     }
 }

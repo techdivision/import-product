@@ -20,8 +20,6 @@
 
 namespace TechDivision\Import\Product\Services;
 
-use TechDivision\Import\Product\Utils\MemberNames;
-
 /**
  * The product bunch processor implementation.
  *
@@ -98,11 +96,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     protected $productWebsiteAction;
 
     /**
-     * The action for product category CRUD methods.
+     * The action for category product relation CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductCategoryAction
+     * @var \TechDivision\Import\Product\Actions\CategoryProductAction
      */
-    protected $productCategoryAction;
+    protected $categoryProductAction;
 
     /**
      * The action for stock item CRUD methods.
@@ -131,6 +129,69 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @var \TechDivision\Import\Product\Repositories\ProductRepository
      */
     protected $productRepository;
+
+    /**
+     * The repository to load the product website relations with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\ProductWebsiteRepository
+     */
+    protected $productWebsiteRepository;
+
+    /**
+     * The repository to load the product datetime attribute with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\ProductDatetimeRepository
+     */
+    protected $productDatetimeRepository;
+
+    /**
+     * The repository to load the product decimal attribute with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\ProductDecimalRepository
+     */
+    protected $productDecimalRepository;
+
+    /**
+     * The repository to load the product integer attribute with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\ProductIntRepository
+     */
+    protected $productIntRepository;
+
+    /**
+     * The repository to load the product text attribute with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\ProductTextRepository
+     */
+    protected $productTextRepository;
+
+    /**
+     * The repository to load the product varchar attribute with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\ProductVarcharRepository
+     */
+    protected $productVarcharRepository;
+
+    /**
+     * The repository to load the category product relations with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\CategoryProductRepository
+     */
+    protected $categoryProductRepository;
+
+    /**
+     * The repository to load the stock status with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\StockStatusRepository
+     */
+    protected $stockStatusRepository;
+
+    /**
+     * The repository to load the stock item with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\StockItemRepository
+     */
+    protected $stockItemRepository;
 
     /**
      * The repository to load the URL rewrites with.
@@ -382,25 +443,25 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
-     * Set's the action with the product category CRUD methods.
+     * Set's the action with the category product relation CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductCategoryAction $productCategoryAction The action with the product category CRUD methods
+     * @param \TechDivision\Import\Product\Actions\ProductCategoryAction $categoryProductAction The action with the category product relation CRUD methods
      *
      * @return void
      */
-    public function setProductCategoryAction($productCategoryAction)
+    public function setCategoryProductAction($categoryProductAction)
     {
-        $this->productCategoryAction = $productCategoryAction;
+        $this->categoryProductAction = $categoryProductAction;
     }
 
     /**
-     * Return's the action with the product category CRUD methods.
+     * Return's the action with the category product relation CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductCategoryAction The action instance
+     * @return \TechDivision\Import\Product\Actions\CategoryProductAction The action instance
      */
-    public function getProductCategoryAction()
+    public function getCategoryProductAction()
     {
-        return $this->productCategoryAction;
+        return $this->categoryProductAction;
     }
 
     /**
@@ -470,28 +531,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
-     * Set's the repository to load the URL rewrites with.
-     *
-     * @param \TechDivision\Import\Product\Repositories\UrlRewriteRepository $urlRewriteRepository The repository instance
-     *
-     * @return void
-     */
-    public function setUrlRewriteRepository($urlRewriteRepository)
-    {
-        $this->urlRewriteRepository = $urlRewriteRepository;
-    }
-
-    /**
-     * Return's the repository to load the URL rewrites with.
-     *
-     * @return \TechDivision\Import\Product\Repositories\UrlRewriteRepository The repository instance
-     */
-    public function getUrlRewriteRepository()
-    {
-        return $this->urlRewriteRepository;
-    }
-
-    /**
      * Set's the repository to load the products with.
      *
      * @param \TechDivision\Import\Product\Repositories\ProductRepository $productRepository The repository instance
@@ -511,6 +550,226 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function getProductRepository()
     {
         return $this->productRepository;
+    }
+
+    /**
+     * Set's the repository to load the product website relations with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\ProductWebsiteRepository $productWebsiteRepository The repository instance
+     *
+     * @return void
+     */
+    public function setProductWebsiteRepository($productWebsiteRepository)
+    {
+        $this->productWebsiteRepository = $productWebsiteRepository;
+    }
+
+    /**
+     * Return's the repository to load the product website relations with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\ProductWebsiteRepository The repository instance
+     */
+    public function getProductWebsiteRepository()
+    {
+        return $this->productWebsiteRepository;
+    }
+
+    /**
+     * Set's the repository to load the product datetime attribute with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\ProductDatetimeRepository $productDatetimeRepository The repository instance
+     *
+     * @return void
+     */
+    public function setProductDatetimeRepository($productDatetimeRepository)
+    {
+        $this->productDatetimeRepository = $productDatetimeRepository;
+    }
+
+    /**
+     * Return's the repository to load the product datetime attribute with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\ProductDatetimeRepository The repository instance
+     */
+    public function getProductDatetimeRepository()
+    {
+        return $this->productDatetimeRepository;
+    }
+
+    /**
+     * Set's the repository to load the product decimal attribute with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\ProductDecimalRepository $productDecimalRepository The repository instance
+     *
+     * @return void
+     */
+    public function setProductDecimalRepository($productDecimalRepository)
+    {
+        $this->productDecimalRepository = $productDecimalRepository;
+    }
+
+    /**
+     * Return's the repository to load the product decimal attribute with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\ProductDecimalRepository The repository instance
+     */
+    public function getProductDecimalRepository()
+    {
+        return $this->productDecimalRepository;
+    }
+
+    /**
+     * Set's the repository to load the product integer attribute with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\ProductIntRepository $productIntRepository The repository instance
+     *
+     * @return void
+     */
+    public function setProductIntRepository($productIntRepository)
+    {
+        $this->productIntRepository = $productIntRepository;
+    }
+
+    /**
+     * Return's the repository to load the product integer attribute with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\ProductIntRepository The repository instance
+     */
+    public function getProductIntRepository()
+    {
+        return $this->productIntRepository;
+    }
+
+    /**
+     * Set's the repository to load the product text attribute with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\ProductTextRepository $productTextRepository The repository instance
+     *
+     * @return void
+     */
+    public function setProductTextRepository($productTextRepository)
+    {
+        $this->productTextRepository = $productTextRepository;
+    }
+
+    /**
+     * Return's the repository to load the product text attribute with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\ProductTextRepository The repository instance
+     */
+    public function getProductTextRepository()
+    {
+        return $this->productTextRepository;
+    }
+
+    /**
+     * Set's the repository to load the product varchar attribute with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepository $productVarcharRepository The repository instance
+     *
+     * @return void
+     */
+    public function setProductVarcharRepository($productVarcharRepository)
+    {
+        $this->productVarcharRepository = $productVarcharRepository;
+    }
+
+    /**
+     * Return's the repository to load the product varchar attribute with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\ProductVarcharRepository The repository instance
+     */
+    public function getProductVarcharRepository()
+    {
+        return $this->productVarcharRepository;
+    }
+
+    /**
+     * Set's the repository to load the category product relations with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\CategoryProductRepository $categoryProductRepository The repository instance
+     *
+     * @return void
+     */
+    public function setCategoryProductRepository($categoryProductRepository)
+    {
+        $this->categoryProductRepository = $categoryProductRepository;
+    }
+
+    /**
+     * Return's the repository to load the category product relations with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\CategoryProductRepository The repository instance
+     */
+    public function getCategoryProductRepository()
+    {
+        return $this->categoryProductRepository;
+    }
+
+    /**
+     * Set's the repository to load the stock status with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\StockStatusRepository $stockStatusRepository The repository instance
+     *
+     * @return void
+     */
+    public function setStockStatusRepository($stockStatusRepository)
+    {
+        $this->stockStatusRepository = $stockStatusRepository;
+    }
+
+    /**
+     * Return's the repository to load the stock status with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\StockStatusRepository The repository instance
+     */
+    public function getStockStatusRepository()
+    {
+        return $this->stockStatusRepository;
+    }
+
+    /**
+     * Set's the repository to load the stock items with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\StockItemRepository $stockItemRepository The repository instance
+     *
+     * @return void
+     */
+    public function setStockItemRepository($stockItemRepository)
+    {
+        $this->stockItemRepository = $stockItemRepository;
+    }
+
+    /**
+     * Return's the repository to load the stock items with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\StockItemRepository The repository instance
+     */
+    public function getStockItemRepository()
+    {
+        return $this->stockItemRepository;
+    }
+
+    /**
+     * Set's the repository to load the URL rewrites with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\UrlRewriteRepository $urlRewriteRepository The repository instance
+     *
+     * @return void
+     */
+    public function setUrlRewriteRepository($urlRewriteRepository)
+    {
+        $this->urlRewriteRepository = $urlRewriteRepository;
+    }
+
+    /**
+     * Return's the repository to load the URL rewrites with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\UrlRewriteRepository The repository instance
+     */
+    public function getUrlRewriteRepository()
+    {
+        return $this->urlRewriteRepository;
     }
 
     /**
@@ -552,6 +811,130 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
+     * Load's and return's the product website relation with the passed product and website ID.
+     *
+     * @param string $productId The product ID of the relation
+     * @param string $websiteId The website ID of the relation
+     *
+     * @return array The product website
+     */
+    public function loadProductWebsite($productId, $websiteId)
+    {
+        return $this->getProductWebsiteRepository()->findOneByProductIdAndWebsite($productId, $websiteId);
+    }
+
+    /**
+     * Return's the category product relation with the passed category/product ID.
+     *
+     * @param integer $categoryId The category ID of the category product relation to return
+     * @param integer $productId  The product ID of the category product relation to return
+     *
+     * @return array The category product relation
+     */
+    public function loadCategoryProduct($categoryId, $productId)
+    {
+        return $this->getCategoryProductRepository()->findOneByCategoryIdAndProductId($categoryId, $productId);
+    }
+
+    /**
+     * Load's and return's the stock status with the passed product/website/stock ID.
+     *
+     * @param integer $productId The product ID of the stock status to load
+     * @param integer $websiteId The website ID of the stock status to load
+     * @param integer $stockId   The stock ID of the stock status to load
+     *
+     * @return array The stock status
+     */
+    public function loadStockStatus($productId, $websiteId, $stockId)
+    {
+        return $this->getStockStatusRepository()->findOneByProductIdAndWebsiteIdAndStockId($productId, $websiteId, $stockId);
+    }
+
+    /**
+     * Load's and return's the stock status with the passed product/website/stock ID.
+     *
+     * @param integer $productId The product ID of the stock item to load
+     * @param integer $websiteId The website ID of the stock item to load
+     * @param integer $stockId   The stock ID of the stock item to load
+     *
+     * @return array The stock item
+     */
+    public function loadStockItem($productId, $websiteId, $stockId)
+    {
+        return $this->getStockItemRepository()->findOneByProductIdAndWebsiteIdAndStockId($productId, $websiteId, $stockId);
+    }
+
+    /**
+     * Load's and return's the datetime attribute with the passed entity/attribute/store ID.
+     *
+     * @param integer $entityId    The entity ID of the attribute
+     * @param integer $attributeId The attribute ID of the attribute
+     * @param integer $storeId     The store ID of the attribute
+     *
+     * @return array|null The datetime attribute
+     */
+    public function loadProductDatetimeAttribute($entityId, $attributeId, $storeId)
+    {
+        return  $this->getProductDatetimeRepository()->findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId);
+    }
+
+    /**
+     * Load's and return's the decimal attribute with the passed entity/attribute/store ID.
+     *
+     * @param integer $entityId    The entity ID of the attribute
+     * @param integer $attributeId The attribute ID of the attribute
+     * @param integer $storeId     The store ID of the attribute
+     *
+     * @return array|null The decimal attribute
+     */
+    public function loadProductDecimalAttribute($entityId, $attributeId, $storeId)
+    {
+        return  $this->getProductDecimalRepository()->findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId);
+    }
+
+    /**
+     * Load's and return's the integer attribute with the passed entity/attribute/store ID.
+     *
+     * @param integer $entityId    The entity ID of the attribute
+     * @param integer $attributeId The attribute ID of the attribute
+     * @param integer $storeId     The store ID of the attribute
+     *
+     * @return array|null The integer attribute
+     */
+    public function loadProductIntAttribute($entityId, $attributeId, $storeId)
+    {
+        return $this->getProductIntRepository()->findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId);
+    }
+
+    /**
+     * Load's and return's the text attribute with the passed entity/attribute/store ID.
+     *
+     * @param integer $entityId    The entity ID of the attribute
+     * @param integer $attributeId The attribute ID of the attribute
+     * @param integer $storeId     The store ID of the attribute
+     *
+     * @return array|null The text attribute
+     */
+    public function loadProductTextAttribute($entityId, $attributeId, $storeId)
+    {
+        return $this->getProductTextRepository()->findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId);
+    }
+
+    /**
+     * Load's and return's the varchar attribute with the passed entity/attribute/store ID.
+     *
+     * @param integer $entityId    The entity ID of the attribute
+     * @param integer $attributeId The attribute ID of the attribute
+     * @param integer $storeId     The store ID of the attribute
+     *
+     * @return array|null The varchar attribute
+     */
+    public function loadProductVarcharAttribute($entityId, $attributeId, $storeId)
+    {
+        return $this->getProductVarcharRepository()->findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId);
+    }
+
+    /**
      * Persist's the passed product data and return's the ID.
      *
      * @param array       $product The product data to persist
@@ -561,14 +944,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProduct($product, $name = null)
     {
-
-        // query whether or not we've to update an exsisting entity
-        if (isset($product[MemberNames::ENTITY_ID])) {
-            return $this->getProductAction()->update($product, $name);
-        }
-
-        // create a new entity
-        return $this->getProductAction()->create($product, $name);
+        return $this->getProductAction()->persist($product, $name);
     }
 
     /**
@@ -581,7 +957,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductVarcharAttribute($attribute, $name = null)
     {
-        $this->getProductVarcharAction()->create($attribute, $name);
+        $this->getProductVarcharAction()->persist($attribute, $name);
     }
 
     /**
@@ -594,7 +970,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductIntAttribute($attribute, $name = null)
     {
-        $this->getProductIntAction()->create($attribute, $name);
+        $this->getProductIntAction()->persist($attribute, $name);
     }
 
     /**
@@ -607,7 +983,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductDecimalAttribute($attribute, $name = null)
     {
-        $this->getProductDecimalAction()->create($attribute, $name);
+        $this->getProductDecimalAction()->persist($attribute, $name);
     }
 
     /**
@@ -620,7 +996,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductDatetimeAttribute($attribute, $name = null)
     {
-        $this->getProductDatetimeAction()->create($attribute, $name);
+        $this->getProductDatetimeAction()->persist($attribute, $name);
     }
 
     /**
@@ -633,7 +1009,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductTextAttribute($attribute, $name = null)
     {
-        $this->getProductTextAction()->create($attribute, $name);
+        $this->getProductTextAction()->persist($attribute, $name);
     }
 
     /**
@@ -646,20 +1022,20 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProductWebsite($productWebsite, $name = null)
     {
-        $this->getProductWebsiteAction()->create($productWebsite, $name);
+        $this->getProductWebsiteAction()->persist($productWebsite, $name);
     }
 
     /**
-     * Persist's the passed product category data and return's the ID.
+     * Persist's the passed category product relation.
      *
-     * @param array       $productCategory The product category data to persist
+     * @param array       $categoryProduct The category product relation to persist
      * @param string|null $name            The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function persistProductCategory($productCategory, $name = null)
+    public function persistCategoryProduct($categoryProduct, $name = null)
     {
-        $this->getProductCategoryAction()->create($productCategory, $name);
+        $this->getCategoryProductAction()->persist($categoryProduct, $name);
     }
 
     /**
@@ -672,7 +1048,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistStockItem($stockItem, $name = null)
     {
-        $this->getStockItemAction()->create($stockItem, $name);
+        $this->getStockItemAction()->persist($stockItem, $name);
     }
 
     /**
@@ -685,7 +1061,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistStockStatus($stockStatus, $name = null)
     {
-        $this->getStockStatusAction()->create($stockStatus, $name);
+        $this->getStockStatusAction()->persist($stockStatus, $name);
     }
 
     /**
@@ -698,7 +1074,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistUrlRewrite($row, $name = null)
     {
-        $this->getUrlRewriteAction()->create($row, $name);
+        $this->getUrlRewriteAction()->persist($row, $name);
     }
 
     /**
@@ -767,15 +1143,15 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
-     * Delete's the product category relations with the passed attributes.
+     * Delete's the category product relations with the passed attributes.
      *
      * @param array       $row  The attributes of the entity to delete
      * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    public function deleteProductCategory($row, $name = null)
+    public function deleteCategoryProduct($row, $name = null)
     {
-        $this->getProductCategoryAction()->delete($row, $name);
+        $this->getCategoryProductAction()->delete($row, $name);
     }
 }

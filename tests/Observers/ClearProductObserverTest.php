@@ -77,7 +77,7 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                                     'deleteStockItem',
                                     'deleteStockStatus',
                                     'deleteProductWebsite',
-                                    'deleteProductCategory',
+                                    'deleteCategoryProduct',
                                     'deleteProduct'
                                 )
                             )
@@ -101,7 +101,7 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('deleteProductWebsite')
                     ->with(array($row[$headers[ColumnKeys::SKU]]));
         $mockSubject->expects($this->once())
-                    ->method('deleteProductCategory')
+                    ->method('deleteCategoryProduct')
                     ->with(array($row[$headers[ColumnKeys::SKU]]));
         $mockSubject->expects($this->once())
                     ->method('deleteProduct')

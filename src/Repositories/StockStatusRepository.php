@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Repositories\ProductRepository
+ * TechDivision\Import\Product\Repositories\StockStatusRepository
  *
  * NOTICE OF LICENSE
  *
@@ -24,7 +24,7 @@ use TechDivision\Import\Repositories\AbstractRepository;
 use TechDivision\Import\Product\Utils\MemberNames;
 
 /**
- * Repository implementation to load product data.
+ * Repository implementation to load stock status data.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -32,15 +32,15 @@ use TechDivision\Import\Product\Utils\MemberNames;
  * @link      https://github.com/techdivision/import
  * @link      http://www.techdivision.com
  */
-class ProductRepository extends AbstractRepository
+class StockStatusRepository extends AbstractRepository
 {
 
     /**
-     * The prepared statement to load the existing products.
+     * The prepared statement to load the existing stock status.
      *
      * @var \PDOStatement
      */
-    protected $productStmt;
+    protected $stockStatusStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -54,20 +54,30 @@ class ProductRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->productStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT);
+        $this->stockStatusStmt = $this->getConnection()->prepare($utilityClassName::STOCK_STATUS);
     }
 
     /**
-     * Return's the product with the passed SKU.
+     * Load's and return's the stock status with the passed product/website/stock ID.
      *
-     * @param string $sku The SKU of the product to return
+     * @param integer $productId The product ID of the stock status to load
+     * @param integer $websiteId The website ID of the stock status to load
+     * @param integer $stockId   The stock ID of the stock status to load
      *
-     * @return array The product
+     * @return array The stock status
      */
-    public function findOneBySku($sku)
+    public function findOneByProductIdAndWebsiteIdAndStockId($productId, $websiteId, $stockId)
     {
-        // load and return the product with the passed SKU
-        $this->productStmt->execute(array(MemberNames::SKU => $sku));
-        return $this->productStmt->fetch(\PDO::FETCH_ASSOC);
+
+        // prepare the params
+        $params = array(
+            MemberNames::PRODUCT_ID => $productId,
+            MemberNames::WEBSITE_ID => $websiteId,
+            MemberNames::STOCK_ID   => $stockId
+        );
+
+        // load and return the stock status with the passed product/website/stock ID
+        $this->stockStatusStmt->execute($params);
+        return $this->stockStatusStmt->fetch(\PDO::FETCH_ASSOC);
     }
 }

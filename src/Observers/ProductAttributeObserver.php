@@ -21,7 +21,6 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Utils\StoreViewCodes;
-use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
@@ -59,11 +58,11 @@ class ProductAttributeObserver extends AbstractProductImportObserver
     protected $backendType;
 
     /**
-     * The the persist method for the found backend type.
+     * The attribute value to process.
      *
-     * @var string
+     * @var mixed
      */
-    protected $persistMethod;
+    protected $attributeValue;
 
     /**
      * Will be invoked by the action on the events the listener has been registered for.
@@ -76,11 +75,26 @@ class ProductAttributeObserver extends AbstractProductImportObserver
     public function handle(array $row)
     {
 
-        // load the header information
-        $headers = $this->getHeaders();
+        // initialize the row
+        $this->setRow($row);
+
+        // process the functionality and return the row
+        $this->process();
+
+        // return the processed row
+        return $this->getRow();
+    }
+
+    /**
+     * Process the observer's business logic.
+     *
+     * @return void
+     */
+    public function process()
+    {
 
         // initialize the store view code
-        $this->prepareStoreViewCode($row);
+        $this->prepareStoreViewCode();
 
         // load the attributes by the found attribute set
         $attributes = $this->getAttributes();
@@ -94,26 +108,17 @@ class ProductAttributeObserver extends AbstractProductImportObserver
             // query weather or not we've a mapping, if yes, map the attribute code
             $attributeCode = $this->mapAttributeCodeByHeaderMapping($attributeCode);
 
-            // query whether or not we found the column in the CSV file
-            if (!isset($headers[$attributeCode]) ||
-                !isset($row[$headers[$attributeCode]])
-            ) {
-                continue;
-            }
-
-            // query whether or not, a value is available
-            if ($row[$headers[$attributeCode]] === null ||
-                trim($row[$headers[$attributeCode]]) === ''
-            ) {
+            // query whether or not we've a attribute value found
+            $attributeValue = $this->getValue($attributeCode);
+            if ($attributeValue == null) {
                 continue;
             }
 
             // load the backend type => to find the apropriate entity
             $backendType = $attribute[MemberNames::BACKEND_TYPE];
             if ($backendType == null) {
-                $this->getSystemLogger()->warning(
-                    sprintf('Found EMTPY backend type for attribute %s', $attributeCode)
-                );
+                $this->getSystemLogger()
+                     ->warning(sprintf('Found EMTPY backend type for attribute %s', $attributeCode));
                 continue;
             }
 
@@ -122,45 +127,49 @@ class ProductAttributeObserver extends AbstractProductImportObserver
 
             // query whether or not we've found a supported backend type
             if (isset($backendTypes[$backendType])) {
-                // initialize the persist method for the found backend type
-                $this->setPersistMethod($backendTypes[$backendType]);
-
                 // initialize attribute ID/code and backend type
                 $this->setAttributeId($attributeId);
                 $this->setAttributeCode($attributeCode);
                 $this->setBackendType($backendType);
 
-                // load the row's value and persist it
-                $this->processAttribute($row[$headers[$attributeCode]]);
+                // initialize the persist method for the found backend type
+                list ($persistMethod, ) = $backendTypes[$backendType];
+
+                // set the attribute value
+                $this->setAttributeValue($attributeValue);
+
+                // load the prepared values
+                $entity = $this->initializeAttribute($this->prepareAttributes());
+
+                // persist the attribute
+                $this->$persistMethod($entity);
 
             } else {
+                // log the debug message
                 $this->getSystemLogger()->debug(
                     sprintf('Found invalid backend type %s for attribute %s', $backendType, $attributeCode)
                 );
             }
         }
-
-        // returns the row
-        return $row;
     }
 
     /**
-     * This method finally persists the passed value by invoking the
-     * persist method defined by the attribute's backend type.
+     * Prepare the attributes of the entity that has to be persisted.
      *
-     * @param mixed $value The value to persist
-     *
-     * @return void
+     * @return array The prepared attributes
      */
-    public function processAttribute($value)
+    public function prepareAttributes()
     {
+
+        // load the attribute value
+        $attributeValue = $this->getAttributeValue();
 
         // laod the callbacks for the actual attribute code
         $callbacks = $this->getCallbacksByType($this->getAttributeCode());
 
         // invoke the pre-cast callbacks
         foreach ($callbacks as $callback) {
-            $value = $callback->handle($value);
+            $attributeValue = $callback->handle($attributeValue);
         }
 
         // load the ID of the product that has been created recently
@@ -170,20 +179,35 @@ class ProductAttributeObserver extends AbstractProductImportObserver
         $attributeId = $this->getAttributeId();
 
         // load the store ID
-        $storeId = $this->getRowStoreId();
+        $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
 
         // load the backend type of the actual attribute
         $backendType = $this->getBackendType();
 
         // cast the value based on the backend type
-        $castedValue = $this->castValueByBackendType($backendType, $value);
+        $castedValue = $this->castValueByBackendType($backendType, $attributeValue);
 
         // prepare the attribute values
-        $attribute = array($lastEntityId, $attributeId, $storeId, $castedValue);
+        return $this->initializeEntity(
+            array(
+                MemberNames::ENTITY_ID    => $lastEntityId,
+                MemberNames::ATTRIBUTE_ID => $attributeId,
+                MemberNames::STORE_ID     => $storeId,
+                MemberNames::VALUE        => $castedValue
+            )
+        );
+    }
 
-        // initialize and persist the entity attribute
-        $persistMethod = $this->getPersistMethod();
-        $this->$persistMethod($attribute);
+    /**
+     * Initialize the category product with the passed attributes and returns an instance.
+     *
+     * @param array $attr The category product attributes
+     *
+     * @return array The initialized category product
+     */
+    public function initializeAttribute(array $attr)
+    {
+        return $attr;
     }
 
     /**
@@ -197,25 +221,25 @@ class ProductAttributeObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Set's the persist method for the found backend type.
+     * Set's the attribute value to process.
      *
-     * @param string $persistMethod The persist method
+     * @param mixed $attributeValue The attribute value
      *
      * @return void
      */
-    public function setPersistMethod($persistMethod)
+    public function setAttributeValue($attributeValue)
     {
-        $this->persistMethod = $persistMethod;
+        $this->attributeValue = $attributeValue;
     }
 
     /**
-     * Return's the persist method for the found backend type.
+     * Return's the attribute value to process.
      *
-     * @return string The persist method
+     * @return mixed The attribute value
      */
-    public function getPersistMethod()
+    public function getAttributeValue()
     {
-        return $this->persistMethod;
+        return $this->attributeValue;
     }
 
     /**
@@ -331,14 +355,17 @@ class ProductAttributeObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Return's the store ID of the actual row.
+     * Return's the store ID of the actual row, or of the default store
+     * if no store view code is set in the CSV file.
+     *
+     * @param string|null $default The default store view code to use, if no store view code is set in the CSV file
      *
      * @return integer The ID of the actual store
      * @throws \Exception Is thrown, if the store with the actual code is not available
      */
-    public function getRowStoreId()
+    public function getRowStoreId($default = null)
     {
-        return $this->getSubject()->getRowStoreId();
+        return $this->getSubject()->getRowStoreId($default);
     }
 
     /**

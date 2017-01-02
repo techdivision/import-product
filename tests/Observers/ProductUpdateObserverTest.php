@@ -20,6 +20,9 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Product\Utils\MemberNames;
+
 /**
  * Test class for the product update observer implementation.
  *
@@ -56,103 +59,97 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testInitializeProductWithoutExistingProduct()
+    public function testHandleWithExistingProduct()
     {
 
-        // initialize the expected result
-        $expectedResult = array(
-            'sku'              => $sku             = '24-MB01',
-            'created_at'       => $createdAt       = '2016-10-24 12:36:00',
-            'updated_at'       => $updatedAt       = '2016-10-24 12:37:00',
-            'has_options'      => $hasOptions      = 1,
-            'required_options' => $requiredOptions = 1,
-            'type_id'          => $typeId          = 'simple',
-            'attribute_set_id' => $attributeSetId  = 15
+        // create a dummy CSV file header
+        $headers = array(
+            'sku'                => 0,
+            'created_at'         => 1,
+            'updated_at'         => 2,
+            'has_options'        => 3,
+            'required_options'   => 4,
+            'product_type'       => 5,
+            'attribute_set_code' => 6
         );
 
-        // create a mock subject
-        $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
-            ->setMethods(array('loadProduct'))
-            ->getMock();
-        $mockSubject->expects($this->once())
-            ->method('loadProduct')
-            ->with($sku)
-            ->willReturn(null);
-
-        // inject the subject
-        $this->observer->setSubject($mockSubject);
-
-        // initialize the product
-        $result = $this->observer->initializeProduct(
-            $sku,
-            $createdAt,
-            $updatedAt,
-            $hasOptions,
-            $requiredOptions,
-            $typeId,
-            $attributeSetId
+        // create a dummy CSV file row
+        $row = array(
+            0 => $sku = '24-MB01',
+            1 => '10/23/16, 5:10 PM',
+            2 => '10/23/16, 5:10 PM',
+            3 => 1,
+            4 => 1,
+            5 => $productType = 'simple',
+            6 => $attributeSetCode = 'Bag'
         );
 
-        // query whether or not the result is as expected
-        $this->assertEquals($expectedResult, $result);
-    }
-
-    /**
-     * Test's the initializeProduct() method with existing product.
-     *
-     * @return void
-     */
-    public function testInitializeProductWithExistingProduct()
-    {
-
-        // initialize the expected result
-        $expectedResult = array(
-            'entity_id'        => $entityId        = 92000,
-            'sku'              => $sku             = '24-MB01',
-            'created_at'       => $createdAt       = '2016-10-24 12:36:00',
-            'updated_at'       => $updatedAt       = '2016-10-24 12:37:00',
-            'has_options'      => $hasOptions      = 1,
-            'required_options' => $requiredOptions = 1,
-            'type_id'          => $typeId          = 'simple',
-            'attribute_set_id' => $attributeSetId  = 15
-        );
-
-        // the product that has to be loaded
-        $product = array(
-            'entity_id'        => $entityId,
+        // the old product data
+        $oldProduct = array(
             'sku'              => $sku,
-            'created_at'       => '2016-10-24 12:36:00',
-            'updated_at'       => '2016-10-24 12:36:00',
+            'created_at'       => '2016-10-23 12:00:00',
+            'updated_at'       => '2016-10-23 12:00:00',
             'has_options'      => 0,
             'required_options' => 0,
-            'type_id'          => $typeId,
-            'attribute_set_id' => $attributeSetId
+            'type_id'          => $productType,
+            'attribute_set_id' => $attributeSetId = 15
+        );
+
+        // the new product data
+        $newProduct = array(
+            'sku'                     => $sku,
+            'created_at'              => '2016-10-23 17:10:00',
+            'updated_at'              => '2016-10-23 17:10:00',
+            'has_options'             => 0,
+            'required_options'        => 0,
+            'type_id'                 => $productType,
+            'attribute_set_id'        => $attributeSetId,
+            EntityStatus::MEMBER_NAME => EntityStatus::STATUS_UPDATE
         );
 
         // create a mock subject
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
-            ->setMethods(array('loadProduct'))
+            ->setMethods(
+                array(
+                    'getHeaders',
+                    'getLastSku',
+                    'getAttributeSetByAttributeSetName',
+                    'getSourceDateFormat',
+                    'loadProduct',
+                    'persistProduct'
+                )
+            )
             ->getMock();
+        $mockSubject->expects($this->any())
+            ->method('getHeaders')
+            ->willReturn($headers);
+        $mockSubject->expects($this->once())
+            ->method('getLastSku')
+            ->willReturn('24-MB02');
+        $mockSubject->expects($this->any(2))
+            ->method('getSourceDateFormat')
+            ->willReturn('n/d/y, g:i A');
+        $mockSubject->expects($this->once())
+            ->method('getAttributeSetByAttributeSetName')
+            ->with($attributeSetCode)
+            ->willReturn(
+                array(
+                    MemberNames::ATTRIBUTE_SET_ID   => 15,
+                    MemberNames::ATTRIBUTE_SET_NAME => $attributeSetCode
+                )
+            );
         $mockSubject->expects($this->once())
             ->method('loadProduct')
             ->with($sku)
-            ->willReturn($product);
+            ->willReturn($oldProduct);
+        $mockSubject->expects($this->once())
+            ->method('persistProduct')
+            ->with($newProduct);
 
         // inject the subject
         $this->observer->setSubject($mockSubject);
 
-        // initialize the product
-        $result = $this->observer->initializeProduct(
-            $sku,
-            $createdAt,
-            $updatedAt,
-            $hasOptions,
-            $requiredOptions,
-            $typeId,
-            $attributeSetId
-        );
-
         // query whether or not the result is as expected
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals($row, $this->observer->handle($row));
     }
 }

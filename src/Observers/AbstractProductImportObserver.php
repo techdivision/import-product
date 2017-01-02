@@ -20,8 +20,9 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Observers\AbstractObserver;
+use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Observers\AbstractObserver;
 
 /**
  * A SLSB that handles the process to import product bunches.
@@ -34,6 +35,13 @@ use TechDivision\Import\Product\Utils\ColumnKeys;
  */
 abstract class AbstractProductImportObserver extends AbstractObserver implements ProductImportObserverInterface
 {
+
+    /**
+     * The actual row, that has to be processed.
+     *
+     * @var array
+     */
+    protected $row = array();
 
     /**
      * Set's the array containing header row.
@@ -129,14 +137,13 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     /**
      * Prepare's the store view code in the subject.
      *
-     * @param array $row The row with the data
-     *
      * @return void
      */
-    public function prepareStoreViewCode($row)
+    public function prepareStoreViewCode()
     {
 
         // load the headers
+        $row = $this->getRow();
         $headers = $this->getHeaders();
 
         // initialize the store view code
@@ -149,5 +156,131 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
                 $this->setStoreViewCode($storeViewCode);
             }
         }
+    }
+
+    /**
+     * Set's the actual row, that has to be processed.
+     *
+     * @param array $row The row
+     *
+     * @return void
+     */
+    public function setRow(array $row)
+    {
+        $this->row = $row;
+    }
+
+    /**
+     * Return's the actual row, that has to be processed.
+     *
+     * @return array The row
+     */
+    public function getRow()
+    {
+        return $this->row;
+    }
+
+    /**
+     * Tries to format the passed value to a valid date with format 'Y-m-d H:i:s'.
+     * If the passed value is NOT a valid date, NULL will be returned.
+     *
+     * @param string|null $value The value to format
+     *
+     * @return string The formatted date
+     */
+    public function formatDate($value)
+    {
+
+        // create a DateTime instance from the passed value
+        if ($dateTime = \DateTime::createFromFormat($this->getSourceDateFormat(), $value)) {
+            return $dateTime->format('Y-m-d H:i:s');
+        }
+
+        // return NULL, if the passed value is NOT a valid date
+        return null;
+    }
+
+    /**
+     * Query whether or not the value with the passed key exists.
+     *
+     * @param string $key The key of the value to query
+     *
+     * @return boolean TRUE if the value is set, else FALSE
+     */
+    public function hasValue($key)
+    {
+
+        // load row and headers
+        $row = $this->getRow();
+        $headers = $this->getHeaders();
+
+        // query whether or not the value exists
+        return isset($row[$headers[$key]]);
+    }
+
+    /**
+     * Resolve's the value with the passed key from the actual row. If a callback will
+     * be passed, the callback will be invoked with the found value as parameter. If
+     * the value is NULL or empty, the default value will be returned.
+     *
+     * @param string        $key      The key of the value to return
+     * @param mixed|null    $default  The default value, that has to be returned, if the row's value is empty
+     * @param callable|null $callback The callback that has to be invoked on the value, e. g. to format it
+     *
+     * @return mixed|null The, almost formatted, value
+     */
+    public function getValue($key, $default = null, callable $callback = null)
+    {
+
+        // load row and headers
+        $row = $this->getRow();
+        $headers = $this->getHeaders();
+
+        // initialize the value
+        $value = null;
+
+        // query wheter or not, the value with the requested key is available
+        if (isset($headers[$key]) && isset($row[$headers[$key]])) {
+            $value = $row[$headers[$key]];
+        }
+
+        // query whether or not, a callback has been passed
+        if (is_callable($callback)) {
+            $value = call_user_func($callback, $value);
+        }
+
+        // query whether or not
+        if ($value == null && $default != null) {
+            $value = $default;
+        }
+
+        // return the value
+        return $value;
+    }
+
+    /**
+     * Initialize's and return's a new entity with the status 'create'.
+     *
+     * @param array $attr The attributes to merge into the new entity
+     *
+     * @return array The initialized entity
+     */
+    public function initializeEntity(array $attr = array())
+    {
+        return array_merge(array(EntityStatus::MEMBER_NAME => EntityStatus::STATUS_CREATE), $attr);
+    }
+
+    /**
+     * Merge's and return's the entity with the passed attributes and set's the
+     * status to 'update'.
+     *
+     * @param array $entity The entity to merge the attributes into
+     * @param array $attr   The attributes to be merged
+     *
+     * @return array The merged entity
+     */
+    public function mergeEntity(array $entity, array $attr)
+    {
+        return array_merge($entity, $attr, array(EntityStatus::MEMBER_NAME => EntityStatus::STATUS_UPDATE));
     }
 }
