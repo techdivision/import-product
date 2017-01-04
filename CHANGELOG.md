@@ -1,3 +1,14 @@
+# Version 1.0.0-alpha10
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add explode() callback to AbstractProductImportObserver
+* Invoke callback only, if value to invoke callback on, is NOT empty
+
 # Version 1.0.0-alpha9
 
 ## Bugfixes
