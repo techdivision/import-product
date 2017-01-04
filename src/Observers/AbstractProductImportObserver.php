@@ -201,6 +201,20 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     }
 
     /**
+     * Extracts the elements of the passed value by exploding them
+     * with the also passed separator.
+     *
+     * @param string $value     The value to extract
+     * @param string $separator The separator used to extrace the elements
+     *
+     * @return array The exploded values
+     */
+    public function explode($value, $separator = ',')
+    {
+        return explode($separator, $value);
+    }
+
+    /**
      * Query whether or not the value with the passed key exists.
      *
      * @param string $key The key of the value to query
@@ -245,7 +259,7 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
         }
 
         // query whether or not, a callback has been passed
-        if (is_callable($callback)) {
+        if ($value != null && is_callable($callback)) {
             $value = call_user_func($callback, $value);
         }
 
