@@ -514,7 +514,7 @@ class SqlStatements extends FallbackStatements
      */
     const DELETE_PRODUCT = 'DELETE
                               FROM catalog_product_entity
-                             WHERE sku = ?';
+                             WHERE sku = :sku';
 
     /**
      * The SQL statement to remove a existing URL rewrite.
@@ -533,7 +533,7 @@ class SqlStatements extends FallbackStatements
     const DELETE_URL_REWRITE_BY_SKU = 'DELETE url_rewrite
                                          FROM url_rewrite
                                    INNER JOIN catalog_product_entity
-                                        WHERE catalog_product_entity.sku = ?
+                                        WHERE catalog_product_entity.sku = :sku
                                           AND url_rewrite.entity_id = catalog_product_entity.entity_id';
 
     /**
@@ -544,7 +544,7 @@ class SqlStatements extends FallbackStatements
     const DELETE_STOCK_STATUS_BY_SKU = 'DELETE cataloginventory_stock_status
                                          FROM cataloginventory_stock_status
                                    INNER JOIN catalog_product_entity
-                                        WHERE catalog_product_entity.sku = ?
+                                        WHERE catalog_product_entity.sku = :sku
                                           AND cataloginventory_stock_status.product_id = catalog_product_entity.entity_id';
 
     /**
@@ -555,7 +555,7 @@ class SqlStatements extends FallbackStatements
     const DELETE_STOCK_ITEM_BY_SKU = 'DELETE cataloginventory_stock_item
                                         FROM cataloginventory_stock_item
                                   INNER JOIN catalog_product_entity
-                                       WHERE catalog_product_entity.sku = ?
+                                       WHERE catalog_product_entity.sku = :sku
                                          AND cataloginventory_stock_item.product_id = catalog_product_entity.entity_id';
 
     /**
@@ -566,7 +566,7 @@ class SqlStatements extends FallbackStatements
     const DELETE_PRODUCT_WEBSITE_BY_SKU = 'DELETE catalog_product_website
                                              FROM catalog_product_website
                                        INNER JOIN catalog_product_entity
-                                            WHERE catalog_product_entity.sku = ?
+                                            WHERE catalog_product_entity.sku = :sku
                                               AND catalog_product_website.product_id = catalog_product_entity.entity_id';
 
     /**
@@ -577,7 +577,7 @@ class SqlStatements extends FallbackStatements
     const DELETE_CATEGORY_PRODUCT_BY_SKU = 'DELETE catalog_category_product
                                               FROM catalog_category_product
                                         INNER JOIN catalog_product_entity
-                                             WHERE catalog_product_entity.sku = ?
+                                             WHERE catalog_product_entity.sku = :sku
                                                AND catalog_category_product.product_id = catalog_product_entity.entity_id';
 
     /**

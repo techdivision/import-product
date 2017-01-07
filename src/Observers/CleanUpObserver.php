@@ -36,27 +36,18 @@ class CleanUpObserver extends AbstractProductImportObserver
 {
 
     /**
-     * Will be invoked by the action on the events the listener has been registered for.
+     * Process the observer's business logic.
      *
-     * @param array $row The row to handle
-     *
-     * @return array The modified row
-     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
+     * @return array The processed row
      */
-    public function handle(array $row)
+    protected function process()
     {
 
-        // load the header information
-        $headers = $this->getHeaders();
-
         // add the SKU => entity ID mapping
-        $this->addSkuEntityIdMapping($sku = $row[$headers[ColumnKeys::SKU]]);
+        $this->addSkuEntityIdMapping($sku = $this->getValue(ColumnKeys::SKU));
 
         // temporary persist the SKU
         $this->setLastSku($sku);
-
-        // returns the row
-        return $row;
     }
 
     /**
@@ -66,7 +57,7 @@ class CleanUpObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function addSkuEntityIdMapping($sku)
+    protected function addSkuEntityIdMapping($sku)
     {
         $this->getSubject()->addSkuEntityIdMapping($sku);
     }
@@ -78,7 +69,7 @@ class CleanUpObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function setLastSku($lastSku)
+    protected function setLastSku($lastSku)
     {
         $this->getSubject()->setLastSku($lastSku);
     }

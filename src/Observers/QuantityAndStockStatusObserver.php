@@ -36,45 +36,22 @@ class QuantityAndStockStatusObserver extends AbstractProductImportObserver
 {
 
     /**
-     * Will be invoked by the action on the events the listener has been registered for.
+     * Process the observer's business logic.
      *
-     * @param array $row The row to handle
-     *
-     * @return array The modified row
-     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
+     * @return array The processed row
      */
-    public function handle(array $row)
+    protected function process()
     {
 
         // load the header information
         $headers = $this->getHeaders();
 
-        /*
-        $qty = (float) $row[$this->headers[ColumnKeys::QTY]];
-        $isInStock = (integer) $row[$this->headers[ColumnKeys::IS_IN_STOCK]];
-
-        $this->getSystemLogger()->info("Found qty $qty and is_in_stock $isInStock");
-
-        $quantityAndStockStatus = 0;
-        if ($qty > 0 && $isInStock === 1) {
-            $quantityAndStockStatus = 1;
-        }
-        */
-
         // try to load the appropriate key for the stock status
-        if (isset($headers[ColumnKeys::QUANTITY_AND_STOCK_STATUS])) {
-            $newKey = $headers[ColumnKeys::QUANTITY_AND_STOCK_STATUS];
-        } else {
-            $headers[ColumnKeys::QUANTITY_AND_STOCK_STATUS] = $newKey = sizeof($headers);
+        if (!$this->hasHeader(ColumnKeys::QUANTITY_AND_STOCK_STATUS)) {
+            $this->addHeader(ColumnKeys::QUANTITY_AND_STOCK_STATUS);
         }
 
         // append/replace the stock status
-        $row[$newKey] = 1;
-
-        // update the header information
-        $this->setHeaders($headers);
-
-        // return the prepared row
-        return $row;
+        $this->setValue(ColumnKeys::QUANTITY_AND_STOCK_STATUS, 1);
     }
 }

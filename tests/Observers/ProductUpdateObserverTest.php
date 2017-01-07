@@ -22,6 +22,7 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\ColumnKeys;
 
 /**
  * Test class for the product update observer implementation.
@@ -98,8 +99,8 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
         // the new product data
         $newProduct = array(
             'sku'                     => $sku,
-            'created_at'              => '2016-10-23 17:10:00',
-            'updated_at'              => '2016-10-23 17:10:00',
+            'created_at'              => $createdAt = '2016-10-23 17:10:00',
+            'updated_at'              => $updatedAt = '2016-10-23 17:10:00',
             'has_options'             => 0,
             'required_options'        => 0,
             'type_id'                 => $productType,
@@ -109,42 +110,58 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
 
         // create a mock subject
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
-            ->setMethods(
-                array(
-                    'getHeaders',
-                    'getLastSku',
-                    'getAttributeSetByAttributeSetName',
-                    'getSourceDateFormat',
-                    'loadProduct',
-                    'persistProduct'
-                )
-            )
-            ->getMock();
+                            ->setMethods(
+                                array(
+                                    'hasHeader',
+                                    'getHeader',
+                                    'getHeaders',
+                                    'getLastSku',
+                                    'getAttributeSetByAttributeSetName',
+                                    'getSourceDateFormat',
+                                    'loadProduct',
+                                    'persistProduct'
+                                )
+                            )
+                            ->getMock();
         $mockSubject->expects($this->any())
-            ->method('getHeaders')
-            ->willReturn($headers);
+                    ->method('getHeaders')
+                    ->willReturn($headers);
+        $mockSubject->expects($this->any())
+                    ->method('hasHeader')
+                    ->willReturn(true);
+        $mockSubject->expects($this->any())
+                    ->method('getHeader')
+                    ->withConsecutive(
+                        array(ColumnKeys::SKU),
+                        array(ColumnKeys::CREATED_AT),
+                        array(ColumnKeys::UPDATED_AT),
+                        array(ColumnKeys::ATTRIBUTE_SET_CODE),
+                        array(ColumnKeys::SKU),
+                        array(ColumnKeys::PRODUCT_TYPE)
+                     )
+                    ->willReturnOnConsecutiveCalls(0, 1, 2, 6, 0, 5);
         $mockSubject->expects($this->once())
-            ->method('getLastSku')
-            ->willReturn('24-MB02');
+                    ->method('getLastSku')
+                    ->willReturn('24-MB02');
         $mockSubject->expects($this->any(2))
-            ->method('getSourceDateFormat')
-            ->willReturn('n/d/y, g:i A');
+                    ->method('getSourceDateFormat')
+                    ->willReturn('n/d/y, g:i A');
         $mockSubject->expects($this->once())
-            ->method('getAttributeSetByAttributeSetName')
-            ->with($attributeSetCode)
-            ->willReturn(
-                array(
-                    MemberNames::ATTRIBUTE_SET_ID   => 15,
-                    MemberNames::ATTRIBUTE_SET_NAME => $attributeSetCode
-                )
-            );
+                    ->method('getAttributeSetByAttributeSetName')
+                    ->with($attributeSetCode)
+                    ->willReturn(
+                        array(
+                            MemberNames::ATTRIBUTE_SET_ID   => 15,
+                            MemberNames::ATTRIBUTE_SET_NAME => $attributeSetCode
+                        )
+                    );
         $mockSubject->expects($this->once())
-            ->method('loadProduct')
-            ->with($sku)
-            ->willReturn($oldProduct);
+                    ->method('loadProduct')
+                    ->with($sku)
+                    ->willReturn($oldProduct);
         $mockSubject->expects($this->once())
-            ->method('persistProduct')
-            ->with($newProduct);
+                    ->method('persistProduct')
+                    ->with($newProduct);
 
         // inject the subject
         $this->observer->setSubject($mockSubject);

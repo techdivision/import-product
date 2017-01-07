@@ -41,7 +41,7 @@ class CategoryProductUpdateObserver extends CategoryProductObserver
      *
      * @return array The initialized category product
      */
-    public function initializeCategoryProduct(array $attr)
+    protected function initializeCategoryProduct(array $attr)
     {
 
         // try to load the category product relation with the passed category/product ID and merge it with the attributes
@@ -61,7 +61,7 @@ class CategoryProductUpdateObserver extends CategoryProductObserver
      *
      * @return array The category product relation
      */
-    public function loadCategoryProduct($categoryId, $productId)
+    protected function loadCategoryProduct($categoryId, $productId)
     {
         return $this->getSubject()->loadCategoryProduct($categoryId, $productId);
     }

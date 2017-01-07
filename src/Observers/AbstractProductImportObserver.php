@@ -44,121 +44,6 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     protected $row = array();
 
     /**
-     * Set's the array containing header row.
-     *
-     * @param array $headers The array with the header row
-     *
-     * @return void
-     */
-    public function setHeaders(array $headers)
-    {
-        $this->getSubject()->setHeaders($headers);
-    }
-
-    /**
-     * Return's the array containing header row.
-     *
-     * @return array The array with the header row
-     */
-    public function getHeaders()
-    {
-        return $this->getSubject()->getHeaders();
-    }
-
-    /**
-     * Return's TRUE if the passed SKU is the actual one.
-     *
-     * @param string $sku The SKU to check
-     *
-     * @return boolean TRUE if the passed SKU is the actual one
-     */
-    public function isLastSku($sku)
-    {
-        return $this->getSubject()->getLastSku() === $sku;
-    }
-
-    /**
-     * Return's the ID of the product that has been created recently.
-     *
-     * @return string The entity Id
-     */
-    public function getLastEntityId()
-    {
-        return $this->getSubject()->getLastEntityId();
-    }
-
-    /**
-     * Return's the source date format to use.
-     *
-     * @return string The source date format
-     */
-    public function getSourceDateFormat()
-    {
-        return $this->getSubject()->getSourceDateFormat();
-    }
-
-    /**
-     * Cast's the passed value based on the backend type information.
-     *
-     * @param string $backendType The backend type to cast to
-     * @param mixed  $value       The value to be casted
-     *
-     * @return mixed The casted value
-     */
-    public function castValueByBackendType($backendType, $value)
-    {
-        return $this->getSubject()->castValueByBackendType($backendType, $value);
-    }
-
-    /**
-     * Set's the store view code the create the product/attributes for.
-     *
-     * @param string $storeViewCode The store view code
-     *
-     * @return void
-     */
-    public function setStoreViewCode($storeViewCode)
-    {
-        $this->getSubject()->setStoreViewCode($storeViewCode);
-    }
-
-    /**
-     * Return's the store view code the create the product/attributes for.
-     *
-     * @param string|null $default The default value to return, if the store view code has not been set
-     *
-     * @return string The store view code
-     */
-    public function getStoreViewCode($default = null)
-    {
-        return $this->getSubject()->getStoreViewCode($default);
-    }
-
-    /**
-     * Prepare's the store view code in the subject.
-     *
-     * @return void
-     */
-    public function prepareStoreViewCode()
-    {
-
-        // load the headers
-        $row = $this->getRow();
-        $headers = $this->getHeaders();
-
-        // initialize the store view code
-        $this->setStoreViewCode(null);
-
-        // initialize the store view code
-        if (isset($row[$headers[ColumnKeys::STORE_VIEW_CODE]])) {
-            $storeViewCode = $row[$headers[ColumnKeys::STORE_VIEW_CODE]];
-            if (!empty($storeViewCode)) {
-                $this->setStoreViewCode($storeViewCode);
-            }
-        }
-    }
-
-    /**
      * Set's the actual row, that has to be processed.
      *
      * @param array $row The row
@@ -181,6 +66,182 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     }
 
     /**
+     * Will be invoked by the action on the events the listener has been registered for.
+     *
+     * @param array $row The row to handle
+     *
+     * @return array The modified row
+     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
+     */
+    public function handle(array $row)
+    {
+
+        // initialize the row
+        $this->setRow($row);
+
+        // process the functionality and return the row
+        $this->process();
+
+        // return the processed row
+        return $this->getRow();
+    }
+
+    /**
+     * Process the observer's business logic.
+     *
+     * @return array The processed row
+     */
+    protected function process()
+    {
+
+    }
+
+    /**
+     * Set's the array containing header row.
+     *
+     * @param array $headers The array with the header row
+     *
+     * @return void
+     */
+    public function setHeaders(array $headers)
+    {
+        $this->getSubject()->setHeaders($headers);
+    }
+
+    /**
+     * Return's the array containing header row.
+     *
+     * @return array The array with the header row
+     */
+    protected function getHeaders()
+    {
+        return $this->getSubject()->getHeaders();
+    }
+
+    /**
+     * Queries whether or not the header with the passed name is available.
+     *
+     * @param string $name The header name to query
+     *
+     * @return boolean TRUE if the header is available, else FALSE
+     */
+    protected function hasHeader($name)
+    {
+        return $this->getSubject()->hasHeader($name);
+    }
+
+    /**
+     * Return's the header value for the passed name.
+     *
+     * @param string $name The name of the header to return the value for
+     *
+     * @return mixed The header value
+     * \InvalidArgumentException Is thrown, if the header with the passed name is NOT available
+     */
+    protected function getHeader($name)
+    {
+        return $this->getSubject()->getHeader($name);
+    }
+
+    /**
+     * Add's the header with the passed name and position, if not NULL.
+     *
+     * @param string $name The header name to add
+     *
+     * @return integer The new headers position
+     */
+    protected function addHeader($name)
+    {
+        return $this->getSubject()->addHeader($name);
+    }
+
+    /**
+     * Return's TRUE if the passed SKU is the actual one.
+     *
+     * @param string $sku The SKU to check
+     *
+     * @return boolean TRUE if the passed SKU is the actual one
+     */
+    protected function isLastSku($sku)
+    {
+        return $this->getSubject()->getLastSku() === $sku;
+    }
+
+    /**
+     * Return's the ID of the product that has been created recently.
+     *
+     * @return string The entity Id
+     */
+    protected function getLastEntityId()
+    {
+        return $this->getSubject()->getLastEntityId();
+    }
+
+    /**
+     * Return's the source date format to use.
+     *
+     * @return string The source date format
+     */
+    protected function getSourceDateFormat()
+    {
+        return $this->getSubject()->getSourceDateFormat();
+    }
+
+    /**
+     * Cast's the passed value based on the backend type information.
+     *
+     * @param string $backendType The backend type to cast to
+     * @param mixed  $value       The value to be casted
+     *
+     * @return mixed The casted value
+     */
+    protected function castValueByBackendType($backendType, $value)
+    {
+        return $this->getSubject()->castValueByBackendType($backendType, $value);
+    }
+
+    /**
+     * Set's the store view code the create the product/attributes for.
+     *
+     * @param string $storeViewCode The store view code
+     *
+     * @return void
+     */
+    protected function setStoreViewCode($storeViewCode)
+    {
+        $this->getSubject()->setStoreViewCode($storeViewCode);
+    }
+
+    /**
+     * Return's the store view code the create the product/attributes for.
+     *
+     * @param string|null $default The default value to return, if the store view code has not been set
+     *
+     * @return string The store view code
+     */
+    protected function getStoreViewCode($default = null)
+    {
+        return $this->getSubject()->getStoreViewCode($default);
+    }
+
+    /**
+     * Prepare's the store view code in the subject.
+     *
+     * @return void
+     */
+    protected function prepareStoreViewCode()
+    {
+
+        // re-set the store view code
+        $this->setStoreViewCode(null);
+
+        // initialize the store view code
+        if ($storeViewCode = $this->getValue(ColumnKeys::STORE_VIEW_CODE)) {
+            $this->setStoreViewCode($storeViewCode);
+        }
+    }
+
+    /**
      * Tries to format the passed value to a valid date with format 'Y-m-d H:i:s'.
      * If the passed value is NOT a valid date, NULL will be returned.
      *
@@ -188,7 +249,7 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      *
      * @return string The formatted date
      */
-    public function formatDate($value)
+    protected function formatDate($value)
     {
 
         // create a DateTime instance from the passed value
@@ -209,7 +270,7 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      *
      * @return array The exploded values
      */
-    public function explode($value, $separator = ',')
+    protected function explode($value, $separator = ',')
     {
         return explode($separator, $value);
     }
@@ -221,15 +282,22 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      *
      * @return boolean TRUE if the value is set, else FALSE
      */
-    public function hasValue($key)
+    protected function hasValue($key)
     {
+        return isset($this->row[$this->getHeader($key)]);
+    }
 
-        // load row and headers
-        $row = $this->getRow();
-        $headers = $this->getHeaders();
-
-        // query whether or not the value exists
-        return isset($row[$headers[$key]]);
+    /**
+     * Set the value in the passed column name.
+     *
+     * @param string $columName The column name to set the value for
+     * @param mixed  $value     The value to set
+     *
+     * @return void
+     */
+    protected function setValue($columName, $value)
+    {
+        $this->row[$this->getHeader($columName)] = $value;
     }
 
     /**
@@ -243,19 +311,23 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      *
      * @return mixed|null The, almost formatted, value
      */
-    public function getValue($key, $default = null, callable $callback = null)
+    protected function getValue($key, $default = null, callable $callback = null)
     {
 
-        // load row and headers
-        $row = $this->getRow();
-        $headers = $this->getHeaders();
+        // query whether or not the header is available
+        if (!$this->hasHeader($key)) {
+            return;
+        }
 
         // initialize the value
         $value = null;
 
+        // try to load the header
+        $header = $this->getHeader($key);
+
         // query wheter or not, the value with the requested key is available
-        if (isset($headers[$key]) && isset($row[$headers[$key]])) {
-            $value = $row[$headers[$key]];
+        if (isset($this->row[$header])) {
+            $value = $this->row[$header];
         }
 
         // query whether or not, a callback has been passed
@@ -279,7 +351,7 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      *
      * @return array The initialized entity
      */
-    public function initializeEntity(array $attr = array())
+    protected function initializeEntity(array $attr = array())
     {
         return array_merge(array(EntityStatus::MEMBER_NAME => EntityStatus::STATUS_CREATE), $attr);
     }
@@ -293,7 +365,7 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      *
      * @return array The merged entity
      */
-    public function mergeEntity(array $entity, array $attr)
+    protected function mergeEntity(array $entity, array $attr)
     {
         return array_merge($entity, $attr, array(EntityStatus::MEMBER_NAME => EntityStatus::STATUS_UPDATE));
     }

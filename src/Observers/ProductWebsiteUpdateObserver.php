@@ -42,7 +42,7 @@ class ProductWebsiteUpdateObserver extends ProductWebsiteObserver
      * @return array The initialized product website
      * @throws \RuntimeException Is thrown, if the attributes can not be initialized
      */
-    public function initializeProductWebsite(array $attr)
+    protected function initializeProductWebsite(array $attr)
     {
 
         // try to load the product website relation with the passed product/website ID
@@ -69,7 +69,7 @@ class ProductWebsiteUpdateObserver extends ProductWebsiteObserver
      *
      * @return array The product website
      */
-    public function loadProductWebsite($productId, $websiteId)
+    protected function loadProductWebsite($productId, $websiteId)
     {
         return $this->getSubject()->loadProductWebsite($productId, $websiteId);
     }

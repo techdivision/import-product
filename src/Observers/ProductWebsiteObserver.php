@@ -66,43 +66,22 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Will be invoked by the action on the events the listener has been registered for.
-     *
-     * @param array $row The row to handle
-     *
-     * @return array The modified row
-     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
-     */
-    public function handle(array $row)
-    {
-
-        // initialize the row
-        $this->setRow($row);
-
-        // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
-            return $this->getRow();
-        }
-
-        // query whether or not, product => website relations has been specified
-        if (!$this->hasValue(ColumnKeys::PRODUCT_WEBSITES)) {
-            return $this->getRow();
-        }
-
-        // process the functionality and return the row
-        $this->process();
-
-        // return the processed row
-        return $this->getRow();
-    }
-
-    /**
      * Process the observer's business logic.
      *
      * @return array The processed row
      */
-    public function process()
+    protected function process()
     {
+
+        // query whether or not, we've found a new SKU => means we've found a new product
+        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
+            return;
+        }
+
+        // query whether or not, product => website relations has been specified
+        if (!$this->hasValue(ColumnKeys::PRODUCT_WEBSITES)) {
+            return;
+        }
 
         // append the product => website relations found
         $codes = explode(',', $this->getValue(ColumnKeys::PRODUCT_WEBSITES));

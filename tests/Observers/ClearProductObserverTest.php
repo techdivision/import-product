@@ -71,7 +71,8 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
                             ->setMethods(
                                 array(
-                                    'getHeaders',
+                                    'hasHeader',
+                                    'getHeader',
                                     'getLastSku',
                                     'deleteUrlRewrite',
                                     'deleteStockItem',
@@ -82,30 +83,34 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                                 )
                             )
                             ->getMock();
-        $mockSubject->expects($this->once())
-                    ->method('getHeaders')
-                    ->willReturn($headers);
+        $mockSubject->expects($this->any())
+                    ->method('hasHeader')
+                    ->willReturn(true);
+        $mockSubject->expects($this->any())
+                    ->method('getHeader')
+                    ->with(ColumnKeys::SKU)
+                    ->willReturn(0);
         $mockSubject->expects($this->once())
                     ->method('getLastSku')
                     ->willReturn('TEST-02');
         $mockSubject->expects($this->once())
                     ->method('deleteUrlRewrite')
-                    ->with(array($row[$headers[ColumnKeys::SKU]]));
+                    ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
         $mockSubject->expects($this->once())
                     ->method('deleteStockItem')
-                    ->with(array($row[$headers[ColumnKeys::SKU]]));
+                    ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
         $mockSubject->expects($this->once())
                     ->method('deleteStockStatus')
-                    ->with(array($row[$headers[ColumnKeys::SKU]]));
+                    ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
         $mockSubject->expects($this->once())
                     ->method('deleteProductWebsite')
-                    ->with(array($row[$headers[ColumnKeys::SKU]]));
+                    ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
         $mockSubject->expects($this->once())
                     ->method('deleteCategoryProduct')
-                    ->with(array($row[$headers[ColumnKeys::SKU]]));
+                    ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
         $mockSubject->expects($this->once())
                     ->method('deleteProduct')
-                    ->with(array($row[$headers[ColumnKeys::SKU]]));
+                    ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
 
         // inject the subject und invoke the handle() method
         $this->observer->setSubject($mockSubject);
