@@ -41,7 +41,7 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
      *
      * @return array The initialized stock status
      */
-    public function initializeStockStatus(array $attr)
+    protected function initializeStockStatus(array $attr)
     {
 
         // load the stock status with the passed product/website/stock ID
@@ -67,7 +67,7 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
      *
      * @return array The initialized stock item
      */
-    public function initializeStockItem(array $attr)
+    protected function initializeStockItem(array $attr)
     {
 
         // load the stock item with the passed item/product/stock ID
@@ -95,7 +95,7 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
      *
      * @return array The stock status
      */
-    public function loadStockStatus($productId, $websiteId, $stockId)
+    protected function loadStockStatus($productId, $websiteId, $stockId)
     {
         return $this->getSubject()->loadStockStatus($productId, $websiteId, $stockId);
     }
@@ -109,7 +109,7 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
      *
      * @return array The stock item
      */
-    public function loadStockItem($productId, $websiteId, $stockId)
+    protected function loadStockItem($productId, $websiteId, $stockId)
     {
         return $this->getSubject()->loadStockItem($productId, $websiteId, $stockId);
     }

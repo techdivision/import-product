@@ -81,6 +81,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
                             ->setMethods(
                                 array(
+                                    'hasHeader',
+                                    'getHeader',
                                     'getHeaders',
                                     'getLastSku',
                                     'getLastEntityId',
@@ -95,6 +97,17 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeaders')
                     ->willReturn($headers);
+        $mockSubject->expects($this->any())
+                    ->method('hasHeader')
+                    ->willReturn(true);
+        $mockSubject->expects($this->any())
+                    ->method('getHeader')
+                    ->withConsecutive(
+                        array(ColumnKeys::SKU),
+                        array(ColumnKeys::URL_KEY),
+                        array(ColumnKeys::STORE_VIEW_CODE)
+                    )
+                    ->willReturnOnConsecutiveCalls(0, 1, 2);
         $mockSubject->expects($this->exactly(2))
                     ->method('getLastEntityId')
                     ->willReturn($entityId = 61413);
@@ -167,6 +180,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
                             ->setMethods(
                                 array(
+                                    'hasHeader',
+                                    'getHeader',
                                     'getHeaders',
                                     'getLastSku',
                                     'getLastEntityId',
@@ -181,6 +196,17 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeaders')
                     ->willReturn($headers);
+        $mockSubject->expects($this->any())
+                    ->method('hasHeader')
+                    ->willReturn(true);
+        $mockSubject->expects($this->any())
+                    ->method('getHeader')
+                    ->withConsecutive(
+                        array(ColumnKeys::SKU),
+                        array(ColumnKeys::URL_KEY),
+                        array(ColumnKeys::STORE_VIEW_CODE)
+                    )
+                    ->willReturnOnConsecutiveCalls(0, 1, 2);
         $mockSubject->expects($this->any())
                     ->method('getLastEntityId')
                     ->willReturn($entityId);

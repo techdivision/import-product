@@ -65,32 +65,11 @@ class ProductAttributeObserver extends AbstractProductImportObserver
     protected $attributeValue;
 
     /**
-     * Will be invoked by the action on the events the listener has been registered for.
-     *
-     * @param array $row The row to handle
-     *
-     * @return array The modified row
-     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
-     */
-    public function handle(array $row)
-    {
-
-        // initialize the row
-        $this->setRow($row);
-
-        // process the functionality and return the row
-        $this->process();
-
-        // return the processed row
-        return $this->getRow();
-    }
-
-    /**
      * Process the observer's business logic.
      *
      * @return void
      */
-    public function process()
+    protected function process()
     {
 
         // initialize the store view code
@@ -158,7 +137,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return array The prepared attributes
      */
-    public function prepareAttributes()
+    protected function prepareAttributes()
     {
 
         // load the attribute value
@@ -205,7 +184,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return array The initialized category product
      */
-    public function initializeAttribute(array $attr)
+    protected function initializeAttribute(array $attr)
     {
         return $attr;
     }
@@ -215,7 +194,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return integer The PK to create the relation with
      */
-    public function getPrimaryKey()
+    protected function getPrimaryKey()
     {
         return $this->getLastEntityId();
     }
@@ -227,7 +206,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function setAttributeValue($attributeValue)
+    protected function setAttributeValue($attributeValue)
     {
         $this->attributeValue = $attributeValue;
     }
@@ -237,7 +216,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return mixed The attribute value
      */
-    public function getAttributeValue()
+    protected function getAttributeValue()
     {
         return $this->attributeValue;
     }
@@ -249,7 +228,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function setBackendType($backendType)
+    protected function setBackendType($backendType)
     {
         $this->backendType = $backendType;
     }
@@ -259,7 +238,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return string The backend type
      */
-    public function getBackendType()
+    protected function getBackendType()
     {
         return $this->backendType;
     }
@@ -271,7 +250,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function setAttributeCode($attributeCode)
+    protected function setAttributeCode($attributeCode)
     {
         $this->attributeCode = $attributeCode;
     }
@@ -281,7 +260,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return string The attribute code
      */
-    public function getAttributeCode()
+    protected function getAttributeCode()
     {
         return $this->attributeCode;
     }
@@ -293,7 +272,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function setAttributeId($attributeId)
+    protected function setAttributeId($attributeId)
     {
         $this->attributeId = $attributeId;
     }
@@ -303,7 +282,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return integer The attribute ID
      */
-    public function getAttributeId()
+    protected function getAttributeId()
     {
         return $this->attributeId;
     }
@@ -316,7 +295,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return string The mapped attribute code, or the original one
      */
-    public function mapAttributeCodeByHeaderMapping($attributeCode)
+    protected function mapAttributeCodeByHeaderMapping($attributeCode)
     {
         return $this->getSubject()->mapAttributeCodeByHeaderMapping($attributeCode);
     }
@@ -328,7 +307,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return array The callbacks
      */
-    public function getCallbacksByType($type)
+    protected function getCallbacksByType($type)
     {
         return $this->getSubject()->getCallbacksByType($type);
     }
@@ -338,7 +317,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return array The mapping for the supported backend types
      */
-    public function getBackendTypes()
+    protected function getBackendTypes()
     {
         return $this->getSubject()->getBackendTypes();
     }
@@ -349,7 +328,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      * @return array The attributes
      * @throws \Exception
      */
-    public function getAttributes()
+    protected function getAttributes()
     {
         return $this->getSubject()->getAttributes();
     }
@@ -363,7 +342,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      * @return integer The ID of the actual store
      * @throws \Exception Is thrown, if the store with the actual code is not available
      */
-    public function getRowStoreId($default = null)
+    protected function getRowStoreId($default = null)
     {
         return $this->getSubject()->getRowStoreId($default);
     }
@@ -375,7 +354,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function persistProductVarcharAttribute($attribute)
+    protected function persistProductVarcharAttribute($attribute)
     {
         $this->getSubject()->persistProductVarcharAttribute($attribute);
     }
@@ -387,7 +366,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function persistProductIntAttribute($attribute)
+    protected function persistProductIntAttribute($attribute)
     {
         $this->getSubject()->persistProductIntAttribute($attribute);
     }
@@ -399,7 +378,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function persistProductDecimalAttribute($attribute)
+    protected function persistProductDecimalAttribute($attribute)
     {
         $this->getSubject()->persistProductDecimalAttribute($attribute);
     }
@@ -411,7 +390,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function persistProductDatetimeAttribute($attribute)
+    protected function persistProductDatetimeAttribute($attribute)
     {
         $this->getSubject()->persistProductDatetimeAttribute($attribute);
     }
@@ -423,7 +402,7 @@ class ProductAttributeObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function persistProductTextAttribute($attribute)
+    protected function persistProductTextAttribute($attribute)
     {
         $this->getSubject()->persistProductTextAttribute($attribute);
     }

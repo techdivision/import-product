@@ -37,38 +37,17 @@ class ProductInventoryObserver extends AbstractProductImportObserver
 {
 
     /**
-     * Will be invoked by the action on the events the listener has been registered for.
-     *
-     * @param array $row The row to handle
-     *
-     * @return array The modified row
-     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
-     */
-    public function handle(array $row)
-    {
-
-        // initialize the row
-        $this->setRow($row);
-
-        // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
-            return $this->getRow();
-        }
-
-        // process the functionality and return the row
-        $this->process();
-
-        // return the processed row
-        return $this->getRow();
-    }
-
-    /**
      * Process the observer's business logic.
      *
      * @return array The processed row
      */
-    public function process()
+    protected function process()
     {
+
+        // query whether or not, we've found a new SKU => means we've found a new product
+        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
+            return;
+        }
 
         // prepare, initialize and persist the stock status/item
         $this->persistStockStatus($this->initializeStockStatus($this->prepareStockStatusAttributes()));
@@ -80,7 +59,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver
      *
      * @return array The prepared stock status attributes
      */
-    public function prepareStockStatusAttributes()
+    protected function prepareStockStatusAttributes()
     {
 
         // load the ID of the product that has been created recently
@@ -109,7 +88,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver
      *
      * @return array The initialized stock status
      */
-    public function initializeStockStatus(array $attr)
+    protected function initializeStockStatus(array $attr)
     {
         return $attr;
     }
@@ -119,7 +98,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver
      *
      * @return array The prepared stock status item
      */
-    public function prepareStockItemAttributes()
+    protected function prepareStockItemAttributes()
     {
 
         // load the ID of the product that has been created recently
@@ -155,7 +134,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver
      *
      * @return array The initialized stock item
      */
-    public function initializeStockItem(array $attr)
+    protected function initializeStockItem(array $attr)
     {
         return $attr;
     }
@@ -167,7 +146,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function persistStockItem($stockItem)
+    protected function persistStockItem($stockItem)
     {
         $this->getSubject()->persistStockItem($stockItem);
     }
@@ -179,7 +158,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function persistStockStatus($stockStatus)
+    protected function persistStockStatus($stockStatus)
     {
         $this->getSubject()->persistStockStatus($stockStatus);
     }
@@ -189,7 +168,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver
      *
      * @return array The header stock mappings
      */
-    public function getHeaderStockMappings()
+    protected function getHeaderStockMappings()
     {
         return $this->getSubject()->getHeaderStockMappings();
     }

@@ -77,6 +77,8 @@ class ProductWebsiteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
                             ->setMethods(
                                 array(
+                                    'hasHeader',
+                                    'getHeader',
                                     'getHeaders',
                                     'getLastSku',
                                     'getLastEntityId'
@@ -86,6 +88,13 @@ class ProductWebsiteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeaders')
                     ->willReturn($headers);
+        $mockSubject->expects($this->any())
+                    ->method('hasHeader')
+                    ->willReturn(true);
+        $mockSubject->expects($this->any())
+                    ->method('getHeader')
+                    ->withConsecutive(array(ColumnKeys::SKU), array(ColumnKeys::PRODUCT_WEBSITES))
+                    ->willReturnOnConsecutiveCalls(0, 1);
         $mockSubject->expects($this->once())
                     ->method('getLastSku')
                     ->willReturn('TEST-02');

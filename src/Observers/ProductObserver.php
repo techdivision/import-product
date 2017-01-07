@@ -37,27 +37,6 @@ class ProductObserver extends AbstractProductImportObserver
 {
 
     /**
-     * Will be invoked by the action on the events the listener has been registered for.
-     *
-     * @param array $row The row to handle
-     *
-     * @return array The modified row
-     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
-     */
-    public function handle(array $row)
-    {
-
-        // initialize the row
-        $this->setRow($row);
-
-        // process the functionality and return the row
-        $this->process();
-
-        // return the processed row
-        return $this->getRow();
-    }
-
-    /**
      * Process the observer's business logic.
      *
      * @return array The processed row

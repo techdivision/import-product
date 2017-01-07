@@ -37,36 +37,27 @@ class ClearProductObserver extends AbstractProductImportObserver
 {
 
     /**
-     * Will be invoked by the action on the events the listener has been registered for.
+     * Process the observer's business logic.
      *
-     * @param array $row The row to handle
-     *
-     * @return array The modified row
-     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
+     * @return array The processed row
      */
-    public function handle(array $row)
+    protected function process()
     {
 
-        // load the header information
-        $headers = $this->getHeaders();
-
         // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($sku = $row[$headers[ColumnKeys::SKU]])) {
-            return $row;
+        if ($this->isLastSku($sku = $this->getValue(ColumnKeys::SKU))) {
+            return;
         }
 
         // FIRST delete the data related with the product with the passed SKU
-        $this->deleteStockItem(array($sku), SqlStatements::DELETE_STOCK_ITEM_BY_SKU);
-        $this->deleteUrlRewrite(array($sku), SqlStatements::DELETE_URL_REWRITE_BY_SKU);
-        $this->deleteStockStatus(array($sku), SqlStatements::DELETE_STOCK_STATUS_BY_SKU);
-        $this->deleteProductWebsite(array($sku), SqlStatements::DELETE_PRODUCT_WEBSITE_BY_SKU);
-        $this->deleteCategoryProduct(array($sku), SqlStatements::DELETE_CATEGORY_PRODUCT_BY_SKU);
+        $this->deleteStockItem(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_STOCK_ITEM_BY_SKU);
+        $this->deleteUrlRewrite(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_URL_REWRITE_BY_SKU);
+        $this->deleteStockStatus(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_STOCK_STATUS_BY_SKU);
+        $this->deleteProductWebsite(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_PRODUCT_WEBSITE_BY_SKU);
+        $this->deleteCategoryProduct(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_CATEGORY_PRODUCT_BY_SKU);
 
         // delete the product with the passed SKU
-        $this->deleteProduct(array($sku));
-
-        // return the prepared row
-        return $row;
+        $this->deleteProduct(array(ColumnKeys::SKU => $sku));
     }
 
     /**

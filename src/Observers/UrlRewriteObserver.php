@@ -73,32 +73,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected $urlRewrites = array();
 
     /**
-     * Will be invoked by the action on the events the listener has been registered for.
-     *
-     * @param array $row The row to handle
-     *
-     * @return array The modified row
-     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
-     */
-    public function handle(array $row)
-    {
-
-        // initialize the row
-        $this->setRow($row);
-
-        // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
-            return $this->getRow();
-        }
-
-        // process the functionality and return the row
-        $this->process();
-
-        // return the processed row
-        return $this->getRow();
-    }
-
-    /**
      * Set's the prepared URL key.
      *
      * @param string $urlKey The prepared URL key
@@ -171,6 +145,11 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      */
     protected function process()
     {
+
+        // query whether or not, we've found a new SKU => means we've found a new product
+        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
+            return;
+        }
 
         // try to prepare the URL key, return immediately if not possible
         if (!$this->prepareUrlKey()) {

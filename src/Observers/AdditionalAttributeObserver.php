@@ -37,21 +37,18 @@ class AdditionalAttributeObserver extends AbstractProductImportObserver
 {
 
     /**
-     * Will be invoked by the action on the events the listener has been registered for.
+     * Process the observer's business logic.
      *
-     * @param array $row The row to handle
-     *
-     * @return array The modified row
-     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
+     * @return array The processed row
      */
-    public function handle(array $row)
+    protected function process()
     {
 
         // load the header information
         $headers = $this->getHeaders();
 
         // query whether or not the row has additional attributes
-        if ($additionalAttributes = $row[$headers[ColumnKeys::ADDITIONAL_ATTRIBUTES]]) {
+        if ($additionalAttributes = $this->getValue(ColumnKeys::ADDITIONAL_ATTRIBUTES)) {
             // query if the additional attributes have a value, at least
             if (strstr($additionalAttributes, '=') === false) {
                 return;
@@ -66,21 +63,13 @@ class AdditionalAttributeObserver extends AbstractProductImportObserver
                 list ($attributeCode, $optionValue) = explode('=', $additionalAttribute);
 
                 // try to load the appropriate key for the value
-                if (isset($headers[$attributeCode])) {
-                    $newKey = $headers[$attributeCode];
-                } else {
-                    $headers[$attributeCode] = $newKey = sizeof($headers);
+                if (!$this->hasHeader($attributeCode)) {
+                    $this->addHeader($attributeCode);
                 }
 
                 // append/replace the attribute value
-                $row[$newKey] = $optionValue;
+                $this->setValue($attributeCode, $optionValue);
             }
         }
-
-        // update the header information
-        $this->setHeaders($headers);
-
-        // return the prepared row
-        return $row;
     }
 }

@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha11
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Refactor + generalize observers
+
 # Version 1.0.0-alpha10
 
 ## Bugfixes

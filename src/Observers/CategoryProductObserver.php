@@ -66,38 +66,17 @@ class CategoryProductObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Will be invoked by the action on the events the listener has been registered for.
+     * Process the observer's business logic.
      *
-     * @param array $row The row to handle
-     *
-     * @return array The modified row
-     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
+     * @return array The processed row
      */
-    public function handle(array $row)
+    protected function process()
     {
-
-        // initialize the row
-        $this->setRow($row);
 
         // query whether or not, we've found a new SKU => means we've found a new product
         if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
-            return $row;
+            return;
         }
-
-        // process the functionality and return the row
-        $this->process();
-
-        // return the processed row
-        return $this->getRow();
-    }
-
-    /**
-     * Process the observer's business logic.
-     *
-     * @return void
-     */
-    public function process()
-    {
 
         // query whether or not, product => website relations has been specified
         if (!$this->hasValue(ColumnKeys::CATEGORIES)) {
@@ -126,7 +105,7 @@ class CategoryProductObserver extends AbstractProductImportObserver
      *
      * @return array The prepared attributes
      */
-    public function prepareAttributes()
+    protected function prepareAttributes()
     {
 
         // load the ID of the product that has been created recently
@@ -152,7 +131,7 @@ class CategoryProductObserver extends AbstractProductImportObserver
      *
      * @return array The initialized category product
      */
-    public function initializeCategoryProduct(array $attr)
+    protected function initializeCategoryProduct(array $attr)
     {
         return $attr;
     }
@@ -164,7 +143,7 @@ class CategoryProductObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function addProductCategoryId($categoryId)
+    protected function addProductCategoryId($categoryId)
     {
         $this->getSubject()->addProductCategoryId($categoryId);
     }
@@ -176,7 +155,7 @@ class CategoryProductObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function persistCategoryProduct($categoryProduct)
+    protected function persistCategoryProduct($categoryProduct)
     {
         $this->getSubject()->persistCategoryProduct($categoryProduct);
     }
@@ -188,7 +167,7 @@ class CategoryProductObserver extends AbstractProductImportObserver
      *
      * @return array The category
      */
-    public function getCategoryByPath($path)
+    protected function getCategoryByPath($path)
     {
         return $this->getSubject()->getCategoryByPath($path);
     }
