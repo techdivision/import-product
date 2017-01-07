@@ -50,7 +50,7 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function setCode($code)
+    protected function setCode($code)
     {
         $this->code = $code;
     }
@@ -60,7 +60,7 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
      *
      * @return string The website code
      */
-    public function getCode()
+    protected function getCode()
     {
         return $this->code;
     }
@@ -107,7 +107,7 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
      *
      * @return array The prepared attributes
      */
-    public function prepareAttributes()
+    protected function prepareAttributes()
     {
 
         // load the ID of the product that has been created recently
@@ -133,7 +133,7 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
      * @return array The initialized product website
      * @throws \RuntimeException Is thrown, if the attributes can not be initialized
      */
-    public function initializeProductWebsite(array $attr)
+    protected function initializeProductWebsite(array $attr)
     {
         return $attr;
     }
@@ -145,7 +145,7 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function persistProductWebsite($productWebsite)
+    protected function persistProductWebsite($productWebsite)
     {
         $this->getSubject()->persistProductWebsite($productWebsite);
     }
@@ -157,7 +157,7 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
      *
      * @return integer The store website ID
      */
-    public function getStoreWebsiteIdByCode($code)
+    protected function getStoreWebsiteIdByCode($code)
     {
         return $this->getSubject()->getStoreWebsiteIdByCode($code);
     }
