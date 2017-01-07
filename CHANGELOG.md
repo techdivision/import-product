@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha12
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Update scope to protected for methods in ProductWebsiteObserver
+
 # Version 1.0.0-alpha11
 
 ## Bugfixes
