@@ -66,7 +66,8 @@ class BunchSubject extends AbstractProductSubject
         'image' => 'base_image',
         'image_label' => 'base_image_label',
         'thumbnail' => 'thumbnail_image',
-        'thumbnail_label' => 'thumbnail_image_label'
+        'thumbnail_label' => 'thumbnail_image_label',
+        'shipment_type' => 'bundle_shipment_type'
     );
 
     /**
@@ -331,7 +332,7 @@ class BunchSubject extends AbstractProductSubject
     /**
      * Return's the visibility key for the passed visibility string.
      *
-     * @param string $visibility The visibility string the return the key for
+     * @param string $visibility The visibility string to return the key for
      *
      * @return integer The requested visibility key
      * @throws \Exception Is thrown, if the requested visibility is not available
