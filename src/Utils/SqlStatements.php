@@ -20,8 +20,6 @@
 
 namespace TechDivision\Import\Product\Utils;
 
-use TechDivision\Import\Utils\SqlStatements as FallbackStatements;
-
 /**
  * Utility class with the SQL statements to use.
  *
@@ -31,7 +29,7 @@ use TechDivision\Import\Utils\SqlStatements as FallbackStatements;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class SqlStatements extends FallbackStatements
+class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
 {
 
     /**

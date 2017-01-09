@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha13
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add mapping for bundle_shipment_type => shipment_type attribute
+
 # Version 1.0.0-alpha12
 
 ## Bugfixes
