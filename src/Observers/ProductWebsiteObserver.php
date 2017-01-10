@@ -84,7 +84,7 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
         }
 
         // append the product => website relations found
-        $codes = explode(',', $this->getValue(ColumnKeys::PRODUCT_WEBSITES));
+        $codes = $this->getValue(ColumnKeys::PRODUCT_WEBSITES, array(), array($this, 'explode'));
         foreach ($codes as $code) {
             // set the code of the website that has to be processed
             $this->setCode($code);

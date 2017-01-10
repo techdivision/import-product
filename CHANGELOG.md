@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha14
+
+## Bugfixes
+
+* Fixed exception when CSV file contains empty website and/or category columns
+
+## Features
+
+* None
+
 # Version 1.0.0-alpha13
 
 ## Bugfixes
