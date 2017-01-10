@@ -84,7 +84,7 @@ class CategoryProductObserver extends AbstractProductImportObserver
         }
 
         // append the category => product relations found
-        $paths = explode(',', $this->getValue(ColumnKeys::CATEGORIES));
+        $paths = $this->getValue(ColumnKeys::CATEGORIES, array(), array($this, 'explode'));
         foreach ($paths as $path) {
             // load the category for the found path
             $this->setPath(trim($path));
