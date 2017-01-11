@@ -49,11 +49,6 @@ class ProductInventoryObserver extends AbstractProductImportObserver
             return;
         }
 
-        // query whether or not, a website ID has been specified
-        if (!$this->hasValue(ColumnKeys::WEBSITE_ID)) {
-            return;
-        }
-
         // prepare, initialize and persist the stock status/item
         $this->persistStockStatus($this->initializeStockStatus($this->prepareStockStatusAttributes()));
         $this->persistStockItem($this->initializeStockItem($this->prepareStockItemAttributes()));
@@ -71,7 +66,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver
         $lastEntityId = $this->getLastEntityId();
 
         // initialize the stock status data
-        $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID);
+        $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID, 0);
         $qty = $this->castValueByBackendType('float', $this->getValue(ColumnKeys::QTY));
 
         // return the prepared stock status
@@ -110,7 +105,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver
         $lastEntityId = $this->getLastEntityId();
 
         // initialize the stock status data
-        $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID);
+        $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID, 0);
 
         // initialize the stock item with the basic data
         $stockItem = $this->initializeEntity(

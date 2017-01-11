@@ -87,6 +87,10 @@ class ProductAttributeObserver extends AbstractProductImportObserver
             // query weather or not we've a mapping, if yes, map the attribute code
             $attributeCode = $this->mapAttributeCodeByHeaderMapping($attributeCode);
 
+            if (!$this->hasHeader($attributeCode)) {
+                continue;
+            }
+
             // query whether or not we've a attribute value found
             $attributeValue = $this->getValue($attributeCode);
             if ($attributeValue == null) {
