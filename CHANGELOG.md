@@ -1,3 +1,15 @@
+# Version 1.0.0-alpha15
+
+## Bugfixes
+
+* Fixed error that AbstractProductImportObserver::hasValue() returns TRUE for empty column
+* Fixed error that AbstractProductImportObserver::getValue() returns an empty string for an empty column
+* Fixed exception when empty website ID found in ProductInventoryObserver
+
+## Features
+
+* None
+
 # Version 1.0.0-alpha14
 
 ## Bugfixes

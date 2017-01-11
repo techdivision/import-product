@@ -90,11 +90,11 @@ class CategoryProductObserverTest extends \PHPUnit_Framework_TestCase
                     ->willReturn($headers);
         $mockSubject->expects($this->any())
                     ->method('hasHeader')
-                    ->willReturn(true);
+                    ->willReturnOnConsecutiveCalls(true);
         $mockSubject->expects($this->any())
                     ->method('getHeader')
-                    ->withConsecutive(array(ColumnKeys::SKU), array(ColumnKeys::CATEGORIES))
-                    ->willReturnOnConsecutiveCalls(0, 1);
+                    ->withConsecutive(array(ColumnKeys::SKU), array(ColumnKeys::SKU))
+                    ->willReturnOnConsecutiveCalls(0, 0);
         $mockSubject->expects($this->once())
                     ->method('getLastSku')
                     ->willReturn('TEST-02');

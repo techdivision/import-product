@@ -104,10 +104,13 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getHeader')
                     ->withConsecutive(
                         array(ColumnKeys::SKU),
+                        array(ColumnKeys::SKU),
                         array(ColumnKeys::URL_KEY),
+                        array(ColumnKeys::URL_KEY),
+                        array(ColumnKeys::STORE_VIEW_CODE),
                         array(ColumnKeys::STORE_VIEW_CODE)
                     )
-                    ->willReturnOnConsecutiveCalls(0, 1, 2);
+                    ->willReturnOnConsecutiveCalls(0, 0, 1, 1, 2, 2);
         $mockSubject->expects($this->exactly(2))
                     ->method('getLastEntityId')
                     ->willReturn($entityId = 61413);
@@ -203,10 +206,13 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getHeader')
                     ->withConsecutive(
                         array(ColumnKeys::SKU),
+                        array(ColumnKeys::SKU),
                         array(ColumnKeys::URL_KEY),
+                        array(ColumnKeys::URL_KEY),
+                        array(ColumnKeys::STORE_VIEW_CODE),
                         array(ColumnKeys::STORE_VIEW_CODE)
                     )
-                    ->willReturnOnConsecutiveCalls(0, 1, 2);
+                    ->willReturnOnConsecutiveCalls(0, 0, 1, 1, 2, 2);
         $mockSubject->expects($this->any())
                     ->method('getLastEntityId')
                     ->willReturn($entityId);
