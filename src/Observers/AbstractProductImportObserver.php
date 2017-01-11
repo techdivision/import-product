@@ -286,15 +286,16 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     {
 
         // query whether or not the header is available
-        if (!$this->hasHeader($name)) {
-            return false;
+        if ($this->hasHeader($name)) {
+            // load the key for the row
+            $headerValue = $this->getHeader($name);
+
+            // query whether the rows column has a vaild value
+            return (isset($this->row[$headerValue]) && $this->row[$headerValue] != '');
         }
 
-        // load the key for the row
-        $headerValue = $this->getHeader($name);
-
-        // query whether the rows column has a vaild value
-        return (isset($this->row[$headerValue]) && $this->row[$headerValue] != '');
+        // return FALSE if not
+        return false;
     }
 
     /**
@@ -327,9 +328,14 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
         // initialize the value
         $value = null;
 
-        // query wheter or not, the value with the requested key is available
-        if ($this->hasValue($name)) {
-            $value = $this->row[$this->getHeader($name)];
+        // query whether or not the header is available
+        if ($this->hasHeader($name)) {
+            // load the header value
+            $headerValue = $this->getHeader($name);
+            // query wheter or not, the value with the requested key is available
+            if ((isset($this->row[$headerValue]) && $this->row[$headerValue] != '')) {
+                $value = $this->row[$headerValue];
+            }
         }
 
         // query whether or not, a callback has been passed
@@ -338,7 +344,7 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
         }
 
         // query whether or not
-        if ($value == null && $default != null) {
+        if ($value == null && $default !== null) {
             $value = $default;
         }
 

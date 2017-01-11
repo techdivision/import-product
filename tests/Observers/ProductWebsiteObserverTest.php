@@ -95,10 +95,9 @@ class ProductWebsiteObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getHeader')
                     ->withConsecutive(
                         array(ColumnKeys::SKU),
-                        array(ColumnKeys::SKU),
                         array(ColumnKeys::PRODUCT_WEBSITES)
                     )
-                    ->willReturnOnConsecutiveCalls(0, 0, 1);
+                    ->willReturnOnConsecutiveCalls(0, 1);
         $mockSubject->expects($this->once())
                     ->method('getLastSku')
                     ->willReturn('TEST-02');

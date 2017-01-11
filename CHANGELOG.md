@@ -1,3 +1,9 @@
+# Version 1.0.0-alpha16
+
+## Bugfixes
+
+* Fixed not returned default value 0 for AbstractProductImportObserver::getValue()
+
 # Version 1.0.0-alpha15
 
 ## Bugfixes
