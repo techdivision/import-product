@@ -276,58 +276,60 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     }
 
     /**
-     * Query whether or not the value with the passed key exists.
+     * Query whether or not a value for the column with the passed name exists.
      *
-     * @param string $key The key of the value to query
+     * @param string $name The column name to query for a valid value
      *
      * @return boolean TRUE if the value is set, else FALSE
      */
-    protected function hasValue($key)
+    protected function hasValue($name)
     {
-        return isset($this->row[$this->getHeader($key)]);
+
+        // query whether or not the header is available
+        if (!$this->hasHeader($name)) {
+            return false;
+        }
+
+        // load the key for the row
+        $headerValue = $this->getHeader($name);
+
+        // query whether the rows column has a vaild value
+        return (isset($this->row[$headerValue]) && $this->row[$headerValue] != '');
     }
 
     /**
      * Set the value in the passed column name.
      *
-     * @param string $columName The column name to set the value for
-     * @param mixed  $value     The value to set
+     * @param string $name  The column name to set the value for
+     * @param mixed  $value The value to set
      *
      * @return void
      */
-    protected function setValue($columName, $value)
+    protected function setValue($name, $value)
     {
-        $this->row[$this->getHeader($columName)] = $value;
+        $this->row[$this->getHeader($name)] = $value;
     }
 
     /**
-     * Resolve's the value with the passed key from the actual row. If a callback will
+     * Resolve's the value with the passed colum name from the actual row. If a callback will
      * be passed, the callback will be invoked with the found value as parameter. If
      * the value is NULL or empty, the default value will be returned.
      *
-     * @param string        $key      The key of the value to return
+     * @param string        $name     The name of the column to return the value for
      * @param mixed|null    $default  The default value, that has to be returned, if the row's value is empty
      * @param callable|null $callback The callback that has to be invoked on the value, e. g. to format it
      *
      * @return mixed|null The, almost formatted, value
      */
-    protected function getValue($key, $default = null, callable $callback = null)
+    protected function getValue($name, $default = null, callable $callback = null)
     {
-
-        // query whether or not the header is available
-        if (!$this->hasHeader($key)) {
-            return;
-        }
 
         // initialize the value
         $value = null;
 
-        // try to load the header
-        $header = $this->getHeader($key);
-
         // query wheter or not, the value with the requested key is available
-        if (isset($this->row[$header])) {
-            $value = $this->row[$header];
+        if ($this->hasValue($name)) {
+            $value = $this->row[$this->getHeader($name)];
         }
 
         // query whether or not, a callback has been passed

@@ -133,13 +133,19 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getHeader')
                     ->withConsecutive(
                         array(ColumnKeys::SKU),
+                        array(ColumnKeys::SKU),
+                        array(ColumnKeys::CREATED_AT),
                         array(ColumnKeys::CREATED_AT),
                         array(ColumnKeys::UPDATED_AT),
+                        array(ColumnKeys::UPDATED_AT),
+                        array(ColumnKeys::ATTRIBUTE_SET_CODE),
                         array(ColumnKeys::ATTRIBUTE_SET_CODE),
                         array(ColumnKeys::SKU),
+                        array(ColumnKeys::SKU),
+                        array(ColumnKeys::PRODUCT_TYPE),
                         array(ColumnKeys::PRODUCT_TYPE)
                      )
-                    ->willReturnOnConsecutiveCalls(0, 1, 2, 6, 0, 5);
+                    ->willReturnOnConsecutiveCalls(0, 0, 1, 1, 2, 2, 6, 6, 0, 0, 5, 5);
         $mockSubject->expects($this->once())
                     ->method('getLastSku')
                     ->willReturn('24-MB02');
