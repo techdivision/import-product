@@ -50,7 +50,7 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      *
      * @return void
      */
-    public function setRow(array $row)
+    protected function setRow(array $row)
     {
         $this->row = $row;
     }
@@ -60,7 +60,7 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      *
      * @return array The row
      */
-    public function getRow()
+    protected function getRow()
     {
         return $this->row;
     }
@@ -93,7 +93,16 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      */
     protected function process()
     {
+    }
 
+    /**
+     * Return's the multiple field delimiter character to use, default value is comma (,).
+     *
+     * @return string The multiple field delimiter character
+     */
+    protected function getMultipleFieldDelimiter()
+    {
+        return $this->getSubject()->getMultipleFieldDelimiter();
     }
 
     /**
@@ -263,16 +272,23 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
 
     /**
      * Extracts the elements of the passed value by exploding them
-     * with the also passed separator.
+     * with the also passed delimiter.
      *
-     * @param string $value     The value to extract
-     * @param string $separator The separator used to extrace the elements
+     * @param string      $value     The value to extract
+     * @param string|null $delimiter The delimiter used to extrace the elements
      *
      * @return array The exploded values
      */
-    protected function explode($value, $separator = ',')
+    protected function explode($value, $delimiter = null)
     {
-        return explode($separator, $value);
+
+        // load the default multiple field delimiter
+        if ($delimiter === null) {
+            $delimiter = $this->getMultipleFieldDelimiter();
+        }
+
+        // explode and return the array with the values, by using the delimiter
+        return explode($delimiter, $value);
     }
 
     /**
