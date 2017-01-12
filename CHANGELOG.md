@@ -1,4 +1,18 @@
+# Version 1.0.0-alpha17
+
+## Features
+
+* Refactoring to use multiple field delimiter instead of hard coded (,)
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha16
+
+## Features
+
+* None
 
 ## Bugfixes
 
