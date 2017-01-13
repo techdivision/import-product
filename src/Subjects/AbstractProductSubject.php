@@ -274,6 +274,9 @@ abstract class AbstractProductSubject extends AbstractSubject
     public function tearDown()
     {
 
+        // invoke the parent method
+        parent::tearDown();
+
         // load the registry processor
         $registryProcessor = $this->getRegistryProcessor();
 

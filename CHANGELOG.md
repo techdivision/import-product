@@ -1,3 +1,14 @@
+# Version 1.0.0-alpha18
+
+## Features
+
+* Call parent::tearDown() method in AbstractProductSubject
+* Change target-dir for artefact export in BunchSubject::exportArtefacts() method to next source dir
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha17
 
 ## Features
