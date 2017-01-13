@@ -189,11 +189,11 @@ class BunchSubject extends AbstractProductSubject
      *
      * @return void
      */
-    public function exportArtefacts()
+    protected function exportArtefacts()
     {
 
         // load the target directory and the actual timestamp
-        $targetDir = $this->getConfiguration()->getTargetDir();
+        $targetDir = $this->getTargetDir();
         $timestamp = date('Ymd-His');
 
         // initialize the counter
@@ -222,6 +222,16 @@ class BunchSubject extends AbstractProductSubject
                 $exporter->export(sprintf('%s/%s-%s_%d.csv', $targetDir, $artefactType, $timestamp, $counter++), $bunch);
             }
         }
+    }
+
+    /**
+     * Return's the target directory for the artefact export.
+     *
+     * @return string The target directory for the artefact export
+     */
+    protected function getTargetDir()
+    {
+        return $this->getNewSourceDir();
     }
 
     /**
