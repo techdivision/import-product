@@ -196,31 +196,29 @@ class BunchSubject extends AbstractProductSubject
         $targetDir = $this->getTargetDir();
         $timestamp = date('Ymd-His');
 
-        // initialize the counter
-        $counter = 0;
-
         // iterate over the artefacts and export them
         foreach ($this->getArtefacts() as $artefactType => $artefacts) {
+            // initialize the bunch and the exporter
+            $bunch = array();
+            $exporter = new Exporter($this->getExportConfig());
+
+            // iterate over the artefact types artefacts
             foreach ($artefacts as $entityArtefacts) {
-                // initialize the the exporter
-                $exporter = new Exporter($this->getExportConfig());
-
-                // initialize the bunch
-                $bunch = array();
-
                 // set the bunch header and append the artefact data
-                $first = reset($entityArtefacts);
-                $second = reset($first);
-                $bunch[] = array_keys($second);
+                if (sizeof($bunch) === 0) {
+                    $first = reset($entityArtefacts);
+                    $second = reset($first);
+                    $bunch[] = array_keys($second);
+                }
 
                 // export the artefacts
                 foreach ($entityArtefacts as $entityArtefact) {
                     $bunch = array_merge($bunch, $entityArtefact);
                 }
-
-                // export the artefact (bunch)
-                $exporter->export(sprintf('%s/%s-%s_%d.csv', $targetDir, $artefactType, $timestamp, $counter++), $bunch);
             }
+
+            // export the artefact (bunch)
+            $exporter->export(sprintf('%s/%s-%s_01.csv', $targetDir, $artefactType, $timestamp), $bunch);
         }
     }
 

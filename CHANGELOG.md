@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha19
+
+## Features
+
+* Refactoring artefact export to reduce number of exported files
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha18
 
 ## Features
