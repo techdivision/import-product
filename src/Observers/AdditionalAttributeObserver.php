@@ -44,9 +44,6 @@ class AdditionalAttributeObserver extends AbstractProductImportObserver
     protected function process()
     {
 
-        // load the header information
-        $headers = $this->getHeaders();
-
         // query whether or not the row has additional attributes
         if ($additionalAttributes = $this->getValue(ColumnKeys::ADDITIONAL_ATTRIBUTES)) {
             // query if the additional attributes have a value, at least

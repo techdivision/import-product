@@ -43,9 +43,6 @@ class QuantityAndStockStatusObserver extends AbstractProductImportObserver
     protected function process()
     {
 
-        // load the header information
-        $headers = $this->getHeaders();
-
         // try to load the appropriate key for the stock status
         if (!$this->hasHeader(ColumnKeys::QUANTITY_AND_STOCK_STATUS)) {
             $this->addHeader(ColumnKeys::QUANTITY_AND_STOCK_STATUS);
