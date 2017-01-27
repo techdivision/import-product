@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha20
+
+## Features
+
+* None
+
+## Bugfixes
+
+* Fixed PHPMD recommendations
+
 # Version 1.0.0-alpha19
 
 ## Features

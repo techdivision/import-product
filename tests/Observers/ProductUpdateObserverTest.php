@@ -99,8 +99,8 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
         // the new product data
         $newProduct = array(
             'sku'                     => $sku,
-            'created_at'              => $createdAt = '2016-10-23 17:10:00',
-            'updated_at'              => $updatedAt = '2016-10-23 17:10:00',
+            'created_at'              => '2016-10-23 17:10:00',
+            'updated_at'              => '2016-10-23 17:10:00',
             'has_options'             => 0,
             'required_options'        => 0,
             'type_id'                 => $productType,
