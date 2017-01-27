@@ -44,28 +44,6 @@ class CategoryProductObserver extends AbstractProductImportObserver
     protected $path;
 
     /**
-     * Set's the actual category path that has to be processed.
-     *
-     * @param string $path The category path
-     *
-     * @return void
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
-
-    /**
-     * Return's the category path that has to be processed.
-     *
-     * @return string The category path
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
      * Process the observer's business logic.
      *
      * @return array The processed row
@@ -87,16 +65,16 @@ class CategoryProductObserver extends AbstractProductImportObserver
         $paths = $this->getValue(ColumnKeys::CATEGORIES, array(), array($this, 'explode'));
         foreach ($paths as $path) {
             // load the category for the found path
-            $this->setPath(trim($path));
+            $this->path = trim($path);
             // prepare the product website relation attributes
-            $attr = $this->prepareAttributes();
+            if ($attr = $this->prepareAttributes()) {
+                // create the category product relation
+                $categoryProduct = $this->initializeCategoryProduct($attr);
+                $this->persistCategoryProduct($categoryProduct);
 
-            // create the category product relation
-            $categoryProduct = $this->initializeCategoryProduct($attr);
-            $this->persistCategoryProduct($categoryProduct);
-
-            // add the category ID to the list => necessary to create the URL rewrites later!
-            $this->addProductCategoryId($categoryProduct[MemberNames::CATEGORY_ID]);
+                // add the category ID to the list => necessary to create the URL rewrites later!
+                $this->addProductCategoryId($categoryProduct[MemberNames::CATEGORY_ID]);
+            }
         }
     }
 
@@ -111,17 +89,30 @@ class CategoryProductObserver extends AbstractProductImportObserver
         // load the ID of the product that has been created recently
         $lastEntityId = $this->getLastEntityId();
 
-        // load the category for the found path
-        $category = $this->getCategoryByPath($this->getPath());
+        try {
+            // load the category for the found path
+            $category = $this->getCategoryByPath($this->path);
 
-        // return the prepared category product relation
-        return $this->initializeEntity(
-            array(
-                MemberNames::CATEGORY_ID => $category[MemberNames::ENTITY_ID],
-                MemberNames::PRODUCT_ID  => $lastEntityId,
-                MemberNames::POSITION    => 0
-            )
-        );
+            // return the prepared category product relation
+            return $this->initializeEntity(
+                array(
+                    MemberNames::CATEGORY_ID => $category[MemberNames::ENTITY_ID],
+                    MemberNames::PRODUCT_ID  => $lastEntityId,
+                    MemberNames::POSITION    => 0
+                )
+            );
+
+        } catch (\Exception $e) {
+            // query whether or not, debug mode is enabled
+            if ($this->isDebugMode()) {
+                // log a warning and return immediately
+                $this->getSystemLogger()->warning($e->getMessage());
+                return;
+            }
+
+            // if we're NOT in debug mode, re-throw the exception
+            throw $e;
+        }
     }
 
     /**
@@ -170,5 +161,15 @@ class CategoryProductObserver extends AbstractProductImportObserver
     protected function getCategoryByPath($path)
     {
         return $this->getSubject()->getCategoryByPath($path);
+    }
+
+    /**
+     * Queries whether or not debug mode is enabled or not, default is TRUE.
+     *
+     * @return boolean TRUE if debug mode is enabled, else FALSE
+     */
+    protected function isDebugMode()
+    {
+        return $this->getSubject()->isDebugMode();
     }
 }

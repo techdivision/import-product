@@ -1,3 +1,14 @@
+# Version 1.0.0-alpha21
+
+## Features
+
+* Ignore missing categories on category product relation in debug mode
+* Add CSV filename/line number to exceptions to improve error handling/debugging
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha20
 
 ## Features

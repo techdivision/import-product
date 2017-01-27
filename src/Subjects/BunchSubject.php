@@ -354,7 +354,14 @@ class BunchSubject extends AbstractProductSubject
         }
 
         // throw an exception, if not
-        throw new \Exception(sprintf('Found invalid visibility %s', $visibility));
+        throw new \Exception(
+            sprintf(
+                'Found invalid visibility %s in file %s on line %d',
+                $visibility,
+                $this->getFilename(),
+                $this->getLineNumber()
+            )
+        );
     }
 
     /**
