@@ -100,13 +100,17 @@ class ProductAttributeObserver extends AbstractProductImportObserver
             // load the backend type => to find the apropriate entity
             $backendType = $attribute[MemberNames::BACKEND_TYPE];
             if ($backendType == null) {
-                $this->getSystemLogger()
-                     ->warning(sprintf('Found EMTPY backend type for attribute %s', $attributeCode));
+                $this->getSystemLogger()->warning(sprintf('Found EMTPY backend type for attribute %s', $attributeCode));
                 continue;
             }
 
             // load the supported backend types
             $backendTypes = $this->getBackendTypes();
+
+            // do nothing on static backend type
+            if ($backendType === 'static') {
+                continue;
+            }
 
             // query whether or not we've found a supported backend type
             if (isset($backendTypes[$backendType])) {
@@ -124,15 +128,21 @@ class ProductAttributeObserver extends AbstractProductImportObserver
                 // load the prepared values
                 $entity = $this->initializeAttribute($this->prepareAttributes());
 
-                // persist the attribute
+                // persist the attribute and continue
                 $this->$persistMethod($entity);
-
-            } else {
-                // log the debug message
-                $this->getSystemLogger()->debug(
-                    sprintf('Found invalid backend type %s for attribute %s', $backendType, $attributeCode)
-                );
+                continue;
             }
+
+            // log the debug message
+            $this->getSystemLogger()->debug(
+                sprintf(
+                    'Found invalid backend type %s for attribute %s in file %s on line %s',
+                    $backendType,
+                    $attributeCode,
+                    $this->getFilename(),
+                    $this->getLineNumber()
+                )
+            );
         }
     }
 
