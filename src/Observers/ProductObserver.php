@@ -39,14 +39,14 @@ class ProductObserver extends AbstractProductImportObserver
     /**
      * Process the observer's business logic.
      *
-     * @return array The processed row
+     * @return void
      */
     protected function process()
     {
 
         // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
-            return $this->getRow();
+        if ($this->hasBeenProcessed($this->getValue(ColumnKeys::SKU))) {
+            return;
         }
 
         // prepare the static entity values

@@ -116,7 +116,7 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
                             ->setMethods(
                                 array(
-                                    'getLastSku',
+                                    'hasBeenProcessed',
                                     'getLastEntityId',
                                     'persistStockItem',
                                     'persistStockStatus'
@@ -125,8 +125,8 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
                             ->getMock();
         $mockSubject->setHeaders($headers);
         $mockSubject->expects($this->once())
-                    ->method('getLastSku')
-                    ->willReturn('TEST-02');
+                    ->method('hasBeenProcessed')
+                    ->willReturn(false);
         $mockSubject->expects($this->exactly(2))
                     ->method('getLastEntityId')
                     ->willReturn($lastEntityId = 12345);

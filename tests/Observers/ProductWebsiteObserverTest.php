@@ -80,7 +80,7 @@ class ProductWebsiteObserverTest extends \PHPUnit_Framework_TestCase
                                     'hasHeader',
                                     'getHeader',
                                     'getHeaders',
-                                    'getLastSku',
+                                    'hasBeenProcessed',
                                     'getLastEntityId'
                                 )
                             )
@@ -99,8 +99,8 @@ class ProductWebsiteObserverTest extends \PHPUnit_Framework_TestCase
                     )
                     ->willReturnOnConsecutiveCalls(0, 1);
         $mockSubject->expects($this->once())
-                    ->method('getLastSku')
-                    ->willReturn('TEST-02');
+                    ->method('hasBeenProcessed')
+                    ->willReturn(false);
         $mockSubject->expects($this->never())
                     ->method('getLastEntityId');
 

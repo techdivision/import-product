@@ -43,23 +43,12 @@ class CleanUpObserver extends AbstractProductImportObserver
     protected function process()
     {
 
-        // add the SKU => entity ID mapping
+        // add the SKU => entity ID/store view code mapping
         $this->addSkuEntityIdMapping($sku = $this->getValue(ColumnKeys::SKU));
+        $this->addSkuStoreViewCodeMapping($sku, $this->getValue(ColumnKeys::STORE_VIEW_CODE));
 
         // temporary persist the SKU
         $this->setLastSku($sku);
-    }
-
-    /**
-     * Add the passed SKU => entity ID mapping.
-     *
-     * @param string $sku The SKU
-     *
-     * @return void
-     */
-    protected function addSkuEntityIdMapping($sku)
-    {
-        $this->getSubject()->addSkuEntityIdMapping($sku);
     }
 
     /**

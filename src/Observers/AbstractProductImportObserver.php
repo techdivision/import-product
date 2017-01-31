@@ -89,10 +89,47 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     /**
      * Process the observer's business logic.
      *
-     * @return array The processed row
+     * @return void
      */
     protected function process()
     {
+    }
+
+    /**
+     * Queries whether or not the SKU has already been processed.
+     *
+     * @param string $sku The SKU to check been processed
+     *
+     * @return boolean TRUE if the SKU has been processed, else FALSE
+     */
+    protected function hasBeenProcessed($sku)
+    {
+        return $this->getSubject()->hasBeenProcessed($sku);
+    }
+
+    /**
+     * Add the passed SKU => entity ID mapping.
+     *
+     * @param string $sku The SKU
+     *
+     * @return void
+     */
+    protected function addSkuEntityIdMapping($sku)
+    {
+        $this->getSubject()->addSkuEntityIdMapping($sku);
+    }
+
+    /**
+     * Add the passed SKU => store view code mapping.
+     *
+     * @param string $sku           The SKU
+     * @param string $storeViewCode The store view code
+     *
+     * @return void
+     */
+    protected function addSkuStoreViewCodeMapping($sku, $storeViewCode)
+    {
+        $this->getSubject()->addSkuStoreViewCodeMapping($sku, $storeViewCode);
     }
 
     /**

@@ -115,7 +115,7 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                     'hasHeader',
                                     'getHeader',
                                     'getHeaders',
-                                    'getLastSku',
+                                    'hasBeenProcessed',
                                     'getAttributeSetByAttributeSetName',
                                     'getSourceDateFormat',
                                     'loadProduct',
@@ -141,8 +141,8 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
                      )
                     ->willReturnOnConsecutiveCalls(0, 1, 2, 6, 0, 5);
         $mockSubject->expects($this->once())
-                    ->method('getLastSku')
-                    ->willReturn('24-MB02');
+                    ->method('hasBeenProcessed')
+                    ->willReturn(false);
         $mockSubject->expects($this->any(2))
                     ->method('getSourceDateFormat')
                     ->willReturn('n/d/y, g:i A');

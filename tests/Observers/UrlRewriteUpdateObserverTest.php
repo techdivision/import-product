@@ -141,7 +141,7 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                         'hasHeader',
                                         'getHeader',
                                         'getHeaders',
-                                        'getLastSku',
+                                        'hasBeenProcessed',
                                         'getLastEntityId',
                                         'getProductCategoryIds',
                                         'getRootCategory',
@@ -179,8 +179,8 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                         array(MemberNames::ENTITY_ID =>  2, MemberNames::URL_PATH => null)
                     );
         $mockSubject->expects($this->once())
-                    ->method('getLastSku')
-                    ->willReturn('TEST-02');
+                    ->method('hasBeenProcessed')
+                    ->willReturn(false);
         $mockSubject->expects($this->any())
                     ->method('getRootCategory')
                     ->willReturn(array(MemberNames::ENTITY_ID =>  2, MemberNames::URL_PATH => null));
