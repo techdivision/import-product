@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha22
+
+## Features
+
+* Add mapping for SKU => store view code to improve multilange imports
+
+## Bugfixes
+
+* Query whether or not a row has already been imported, independent on the previous row's position 
+
 # Version 1.0.0-alpha21
 
 ## Features

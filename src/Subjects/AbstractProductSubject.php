@@ -130,6 +130,20 @@ abstract class AbstractProductSubject extends AbstractSubject
     protected $coreConfigData;
 
     /**
+     * The mapping for the SKUs to the created entity IDs.
+     *
+     * @var array
+     */
+    protected $skuEntityIdMapping = array();
+
+    /**
+     * The mapping for the SKUs to the store view codes.
+     *
+     * @var array
+     */
+    protected $skuStoreViewCodeMapping = array();
+
+    /**
      * Set's the product processor instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductProcessorInterface $productProcessor The product processor instance
@@ -193,6 +207,44 @@ abstract class AbstractProductSubject extends AbstractSubject
     public function getLastEntityId()
     {
         return $this->lastEntityId;
+    }
+
+    /**
+     * Queries whether or not the SKU has already been processed.
+     *
+     * @param string $sku The SKU to check been processed
+     *
+     * @return boolean TRUE if the SKU has been processed, else FALSE
+     */
+    public function hasBeenProcessed($sku)
+    {
+        return isset($this->skuEntityIdMapping[$sku]);
+    }
+
+    /**
+     * Add the passed SKU => entity ID mapping.
+     *
+     * @param string $sku The SKU
+     *
+     * @return void
+     * @uses \Import\Csv\Actions\ProductImportBunchAction::getLastEntityId()
+     */
+    public function addSkuEntityIdMapping($sku)
+    {
+        $this->skuEntityIdMapping[$sku] = $this->getLastEntityId();
+    }
+
+    /**
+     * Add the passed SKU => store view code mapping.
+     *
+     * @param string $sku           The SKU
+     * @param string $storeViewCode The store view code
+     *
+     * @return void
+     */
+    public function addSkuStoreViewCodeMapping($sku, $storeViewCode)
+    {
+        $this->skuStoreViewCodeMapping[$sku] = $storeViewCode;
     }
 
     /**
@@ -280,13 +332,19 @@ abstract class AbstractProductSubject extends AbstractSubject
         // load the registry processor
         $registryProcessor = $this->getRegistryProcessor();
 
+        // update the status with the SKU => entity ID mapping
+        $registryProcessor->mergeAttributesRecursive(
+            $this->getSerial(),
+            array()
+        );
+
         // update the status
         $registryProcessor->mergeAttributesRecursive(
             $this->getSerial(),
             array(
-                RegistryKeys::FILES => array(
-                    $this->getFilename() => array(RegistryKeys::STATUS => 1)
-                )
+                RegistryKeys::FILES => array($this->getFilename() => array(RegistryKeys::STATUS => 1)),
+                RegistryKeys::SKU_ENTITY_ID_MAPPING => $this->skuEntityIdMapping,
+                RegistryKeys::SKU_STORE_VIEW_CODE_MAPPING => $this->skuStoreViewCodeMapping
             )
         );
     }

@@ -84,7 +84,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'hasHeader',
                                     'getHeader',
                                     'getHeaders',
-                                    'getLastSku',
+                                    'hasBeenProcessed',
                                     'getLastEntityId',
                                     'getProductCategoryIds',
                                     'getRowStoreId',
@@ -112,8 +112,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getLastEntityId')
                     ->willReturn($entityId = 61413);
         $mockSubject->expects($this->once())
-                    ->method('getLastSku')
-                    ->willReturn('TEST-02');
+                    ->method('hasBeenProcessed')
+                    ->willReturn(false);
         $mockSubject->expects($this->once())
                     ->method('getProductCategoryIds')
                     ->willReturn(array($categoryId = 2 => $entityId));
@@ -183,7 +183,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'hasHeader',
                                     'getHeader',
                                     'getHeaders',
-                                    'getLastSku',
+                                    'hasBeenProcessed',
                                     'getLastEntityId',
                                     'getProductCategoryIds',
                                     'persistUrlRewrite',
@@ -220,8 +220,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                          array(MemberNames::ENTITY_ID => 13, MemberNames::URL_PATH => 'men/tops-men')
                      );
         $mockSubject->expects($this->once())
-                    ->method('getLastSku')
-                    ->willReturn('TEST-02');
+                    ->method('hasBeenProcessed')
+                    ->willReturn(false);
         $mockSubject->expects($this->any())
                     ->method('getRootCategory')
                     ->willReturn(array(MemberNames::ENTITY_ID =>  2, MemberNames::URL_PATH => null));

@@ -52,7 +52,7 @@ class CategoryProductObserver extends AbstractProductImportObserver
     {
 
         // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
+        if ($this->hasBeenProcessed($this->getValue(ColumnKeys::SKU))) {
             return;
         }
 
@@ -161,15 +161,5 @@ class CategoryProductObserver extends AbstractProductImportObserver
     protected function getCategoryByPath($path)
     {
         return $this->getSubject()->getCategoryByPath($path);
-    }
-
-    /**
-     * Queries whether or not debug mode is enabled or not, default is TRUE.
-     *
-     * @return boolean TRUE if debug mode is enabled, else FALSE
-     */
-    protected function isDebugMode()
-    {
-        return $this->getSubject()->isDebugMode();
     }
 }

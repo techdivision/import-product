@@ -80,8 +80,7 @@ class CategoryProductObserverTest extends \PHPUnit_Framework_TestCase
                                     'hasHeader',
                                     'getHeader',
                                     'getHeaders',
-                                    'getLastSku',
-                                    'getLastEntityId'
+                                    'hasBeenProcessed'
                                 )
                             )
                             ->getMock();
@@ -96,10 +95,8 @@ class CategoryProductObserverTest extends \PHPUnit_Framework_TestCase
                     ->withConsecutive(array(ColumnKeys::SKU), array(ColumnKeys::CATEGORIES))
                     ->willReturnOnConsecutiveCalls(0, 1);
         $mockSubject->expects($this->once())
-                    ->method('getLastSku')
+                    ->method('hasBeenProcessed')
                     ->willReturn('TEST-02');
-        $mockSubject->expects($this->never())
-                    ->method('getLastEntityId');
 
         // inject the subject und invoke the handle() method
         $this->observer->setSubject($mockSubject);

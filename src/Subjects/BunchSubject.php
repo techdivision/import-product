@@ -125,13 +125,6 @@ class BunchSubject extends AbstractProductSubject
     protected $artefacs = array();
 
     /**
-     * The mapping for the SKUs to the created entity IDs.
-     *
-     * @var array
-     */
-    protected $skuEntityIdMapping = array();
-
-    /**
      * The category IDs the product is related with.
      *
      * @var array
@@ -173,15 +166,6 @@ class BunchSubject extends AbstractProductSubject
 
         // export the artefacts
         $this->exportArtefacts();
-
-        // load the registry processor
-        $registryProcessor = $this->getRegistryProcessor();
-
-        // update the status with the SKU => entity ID mapping
-        $registryProcessor->mergeAttributesRecursive(
-            $this->getSerial(),
-            array(RegistryKeys::SKU_ENTITY_ID_MAPPING => $this->skuEntityIdMapping)
-        );
     }
 
     /**
@@ -404,19 +388,6 @@ class BunchSubject extends AbstractProductSubject
 
         // append the artefacts to the stack
         $this->artefacs[$type][$this->getLastEntityId()][] = $artefacts;
-    }
-
-    /**
-     * Add the passed SKU => entity ID mapping.
-     *
-     * @param string $sku The SKU
-     *
-     * @return void
-     * @uses \Import\Csv\Actions\ProductImportBunchAction::getLastEntityId()
-     */
-    public function addSkuEntityIdMapping($sku)
-    {
-        $this->skuEntityIdMapping[$sku] = $this->getLastEntityId();
     }
 
     /**

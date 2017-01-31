@@ -21,8 +21,8 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
-use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
  * Observer that creates/updates the product's website relations.
@@ -74,7 +74,7 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
     {
 
         // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->isLastSku($this->getValue(ColumnKeys::SKU))) {
+        if ($this->hasBeenProcessed($this->getValue(ColumnKeys::SKU))) {
             return;
         }
 
