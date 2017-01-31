@@ -22,8 +22,6 @@ namespace TechDivision\Import\Product\Subjects;
 
 use Goodby\CSV\Export\Standard\Exporter;
 use Goodby\CSV\Export\Standard\ExporterConfig;
-use TechDivision\Import\Utils\RegistryKeys;
-use TechDivision\Import\Services\RegistryProcessor;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
 
 /**

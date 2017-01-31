@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha23
+
+## Features
+
+* None
+
+## Bugfixes
+
+* Fixed PHPMD errors
+
 # Version 1.0.0-alpha22
 
 ## Features
