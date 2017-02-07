@@ -83,7 +83,9 @@ class ProductAttributeObserver extends AbstractProductImportObserver
         // remove all the empty values from the row
         $row = array_filter(
             $this->row,
-            function ($value, $key) { return ($value !== null && $value !== ''); },
+            function ($value, $key) {
+                return ($value !== null && $value !== '');
+            },
             ARRAY_FILTER_USE_BOTH
         );
 
