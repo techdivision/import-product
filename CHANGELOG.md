@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha25
+
+## Features
+
+* None
+
+## Bugfixes
+
+* Refactoring attribute observer to iterate over not empty columns in CSV files instead over all available attributes
+
 # Version 1.0.0-alpha24
 
 ## Features
