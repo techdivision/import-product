@@ -20,9 +20,9 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
-use Goodby\CSV\Export\Standard\Exporter;
-use Goodby\CSV\Export\Standard\ExporterConfig;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
+use TechDivision\Import\Subjects\ExportableTrait;
+use TechDivision\Import\Subjects\ExportableSubjectInterface;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -33,8 +33,15 @@ use TechDivision\Import\Product\Utils\VisibilityKeys;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class BunchSubject extends AbstractProductSubject
+class BunchSubject extends AbstractProductSubject implements ExportableSubjectInterface
 {
+
+    /**
+     * The trait that implements the export functionality.
+     *
+     * @var \TechDivision\Import\Subjects\ExportableTrait
+     */
+    use ExportableTrait;
 
     /**
      * The mapping for the supported backend types (for the product entity) => persist methods.
@@ -116,13 +123,6 @@ class BunchSubject extends AbstractProductSubject
     protected $attributeSet = array();
 
     /**
-     * The array containing the data for product type configuration (configurables, bundles, etc).
-     *
-     * @var array
-     */
-    protected $artefacs = array();
-
-    /**
      * The category IDs the product is related with.
      *
      * @var array
@@ -149,114 +149,6 @@ class BunchSubject extends AbstractProductSubject
     public function getAttributeSet()
     {
         return $this->attributeSet;
-    }
-
-    /**
-     * Clean up the global data after importing the bunch.
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-
-        // invoke parent method
-        parent::tearDown();
-
-        // export the artefacts
-        $this->exportArtefacts();
-    }
-
-    /**
-     * Export's the artefacts to CSV files.
-     *
-     * @return void
-     */
-    protected function exportArtefacts()
-    {
-
-        // load the target directory and the actual timestamp
-        $targetDir = $this->getTargetDir();
-        $timestamp = date('Ymd-His');
-
-        // iterate over the artefacts and export them
-        foreach ($this->getArtefacts() as $artefactType => $artefacts) {
-            // initialize the bunch and the exporter
-            $bunch = array();
-            $exporter = new Exporter($this->getExportConfig());
-
-            // iterate over the artefact types artefacts
-            foreach ($artefacts as $entityArtefacts) {
-                // set the bunch header and append the artefact data
-                if (sizeof($bunch) === 0) {
-                    $first = reset($entityArtefacts);
-                    $second = reset($first);
-                    $bunch[] = array_keys($second);
-                }
-
-                // export the artefacts
-                foreach ($entityArtefacts as $entityArtefact) {
-                    $bunch = array_merge($bunch, $entityArtefact);
-                }
-            }
-
-            // export the artefact (bunch)
-            $exporter->export(sprintf('%s/%s-%s_01.csv', $targetDir, $artefactType, $timestamp), $bunch);
-        }
-    }
-
-    /**
-     * Return's the target directory for the artefact export.
-     *
-     * @return string The target directory for the artefact export
-     */
-    protected function getTargetDir()
-    {
-        return $this->getNewSourceDir();
-    }
-
-    /**
-     * Initialize and return the exporter configuration.
-     *
-     * @return \Goodby\CSV\Export\Standard\ExporterConfig The exporter configuration
-     */
-    protected function getExportConfig()
-    {
-
-        // initialize the lexer configuration
-        $config = new ExporterConfig();
-
-        // query whether or not a delimiter character has been configured
-        if ($delimiter = $this->getConfiguration()->getDelimiter()) {
-            $config->setDelimiter($delimiter);
-        }
-
-        // query whether or not a custom escape character has been configured
-        if ($escape = $this->getConfiguration()->getEscape()) {
-            $config->setEscape($escape);
-        }
-
-        // query whether or not a custom enclosure character has been configured
-        if ($enclosure = $this->getConfiguration()->getEnclosure()) {
-            $config->setEnclosure($enclosure);
-        }
-
-        // query whether or not a custom source charset has been configured
-        if ($fromCharset = $this->getConfiguration()->getFromCharset()) {
-            $config->setFromCharset($fromCharset);
-        }
-
-        // query whether or not a custom target charset has been configured
-        if ($toCharset = $this->getConfiguration()->getToCharset()) {
-            $config->setToCharset($toCharset);
-        }
-
-        // query whether or not a custom file mode has been configured
-        if ($fileMode = $this->getConfiguration()->getFileMode()) {
-            $config->setFileMode($fileMode);
-        }
-
-        // return the lexer configuratio
-        return $config;
     }
 
     /**
@@ -310,16 +202,6 @@ class BunchSubject extends AbstractProductSubject
     }
 
     /**
-     * Return's the artefacts for post-processing.
-     *
-     * @return array The artefacts
-     */
-    public function getArtefacts()
-    {
-        return $this->artefacs;
-    }
-
-    /**
      * Return's the visibility key for the passed visibility string.
      *
      * @param string $visibility The visibility string to return the key for
@@ -364,28 +246,6 @@ class BunchSubject extends AbstractProductSubject
 
         // return the (mapped) attribute code
         return $attributeCode;
-    }
-
-    /**
-     * Add the passed product type artefacts to the product with the
-     * last entity ID.
-     *
-     * @param string $type      The artefact type, e. g. configurable
-     * @param array  $artefacts The product type artefacts
-     *
-     * @return void
-     * @uses \TechDivision\Import\Product\Subjects\BunchSubject::getLastEntityId()
-     */
-    public function addArtefacts($type, array $artefacts)
-    {
-
-        // query whether or not, any artefacts are available
-        if (sizeof($artefacts) === 0) {
-            return;
-        }
-
-        // append the artefacts to the stack
-        $this->artefacs[$type][$this->getLastEntityId()][] = $artefacts;
     }
 
     /**
