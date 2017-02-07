@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Utils\StoreViewCodes;
+use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
@@ -75,27 +76,34 @@ class ProductAttributeObserver extends AbstractProductImportObserver
         // initialize the store view code
         $this->prepareStoreViewCode();
 
-        // load the attributes by the found attribute set
+        // load the attributes by the found attribute set and the backend types
         $attributes = $this->getAttributes();
+        $backendTypes = $this->getBackendTypes();
 
-        // iterate over the attribute related by the found attribute set
-        foreach ($attributes as $attribute) {
-            // load the attribute code/ID
-            $attributeCode = $attribute[MemberNames::ATTRIBUTE_CODE];
-            $attributeId = (integer) $attribute[MemberNames::ATTRIBUTE_ID];
+        // remove all the empty values from the row
+        $row = array_filter(
+            $this->row,
+            function ($value, $key) { return ($value !== null && $value !== ''); },
+            ARRAY_FILTER_USE_BOTH
+        );
 
-            // query weather or not we've a mapping, if yes, map the attribute code
-            $attributeCode = $this->mapAttributeCodeByHeaderMapping($attributeCode);
+        // load the header keys
+        $headers = array_flip($this->getHeaders());
 
-            if (!$this->hasHeader($attributeCode)) {
-                continue;
-            }
-
+        // iterate over the attributes and append them to the row
+        foreach ($row as $key => $attributeValue) {
             // query whether or not we've a attribute value found
-            $attributeValue = $this->getValue($attributeCode);
-            if ($attributeValue == null) {
+            if ($attributeValue === null) {
                 continue;
             }
+
+            // query whether or not attribute with the found code exists
+            if (!isset($attributes[$attributeCode = $headers[$key]])) {
+                continue;
+            }
+
+            // if yes, load the attribute by its code
+            $attribute = $attributes[$attributeCode];
 
             // load the backend type => to find the apropriate entity
             $backendType = $attribute[MemberNames::BACKEND_TYPE];
@@ -103,9 +111,6 @@ class ProductAttributeObserver extends AbstractProductImportObserver
                 $this->getSystemLogger()->warning(sprintf('Found EMTPY backend type for attribute %s', $attributeCode));
                 continue;
             }
-
-            // load the supported backend types
-            $backendTypes = $this->getBackendTypes();
 
             // do nothing on static backend type
             if ($backendType === 'static') {
@@ -115,15 +120,15 @@ class ProductAttributeObserver extends AbstractProductImportObserver
             // query whether or not we've found a supported backend type
             if (isset($backendTypes[$backendType])) {
                 // initialize attribute ID/code and backend type
-                $this->setAttributeId($attributeId);
-                $this->setAttributeCode($attributeCode);
-                $this->setBackendType($backendType);
+                $this->attributeId = $attribute[MemberNames::ATTRIBUTE_ID];
+                $this->attributeCode = $attributeCode;
+                $this->backendType = $backendType;
 
                 // initialize the persist method for the found backend type
                 list ($persistMethod, ) = $backendTypes[$backendType];
 
                 // set the attribute value
-                $this->setAttributeValue($attributeValue);
+                $this->attributeValue = $attributeValue;
 
                 // load the prepared values
                 $entity = $this->initializeAttribute($this->prepareAttributes());
@@ -137,8 +142,8 @@ class ProductAttributeObserver extends AbstractProductImportObserver
             $this->getSystemLogger()->debug(
                 sprintf(
                     'Found invalid backend type %s for attribute %s in file %s on line %s',
-                    $backendType,
-                    $attributeCode,
+                    $this->backendType,
+                    $this->attributeCode,
                     $this->getFilename(),
                     $this->getLineNumber()
                 )
@@ -154,37 +159,28 @@ class ProductAttributeObserver extends AbstractProductImportObserver
     protected function prepareAttributes()
     {
 
-        // load the attribute value
-        $attributeValue = $this->getAttributeValue();
-
         // laod the callbacks for the actual attribute code
-        $callbacks = $this->getCallbacksByType($this->getAttributeCode());
+        $callbacks = $this->getCallbacksByType($this->attributeCode);
 
         // invoke the pre-cast callbacks
         foreach ($callbacks as $callback) {
-            $attributeValue = $callback->handle($attributeValue);
+            $this->attributeValue = $callback->handle($this->attributeValue);
         }
 
         // load the ID of the product that has been created recently
         $lastEntityId = $this->getPrimaryKey();
 
-        // load the ID of the attribute to create the values for
-        $attributeId = $this->getAttributeId();
-
         // load the store ID
         $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
 
-        // load the backend type of the actual attribute
-        $backendType = $this->getBackendType();
-
         // cast the value based on the backend type
-        $castedValue = $this->castValueByBackendType($backendType, $attributeValue);
+        $castedValue = $this->castValueByBackendType($this->backendType, $this->attributeValue);
 
         // prepare the attribute values
         return $this->initializeEntity(
             array(
                 MemberNames::ENTITY_ID    => $lastEntityId,
-                MemberNames::ATTRIBUTE_ID => $attributeId,
+                MemberNames::ATTRIBUTE_ID => $this->attributeId,
                 MemberNames::STORE_ID     => $storeId,
                 MemberNames::VALUE        => $castedValue
             )
@@ -211,94 +207,6 @@ class ProductAttributeObserver extends AbstractProductImportObserver
     protected function getPrimaryKey()
     {
         return $this->getLastEntityId();
-    }
-
-    /**
-     * Set's the attribute value to process.
-     *
-     * @param mixed $attributeValue The attribute value
-     *
-     * @return void
-     */
-    protected function setAttributeValue($attributeValue)
-    {
-        $this->attributeValue = $attributeValue;
-    }
-
-    /**
-     * Return's the attribute value to process.
-     *
-     * @return mixed The attribute value
-     */
-    protected function getAttributeValue()
-    {
-        return $this->attributeValue;
-    }
-
-    /**
-     * Set's the backend type of the attribute to create the values for.
-     *
-     * @param string $backendType The backend type
-     *
-     * @return void
-     */
-    protected function setBackendType($backendType)
-    {
-        $this->backendType = $backendType;
-    }
-
-    /**
-     * Return's the backend type of the attribute to create the values for.
-     *
-     * @return string The backend type
-     */
-    protected function getBackendType()
-    {
-        return $this->backendType;
-    }
-
-    /**
-     * Set's the attribute code of the attribute to create the values for.
-     *
-     * @param string $attributeCode The attribute code
-     *
-     * @return void
-     */
-    protected function setAttributeCode($attributeCode)
-    {
-        $this->attributeCode = $attributeCode;
-    }
-
-    /**
-     * Return's the attribute code of the attribute to create the values for.
-     *
-     * @return string The attribute code
-     */
-    protected function getAttributeCode()
-    {
-        return $this->attributeCode;
-    }
-
-    /**
-     * Set's the ID of the attribute to create the values for.
-     *
-     * @param integer $attributeId The attribute ID
-     *
-     * @return void
-     */
-    protected function setAttributeId($attributeId)
-    {
-        $this->attributeId = $attributeId;
-    }
-
-    /**
-     * Return's the ID of the attribute to create the values for.
-     *
-     * @return integer The attribute ID
-     */
-    protected function getAttributeId()
-    {
-        return $this->attributeId;
     }
 
     /**

@@ -57,25 +57,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     );
 
     /**
-     * Mappings for attribute code => CSV column header.
-     *
-     * @var array
-     */
-    protected $headerMappings = array(
-        'status' => 'product_online',
-        'tax_class_id' => 'tax_class_name',
-        'price_type'  => 'bundle_price_type',
-        'sku_type' => 'bundle_sku_type',
-        'price_view' => 'bundle_price_view',
-        'weight_type' => 'bundle_weight_type',
-        'image' => 'base_image',
-        'image_label' => 'base_image_label',
-        'thumbnail' => 'thumbnail_image',
-        'thumbnail_label' => 'thumbnail_image_label',
-        'shipment_type' => 'bundle_shipment_type'
-    );
-
-    /**
      * Mappings for the table column => CSV column header.
      *
      * @var array
@@ -226,26 +207,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
                 $this->getLineNumber()
             )
         );
-    }
-
-    /**
-     * Map the passed attribute code, if a header mapping exists and return the
-     * mapped mapping.
-     *
-     * @param string $attributeCode The attribute code to map
-     *
-     * @return string The mapped attribute code, or the original one
-     */
-    public function mapAttributeCodeByHeaderMapping($attributeCode)
-    {
-
-        // query weather or not we've a mapping, if yes, map the attribute code
-        if (isset($this->headerMappings[$attributeCode])) {
-            $attributeCode = $this->headerMappings[$attributeCode];
-        }
-
-        // return the (mapped) attribute code
-        return $attributeCode;
     }
 
     /**
