@@ -144,6 +144,13 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface
     public function getUrlRewriteRepository();
 
     /**
+     * Return's the repository to load the URL rewrite product category relations with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository The repository instance
+     */
+    public function getUrlRewriteProductCategoryRepository();
+
+    /**
      * Return's the attribute option value with the passed value and store ID.
      *
      * @param mixed   $value   The option value
@@ -268,6 +275,17 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface
      * @return array|null The varchar attribute
      */
     public function loadProductVarcharAttribute($entityId, $attributeId, $storeId);
+
+    /**
+     * Return's the URL rewrite product category relation for the passed
+     * product and category ID.
+     *
+     * @param integer $productId  The product ID to load the URL rewrite product category relation for
+     * @param integer $categoryId The category ID to load the URL rewrite product category relation for
+     *
+     * @return array|null The URL rewrite product category relations
+     */
+    public function loadUrlRewriteProductCategory($productId, $categoryId);
 
     /**
      * Persist's the passed product data and return's the ID.

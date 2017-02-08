@@ -51,18 +51,4 @@ class UrlRewriteProductCategoryUpdateProcessor extends AbstractUpdateProcessor
             $utilityClassName::UPDATE_URL_REWRITE_PRODUCT_CATEGORY => $utilityClassName::UPDATE_URL_REWRITE_PRODUCT_CATEGORY
         );
     }
-
-    /**
-     * Update's the passed row.
-     *
-     * @param array       $row  The row to update
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return string The ID of the updated product
-     */
-    public function execute($row, $name = null)
-    {
-        parent::execute($row, $name);
-        return $row[MemberNames::ENTITY_ID];
-    }
 }
