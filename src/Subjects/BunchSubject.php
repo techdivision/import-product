@@ -524,15 +524,27 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     }
 
     /**
-     * Persist's the URL write with the passed data.
+     * Persist's the URL rewrite with the passed data.
      *
      * @param array $row The URL rewrite to persist
      *
-     * @return void
+     * @return string The ID of the persisted entity
      */
     public function persistUrlRewrite($row)
     {
-        $this->getProductProcessor()->persistUrlRewrite($row);
+        return $this->getProductProcessor()->persistUrlRewrite($row);
+    }
+
+    /**
+     * Persist's the URL rewrite product => category relation with the passed data.
+     *
+     * @param array $row The URL rewrite product => category relation to persist
+     *
+     * @return void
+     */
+    public function persistUrlRewriteProductCategory($row)
+    {
+        $this->getProductProcessor()->persistUrlRewriteProductCategory($row);
     }
 
     /**

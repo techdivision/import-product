@@ -109,6 +109,13 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface
     public function getUrlRewriteAction();
 
     /**
+     * Return's the action with the URL rewrite product category CRUD methods.
+     *
+     * @return \TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction The action instance
+     */
+    public function getUrlRewriteProductCategoryAction();
+
+    /**
      * Return's the repository to load the products with.
      *
      * @return \TechDivision\Import\Product\Repositories\ProductRepository The repository instance
@@ -368,9 +375,19 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface
      * @param array       $row  The URL rewrite to persist
      * @param string|null $name The name of the prepared statement that has to be executed
      *
-     * @return void
+     * @return string The ID of the persisted entity
      */
     public function persistUrlRewrite($row, $name = null);
+
+    /**
+     * Persist's the URL rewrite product => category relation with the passed data.
+     *
+     * @param array       $row  The URL rewrite product => category relation to persist
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function persistUrlRewriteProductCategory($row, $name = null);
 
     /**
      * Delete's the entity with the passed attributes.

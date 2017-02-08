@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha26
+
+## Features
+
+* None
+
+## Bugfixes
+
+* Add URL rewrite product category relations to table catalog_url_rewrite_product_category
+
 # Version 1.0.0-alpha25
 
 ## Features

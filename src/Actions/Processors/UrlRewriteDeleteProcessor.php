@@ -52,18 +52,4 @@ class UrlRewriteDeleteProcessor extends AbstractDeleteProcessor
             $utilityClassName::DELETE_URL_REWRITE_BY_SKU => $utilityClassName::DELETE_URL_REWRITE_BY_SKU
         );
     }
-
-    /**
-     * Implements the CRUD functionality the processor is responsible for,
-     * can be one of CREATE, READ, UPDATE or DELETE a entity.
-     *
-     * @param array       $row  The data to handle
-     * @param string|null $name The name of the prepared statement to execute
-     *
-     * @return void
-     */
-    public function execute($row, $name = null)
-    {
-        $this->getPreparedStatement($name)->execute($row);
-    }
 }
