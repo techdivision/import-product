@@ -106,8 +106,17 @@ class UrlRewriteObserver extends AbstractProductImportObserver
                 $this->urlRewriteId = $this->persistUrlRewrite($urlRewrite);
 
                 // initialize and persist the URL rewrite product => category relation
-                $attr = $this->prepareUrlRewriteProductCategoryAttributes();
-                $this->persistUrlRewriteProductCategory($this->initializeUrlRewriteProductCategory($attr));
+                $urlRewriteProductCategory = $this->initializeUrlRewriteProductCategory(
+                    $this->prepareUrlRewriteProductCategoryAttributes()
+                );
+
+                // create a URL rewrite product category relation, if not available yet
+                if ($urlRewriteProductCategory === null) {
+                    continue;
+                }
+
+                // persist the URL rewrite product category relation
+                $this->persistUrlRewriteProductCategory($urlRewriteProductCategory);
             }
         }
     }
@@ -437,7 +446,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      */
     protected function persistUrlRewriteProductCategory($row)
     {
-        $this->getSubject()->persistUrlRewriteProductCategory($row);
+        return $this->getSubject()->persistUrlRewriteProductCategory($row);
     }
 
     /**

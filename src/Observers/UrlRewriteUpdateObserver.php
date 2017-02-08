@@ -206,6 +206,28 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
     }
 
     /**
+     * Initialize the URL rewrite product => category relation with the passed attributes
+     * and returns an instance.
+     *
+     * @param array $attr The URL rewrite product => category relation attributes
+     *
+     * @return array|null The initialized URL rewrite product => category relation
+     */
+    protected function initializeUrlRewriteProductCategory($attr)
+    {
+
+        // initialize product and category ID
+        $productId = $attr[MemberNames::PRODUCT_ID];
+        $categoryId = $attr[MemberNames::CATEGORY_ID];
+
+        // try to load the URL rewrite product category relation for the product/category ID
+        if (!$this->loadUrlRewriteProductCategory($productId, $categoryId)) {
+            // simple return the URL rewrite product category
+            return $attr;
+        }
+    }
+
+    /**
      * Return's the unserialized metadata of the passed URL rewrite. If the
      * metadata doesn't contain a category ID, the category ID of the root
      * category will be added.
@@ -250,5 +272,19 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
     protected function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
     {
         return $this->getSubject()->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
+    }
+
+    /**
+     * Return's the URL rewrite product category relation for the passed
+     * product and category ID.
+     *
+     * @param integer $productId  The product ID to load the URL rewrite product category relation for
+     * @param integer $categoryId The category ID to load the URL rewrite product category relation for
+     *
+     * @return array|false The URL rewrite product category relations
+     */
+    protected function loadUrlRewriteProductCategory($productId, $categoryId)
+    {
+        return $this->getSubject()->loadUrlRewriteProductCategory($productId, $categoryId);
     }
 }

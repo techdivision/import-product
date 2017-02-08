@@ -149,7 +149,8 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                         'getCategory',
                                         'persistUrlRewrite',
                                         'persistUrlRewriteProductCategory',
-                                        'getUrlRewritesByEntityTypeAndEntityId'
+                                        'getUrlRewritesByEntityTypeAndEntityId',
+                                        'loadUrlRewriteProductCategory'
                                     )
                                 )
                                 ->getMock();
@@ -167,6 +168,9 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                         array(ColumnKeys::STORE_VIEW_CODE)
                     )
                     ->willReturnOnConsecutiveCalls(0, 1, 2);
+        $mockSubject->expects($this->any())
+                    ->method('loadUrlRewriteProductCategory')
+                    ->willReturn(array());
         $mockSubject->expects($this->any())
                     ->method('getLastEntityId')
                     ->willReturn($entityId);

@@ -208,6 +208,13 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     protected $urlRewriteRepository;
 
     /**
+     * The repository to load the URL rewrite product category relations with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository
+     */
+    protected $urlRewriteProductCategoryRepository;
+
+    /**
      * Set's the passed connection.
      *
      * @param \PDO $connection The connection to set
@@ -802,6 +809,28 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
+     * Set's the repository to load the URL rewrite product category relations with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository $urlRewriteProductCategoryRepository The repository instance
+     *
+     * @return void
+     */
+    public function setUrlRewriteProductCategoryRepository($urlRewriteProductCategoryRepository)
+    {
+        $this->urlRewriteProductCategoryRepository = $urlRewriteProductCategoryRepository;
+    }
+
+    /**
+     * Return's the repository to load the URL rewrite product category relations with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository The repository instance
+     */
+    public function getUrlRewriteProductCategoryRepository()
+    {
+        return $this->urlRewriteProductCategoryRepository;
+    }
+
+    /**
      * Return's the attribute option value with the passed value and store ID.
      *
      * @param mixed   $value   The option value
@@ -961,6 +990,20 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function loadProductVarcharAttribute($entityId, $attributeId, $storeId)
     {
         return $this->getProductVarcharRepository()->findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId);
+    }
+
+    /**
+     * Return's the URL rewrite product category relation for the passed
+     * product and category ID.
+     *
+     * @param integer $productId  The product ID to load the URL rewrite product category relation for
+     * @param integer $categoryId The category ID to load the URL rewrite product category relation for
+     *
+     * @return array|false The URL rewrite product category relations
+     */
+    public function loadUrlRewriteProductCategory($productId, $categoryId)
+    {
+        return $this->getUrlRewriteProductCategoryRepository()->findOneByProductIdAndCategoryId($productId, $categoryId);
     }
 
     /**

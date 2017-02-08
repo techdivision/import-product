@@ -621,4 +621,14 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                                                          FROM url_rewrite
                                                         WHERE entity_type = ?
                                                           AND entity_id = ?';
+
+    /**
+     * The SQL statement to load the URL rewrite product category relation for the passed product/category ID.
+     *
+     * @var string
+     */
+    const URL_REWRITE_PRODUCT_CATEGORY_BY_PRODUCT_ID_AND_CATEGORY_ID = 'SELECT *
+                                                                          FROM catalog_url_rewrite_product_category
+                                                                         WHERE product_id = :product_id
+                                                                           AND category_id = :category_id';
 }

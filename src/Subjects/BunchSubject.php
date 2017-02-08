@@ -404,6 +404,20 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     }
 
     /**
+     * Return's the URL rewrite product category relation for the passed
+     * product and category ID.
+     *
+     * @param integer $productId  The product ID to load the URL rewrite product category relation for
+     * @param integer $categoryId The category ID to load the URL rewrite product category relation for
+     *
+     * @return array|false The URL rewrite product category relations
+     */
+    public function loadUrlRewriteProductCategory($productId, $categoryId)
+    {
+        return $this->getProductProcessor()->loadUrlRewriteProductCategory($productId, $categoryId);
+    }
+
+    /**
      * Persist's the passed product data and return's the ID.
      *
      * @param array $product The product data to persist

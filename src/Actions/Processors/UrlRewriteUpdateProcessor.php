@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Actions\Processors;
 
 use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
+use TechDivision\Import\Product\Utils\MemberNames;
 
 /**
  * The URL rewrite update processor implementation.
