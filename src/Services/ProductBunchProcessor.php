@@ -124,6 +124,13 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     protected $urlRewriteAction;
 
     /**
+     * The action for URL rewrite product category CRUD methods.
+     *
+     * @var \TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction
+     */
+    protected $urlRewriteProductCategoryAction;
+
+    /**
      * The repository to load the products with.
      *
      * @var \TechDivision\Import\Product\Repositories\ProductRepository
@@ -521,13 +528,35 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
-     * Return's the action with the stock status CRUD methods.
+     * Return's the action with the URL rewrite CRUD methods.
      *
      * @return \TechDivision\Import\Product\Actions\UrlRewriteAction The action instance
      */
     public function getUrlRewriteAction()
     {
         return $this->urlRewriteAction;
+    }
+
+    /**
+     * Set's the action with the URL rewrite product category CRUD methods.
+     *
+     * @param \TechDivision\Import\Product\Actions\UrlRewriteAction $urlRewriteProductCategoryAction The action with the URL rewrite CRUD methods
+     *
+     * @return void
+     */
+    public function setUrlRewriteProductCategoryAction($urlRewriteProductCategoryAction)
+    {
+        $this->urlRewriteProductCategoryAction = $urlRewriteProductCategoryAction;
+    }
+
+    /**
+     * Return's the action with the URL rewrite product category CRUD methods.
+     *
+     * @return \TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction The action instance
+     */
+    public function getUrlRewriteProductCategoryAction()
+    {
+        return $this->urlRewriteProductCategoryAction;
     }
 
     /**
@@ -1070,11 +1099,24 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @param array       $row  The URL rewrite to persist
      * @param string|null $name The name of the prepared statement that has to be executed
      *
-     * @return void
+     * @return string The ID of the persisted entity
      */
     public function persistUrlRewrite($row, $name = null)
     {
-        $this->getUrlRewriteAction()->persist($row, $name);
+        return $this->getUrlRewriteAction()->persist($row, $name);
+    }
+
+    /**
+     * Persist's the URL rewrite product => category relation with the passed data.
+     *
+     * @param array       $row  The URL rewrite product => category relation to persist
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function persistUrlRewriteProductCategory($row, $name = null)
+    {
+        $this->getUrlRewriteProductCategoryAction()->persist($row, $name);
     }
 
     /**

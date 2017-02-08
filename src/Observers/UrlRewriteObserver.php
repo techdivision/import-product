@@ -73,72 +73,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected $urlRewrites = array();
 
     /**
-     * Set's the prepared URL key.
-     *
-     * @param string $urlKey The prepared URL key
-     *
-     * @return void
-     */
-    protected function setUrlKey($urlKey)
-    {
-        $this->urlKey = $urlKey;
-    }
-
-    /**
-     * Return's the prepared URL key.
-     *
-     * @return string The prepared URL key
-     */
-    protected function getUrlKey()
-    {
-        return $this->urlKey;
-    }
-
-    /**
-     * Set's the actual category ID to process.
-     *
-     * @param integer $categoryId The category ID
-     *
-     * @return void
-     */
-    protected function setCategoryId($categoryId)
-    {
-        $this->categoryId = $categoryId;
-    }
-
-    /**
-     * Return's the actual category ID to process.
-     *
-     * @return integer The category ID
-     */
-    protected function getCategoryId()
-    {
-        return $this->categoryId;
-    }
-
-    /**
-     * Set's the actual entity ID to process.
-     *
-     * @param integer $entityId The entity ID
-     *
-     * @return void
-     */
-    protected function setEntityId($entityId)
-    {
-        $this->entityId = $entityId;
-    }
-
-    /**
-     * Return's the actual entity ID to process.
-     *
-     * @return integer The entity ID
-     */
-    protected function getEntityId()
-    {
-        return $this->entityId;
-    }
-
-    /**
      * Process the observer's business logic.
      *
      * @return void
@@ -163,10 +97,17 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         $this->prepareUrlRewrites();
 
         // iterate over the categories and create the URL rewrites
-        foreach ($this->urlRewrites as $urlRewrite) {
+        foreach ($this->urlRewrites as $categoryId => $urlRewrite) {
             // initialize and persist the URL rewrite
             if ($urlRewrite = $this->initializeUrlRewrite($urlRewrite)) {
-                $this->persistUrlRewrite($urlRewrite);
+                // initialize URL rewrite and catagory ID
+                $this->categoryId = $categoryId;
+                $this->entityId = $urlRewrite[MemberNames::ENTITY_ID];
+                $this->urlRewriteId = $this->persistUrlRewrite($urlRewrite);
+
+                // initialize and persist the URL rewrite product => category relation
+                $attr = $this->prepareUrlRewriteProductCategoryAttributes();
+                $this->persistUrlRewriteProductCategory($this->initializeUrlRewriteProductCategory($attr));
             }
         }
     }
@@ -179,6 +120,19 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      * @return array The initialized category product
      */
     protected function initializeUrlRewrite(array $attr)
+    {
+        return $attr;
+    }
+
+    /**
+     * Initialize the URL rewrite product => category relation with the passed attributes
+     * and returns an instance.
+     *
+     * @param array $attr The URL rewrite product => category relation attributes
+     *
+     * @return array The initialized URL rewrite product => category relation
+     */
+    protected function initializeUrlRewriteProductCategory($attr)
     {
         return $attr;
     }
@@ -204,8 +158,8 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         // prepare the URL rewrites
         foreach ($productCategoryIds as $categoryId => $entityId) {
             // set category/entity ID
-            $this->setCategoryId($categoryId);
-            $this->setEntityId($entityId);
+            $this->categoryId = $categoryId;
+            $this->entityId = $entityId;
 
             // prepare the attributes for each URL rewrite
             $this->urlRewrites[$categoryId] = $this->prepareAttributes();
@@ -247,7 +201,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         }
 
         // convert and set the URL key
-        $this->setUrlKey($urlKey);
+        $this->urlKey = $urlKey;
 
         // return TRUE if the URL key has been prepared
         return true;
@@ -261,15 +215,11 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected function prepareAttributes()
     {
 
-        // load entity/category ID
-        $entityId = $this->getEntityId();
-        $categoryId = $this->getCategoryId();
-
         // load the store ID to use
         $storeId = $this->getRowStoreId();
 
         // load the category to create the URL rewrite for
-        $category = $this->getCategory($categoryId);
+        $category = $this->getCategory($this->categoryId);
 
         // initialize the values
         $requestPath = $this->prepareRequestPath($category);
@@ -280,7 +230,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         return $this->initializeEntity(
             array(
                 MemberNames::ENTITY_TYPE      => UrlRewriteObserver::ENTITY_TYPE,
-                MemberNames::ENTITY_ID        => $entityId,
+                MemberNames::ENTITY_ID        => $this->entityId,
                 MemberNames::REQUEST_PATH     => $requestPath,
                 MemberNames::TARGET_PATH      => $targetPath,
                 MemberNames::REDIRECT_TYPE    => 0,
@@ -288,6 +238,24 @@ class UrlRewriteObserver extends AbstractProductImportObserver
                 MemberNames::DESCRIPTION      => null,
                 MemberNames::IS_AUTOGENERATED => 1,
                 MemberNames::METADATA         => $metadata
+            )
+        );
+    }
+
+    /**
+     * Prepare's the URL rewrite product => category relation attributes.
+     *
+     * @return arry The prepared attributes
+     */
+    protected function prepareUrlRewriteProductCategoryAttributes()
+    {
+
+        // return the prepared product
+        return $this->initializeEntity(
+            array(
+                MemberNames::PRODUCT_ID => $this->entityId,
+                MemberNames::CATEGORY_ID => $this->categoryId,
+                MemberNames::URL_REWRITE_ID => $this->urlRewriteId
             )
         );
     }
@@ -328,9 +296,9 @@ class UrlRewriteObserver extends AbstractProductImportObserver
 
         // query whether or not, the category is the root category
         if ($this->isRootCategory($category)) {
-            $requestPath = sprintf('%s.html', $this->getUrlKey());
+            $requestPath = sprintf('%s.html', $this->urlKey);
         } else {
-            $requestPath = sprintf('%s/%s.html', $category[MemberNames::URL_PATH], $this->getUrlKey());
+            $requestPath = sprintf('%s/%s.html', $category[MemberNames::URL_PATH], $this->urlKey);
         }
 
         // return the request path
@@ -449,15 +417,27 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Persist's the URL write with the passed data.
+     * Persist's the URL rewrite with the passed data.
      *
      * @param array $row The URL rewrite to persist
      *
-     * @return void
+     * @return string The ID of the persisted entity
      */
     protected function persistUrlRewrite($row)
     {
-        $this->getSubject()->persistUrlRewrite($row);
+        return $this->getSubject()->persistUrlRewrite($row);
+    }
+
+    /**
+     * Persist's the URL rewrite product => category relation with the passed data.
+     *
+     * @param array $row The URL rewrite product => category relation to persist
+     *
+     * @return void
+     */
+    protected function persistUrlRewriteProductCategory($row)
+    {
+        $this->getSubject()->persistUrlRewriteProductCategory($row);
     }
 
     /**

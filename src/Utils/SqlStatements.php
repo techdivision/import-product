@@ -506,6 +506,40 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                                  WHERE url_rewrite_id = :url_rewrite_id';
 
     /**
+     * The SQL statement to create new URL rewrite product category relations.
+     *
+     * @var string
+     */
+    const CREATE_URL_REWRITE_PRODUCT_CATEGORY = 'INSERT
+                                         INTO catalog_url_rewrite_product_category (
+                                              url_rewrite_id,
+                                              category_id,
+                                              product_id
+                                          )
+                                   VALUES (:url_rewrite_id,
+                                           :category_id,
+                                           :product_id)';
+
+    /**
+     * The SQL statement to update an existing URL rewrite product category relation.
+     *
+     * @var string
+     */
+    const UPDATE_URL_REWRITE_PRODUCT_CATEGORY = 'UPDATE catalog_url_rewrite_product_category
+                                          SET category_id = :category_id,
+                                              product_id = :product_id
+                                        WHERE url_rewrite_id = :url_rewrite_id';
+
+    /**
+     * The SQL statement to remove a existing URL rewrite product category relation.
+     *
+     * @var string
+     */
+    const DELETE_URL_REWRITE_PRODUCT_CATEGORY = 'DELETE
+                                                   FROM catalog_url_rewrite_product_category
+                                                  WHERE url_rewrite_id = :url_rewrite_id';
+
+    /**
      * The SQL statement to remove a existing product.
      *
      * @var string

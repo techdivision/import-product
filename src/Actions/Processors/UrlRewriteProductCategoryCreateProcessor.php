@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\UrlRewriteCreateProcessor
+ * TechDivision\Import\Product\Actions\Processors\UrlRewriteProductCategoryCreateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Actions\Processors;
 use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 
 /**
- * The URL rewrite create processor implementation.
+ * The URL rewrite product category create processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class UrlRewriteCreateProcessor extends AbstractCreateProcessor
+class UrlRewriteProductCategoryCreateProcessor extends AbstractCreateProcessor
 {
 
     /**
@@ -48,21 +48,7 @@ class UrlRewriteCreateProcessor extends AbstractCreateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_URL_REWRITE => $utilityClassName::CREATE_URL_REWRITE
+            $utilityClassName::CREATE_URL_REWRITE_PRODUCT_CATEGORY => $utilityClassName::CREATE_URL_REWRITE_PRODUCT_CATEGORY
         );
-    }
-
-    /**
-     * Persist's the passed row.
-     *
-     * @param array       $row  The row to persist
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return string The last inserted ID
-     */
-    public function execute($row, $name = null)
-    {
-        parent::execute($row, $name);
-        return $this->getConnection()->lastInsertId();
     }
 }
