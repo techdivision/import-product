@@ -7,8 +7,8 @@
 ## Bugfixes
 
 * Add missing update functionality for URL rewrite product category relations
-#
- Version 1.0.0-alpha26
+
+#Version 1.0.0-alpha26
 
 ## Features
 
