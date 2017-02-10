@@ -48,7 +48,7 @@ class ProductAttributeUpdateObserver extends ProductAttributeObserver
         $backendTypes = $this->getBackendTypes();
 
         // initialize the persist method for the found backend type
-        list (, $loadMethod) = $backendTypes[$this->getBackendType()];
+        list (, $loadMethod) = $backendTypes[$this->backendType];
 
         // load store/entity/attribute ID
         $storeId = $attr[MemberNames::STORE_ID];
