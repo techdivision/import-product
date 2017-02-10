@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha28
+
+## Features
+
+* None
+
+## Bugfixes
+
+* Fixed invald method call to ProductAttributeObserver::getBackendType()
+
 # Version 1.0.0-alpha27
 
 ## Features
