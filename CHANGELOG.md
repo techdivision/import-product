@@ -1,3 +1,14 @@
+# Version 1.0.0-alpha29
+
+## Features
+
+* Add method ProductBunchProcessor::getEavAttributeByIsUserDefined() to load the user defined attributes
+* Initialize the callbacks and observers in the BunchSubject::setUp() method instead of Simple class
+
+## Bugfixes
+
+* Fixed invald method call to ProductAttributeObserver::getBackendType()
+
 # Version 1.0.0-alpha28
 
 ## Features

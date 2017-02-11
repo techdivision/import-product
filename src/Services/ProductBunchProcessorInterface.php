@@ -161,6 +161,15 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface
     public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
 
     /**
+     * Return's an array with the available EAV attributes for the passed is user defined flag.
+     *
+     * @param integer $isUserDefined The flag itself
+     *
+     * @return array The array with the EAV attributes matching the passed flag
+     */
+    public function getEavAttributeByIsUserDefined($isUserDefined = 1);
+
+    /**
      * Return's the URL rewrites for the passed URL entity type and ID.
      *
      * @param string  $entityType The entity type to load the URL rewrites for
