@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
+use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Subjects\ExportableTrait;
 use TechDivision\Import\Subjects\ExportableSubjectInterface;
@@ -109,6 +110,81 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      * @var array
      */
     protected $productCategoryIds = array();
+
+    /**
+     * The default mappings for the user defined attributes, based on the attributes frontend input type.
+     *
+     * @var array
+     */
+    protected $defaultFrontendInputCallbackMapping = array(
+        'select' => 'TechDivision\\Import\\Product\\Callbacks\\SelectCallback',
+        'multiselect' => 'TechDivision\\Import\\Product\\Callbacks\\MultiselectCallback',
+        'boolean' => 'TechDivision\\Import\\Product\\Callbacks\\BooleanCallback'
+    );
+
+    /**
+     * The default callback mappings for the Magento standard product attributes.
+     *
+     * @var array
+     */
+    protected $defaultCallbackMappings = array(
+        'visibility'           => array('TechDivision\\Import\\Product\\Callbacks\\VisibilityCallback'),
+        'tax_class_name'       => array('TechDivision\\Import\\Product\\Callbacks\\TaxClassCallback'),
+        'bundle_price_type'    => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundleTypeCallback'),
+        'bundle_sku_type'      => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundleTypeCallback'),
+        'bundle_weight_type'   => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundleTypeCallback'),
+        'bundle_price_view'    => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundlePriceViewCallback'),
+        'bundle_shipment_type' => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundleShipmentTypeCallback')
+    );
+
+    /**
+     * Intializes the previously loaded global data for exactly one bunch.
+     *
+     * @return void
+     * @see \Importer\Csv\Actions\ProductImportAction::prepare()
+     */
+    public function setUp()
+    {
+
+        // initialize the callback mappings with the default mappings
+        $this->callbackMappings = array_merge($this->callbackMappings, $this->defaultCallbackMappings);
+
+        // load the user defined attributes and add the callback mappings
+        foreach ($this->getEavAttributeByIsUserDefined() as $eavAttribute) {
+            // load attribute code and frontend input type
+            $attributeCode = $eavAttribute[MemberNames::ATTRIBUTE_CODE];
+            $frontendInput = $eavAttribute[MemberNames::FRONTEND_INPUT];
+
+            // query whether or not the array for the mappings has been initialized
+            if (!isset($this->callbackMappings[$attributeCode])) {
+                $this->callbackMappings[$attributeCode] = array();
+            }
+
+            // set the appropriate callback mapping for the attributes input type
+            if (isset($this->defaultFrontendInputCallbackMapping[$frontendInput])) {
+                $this->callbackMappings[$attributeCode][] = $this->defaultFrontendInputCallbackMapping[$frontendInput];
+            }
+        }
+
+        // merge the callback mappings the the one from the configuration file
+        foreach ($this->getConfiguration()->getCallbacks() as $callbackMappings) {
+            foreach ($callbackMappings as $attributeCode => $mappings) {
+                // write a log message, that default callback configuration will
+                // be overwritten with the one from the configuration file
+                if (isset($this->callbackMappings[$attributeCode])) {
+                    $this->getSystemLogger()->notice(
+                        sprintf('Now override callback mappings for attribute %s with values found in configuration file', $attributeCode)
+                    );
+                }
+
+                // override the attributes callbacks
+                $this->callbackMappings[$attributeCode] = $mappings;
+            }
+        }
+
+        // invoke the parent method
+        parent::setUp();
+    }
 
     /**
      * Set's the attribute set of the product that has to be created.
@@ -252,6 +328,18 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId)
     {
         return $this->getProductProcessor()->getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
+    }
+
+    /**
+     * Return's an array with the available EAV attributes for the passed is user defined flag.
+     *
+     * @param integer $isUserDefined The flag itself
+     *
+     * @return array The array with the EAV attributes matching the passed flag
+     */
+    public function getEavAttributeByIsUserDefined($isUserDefined = 1)
+    {
+        return $this->getProductProcessor()->getEavAttributeByIsUserDefined($isUserDefined);
     }
 
     /**

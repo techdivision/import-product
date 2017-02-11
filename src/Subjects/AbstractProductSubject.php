@@ -314,7 +314,7 @@ abstract class AbstractProductSubject extends AbstractSubject
         $this->defaultStore = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::DEFAULT_STORE];
         $this->coreConfigData = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CORE_CONFIG_DATA];
 
-        // prepare the callbacks
+        // invoke the parent method
         parent::setUp();
     }
 

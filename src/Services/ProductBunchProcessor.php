@@ -47,6 +47,13 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     protected $eavAttributeOptionValueRepository;
 
     /**
+     * The repository to access EAV attributes.
+     *
+     * @var \TechDivision\Import\Repositories\EavAttributeRepository
+     */
+    protected $eavAttributeRepository;
+
+    /**
      * The action for product CRUD methods.
      *
      * @var \TechDivision\Import\Product\Actions\ProductAction
@@ -300,6 +307,40 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function getEavAttributeOptionValueRepository()
     {
         return $this->eavAttributeOptionValueRepository;
+    }
+
+    /**
+     * Set's the repository to access EAV attributes.
+     *
+     * @param \TechDivision\Import\Repositories\EavAttributeRepository $eavAttributeRepository The repository to access EAV attributes
+     *
+     * @return void
+     */
+    public function setEavAttributeRepository($eavAttributeRepository)
+    {
+        $this->eavAttributeRepository = $eavAttributeRepository;
+    }
+
+    /**
+     * Return's the repository to access EAV attributes.
+     *
+     * @return \TechDivision\Import\Repositories\EavAttributeRepository The repository instance
+     */
+    public function getEavAttributeRepository()
+    {
+        return $this->eavAttributeRepository;
+    }
+
+    /**
+     * Return's an array with the available EAV attributes for the passed is user defined flag.
+     *
+     * @param integer $isUserDefined The flag itself
+     *
+     * @return array The array with the EAV attributes matching the passed flag
+     */
+    public function getEavAttributeByIsUserDefined($isUserDefined = 1)
+    {
+        return $this->getEavAttributeRepository()->findAllByIsUserDefined($isUserDefined);
     }
 
     /**
