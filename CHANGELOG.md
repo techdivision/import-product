@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha30
+
+## Features
+
+* Fixed invalid mapping for tax class 
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha29
 
 ## Features

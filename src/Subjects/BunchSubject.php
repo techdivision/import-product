@@ -129,7 +129,7 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      */
     protected $defaultCallbackMappings = array(
         'visibility'           => array('TechDivision\\Import\\Product\\Callbacks\\VisibilityCallback'),
-        'tax_class_name'       => array('TechDivision\\Import\\Product\\Callbacks\\TaxClassCallback'),
+        'tax_class_id'         => array('TechDivision\\Import\\Product\\Callbacks\\TaxClassCallback'),
         'bundle_price_type'    => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundleTypeCallback'),
         'bundle_sku_type'      => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundleTypeCallback'),
         'bundle_weight_type'   => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundleTypeCallback'),
