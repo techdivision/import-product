@@ -84,6 +84,7 @@ class ProductWebsiteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getLastEntityId'
                                 )
                             )
+                            ->disableOriginalConstructor()
                             ->getMock();
         $mockSubject->expects($this->any())
                     ->method('getHeaders')

@@ -169,6 +169,18 @@ abstract class AbstractProductSubject extends AbstractSubject
     }
 
     /**
+     * Set's the product processor instance.
+     *
+     * @param \TechDivision\Import\Product\Services\ProductProcessorInterface $productProcessor The product processor instance
+     *
+     * @return void
+     */
+    public function setProductProcessor(ProductProcessorInterface $productProcessor)
+    {
+        $this->productProcessor = $productProcessor;
+    }
+
+    /**
      * Return's the product processor instance.
      *
      * @return \TechDivision\Import\Services\ProductProcessorInterface The product processor instance

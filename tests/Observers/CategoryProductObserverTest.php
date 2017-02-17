@@ -83,6 +83,7 @@ class CategoryProductObserverTest extends \PHPUnit_Framework_TestCase
                                     'hasBeenProcessed'
                                 )
                             )
+                            ->disableOriginalConstructor()
                             ->getMock();
         $mockSubject->expects($this->any())
                     ->method('getHeaders')

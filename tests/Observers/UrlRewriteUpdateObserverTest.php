@@ -153,6 +153,7 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                         'loadUrlRewriteProductCategory'
                                     )
                                 )
+                                ->disableOriginalConstructor()
                                 ->getMock();
         $mockSubject->expects($this->any())
                     ->method('getHeaders')

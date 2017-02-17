@@ -82,6 +82,7 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                                     'deleteProduct'
                                 )
                             )
+                            ->disableOriginalConstructor()
                             ->getMock();
         $mockSubject->expects($this->any())
                     ->method('hasHeader')

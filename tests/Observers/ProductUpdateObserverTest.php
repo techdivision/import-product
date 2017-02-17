@@ -122,6 +122,7 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                     'persistProduct'
                                 )
                             )
+                            ->disableOriginalConstructor()
                             ->getMock();
         $mockSubject->expects($this->any())
                     ->method('getHeaders')
