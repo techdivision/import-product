@@ -152,7 +152,7 @@ abstract class AbstractProductSubject extends AbstractSubject
      * @param \Psr\Log\LoggerInterface                                         $systemLogger      The system logger instance
      * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface $configuration     The subject configuration instance
      * @param \TechDivision\Import\Services\RegistryProcessorInterface         $registryProcessor The registry processor instance
-     * @param \TechDivision\Import\Product\Services\ProductProcessorInterface  $productProcessor The product processor instance
+     * @param \TechDivision\Import\Product\Services\ProductProcessorInterface  $productProcessor  The product processor instance
      */
     public function __construct(
         LoggerInterface $systemLogger,
