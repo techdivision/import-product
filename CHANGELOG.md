@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha31
+
+## Features
+
+* Refactoring for new plugin functionality
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha30
 
 ## Features

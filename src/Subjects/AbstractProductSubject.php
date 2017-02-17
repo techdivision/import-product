@@ -20,10 +20,13 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
+use Psr\Log\LoggerInterface;
 use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Subjects\AbstractSubject;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Services\ProductProcessorInterface;
+use TechDivision\Import\Services\RegistryProcessorInterface;
+use TechDivision\Import\Configuration\SubjectConfigurationInterface;
 
 /**
  * The abstract product subject implementation that provides basic product
@@ -142,6 +145,28 @@ abstract class AbstractProductSubject extends AbstractSubject
      * @var array
      */
     protected $skuStoreViewCodeMapping = array();
+
+    /**
+     * Initialize the subject instance.
+     *
+     * @param \Psr\Log\LoggerInterface                                         $systemLogger      The system logger instance
+     * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface $configuration     The subject configuration instance
+     * @param \TechDivision\Import\Services\RegistryProcessorInterface         $registryProcessor The registry processor instance
+     * @param \TechDivision\Import\Product\Services\ProductProcessorInterface  $productProcessor  The product processor instance
+     */
+    public function __construct(
+        LoggerInterface $systemLogger,
+        SubjectConfigurationInterface $configuration,
+        RegistryProcessorInterface $registryProcessor,
+        ProductProcessorInterface $productProcessor
+    ) {
+
+        // pass the arguments to the parent constructor
+        parent::__construct($systemLogger, $configuration, $registryProcessor);
+
+        // initialize the produc processor
+        $this->productProcessor = $productProcessor;
+    }
 
     /**
      * Set's the product processor instance.

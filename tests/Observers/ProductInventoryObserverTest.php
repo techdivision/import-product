@@ -122,6 +122,7 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
                                     'persistStockStatus'
                                 )
                             )
+                            ->disableOriginalConstructor()
                             ->getMock();
         $mockSubject->setHeaders($headers);
         $mockSubject->expects($this->once())

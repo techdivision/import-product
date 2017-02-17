@@ -94,6 +94,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getCategory'
                                 )
                             )
+                            ->disableOriginalConstructor()
                             ->getMock();
         $mockSubject->expects($this->any())
                     ->method('getHeaders')
@@ -205,6 +206,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getCategory'
                                 )
                             )
+                            ->disableOriginalConstructor()
                             ->getMock();
         $mockSubject->expects($this->any())
                     ->method('getHeaders')

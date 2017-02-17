@@ -48,7 +48,34 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->subject = new BunchSubject();
+
+        // create a mock logger
+        $mockLogger = $this->getMockBuilder('Psr\Log\LoggerInterface')
+                           ->setMethods(get_class_methods('Psr\Log\LoggerInterface'))
+                           ->getMock();
+
+        // create a mock subject configuration
+        $mockSubjectConfiguration = $this->getMockBuilder('TechDivision\Import\Configuration\SubjectConfigurationInterface')
+                                         ->setMethods(get_class_methods('TechDivision\Import\Configuration\SubjectConfigurationInterface'))
+                                         ->getMock();
+
+        // create a mock registry processor
+        $mockRegistryProcessor = $this->getMockBuilder('TechDivision\Import\Services\RegistryProcessorInterface')
+                                      ->setMethods(get_class_methods('TechDivision\Import\Services\RegistryProcessorInterface'))
+                                      ->getMock();
+
+        // create a mock product processor
+        $mockProductProcessor = $this->getMockBuilder('TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
+                                     ->setMethods(get_class_methods('TechDivision\Import\Product\Services\ProductBunchProcessorInterface'))
+                                     ->getMock();
+
+        // create the subject to be tested
+        $this->subject = new BunchSubject(
+            $mockLogger,
+            $mockSubjectConfiguration,
+            $mockRegistryProcessor,
+            $mockProductProcessor
+        );
     }
 
     /**
