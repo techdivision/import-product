@@ -22,7 +22,7 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Utils\Filter\ConvertLiteralUrl;
+use TechDivision\Import\Utils\Filter\ConvertLiteralUrl;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
@@ -342,7 +342,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     /**
      * Initialize's and return's the URL key filter.
      *
-     * @return \TechDivision\Import\Product\Utils\ConvertLiteralUrl The URL key filter
+     * @return \TechDivision\Import\Utils\ConvertLiteralUrl The URL key filter
      */
     protected function getUrlKeyFilter()
     {

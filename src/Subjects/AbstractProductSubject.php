@@ -49,13 +49,6 @@ abstract class AbstractProductSubject extends AbstractSubject
     protected $productProcessor;
 
     /**
-     * The available EAV attribute sets.
-     *
-     * @var array
-     */
-    protected $attributeSets = array();
-
-    /**
      * The available stores.
      *
      * @var array
@@ -164,7 +157,7 @@ abstract class AbstractProductSubject extends AbstractSubject
         // pass the arguments to the parent constructor
         parent::__construct($systemLogger, $configuration, $registryProcessor);
 
-        // initialize the produc processor
+        // initialize the product processor
         $this->productProcessor = $productProcessor;
     }
 
@@ -252,7 +245,6 @@ abstract class AbstractProductSubject extends AbstractSubject
      * @param string $sku The SKU
      *
      * @return void
-     * @uses \Import\Csv\Actions\ProductImportBunchAction::getLastEntityId()
      */
     public function addSkuEntityIdMapping($sku)
     {
@@ -329,9 +321,7 @@ abstract class AbstractProductSubject extends AbstractSubject
         $status = $this->getRegistryProcessor()->getAttribute($this->getSerial());
 
         // load the global data we've prepared initially
-        $this->attributeSets = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ATTRIBUTE_SETS];
         $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
-        $this->attributes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::EAV_ATTRIBUTES];
         $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
         $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
@@ -370,34 +360,6 @@ abstract class AbstractProductSubject extends AbstractSubject
                 RegistryKeys::FILES => array($this->getFilename() => array(RegistryKeys::STATUS => 1)),
                 RegistryKeys::SKU_ENTITY_ID_MAPPING => $this->skuEntityIdMapping,
                 RegistryKeys::SKU_STORE_VIEW_CODE_MAPPING => $this->skuStoreViewCodeMapping
-            )
-        );
-    }
-
-    /**
-     * Return's the attributes for the attribute set of the product that has to be created.
-     *
-     * @return array The attributes
-     * @throws \Exception Is thrown if the attributes for the actual attribute set are not available
-     */
-    public function getAttributes()
-    {
-
-        // load the attribute set of the product that has to be created.
-        $attributeSet = $this->getAttributeSet();
-
-        // query whether or not, the requested EAV attributes are available
-        if (isset($this->attributes[$attributeSetName = $attributeSet[MemberNames::ATTRIBUTE_SET_NAME]])) {
-            return $this->attributes[$attributeSetName];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(
-            sprintf(
-                'Found invalid attribute set name %s in file %s on line %d',
-                $attributeSetName,
-                $this->getFilename(),
-                $this->getLineNumber()
             )
         );
     }
@@ -487,33 +449,6 @@ abstract class AbstractProductSubject extends AbstractSubject
             sprintf(
                 'Found invalid website code %s in file %s on line %d',
                 $code,
-                $this->getFilename(),
-                $this->getLineNumber()
-            )
-        );
-    }
-
-    /**
-     * Return's the attribute set with the passed attribute set name.
-     *
-     * @param string $attributeSetName The name of the requested attribute set
-     *
-     * @return array The attribute set data
-     * @throws \Exception Is thrown, if the attribute set with the passed name is not available
-     */
-    public function getAttributeSetByAttributeSetName($attributeSetName)
-    {
-
-        // query whether or not, the requested attribute set is available
-        if (isset($this->attributeSets[$attributeSetName])) {
-            return $this->attributeSets[$attributeSetName];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(
-            sprintf(
-                'Found invalid attribute set name %s in file %s on line %d',
-                $attributeSetName,
                 $this->getFilename(),
                 $this->getLineNumber()
             )

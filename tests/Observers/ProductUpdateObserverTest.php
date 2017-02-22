@@ -116,7 +116,7 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                     'getHeader',
                                     'getHeaders',
                                     'hasBeenProcessed',
-                                    'getAttributeSetByAttributeSetName',
+                                    'getAttributeSet',
                                     'getSourceDateFormat',
                                     'loadProduct',
                                     'persistProduct'
@@ -136,11 +136,10 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
                         array(ColumnKeys::SKU),
                         array(ColumnKeys::CREATED_AT),
                         array(ColumnKeys::UPDATED_AT),
-                        array(ColumnKeys::ATTRIBUTE_SET_CODE),
                         array(ColumnKeys::SKU),
                         array(ColumnKeys::PRODUCT_TYPE)
                      )
-                    ->willReturnOnConsecutiveCalls(0, 1, 2, 6, 0, 5);
+                    ->willReturnOnConsecutiveCalls(0, 1, 2, 0, 5);
         $mockSubject->expects($this->once())
                     ->method('hasBeenProcessed')
                     ->willReturn(false);
@@ -148,8 +147,7 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getSourceDateFormat')
                     ->willReturn('n/d/y, g:i A');
         $mockSubject->expects($this->once())
-                    ->method('getAttributeSetByAttributeSetName')
-                    ->with($attributeSetCode)
+                    ->method('getAttributeSet')
                     ->willReturn(
                         array(
                             MemberNames::ATTRIBUTE_SET_ID   => 15,

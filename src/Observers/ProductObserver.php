@@ -68,14 +68,13 @@ class ProductObserver extends AbstractProductImportObserver
         $createdAt = $this->getValue(ColumnKeys::CREATED_AT, date('Y-m-d H:i:s'), array($this, 'formatDate'));
         $updatedAt = $this->getValue(ColumnKeys::UPDATED_AT, date('Y-m-d H:i:s'), array($this, 'formatDate'));
 
-        // load the product's attribute set ID
-        $attributeSet = $this->getAttributeSetByAttributeSetName($this->getValue(ColumnKeys::ATTRIBUTE_SET_CODE));
-        $attributeSetId = $attributeSet[MemberNames::ATTRIBUTE_SET_ID];
-        $this->setAttributeSet($attributeSet);
-
         // initialize the product values
         $sku = $this->getValue(ColumnKeys::SKU);
         $productType = $this->getValue(ColumnKeys::PRODUCT_TYPE);
+
+        // load the product's attribute set ID
+        $attributeSet = $this->getAttributeSet();
+        $attributeSetId = $attributeSet[MemberNames::ATTRIBUTE_SET_ID];
 
         // return the prepared product
         return $this->initializeEntity(
@@ -116,37 +115,13 @@ class ProductObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Set's the attribute set of the product that has to be created.
-     *
-     * @param array $attributeSet The attribute set
-     *
-     * @return void
-     */
-    protected function setAttributeSet(array $attributeSet)
-    {
-        $this->getSubject()->setAttributeSet($attributeSet);
-    }
-
-    /**
      * Return's the attribute set of the product that has to be created.
      *
      * @return array The attribute set
      */
     protected function getAttributeSet()
     {
-        $this->getSubject()->getAttributeSet();
-    }
-
-    /**
-     * Return's the attribute set with the passed attribute set name.
-     *
-     * @param string $attributeSetName The name of the requested attribute set
-     *
-     * @return array The attribute set data
-     */
-    protected function getAttributeSetByAttributeSetName($attributeSetName)
-    {
-        return $this->getSubject()->getAttributeSetByAttributeSetName($attributeSetName);
+        return $this->getSubject()->getAttributeSet();
     }
 
     /**
