@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha33
+
+## Features
+
+* Move generic UrlRewrite actions/processor to this techdivision/import library
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha32
 
 ## Features
