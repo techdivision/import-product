@@ -84,13 +84,6 @@ abstract class AbstractProductSubject extends AbstractSubject
     protected $categories = array();
 
     /**
-     * The available root categories.
-     *
-     * @var array
-     */
-    protected $rootCategories = array();
-
-    /**
      * The ID of the product that has been created recently.
      *
      * @var string
@@ -103,20 +96,6 @@ abstract class AbstractProductSubject extends AbstractSubject
      * @var string
      */
     protected $lastSku;
-
-    /**
-     * The store view code the create the product/attributes for.
-     *
-     * @var string
-     */
-    protected $storeViewCode;
-
-    /**
-     * The default store.
-     *
-     * @var array
-     */
-    protected $defaultStore;
 
     /**
      * The Magento 2 configuration.
@@ -265,50 +244,6 @@ abstract class AbstractProductSubject extends AbstractSubject
     }
 
     /**
-     * Set's the store view code the create the product/attributes for.
-     *
-     * @param string $storeViewCode The store view code
-     *
-     * @return void
-     */
-    public function setStoreViewCode($storeViewCode)
-    {
-        $this->storeViewCode = $storeViewCode;
-    }
-
-    /**
-     * Return's the store view code the create the product/attributes for.
-     *
-     * @param string|null $default The default value to return, if the store view code has not been set
-     *
-     * @return string The store view code
-     */
-    public function getStoreViewCode($default = null)
-    {
-
-        // return the store view code, if available
-        if ($this->storeViewCode != null) {
-            return $this->storeViewCode;
-        }
-
-        // if NOT and a default code is available
-        if ($default != null) {
-            // return the default value
-            return $default;
-        }
-    }
-
-    /**
-     * Return's the default store.
-     *
-     * @return array The default store
-     */
-    public function getDefaultStore()
-    {
-        return $this->defaultStore;
-    }
-
-    /**
      * Intializes the previously loaded global data for exactly one bunch.
      *
      * @return void
@@ -325,8 +260,6 @@ abstract class AbstractProductSubject extends AbstractSubject
         $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
         $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
-        $this->rootCategories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ROOT_CATEGORIES];
-        $this->defaultStore = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::DEFAULT_STORE];
         $this->coreConfigData = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CORE_CONFIG_DATA];
 
         // invoke the parent method
