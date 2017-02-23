@@ -104,7 +104,7 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface
     /**
      * Return's the action with the stock status CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\UrlRewriteAction The action instance
+     * @return \TechDivision\Import\Actions\UrlRewriteAction The action instance
      */
     public function getUrlRewriteAction();
 

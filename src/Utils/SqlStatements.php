@@ -549,26 +549,6 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                              WHERE sku = :sku';
 
     /**
-     * The SQL statement to remove a existing URL rewrite.
-     *
-     * @var string
-     */
-    const DELETE_URL_REWRITE = 'DELETE
-                                  FROM url_rewrite
-                                 WHERE url_rewrite_id = :url_rewrite_id';
-
-    /**
-     * The SQL statement to remove all existing URL rewrites related with the SKU passed as parameter.
-     *
-     * @var string
-     */
-    const DELETE_URL_REWRITE_BY_SKU = 'DELETE url_rewrite
-                                         FROM url_rewrite
-                                   INNER JOIN catalog_product_entity
-                                        WHERE catalog_product_entity.sku = :sku
-                                          AND url_rewrite.entity_id = catalog_product_entity.entity_id';
-
-    /**
      * The SQL statement to remove all existing stock status related with the SKU passed as parameter.
      *
      * @var string

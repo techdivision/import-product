@@ -126,7 +126,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * The action for URL rewrite CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\UrlRewriteAction
+     * @var \TechDivision\Import\Actions\UrlRewriteAction
      */
     protected $urlRewriteAction;
 
@@ -566,7 +566,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the URL rewrite CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\UrlRewriteAction $urlRewriteAction The action with the URL rewrite CRUD methods
+     * @param \TechDivision\Import\Actions\UrlRewriteAction $urlRewriteAction The action with the URL rewrite CRUD methods
      *
      * @return void
      */
@@ -578,7 +578,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the URL rewrite CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\UrlRewriteAction The action instance
+     * @return \TechDivision\Import\Actions\UrlRewriteAction The action instance
      */
     public function getUrlRewriteAction()
     {
