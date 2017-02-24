@@ -85,8 +85,10 @@ class UrlRewriteObserver extends AbstractProductImportObserver
             return;
         }
 
-        // try to prepare the URL key, return immediately if not possible
-        if (!$this->prepareUrlKey()) {
+        // try to load the URL key, return immediately if not possible
+        if ($this->hasValue(ColumnKeys::URL_KEY)) {
+            $this->urlKey = $this->getValue(ColumnKeys::URL_KEY);
+        } else {
             return;
         }
 
@@ -173,47 +175,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
             // prepare the attributes for each URL rewrite
             $this->urlRewrites[$categoryId] = $this->prepareAttributes();
         }
-    }
-
-    /**
-     * Prepare's and set's the URL key from the passed row of the CSV file.
-     *
-     * @return boolean TRUE, if the URL key has been prepared, else FALSE
-     */
-    protected function prepareUrlKey()
-    {
-
-        // initialize the URL key
-        $urlKey = null;
-
-        // query whether or not we've a URL key available in the CSV file row
-        if ($urlKeyFound = $this->getValue(ColumnKeys::URL_KEY)) {
-            $urlKey = $urlKeyFound;
-        }
-
-        // query whether or not an URL key has been specified in the CSV file
-        if (empty($urlKey)) {
-            // initialize the product name
-            $productName = null;
-            // if not, try to use the product name
-            if ($nameFound = $this->getValue(ColumnKeys::NAME)) {
-                $productName = $nameFound;
-            }
-
-            // if nor URL key AND product name are empty, return immediately
-            if (empty($productName)) {
-                return false;
-            }
-
-            // initialize the URL key with product name
-            $urlKey = $this->convertNameToUrlKey($productName);
-        }
-
-        // convert and set the URL key
-        $this->urlKey = $urlKey;
-
-        // return TRUE if the URL key has been prepared
-        return true;
     }
 
     /**
