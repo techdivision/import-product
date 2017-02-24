@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha34
+
+## Features
+
+* Extract URL key parsing to separate observer
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha33
 
 ## Features
