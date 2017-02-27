@@ -20,7 +20,6 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
-use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Subjects\ExportableTrait;
 use TechDivision\Import\Subjects\ExportableSubjectInterface;

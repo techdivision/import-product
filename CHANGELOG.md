@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha35
+
+## Features
+
+* Refactoring to make existing functionality more generic
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha34
 
 ## Features
