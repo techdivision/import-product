@@ -20,7 +20,6 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
-use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Subjects\ExportableTrait;
 use TechDivision\Import\Subjects\ExportableSubjectInterface;
@@ -43,19 +42,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      * @var \TechDivision\Import\Subjects\ExportableTrait
      */
     use ExportableTrait;
-
-    /**
-     * The mapping for the supported backend types (for the product entity) => persist methods.
-     *
-     * @var array
-     */
-    protected $backendTypes = array(
-        'datetime' => array('persistProductDatetimeAttribute', 'loadProductDatetimeAttribute'),
-        'decimal'  => array('persistProductDecimalAttribute', 'loadProductDecimalAttribute'),
-        'int'      => array('persistProductIntAttribute', 'loadProductIntAttribute'),
-        'text'     => array('persistProductTextAttribute', 'loadProductTextAttribute'),
-        'varchar'  => array('persistProductVarcharAttribute', 'loadProductVarcharAttribute')
-    );
 
     /**
      * Mappings for the table column => CSV column header.
@@ -105,17 +91,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     protected $productCategoryIds = array();
 
     /**
-     * The default mappings for the user defined attributes, based on the attributes frontend input type.
-     *
-     * @var array
-     */
-    protected $defaultFrontendInputCallbackMapping = array(
-        'select' => 'TechDivision\\Import\\Product\\Callbacks\\SelectCallback',
-        'multiselect' => 'TechDivision\\Import\\Product\\Callbacks\\MultiselectCallback',
-        'boolean' => 'TechDivision\\Import\\Product\\Callbacks\\BooleanCallback'
-    );
-
-    /**
      * The default callback mappings for the Magento standard product attributes.
      *
      * @var array
@@ -131,82 +106,13 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     );
 
     /**
-     * Intializes the previously loaded global data for exactly one bunch.
+     * Return's the default callback mappings.
      *
-     * @return void
-     * @see \Importer\Csv\Actions\ProductImportAction::prepare()
+     * @return array The default callback mappings
      */
-    public function setUp()
+    public function getDefaultCallbackMappings()
     {
-
-        // initialize the callback mappings with the default mappings
-        $this->callbackMappings = array_merge($this->callbackMappings, $this->defaultCallbackMappings);
-
-        // load the user defined attributes and add the callback mappings
-        foreach ($this->getEavAttributeByIsUserDefined() as $eavAttribute) {
-            // load attribute code and frontend input type
-            $attributeCode = $eavAttribute[MemberNames::ATTRIBUTE_CODE];
-            $frontendInput = $eavAttribute[MemberNames::FRONTEND_INPUT];
-
-            // query whether or not the array for the mappings has been initialized
-            if (!isset($this->callbackMappings[$attributeCode])) {
-                $this->callbackMappings[$attributeCode] = array();
-            }
-
-            // set the appropriate callback mapping for the attributes input type
-            if (isset($this->defaultFrontendInputCallbackMapping[$frontendInput])) {
-                $this->callbackMappings[$attributeCode][] = $this->defaultFrontendInputCallbackMapping[$frontendInput];
-            }
-        }
-
-        // merge the callback mappings the the one from the configuration file
-        foreach ($this->getConfiguration()->getCallbacks() as $callbackMappings) {
-            foreach ($callbackMappings as $attributeCode => $mappings) {
-                // write a log message, that default callback configuration will
-                // be overwritten with the one from the configuration file
-                if (isset($this->callbackMappings[$attributeCode])) {
-                    $this->getSystemLogger()->notice(
-                        sprintf('Now override callback mappings for attribute %s with values found in configuration file', $attributeCode)
-                    );
-                }
-
-                // override the attributes callbacks
-                $this->callbackMappings[$attributeCode] = $mappings;
-            }
-        }
-
-        // invoke the parent method
-        parent::setUp();
-    }
-
-    /**
-     * Cast's the passed value based on the backend type information.
-     *
-     * @param string $backendType The backend type to cast to
-     * @param mixed  $value       The value to be casted
-     *
-     * @return mixed The casted value
-     */
-    public function castValueByBackendType($backendType, $value)
-    {
-
-        // cast the value to a valid timestamp
-        if ($backendType === 'datetime') {
-            return \DateTime::createFromFormat($this->getSourceDateFormat(), $value)->format('Y-m-d H:i:s');
-        }
-
-        // cast the value to a float value
-        if ($backendType === 'float') {
-            return (float) $value;
-        }
-
-        // cast the value to an integer
-        if ($backendType === 'int') {
-            return (int) $value;
-        }
-
-        // we don't need to cast strings
-        return $value;
+        return $this->defaultCallbackMappings;
     }
 
     /**
@@ -217,16 +123,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     public function getHeaderStockMappings()
     {
         return $this->headerStockMappings;
-    }
-
-    /**
-     * Return's mapping for the supported backend types (for the product entity) => persist methods.
-     *
-     * @return array The mapping for the supported backend types
-     */
-    public function getBackendTypes()
-    {
-        return $this->backendTypes;
     }
 
     /**
@@ -286,19 +182,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
 
         // return the array with the product's category IDs
         return $categoryIds;
-    }
-
-    /**
-     * Return's the attribute option value with the passed value and store ID.
-     *
-     * @param mixed   $value   The option value
-     * @param integer $storeId The ID of the store
-     *
-     * @return array|boolean The attribute option value instance
-     */
-    public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId)
-    {
-        return $this->getProductProcessor()->getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
     }
 
     /**

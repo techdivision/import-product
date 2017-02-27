@@ -58,7 +58,7 @@ class UrlKeyObserver extends AbstractProductImportObserver
 
         // query whether or not a product name is available
         if ($this->hasValue(ColumnKeys::NAME)) {
-            $this->setValue(ColumnKeys::URL_KEY, $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME)));
+            $this->setValue(ColumnKeys::URL_KEY, $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME)));
             return;
         }
 

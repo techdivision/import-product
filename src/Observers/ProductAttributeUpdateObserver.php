@@ -74,7 +74,7 @@ class ProductAttributeUpdateObserver extends ProductAttributeObserver
      *
      * @return array|null The datetime attribute
      */
-    protected function loadProductDatetimeAttribute($entityId, $attributeId, $storeId)
+    protected function loadDatetimeAttribute($entityId, $attributeId, $storeId)
     {
         return $this->getSubject()->loadProductDatetimeAttribute($entityId, $attributeId, $storeId);
     }
@@ -88,7 +88,7 @@ class ProductAttributeUpdateObserver extends ProductAttributeObserver
      *
      * @return array|null The decimal attribute
      */
-    protected function loadProductDecimalAttribute($entityId, $attributeId, $storeId)
+    protected function loadDecimalAttribute($entityId, $attributeId, $storeId)
     {
         return $this->getSubject()->loadProductDecimalAttribute($entityId, $attributeId, $storeId);
     }
@@ -102,7 +102,7 @@ class ProductAttributeUpdateObserver extends ProductAttributeObserver
      *
      * @return array|null The integer attribute
      */
-    protected function loadProductIntAttribute($entityId, $attributeId, $storeId)
+    protected function loadIntAttribute($entityId, $attributeId, $storeId)
     {
         return $this->getSubject()->loadProductIntAttribute($entityId, $attributeId, $storeId);
     }
@@ -116,7 +116,7 @@ class ProductAttributeUpdateObserver extends ProductAttributeObserver
      *
      * @return array|null The text attribute
      */
-    protected function loadProductTextAttribute($entityId, $attributeId, $storeId)
+    protected function loadTextAttribute($entityId, $attributeId, $storeId)
     {
         return $this->getSubject()->loadProductTextAttribute($entityId, $attributeId, $storeId);
     }
@@ -130,7 +130,7 @@ class ProductAttributeUpdateObserver extends ProductAttributeObserver
      *
      * @return array|null The varchar attribute
      */
-    protected function loadProductVarcharAttribute($entityId, $attributeId, $storeId)
+    protected function loadVarcharAttribute($entityId, $attributeId, $storeId)
     {
         return $this->getSubject()->loadProductVarcharAttribute($entityId, $attributeId, $storeId);
     }

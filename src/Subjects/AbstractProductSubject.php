@@ -22,7 +22,7 @@ namespace TechDivision\Import\Product\Subjects;
 
 use Psr\Log\LoggerInterface;
 use TechDivision\Import\Utils\RegistryKeys;
-use TechDivision\Import\Subjects\AbstractSubject;
+use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Services\ProductProcessorInterface;
 use TechDivision\Import\Services\RegistryProcessorInterface;
@@ -38,7 +38,7 @@ use TechDivision\Import\Configuration\SubjectConfigurationInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-abstract class AbstractProductSubject extends AbstractSubject
+abstract class AbstractProductSubject extends AbstractEavSubject
 {
 
     /**
@@ -117,6 +117,25 @@ abstract class AbstractProductSubject extends AbstractSubject
      * @var array
      */
     protected $skuStoreViewCodeMapping = array();
+
+    /**
+     * Mappings for attribute code => CSV column header.
+     *
+     * @var array
+     */
+    protected $headerMappings = array(
+        'product_online' => 'status',
+        'tax_class_name' => 'tax_class_id',
+        'bundle_price_type' => 'price_type',
+        'bundle_sku_type' => 'sku_type',
+        'bundle_price_view' => 'price_view',
+        'bundle_weight_type' => 'weight_type',
+        'base_image' => 'image',
+        'base_image_label' => 'image_label',
+        'thumbnail_image' => 'thumbnail',
+        'thumbnail_image_label'=> 'thumbnail_label',
+        'bundle_shipment_type' => 'shipment_type'
+    );
 
     /**
      * Initialize the subject instance.
@@ -295,6 +314,41 @@ abstract class AbstractProductSubject extends AbstractSubject
                 RegistryKeys::SKU_STORE_VIEW_CODE_MAPPING => $this->skuStoreViewCodeMapping
             )
         );
+    }
+
+    /**
+     * Return's the header mappings for the actual entity.
+     *
+     * @return array The header mappings
+     */
+    public function getHeaderMappings()
+    {
+        return $this->headerMappings;
+    }
+
+    /**
+     * Return's an array with the available EAV attributes for the passed is user defined flag.
+     *
+     * @param integer $isUserDefined The flag itself
+     *
+     * @return array The array with the EAV attributes matching the passed flag
+     */
+    public function getEavAttributeByIsUserDefined($isUserDefined = 1)
+    {
+        return $this->getProductProcessor()->getEavAttributeByIsUserDefined($isUserDefined);
+    }
+
+    /**
+     * Return's the attribute option value with the passed value and store ID.
+     *
+     * @param mixed   $value   The option value
+     * @param integer $storeId The ID of the store
+     *
+     * @return array|boolean The attribute option value instance
+     */
+    public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId)
+    {
+        return $this->getProductProcessor()->getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
     }
 
     /**
