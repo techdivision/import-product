@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha36
+
+## Features
+
+* Add link type handling to AbstractProductSubject
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha35
 
 ## Features
