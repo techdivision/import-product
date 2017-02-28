@@ -84,6 +84,13 @@ abstract class AbstractProductSubject extends AbstractEavSubject
     protected $categories = array();
 
     /**
+     * The available link types.
+     *
+     * @var array
+     */
+    protected $linkTypes = array();
+
+    /**
      * The ID of the product that has been created recently.
      *
      * @var string
@@ -134,7 +141,13 @@ abstract class AbstractProductSubject extends AbstractEavSubject
         'base_image_label' => 'image_label',
         'thumbnail_image' => 'thumbnail',
         'thumbnail_image_label'=> 'thumbnail_label',
-        'bundle_shipment_type' => 'shipment_type'
+        'bundle_shipment_type' => 'shipment_type',
+        'related_skus' => 'relation_skus',
+        'related_position' => 'relation_position',
+        'crosssell_skus' => 'cross_sell_skus',
+        'crosssell_position' => 'cross_sell_position',
+        'upsell_skus' => 'up_sell_skus',
+        'upsell_position' => 'up_sell_position'
     );
 
     /**
@@ -157,6 +170,16 @@ abstract class AbstractProductSubject extends AbstractEavSubject
 
         // initialize the product processor
         $this->productProcessor = $productProcessor;
+    }
+
+    /**
+     * Return's the available link types.
+     *
+     * @return array The link types
+     */
+    public function getLinkTypes()
+    {
+        return $this->linkTypes;
     }
 
     /**
@@ -277,6 +300,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject
         // load the global data we've prepared initially
         $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
         $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
+        $this->linkTypes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::LINK_TYPES];
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
         $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
         $this->coreConfigData = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CORE_CONFIG_DATA];
