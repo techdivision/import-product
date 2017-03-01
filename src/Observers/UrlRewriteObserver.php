@@ -112,10 +112,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
                     $this->prepareUrlRewriteProductCategoryAttributes()
                 );
 
-                // create a URL rewrite product category relation, if not available yet
-                if ($urlRewriteProductCategory === null) {
-                    continue;
-                }
+                error_log(print_r($urlRewriteProductCategory, true));
 
                 // persist the URL rewrite product category relation
                 $this->persistUrlRewriteProductCategory($urlRewriteProductCategory);

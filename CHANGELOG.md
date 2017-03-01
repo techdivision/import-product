@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha37
+
+## Features
+
+* Fixed issue when updating URL rewrites
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha36
 
 ## Features

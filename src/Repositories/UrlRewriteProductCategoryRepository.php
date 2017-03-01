@@ -77,6 +77,6 @@ class UrlRewriteProductCategoryRepository extends AbstractRepository
         );
         // load and return the URL rewrite product category relation
         $this->urlRewriteProductCategoryStmt->execute($params);
-        return $this->urlRewriteProductCategoryStmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->urlRewriteProductCategoryStmt->fetch(\PDO::FETCH_ASSOC);
     }
 }
