@@ -221,10 +221,12 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
         $categoryId = $attr[MemberNames::CATEGORY_ID];
 
         // try to load the URL rewrite product category relation for the product/category ID
-        if (!$this->loadUrlRewriteProductCategory($productId, $categoryId)) {
-            // simple return the URL rewrite product category
-            return $attr;
+        if ($urlRewriteProductCategory = $this->loadUrlRewriteProductCategory($productId, $categoryId)) {
+            return $this->mergeEntity($urlRewriteProductCategory, $attr);
         }
+
+        // simple return the URL rewrite product category
+        return $attr;
     }
 
     /**

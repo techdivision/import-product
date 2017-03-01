@@ -526,9 +526,9 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
      * @var string
      */
     const UPDATE_URL_REWRITE_PRODUCT_CATEGORY = 'UPDATE catalog_url_rewrite_product_category
-                                          SET category_id = :category_id,
-                                              product_id = :product_id
-                                        WHERE url_rewrite_id = :url_rewrite_id';
+                                                    SET url_rewrite_id = :url_rewrite_id
+                                                  WHERE category_id = :category_id
+                                                    AND product_id = :product_id';
 
     /**
      * The SQL statement to remove a existing URL rewrite product category relation.
