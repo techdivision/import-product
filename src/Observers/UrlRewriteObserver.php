@@ -112,8 +112,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
                     $this->prepareUrlRewriteProductCategoryAttributes()
                 );
 
-                error_log(print_r($urlRewriteProductCategory, true));
-
                 // persist the URL rewrite product category relation
                 $this->persistUrlRewriteProductCategory($urlRewriteProductCategory);
             }
