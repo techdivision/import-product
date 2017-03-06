@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha39
+
+## Features
+
+* None
+
+## Bugfixes
+
+* Use Magento configuration for product URL suffix and category path in product URLs
+
 # Version 1.0.0-alpha38
 
 ## Features

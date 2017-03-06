@@ -22,6 +22,7 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 use TechDivision\Import\Utils\Filter\ConvertLiteralUrl;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
@@ -157,8 +158,14 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         // load the root category, because we need that to create the default product URL rewrite
         $rootCategory = $this->getRootCategory();
 
-        // add the root category ID to the category => product relations
-        $productCategoryIds = $this->getProductCategoryIds();
+        // query whether or not categories has to be used as product URL suffix
+        $productCategoryIds = array();
+        if ($this->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_USE_CATEGORIES, false)) {
+            // if yes, add the category IDs of the products
+            $productCategoryIds = $this->getProductCategoryIds();
+        }
+
+        // at least, add the root category ID to the category => product relations
         $productCategoryIds[$rootCategory[MemberNames::ENTITY_ID]] = $this->getLastEntityId();
 
         // prepare the URL rewrites
@@ -259,11 +266,14 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected function prepareRequestPath(array $category)
     {
 
+        // load the product URL suffix to use
+        $urlSuffix = $this->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html');
+
         // query whether or not, the category is the root category
         if ($this->isRootCategory($category)) {
-            $requestPath = sprintf('%s.html', $this->urlKey);
+            $requestPath = sprintf('%s.%s', $this->urlKey, $urlSuffix);
         } else {
-            $requestPath = sprintf('%s/%s.html', $category[MemberNames::URL_PATH], $this->urlKey);
+            $requestPath = sprintf('%s/%s.%s', $category[MemberNames::URL_PATH], $this->urlKey, $urlSuffix);
         }
 
         // return the request path

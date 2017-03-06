@@ -20,9 +20,10 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 
 /**
  * Test class for the product URL rewrite observer implementation.
@@ -91,7 +92,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'persistUrlRewrite',
                                     'persistUrlRewriteProductCategory',
                                     'getRootCategory',
-                                    'getCategory'
+                                    'getCategory',
+                                    'getCoreConfigData'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -130,6 +132,13 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->exactly(4))
                     ->method('getRootCategory')
                     ->willReturn($category);
+        $mockSubject->expects($this->exactly(2))
+                    ->method('getCoreConfigData')
+                    ->withConsecutive(
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_USE_CATEGORIES, false),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html')
+                    )
+                    ->willReturnOnConsecutiveCalls(true, 'html');
         $mockSubject->expects($this->once())
                     ->method('persistUrlRewrite')
                     ->with(
@@ -204,7 +213,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'persistUrlRewriteProductCategory',
                                     'getRootCategory',
                                     'getRowStoreId',
-                                    'getCategory'
+                                    'getCategory',
+                                    'getCoreConfigData'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -248,6 +258,16 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getRowStoreId')
                     ->willReturn($storeId = 1);
+        $mockSubject->expects($this->exactly(5))
+                    ->method('getCoreConfigData')
+                    ->withConsecutive(
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_USE_CATEGORIES, false),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html')
+                    )
+                    ->willReturnOnConsecutiveCalls(true, 'html', 'html', 'html', 'html');
         $mockSubject->expects($this->exactly(4))
                     ->method('persistUrlRewrite')
                     ->withConsecutive(

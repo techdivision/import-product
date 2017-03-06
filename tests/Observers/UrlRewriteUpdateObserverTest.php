@@ -23,6 +23,7 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 
 /**
  * Test class for the product URL rewrite update observer implementation.
@@ -150,7 +151,8 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                         'persistUrlRewrite',
                                         'persistUrlRewriteProductCategory',
                                         'getUrlRewritesByEntityTypeAndEntityId',
-                                        'loadUrlRewriteProductCategory'
+                                        'loadUrlRewriteProductCategory',
+                                        'getCoreConfigData'
                                     )
                                 )
                                 ->disableOriginalConstructor()
@@ -201,6 +203,19 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getUrlRewritesByEntityTypeAndEntityId')
                     ->with(UrlRewriteObserver::ENTITY_TYPE, $entityId)
                     ->willReturn($urlRewrites);
+        $mockSubject->expects($this->exactly(8))
+                    ->method('getCoreConfigData')
+                    ->withConsecutive(
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_USE_CATEGORIES, false),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html')
+                    )
+                    ->willReturnOnConsecutiveCalls(true, 'html', 'html', 'html', 'html', 'html', 'html', 'html');
         $mockSubject->expects($this->exactly(7))
                     ->method('persistUrlRewrite')
                     ->withConsecutive(
