@@ -22,6 +22,7 @@ namespace TechDivision\Import\Product\Subjects;
 
 use Psr\Log\LoggerInterface;
 use TechDivision\Import\Utils\RegistryKeys;
+use TechDivision\Import\Utils\Generators\GeneratorInterface;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Services\ProductProcessorInterface;
@@ -153,20 +154,22 @@ abstract class AbstractProductSubject extends AbstractEavSubject
     /**
      * Initialize the subject instance.
      *
-     * @param \Psr\Log\LoggerInterface                                         $systemLogger      The system logger instance
-     * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface $configuration     The subject configuration instance
-     * @param \TechDivision\Import\Services\RegistryProcessorInterface         $registryProcessor The registry processor instance
-     * @param \TechDivision\Import\Product\Services\ProductProcessorInterface  $productProcessor  The product processor instance
+     * @param \Psr\Log\LoggerInterface                                         $systemLogger               The system logger instance
+     * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface $configuration              The subject configuration instance
+     * @param \TechDivision\Import\Services\RegistryProcessorInterface         $registryProcessor          The registry processor instance
+     * @param \TechDivision\Import\Utils\Generators\GeneratorInterface         $coreConfigDataUidGenerator The UID generator for the core config data
+     * @param \TechDivision\Import\Product\Services\ProductProcessorInterface  $productProcessor           The product processor instance
      */
     public function __construct(
         LoggerInterface $systemLogger,
         SubjectConfigurationInterface $configuration,
         RegistryProcessorInterface $registryProcessor,
+        GeneratorInterface $coreConfigDataUidGenerator,
         ProductProcessorInterface $productProcessor
     ) {
 
         // pass the arguments to the parent constructor
-        parent::__construct($systemLogger, $configuration, $registryProcessor);
+        parent::__construct($systemLogger, $configuration, $registryProcessor, $coreConfigDataUidGenerator);
 
         // initialize the product processor
         $this->productProcessor = $productProcessor;
@@ -298,12 +301,10 @@ abstract class AbstractProductSubject extends AbstractEavSubject
         $status = $this->getRegistryProcessor()->getAttribute($this->getSerial());
 
         // load the global data we've prepared initially
-        $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
-        $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
         $this->linkTypes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::LINK_TYPES];
-        $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
         $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
-        $this->coreConfigData = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CORE_CONFIG_DATA];
+        $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
+        $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
 
         // invoke the parent method
         parent::setUp();

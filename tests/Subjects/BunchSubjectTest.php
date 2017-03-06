@@ -69,11 +69,17 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
                                      ->setMethods(get_class_methods('TechDivision\Import\Product\Services\ProductBunchProcessorInterface'))
                                      ->getMock();
 
+        // create a generator
+        $mockGenerator = $this->getMockBuilder('TechDivision\Import\Utils\Generators\GeneratorInterface')
+                              ->setMethods(get_class_methods('TechDivision\Import\Utils\Generators\GeneratorInterface'))
+                              ->getMock();
+
         // create the subject to be tested
         $this->subject = new BunchSubject(
             $mockLogger,
             $mockSubjectConfiguration,
             $mockRegistryProcessor,
+            $mockGenerator,
             $mockProductProcessor
         );
     }
