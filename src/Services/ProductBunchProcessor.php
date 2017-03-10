@@ -210,7 +210,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * The repository to load the URL rewrites with.
      *
-     * @var \TechDivision\Import\Product\Repositories\UrlRewriteRepository
+     * @var \TechDivision\Import\Repositories\UrlRewriteRepository
      */
     protected $urlRewriteRepository;
 
@@ -830,7 +830,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to load the URL rewrites with.
      *
-     * @param \TechDivision\Import\Product\Repositories\UrlRewriteRepository $urlRewriteRepository The repository instance
+     * @param \TechDivision\Import\Repositories\UrlRewriteRepository $urlRewriteRepository The repository instance
      *
      * @return void
      */
@@ -842,7 +842,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the repository to load the URL rewrites with.
      *
-     * @return \TechDivision\Import\Product\Repositories\UrlRewriteRepository The repository instance
+     * @return \TechDivision\Import\Repositories\UrlRewriteRepository The repository instance
      */
     public function getUrlRewriteRepository()
     {
