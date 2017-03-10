@@ -593,16 +593,6 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                                                AND catalog_category_product.product_id = catalog_product_entity.entity_id';
 
     /**
-     * The SQL statement to load the URL rewrites for the passed entity type and ID.
-     *
-     * @var string
-     */
-    const URL_REWRITES_BY_ENTITY_TYPE_AND_ENTITY_ID = 'SELECT *
-                                                         FROM url_rewrite
-                                                        WHERE entity_type = ?
-                                                          AND entity_id = ?';
-
-    /**
      * The SQL statement to load the URL rewrite product category relation for the passed product/category ID.
      *
      * @var string

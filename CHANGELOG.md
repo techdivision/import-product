@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha40
+
+## Features
+
+* Move UrlRewriteRepository to techdivision/import library
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha39
 
 ## Features
