@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha41
+
+## Features
+
+* Add PreLoadEntityIdObserver to temporary store the entity IDs of deleted products
+
+## Bugfixes
+
+* Removed unnecessary array merging into registry in AbstractProductSubject::tearDown() method
+
 # Version 1.0.0-alpha40
 
 ## Features
