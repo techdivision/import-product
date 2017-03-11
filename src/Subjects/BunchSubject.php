@@ -23,6 +23,8 @@ namespace TechDivision\Import\Product\Subjects;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Subjects\ExportableTrait;
 use TechDivision\Import\Subjects\ExportableSubjectInterface;
+use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\RegistryKeys;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -42,6 +44,13 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      * @var \TechDivision\Import\Subjects\ExportableTrait
      */
     use ExportableTrait;
+
+    /**
+     * The array with the pre-loaded entity IDs.
+     *
+     * @var array
+     */
+    protected $preLoadedEntityIds = array();
 
     /**
      * Mappings for the table column => CSV column header.
@@ -104,6 +113,29 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
         'bundle_price_view'    => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundlePriceViewCallback'),
         'bundle_shipment_type' => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundleShipmentTypeCallback')
     );
+
+    /**
+     * Clean up the global data after importing the bunch.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+
+        // invoke the parent method
+        parent::tearDown();
+
+        // load the registry processor
+        $registryProcessor = $this->getRegistryProcessor();
+
+        // update the status
+        $registryProcessor->mergeAttributesRecursive(
+            $this->getSerial(),
+            array(
+                RegistryKeys::PRE_LOADED_ENTITY_IDS => $this->preLoadedEntityIds,
+            )
+        );
+    }
 
     /**
      * Return's the default callback mappings.
@@ -182,6 +214,24 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
 
         // return the array with the product's category IDs
         return $categoryIds;
+    }
+
+    /**
+     * Pre-load the entity ID for the product with the passed SKU
+     * and persist it temporary in the registry.
+     *
+     * @param string $sku The SKU of the product to be pre-loaded
+     *
+     * @return void
+     */
+    public function preLoadEntityId($sku)
+    {
+
+        // load the product by the passed SKU
+        $product = $this->loadProduct($sku);
+
+        // temporary persist the pre-loaded SKU => entity ID mapping
+        $this->preLoadedEntityIds[$sku]= $product[MemberNames::ENTITY_ID];
     }
 
     /**

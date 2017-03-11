@@ -324,12 +324,6 @@ abstract class AbstractProductSubject extends AbstractEavSubject
         // load the registry processor
         $registryProcessor = $this->getRegistryProcessor();
 
-        // update the status with the SKU => entity ID mapping
-        $registryProcessor->mergeAttributesRecursive(
-            $this->getSerial(),
-            array()
-        );
-
         // update the status
         $registryProcessor->mergeAttributesRecursive(
             $this->getSerial(),
