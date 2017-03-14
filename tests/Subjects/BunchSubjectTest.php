@@ -49,11 +49,6 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
 
-        // create a mock logger
-        $mockLogger = $this->getMockBuilder('Psr\Log\LoggerInterface')
-                           ->setMethods(get_class_methods('Psr\Log\LoggerInterface'))
-                           ->getMock();
-
         // create a mock subject configuration
         $mockSubjectConfiguration = $this->getMockBuilder('TechDivision\Import\Configuration\SubjectConfigurationInterface')
                                          ->setMethods(get_class_methods('TechDivision\Import\Configuration\SubjectConfigurationInterface'))
@@ -76,10 +71,10 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
 
         // create the subject to be tested
         $this->subject = new BunchSubject(
-            $mockLogger,
             $mockSubjectConfiguration,
             $mockRegistryProcessor,
             $mockGenerator,
+            array(),
             $mockProductProcessor
         );
     }
