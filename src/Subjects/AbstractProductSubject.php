@@ -154,22 +154,22 @@ abstract class AbstractProductSubject extends AbstractEavSubject
     /**
      * Initialize the subject instance.
      *
-     * @param \Psr\Log\LoggerInterface                                         $systemLogger               The system logger instance
      * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface $configuration              The subject configuration instance
      * @param \TechDivision\Import\Services\RegistryProcessorInterface         $registryProcessor          The registry processor instance
      * @param \TechDivision\Import\Utils\Generators\GeneratorInterface         $coreConfigDataUidGenerator The UID generator for the core config data
+     * @param array                                                            $systemLoggers              The array with the system logger instances
      * @param \TechDivision\Import\Product\Services\ProductProcessorInterface  $productProcessor           The product processor instance
      */
     public function __construct(
-        LoggerInterface $systemLogger,
         SubjectConfigurationInterface $configuration,
         RegistryProcessorInterface $registryProcessor,
         GeneratorInterface $coreConfigDataUidGenerator,
+        array $systemLoggers,
         ProductProcessorInterface $productProcessor
     ) {
 
         // pass the arguments to the parent constructor
-        parent::__construct($systemLogger, $configuration, $registryProcessor, $coreConfigDataUidGenerator);
+        parent::__construct($configuration, $registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
 
         // initialize the product processor
         $this->productProcessor = $productProcessor;
