@@ -21,7 +21,6 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
-use TechDivision\Import\Product\Utils\SqlStatements;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
