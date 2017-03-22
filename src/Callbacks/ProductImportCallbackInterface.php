@@ -33,13 +33,4 @@ use TechDivision\Import\Callbacks\CallbackInterface;
  */
 interface ProductImportCallbackInterface extends CallbackInterface
 {
-
-    /**
-     * Will be invoked by a observer it has been registered for.
-     *
-     * @param mixed $value The value to handle
-     *
-     * @return mixed The modified value
-     */
-    public function handle($value);
 }

@@ -175,11 +175,8 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
 
         // throw an exception, if not
         throw new \Exception(
-            sprintf(
-                'Found invalid visibility %s in file %s on line %d',
-                $visibility,
-                $this->getFilename(),
-                $this->getLineNumber()
+            $this->appendExceptionSuffix(
+                sprintf('Found invalid visibility %s', $visibility)
             )
         );
     }
