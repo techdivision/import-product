@@ -398,11 +398,8 @@ abstract class AbstractProductSubject extends AbstractEavSubject
 
         // throw an exception, if not
         throw new \Exception(
-            sprintf(
-                'Found invalid store view code %s in file %s on line %d',
-                $storeViewCode,
-                $this->getFilename(),
-                $this->getLineNumber()
+            $this->appendExceptionSuffix(
+                sprintf('Found invalid store view code %s', $storeViewCode)
             )
         );
     }
@@ -425,11 +422,8 @@ abstract class AbstractProductSubject extends AbstractEavSubject
 
         // throw an exception, if not
         throw new \Exception(
-            sprintf(
-                'Found invalid tax class name %s in file %s on line %d',
-                $taxClassName,
-                $this->getFilename(),
-                $this->getLineNumber()
+            $this->appendExceptionSuffix(
+                sprintf('Found invalid tax class name %s', $taxClassName)
             )
         );
     }
@@ -452,11 +446,8 @@ abstract class AbstractProductSubject extends AbstractEavSubject
 
         // throw an exception, if not
         throw new \Exception(
-            sprintf(
-                'Found invalid website code %s in file %s on line %d',
-                $code,
-                $this->getFilename(),
-                $this->getLineNumber()
+            $this->appendExceptionSuffix(
+                sprintf('Found invalid website code %s', $code)
             )
         );
     }
@@ -479,11 +470,8 @@ abstract class AbstractProductSubject extends AbstractEavSubject
 
         // throw an exception, if not
         throw new \Exception(
-            sprintf(
-                'Can\'t find category with path %s in file %s on line %d',
-                $path,
-                $this->getFilename(),
-                $this->getLineNumber()
+            $this->appendExceptionSuffix(
+                sprintf('Can\'t find category with path %s', $path)
             )
         );
     }
@@ -508,11 +496,8 @@ abstract class AbstractProductSubject extends AbstractEavSubject
 
         // throw an exception if the category is NOT available
         throw new \Exception(
-            sprintf(
-                'Can\'t load category with ID %d in file %s on line %d',
-                $categoryId,
-                $this->getFilename(),
-                $this->getLineNumber()
+            $this->appendExceptionSuffix(
+                sprintf('Can\'t load category with ID %d', $categoryId)
             )
         );
     }
@@ -538,6 +523,10 @@ abstract class AbstractProductSubject extends AbstractEavSubject
         }
 
         // throw an exception if the root category is NOT available
-        throw new \Exception(sprintf('Root category for %s is not available', $storeViewCode));
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Root category for %s is not available', $storeViewCode)
+            )
+        );
     }
 }

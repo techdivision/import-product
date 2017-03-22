@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha43
+
+## Features
+
+* Switch to latest callback interface and optimise error messages
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha42
 
 ## Features
