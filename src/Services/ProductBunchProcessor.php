@@ -20,6 +20,33 @@
 
 namespace TechDivision\Import\Product\Services;
 
+use TechDivision\Import\Actions\UrlRewriteAction;
+use TechDivision\Import\Repositories\UrlRewriteRepository;
+use TechDivision\Import\Product\Repositories\ProductRepository;
+use TechDivision\Import\Product\Repositories\ProductWebsiteRepository;
+use TechDivision\Import\Product\Repositories\ProductDatetimeRepository;
+use TechDivision\Import\Product\Repositories\ProductDecimalRepository;
+use TechDivision\Import\Product\Repositories\ProductIntRepository;
+use TechDivision\Import\Product\Repositories\ProductTextRepository;
+use TechDivision\Import\Product\Repositories\ProductVarcharRepository;
+use TechDivision\Import\Product\Repositories\CategoryProductRepository;
+use TechDivision\Import\Product\Repositories\StockStatusRepository;
+use TechDivision\Import\Product\Repositories\StockItemRepository;
+use TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository;
+use TechDivision\Import\Repositories\EavAttributeOptionValueRepository;
+use TechDivision\Import\Repositories\EavAttributeRepository;
+use TechDivision\Import\Product\Actions\CategoryProductAction;
+use TechDivision\Import\Product\Actions\ProductDatetimeAction;
+use TechDivision\Import\Product\Actions\ProductDecimalAction;
+use TechDivision\Import\Product\Actions\ProductIntAction;
+use TechDivision\Import\Product\Actions\ProductAction;
+use TechDivision\Import\Product\Actions\ProductTextAction;
+use TechDivision\Import\Product\Actions\ProductVarcharAction;
+use TechDivision\Import\Product\Actions\ProductWebsiteAction;
+use TechDivision\Import\Product\Actions\StockItemAction;
+use TechDivision\Import\Product\Actions\StockStatusAction;
+use TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction;
+
 /**
  * The product bunch processor implementation.
  *
@@ -220,6 +247,95 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @var \TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository
      */
     protected $urlRewriteProductCategoryRepository;
+
+    /**
+     * Initialize the processor with the necessary assembler and repository instances.
+     *
+     * @param \PDO                                                                        $connection                          The PDO connection to use
+     * @param \TechDivision\Import\Product\Repositories\ProductRepository                 $productRepository                   The product repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductWebsiteRepository          $productWebsiteRepository            The product website repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductDatetimeRepository         $productDatetimeRepository           The product datetime repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductDecimalRepository          $productDecimalRepository            The product decimal repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductIntRepository              $productIntRepository                The product integer repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductTextRepository             $productTextRepository               The product text repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepository          $productVarcharRepository            The product varchar repository to use
+     * @param \TechDivision\Import\Product\Repositories\CategoryProductRepository         $categoryProductRepository           The category product repository to use
+     * @param \TechDivision\Import\Product\Repositories\StockStatusRepository             $stockStatusRepository               The stock status repository to use
+     * @param \TechDivision\Import\Product\Repositories\StockItemRepository               $stockItemRepository                 The stock item repository to use
+     * @param \TechDivision\Import\Repositories\UrlRewriteRepository                      $urlRewriteRepository                The URL rewrite repository to use
+     * @param \TechDivision\Import\Repositories\UrlRewriteRepository                      $urlRewriteProductCategoryRepository The URL rewrite product category repository to use
+     * @param \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository $eavAttributeOptionValueRepository   The EAV attribute option value repository to use
+     * @param \TechDivision\Import\Repositories\EavAttributeRepository                    $eavAttributeRepository              The EAV attribute repository to use
+     * @param \TechDivision\Import\Product\Actions\CategoryProductAction                  $categoryProductAction               The category product action to use
+     * @param \TechDivision\Import\Product\Actions\ProductDatetimeAction                  $productDatetimeAction               The product datetime action to use
+     * @param \TechDivision\Import\Product\Actions\ProductDecimalAction                   $productDecimalAction                The product decimal action to use
+     * @param \TechDivision\Import\Product\Actions\ProductIntAction                       $productIntAction                    The product integer action to use
+     * @param \TechDivision\Import\Product\Actions\ProductAction                          $productAction                       The product action to use
+     * @param \TechDivision\Import\Product\Actions\ProductTextAction                      $productTextAction                   The product text action to use
+     * @param \TechDivision\Import\Product\Actions\ProductVarcharAction                   $productVarcharAction                The product varchar action to use
+     * @param \TechDivision\Import\Product\Actions\ProductWebsiteAction                   $productWebsiteAction                The product website action to use
+     * @param \TechDivision\Import\Product\Actions\StockItemAction                        $stockItemAction                     The stock item action to use
+     * @param \TechDivision\Import\Product\Actions\StockStatusAction                      $stockStatusAction                   The stock status action to use
+     * @param \TechDivision\Import\Actions\UrlRewriteAction                               $urlRewriteAction                    The URL rewrite action to use
+     * @param \TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction        $urlRewriteProductCategoryAction     The URL rewrite product category action to use
+     */
+    public function __construct(
+        \PDO $connection,
+        ProductRepository $productRepository,
+        ProductWebsiteRepository $productWebsiteRepository,
+        ProductDatetimeRepository $productDatetimeRepository,
+        ProductDecimalRepository $productDecimalRepository,
+        ProductIntRepository $productIntRepository,
+        ProductTextRepository $productTextRepository,
+        ProductVarcharRepository $productVarcharRepository,
+        CategoryProductRepository $categoryProductRepository,
+        StockStatusRepository $stockStatusRepository,
+        StockItemRepository $stockItemRepository,
+        UrlRewriteRepository $urlRewriteRepository,
+        UrlRewriteProductCategoryRepository $urlRewriteProductCategoryRepository,
+        EavAttributeOptionValueRepository $eavAttributeOptionValueRepository,
+        EavAttributeRepository $eavAttributeRepository,
+        CategoryProductAction $categoryProductAction,
+        ProductDatetimeAction $productDatetimeAction,
+        ProductDecimalAction $productDecimalAction,
+        ProductIntAction $productIntAction,
+        ProductAction $productAction,
+        ProductTextAction $productTextAction,
+        ProductVarcharAction $productVarcharAction,
+        ProductWebsiteAction $productWebsiteAction,
+        StockItemAction $stockItemAction,
+        StockStatusAction $stockStatusAction,
+        UrlRewriteAction $urlRewriteAction,
+        UrlRewriteProductCategoryAction $urlRewriteProductCategoryAction
+    ) {
+        $this->setConnection($connection);
+        $this->setProductRepository($productRepository);
+        $this->setProductWebsiteRepository($productWebsiteRepository);
+        $this->setProductDatetimeRepository($productDatetimeRepository);
+        $this->setProductDecimalRepository($productDecimalRepository);
+        $this->setProductIntRepository($productIntRepository);
+        $this->setProductTextRepository($productTextRepository);
+        $this->setProductVarcharRepository($productVarcharRepository);
+        $this->setCategoryProductRepository($categoryProductRepository);
+        $this->setStockStatusRepository($stockStatusRepository);
+        $this->setStockItemRepository($stockItemRepository);
+        $this->setUrlRewriteRepository($urlRewriteRepository);
+        $this->setUrlRewriteProductCategoryRepository($urlRewriteProductCategoryRepository);
+        $this->setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository);
+        $this->setEavAttributeRepository($eavAttributeRepository);
+        $this->setCategoryProductAction($categoryProductAction);
+        $this->setProductDatetimeAction($productDatetimeAction);
+        $this->setProductDecimalAction($productDecimalAction);
+        $this->setProductIntAction($productIntAction);
+        $this->setProductAction($productAction);
+        $this->setProductTextAction($productTextAction);
+        $this->setProductVarcharAction($productVarcharAction);
+        $this->setProductWebsiteAction($productWebsiteAction);
+        $this->setStockItemAction($stockItemAction);
+        $this->setStockStatusAction($stockStatusAction);
+        $this->setUrlRewriteAction($urlRewriteAction);
+        $this->setUrlRewriteProductCategoryAction($urlRewriteProductCategoryAction);
+    }
 
     /**
      * Set's the passed connection.

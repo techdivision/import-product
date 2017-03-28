@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha44
+
+## Features
+
+* Refactoring for DI integrations
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-alpha43
 
 ## Features
