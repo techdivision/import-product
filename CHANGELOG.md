@@ -2,6 +2,7 @@
 
 ## Features
 
+* Make select, multiselect + boolean callbacks abstract
 * Refactoring for DI integrations
 
 ## Bugfixes

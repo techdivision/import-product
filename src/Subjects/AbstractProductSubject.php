@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Subjects;
 
 use TechDivision\Import\Utils\RegistryKeys;
+use TechDivision\Import\Utils\FrontendInputTypes;
 use TechDivision\Import\Utils\Generators\GeneratorInterface;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Product\Utils\MemberNames;
@@ -151,6 +152,17 @@ abstract class AbstractProductSubject extends AbstractEavSubject
     );
 
     /**
+     * The default mappings for the user defined attributes, based on the attributes frontend input type.
+     *
+     * @var array
+     */
+    protected $defaultFrontendInputCallbackMappings = array(
+        FrontendInputTypes::SELECT      => 'TechDivision\\Import\\Product\\Callbacks\\SelectCallback',
+        FrontendInputTypes::MULTISELECT => 'TechDivision\\Import\\Product\\Callbacks\\MultiselectCallback',
+        FrontendInputTypes::BOOLEAN     => 'TechDivision\\Import\\Product\\Callbacks\\BooleanCallback'
+    );
+
+    /**
      * Initialize the subject instance.
      *
      * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface $configuration              The subject configuration instance
@@ -172,6 +184,16 @@ abstract class AbstractProductSubject extends AbstractEavSubject
 
         // initialize the product processor
         $this->productProcessor = $productProcessor;
+    }
+
+    /**
+     * Return's the default callback frontend input mappings for the user defined attributes.
+     *
+     * @return array The default frontend input callback mappings
+     */
+    public function getDefaultFrontendInputCallbackMappings()
+    {
+        return $this->defaultFrontendInputCallbackMappings;
     }
 
     /**
