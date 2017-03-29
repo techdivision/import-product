@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Callbacks\AbstractProductImportCallback
+ * TechDivision\Import\Product\Callbacks\SelectCallback
  *
  * NOTICE OF LICENSE
  *
@@ -21,10 +21,10 @@
 namespace TechDivision\Import\Product\Callbacks;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
-use TechDivision\Import\Callbacks\AbstractCallback;
+use TechDivision\Import\Callbacks\AbstractSelectCallback;
 
 /**
- * Abstract product import callback implementation.
+ * A callback implementation that converts the passed select value.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -32,7 +32,7 @@ use TechDivision\Import\Callbacks\AbstractCallback;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-abstract class AbstractProductImportCallback extends AbstractCallback implements ProductImportCallbackInterface
+class SelectCallback extends AbstractSelectCallback
 {
 
     /**
