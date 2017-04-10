@@ -105,32 +105,34 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      * @var array
      */
     protected $defaultCallbackMappings = array(
-        'visibility'           => array('TechDivision\\Import\\Product\\Callbacks\\VisibilityCallback'),
-        'tax_class_id'         => array('TechDivision\\Import\\Product\\Callbacks\\TaxClassCallback'),
-        'bundle_price_type'    => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundleTypeCallback'),
-        'bundle_sku_type'      => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundleTypeCallback'),
-        'bundle_weight_type'   => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundleTypeCallback'),
-        'bundle_price_view'    => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundlePriceViewCallback'),
-        'bundle_shipment_type' => array('TechDivision\\Import\\Product\\Bundle\\Callbacks\\BundleShipmentTypeCallback')
+        'visibility'           => array('import_product.callback.visibility'),
+        'tax_class_id'         => array('import_product.callback.tax.class'),
+        'bundle_price_type'    => array('import_product_bundle.callback.bundle.type'),
+        'bundle_sku_type'      => array('import_product_bundle.callback.bundle.type'),
+        'bundle_weight_type'   => array('import_product_bundle.callback.bundle.type'),
+        'bundle_price_view'    => array('import_product_bundle.callback.bundle.price.view'),
+        'bundle_shipment_type' => array('import_product_bundle.callback.bundle.shipment.type')
     );
 
     /**
      * Clean up the global data after importing the bunch.
      *
+     * @param string $serial The serial of the actual import
+     *
      * @return void
      */
-    public function tearDown()
+    public function tearDown($serial)
     {
 
         // invoke the parent method
-        parent::tearDown();
+        parent::tearDown($serial);
 
         // load the registry processor
         $registryProcessor = $this->getRegistryProcessor();
 
         // update the status
         $registryProcessor->mergeAttributesRecursive(
-            $this->getSerial(),
+            $serial,
             array(
                 RegistryKeys::PRE_LOADED_ENTITY_IDS => $this->preLoadedEntityIds,
             )

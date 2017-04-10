@@ -157,15 +157,14 @@ abstract class AbstractProductSubject extends AbstractEavSubject
      * @var array
      */
     protected $defaultFrontendInputCallbackMappings = array(
-        FrontendInputTypes::SELECT      => 'TechDivision\\Import\\Product\\Callbacks\\SelectCallback',
-        FrontendInputTypes::MULTISELECT => 'TechDivision\\Import\\Product\\Callbacks\\MultiselectCallback',
-        FrontendInputTypes::BOOLEAN     => 'TechDivision\\Import\\Product\\Callbacks\\BooleanCallback'
+        FrontendInputTypes::SELECT      => 'import_product.callback.select',
+        FrontendInputTypes::MULTISELECT => 'import_product.callback.multiselect',
+        FrontendInputTypes::BOOLEAN     => 'import_product.callback.boolean'
     );
 
     /**
      * Initialize the subject instance.
      *
-     * @param string                                                           $serial                     The serial of the actual import
      * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface $configuration              The subject configuration instance
      * @param \TechDivision\Import\Services\RegistryProcessorInterface         $registryProcessor          The registry processor instance
      * @param \TechDivision\Import\Utils\Generators\GeneratorInterface         $coreConfigDataUidGenerator The UID generator for the core config data
@@ -173,7 +172,6 @@ abstract class AbstractProductSubject extends AbstractEavSubject
      * @param \TechDivision\Import\Product\Services\ProductProcessorInterface  $productProcessor           The product processor instance
      */
     public function __construct(
-        $serial,
         SubjectConfigurationInterface $configuration,
         RegistryProcessorInterface $registryProcessor,
         GeneratorInterface $coreConfigDataUidGenerator,
@@ -182,7 +180,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject
     ) {
 
         // pass the arguments to the parent constructor
-        parent::__construct($serial, $configuration, $registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
+        parent::__construct($configuration, $registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
 
         // initialize the product processor
         $this->productProcessor = $productProcessor;
@@ -314,14 +312,16 @@ abstract class AbstractProductSubject extends AbstractEavSubject
     /**
      * Intializes the previously loaded global data for exactly one bunch.
      *
+     * @param string $serial The serial of the actual import
+     *
      * @return void
      * @see \Importer\Csv\Actions\ProductImportAction::prepare()
      */
-    public function setUp()
+    public function setUp($serial)
     {
 
         // load the status of the actual import
-        $status = $this->getRegistryProcessor()->getAttribute($this->getSerial());
+        $status = $this->getRegistryProcessor()->getAttribute($serial);
 
         // load the global data we've prepared initially
         $this->linkTypes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::LINK_TYPES];
@@ -330,26 +330,28 @@ abstract class AbstractProductSubject extends AbstractEavSubject
         $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
 
         // invoke the parent method
-        parent::setUp();
+        parent::setUp($serial);
     }
 
     /**
      * Clean up the global data after importing the bunch.
      *
+     * @param string $serial The serial of the actual import
+     *
      * @return void
      */
-    public function tearDown()
+    public function tearDown($serial)
     {
 
         // invoke the parent method
-        parent::tearDown();
+        parent::tearDown($serial);
 
         // load the registry processor
         $registryProcessor = $this->getRegistryProcessor();
 
         // update the status
         $registryProcessor->mergeAttributesRecursive(
-            $this->getSerial(),
+            $serial,
             array(
                 RegistryKeys::FILES => array($this->getFilename() => array(RegistryKeys::STATUS => 1)),
                 RegistryKeys::SKU_ENTITY_ID_MAPPING => $this->skuEntityIdMapping,
