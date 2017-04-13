@@ -15,7 +15,7 @@
     {
       "id": "ce",
       "default": true,
-      "pdo-dsn": "mysql:host=127.0.0.1;dbname=appserver_magento;charset=utf8",
+      "pdo-dsn": "mysql:host=127.0.0.1;dbname=magento;charset=utf8",
       "username": "root",
       "password": ""
     }
