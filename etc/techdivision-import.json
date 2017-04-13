@@ -1,16 +1,11 @@
 {
   "magento-edition": "CE",
   "magento-version": "2.1.2",
-  "operation-name" : "add-update",
-  "installation-dir" : "/var/www/magento",
-  "source-dir": "var/importexport",
-  "target-dir": "var/importexport",
   "source-date-format": "n/d/y, g:i A",
   "archive-artefacts" : true,
   "archive-dir" : "archive",
   "debug-mode" : false,
   "ignore-pid" : false,
-  "entity-type-code" : "catalog_product",
   "databases": [
     {
       "id": "ce",
@@ -33,13 +28,13 @@
             {
               "id": "import.subject.move.files",
               "identifier": "move-files",
-              "prefix": "magento-import",
+              "prefix": "magento-products",
               "ok-file-needed": true
             },
             {
               "id": "import_product.subject.bunch",
               "identifier": "files",
-              "prefix": "magento-import",
+              "prefix": "magento-products",
               "observers": [
                 {
                   "import": [
@@ -67,13 +62,13 @@
             {
               "id": "import.subject.move.files",
               "identifier": "move-files",
-              "prefix": "magento-import",
+              "prefix": "magento-products",
               "ok-file-needed": true
             },
             {
               "id": "import_product.subject.bunch",
               "identifier": "files",
-              "prefix": "magento-import",
+              "prefix": "magento-products",
               "observers": [
                 {
                   "pre-import": [
@@ -189,13 +184,13 @@
             {
               "id": "import.subject.move.files",
               "identifier": "move-files",
-              "prefix": "magento-import",
+              "prefix": "magento-products",
               "ok-file-needed": true
             },
             {
               "id": "import_product.subject.bunch",
               "identifier": "files",
-              "prefix": "magento-import",
+              "prefix": "magento-products",
               "observers": [
                 {
                   "pre-import": [
