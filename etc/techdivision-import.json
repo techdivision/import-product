@@ -6,15 +6,6 @@
   "archive-dir" : "archive",
   "debug-mode" : false,
   "ignore-pid" : false,
-  "databases": [
-    {
-      "id": "ce",
-      "default": true,
-      "pdo-dsn": "mysql:host=127.0.0.1;dbname=magento;charset=utf8",
-      "username": "root",
-      "password": ""
-    }
-  ],
   "operations" : [
     {
       "name" : "delete",
