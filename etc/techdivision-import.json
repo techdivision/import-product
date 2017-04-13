@@ -6,6 +6,8 @@
   "archive-dir" : "archive",
   "debug-mode" : false,
   "ignore-pid" : false,
+  "databases" : [
+  ],
   "operations" : [
     {
       "name" : "delete",
