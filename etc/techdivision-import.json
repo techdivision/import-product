@@ -1,0 +1,289 @@
+{
+  "magento-edition": "CE",
+  "magento-version": "2.1.2",
+  "source-date-format": "n/d/y, g:i A",
+  "archive-artefacts" : true,
+  "archive-dir" : "archive",
+  "debug-mode" : false,
+  "entity-type-code" : "catalog_product",
+  "databases" : [
+  ],
+  "operations" : [
+    {
+      "name" : "delete",
+      "plugins" : [
+        {
+          "id": "import.plugin.global.data"
+        },
+        {
+          "id": "import.plugin.subject",
+          "subjects" : [
+            {
+              "id": "import.subject.move.files",
+              "identifier": "move-files",
+              "prefix": "magento-products",
+              "ok-file-needed": true
+            },
+            {
+              "id": "import_product.subject.bunch",
+              "identifier": "files",
+              "prefix": "magento-products",
+              "observers": [
+                {
+                  "import": [
+                    "import_product.observer.clear.product"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "import.plugin.archive"
+        }
+      ]
+    },
+    {
+      "name" : "replace",
+      "plugins" : [
+        {
+          "id": "import.plugin.global.data"
+        },
+        {
+          "id": "import.plugin.subject",
+          "subjects": [
+            {
+              "id": "import.subject.move.files",
+              "identifier": "move-files",
+              "prefix": "magento-products",
+              "ok-file-needed": true
+            },
+            {
+              "id": "import_product.subject.bunch",
+              "identifier": "files",
+              "prefix": "magento-products",
+              "observers": [
+                {
+                  "pre-import": [
+                    "import_product.observer.pre.load.entity.id",
+                    "import_product.observer.clear.product",
+                    "import.observer.attribute.set",
+                    "import.observer.additional.attribute",
+                    "import_product.observer.url.key",
+                    "import_product.observer.quality.and.stock.status"
+                  ]
+                },
+                {
+                  "import": [
+                    "import_product.observer.product",
+                    "import_product.observer.product.website",
+                    "import_product.observer.category.product",
+                    "import_product.observer.product.inventory",
+                    "import_product.observer.url.rewrite",
+                    "import_product.observer.product.attribute",
+                    "import_product_variant.observer.product.variant",
+                    "import_product_bundle.observer.product.bundle",
+                    "import_product_media.observer.product.media",
+                    "import_product_link.observer.product.link"
+                  ]
+                },
+                {
+                  "post-import": [
+                    "import_product.observer.clean.up"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_product_variant.subject.variant",
+              "prefix": "variants",
+              "observers": [
+                {
+                  "pre-import": [
+                    "import.observer.attribute.set"
+                  ]
+                },
+                {
+                  "import": [
+                    "import_product_variant.observer.variant",
+                    "import_product_variant.observer.variant.super.attribute"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_product_bundle.subject.bundle",
+              "prefix": "bundles",
+              "observers": [
+                {
+                  "import": [
+                    "import_product_bundle.observer.bundle.option",
+                    "import_product_bundle.observer.bundle.option.value",
+                    "import_product_bundle.observer.bundle.selection",
+                    "import_product_bundle.observer.bundle.selection.price"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_product_media.subject.media",
+              "prefix": "media",
+              "params" : [
+                {
+                  "copy-images" : false,
+                  "root-directory" : "/"
+                }
+              ],
+              "observers": [
+                {
+                  "pre-import" : [
+                    "import_product_media.observer.file.upload"
+                  ],
+                  "import": [
+                    "import_product_media.observer.media.gallery",
+                    "import_product_media.observer.media.gallery.value"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "mport_product_link.subject.link",
+              "prefix": "links",
+              "observers": [
+                {
+                  "import": [
+                    "import_product_link.observer.link",
+                    "import_product_link.observer.link.attribute.position"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "import.plugin.archive"
+        }
+      ]
+    },
+    {
+      "name" : "add-update",
+      "plugins" : [
+        {
+          "id": "import.plugin.global.data"
+        },
+        {
+          "id": "import.plugin.subject",
+          "subjects": [
+            {
+              "id": "import.subject.move.files",
+              "identifier": "move-files",
+              "prefix": "magento-products",
+              "ok-file-needed": true
+            },
+            {
+              "id": "import_product.subject.bunch",
+              "identifier": "files",
+              "prefix": "magento-products",
+              "observers": [
+                {
+                  "pre-import": [
+                    "import.observer.attribute.set",
+                    "import.observer.additional.attribute",
+                    "import_product.observer.url.key",
+                    "import_product.observer.quality.and.stock.status"
+                  ]
+                },
+                {
+                  "import": [
+                    "import_product.observer.product.update",
+                    "import_product.observer.product.website.update",
+                    "import_product.observer.category.product.update",
+                    "import_product.observer.product.inventory.update",
+                    "import_product.observer.url.rewrite.update",
+                    "import_product.observer.product.attribute.update",
+                    "import_product_variant.observer.product.variant",
+                    "import_product_bundle.observer.product.bundle",
+                    "import_product_media.observer.product.media",
+                    "import_product_link.observer.product.link"
+                  ]
+                },
+                {
+                  "post-import": [
+                    "import_product.observer.clean.up"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_product_variant.subject.variant",
+              "prefix": "variants",
+              "observers": [
+                {
+                  "pre-import": [
+                    "import.observer.attribute.set"
+                  ]
+                },
+                {
+                  "import": [
+                    "import_product_variant.observer.variant.update",
+                    "import_product_variant.observer.variant.super.attribute.update"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_product_bundle.subject.bundle",
+              "prefix": "bundles",
+              "observers": [
+                {
+                  "import": [
+                    "import_product_bundle.observer.bundle.option.update",
+                    "import_product_bundle.observer.bundle.option.value.update",
+                    "import_product_bundle.observer.bundle.selection.update",
+                    "import_product_bundle.observer.bundle.selection.price.update"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_product_media.subject.media",
+              "prefix": "media",
+              "params" : [
+                {
+                  "copy-images" : false,
+                  "root-directory" : "/"
+                }
+              ],
+              "observers": [
+                {
+                  "pre-import" : [
+                    "import_product_media.observer.file.upload"
+                  ],
+                  "import": [
+                    "import_product_media.observer.media.gallery.update",
+                    "import_product_media.observer.media.gallery.value.update"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_product_link.subject.link",
+              "prefix": "links",
+              "observers": [
+                {
+                  "import": [
+                    "import_product_link.observer.link.update",
+                    "import_product_link.observer.link.attribute.position.update"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "import.plugin.archive"
+        }
+      ]
+    }
+  ]
+}
