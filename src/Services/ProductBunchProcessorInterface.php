@@ -286,6 +286,18 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface
     public function loadProductVarcharAttribute($entityId, $attributeId, $storeId);
 
     /**
+     * Load's and return's the varchar attribute with the passed params.
+     *
+     * @param integer $attributeCode The attribute code of the varchar attribute
+     * @param integer $entityTypeId  The entity type ID of the varchar attribute
+     * @param integer $storeId       The store ID of the varchar attribute
+     * @param string  $value         The value of the varchar attribute
+     *
+     * @return array|null The varchar attribute
+     */
+    public function loadProductVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value);
+
+    /**
      * Return's the URL rewrite product category relation for the passed
      * product and category ID.
      *

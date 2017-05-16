@@ -152,7 +152,8 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                         'persistUrlRewriteProductCategory',
                                         'getUrlRewritesByEntityTypeAndEntityId',
                                         'loadUrlRewriteProductCategory',
-                                        'getCoreConfigData'
+                                        'getCoreConfigData',
+                                        'makeUrlKeyUnique'
                                     )
                                 )
                                 ->disableOriginalConstructor()
@@ -207,15 +208,19 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getCoreConfigData')
                     ->withConsecutive(
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_USE_CATEGORIES, false),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html')
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html')
                     )
-                    ->willReturnOnConsecutiveCalls(true, 'html', 'html', 'html', 'html', 'html', 'html', 'html');
+                    ->willReturnOnConsecutiveCalls(true, '.html', '.html', '.html', '.html', '.html', '.html', '.html');
+        $mockSubject->expects($this->exactly(7))
+                    ->method('makeUrlKeyUnique')
+                    ->with($row[$headers[ColumnKeys::URL_KEY]])
+                    ->willReturn($row[$headers[ColumnKeys::URL_KEY]]);
         $mockSubject->expects($this->exactly(7))
                     ->method('persistUrlRewrite')
                     ->withConsecutive(

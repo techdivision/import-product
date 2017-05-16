@@ -102,6 +102,21 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                                 AND store_id = :store_id';
 
     /**
+     * The SQL statement to load a product varchar attribute by the passed attribute code,
+     * entity typy and store ID as well as the passed value.
+     *
+     * @var string
+     */
+    const PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE = 'SELECT t1.*
+                                                                                           FROM catalog_product_entity_varchar t1,
+                                                                                                eav_attribute t2
+                                                                                          WHERE t2.attribute_code = :attribute_code
+                                                                                            AND t2.entity_type_id = :entity_type_id
+                                                                                            AND t1.attribute_id = t2.attribute_id
+                                                                                            AND t1.store_id = :store_id
+                                                                                            AND t1.value = :value';
+
+    /**
      * The SQL statement to load the category product relations with the passed product/website ID.
      *
      * @var string

@@ -248,4 +248,11 @@ class MemberNames extends \TechDivision\Import\Utils\MemberNames
      * @var string
      */
     const ITEM_ID = 'item_id';
+
+    /**
+     * Name for the member 'url_key'.
+     *
+     * @var string
+     */
+    const URL_KEY = 'url_key';
 }

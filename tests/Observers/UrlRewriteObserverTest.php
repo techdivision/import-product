@@ -93,7 +93,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'persistUrlRewriteProductCategory',
                                     'getRootCategory',
                                     'getCategory',
-                                    'getCoreConfigData'
+                                    'getCoreConfigData',
+                                    'makeUrlKeyUnique'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -113,7 +114,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                         array(ColumnKeys::STORE_VIEW_CODE)
                     )
                     ->willReturnOnConsecutiveCalls(0, 1, 1, 2);
-        $mockSubject->expects($this->exactly(2))
+        $mockSubject->expects($this->exactly(3))
                     ->method('getLastEntityId')
                     ->willReturn($entityId = 61413);
         $mockSubject->expects($this->once())
@@ -136,9 +137,13 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getCoreConfigData')
                     ->withConsecutive(
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_USE_CATEGORIES, false),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html')
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html')
                     )
-                    ->willReturnOnConsecutiveCalls(true, 'html');
+                    ->willReturnOnConsecutiveCalls(true, '.html');
+        $mockSubject->expects($this->once())
+                    ->method('makeUrlKeyUnique')
+                    ->with($row[$headers[ColumnKeys::URL_KEY]])
+                    ->willReturn($row[$headers[ColumnKeys::URL_KEY]]);
         $mockSubject->expects($this->once())
                     ->method('persistUrlRewrite')
                     ->with(
@@ -214,7 +219,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getRootCategory',
                                     'getRowStoreId',
                                     'getCategory',
-                                    'getCoreConfigData'
+                                    'getCoreConfigData',
+                                    'makeUrlKeyUnique'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -262,12 +268,16 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getCoreConfigData')
                     ->withConsecutive(
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_USE_CATEGORIES, false),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html'),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html')
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html')
                     )
-                    ->willReturnOnConsecutiveCalls(true, 'html', 'html', 'html', 'html');
+                    ->willReturnOnConsecutiveCalls(true, '.html', '.html', '.html', '.html');
+        $mockSubject->expects($this->exactly(4))
+                    ->method('makeUrlKeyUnique')
+                    ->with($row[$headers[ColumnKeys::URL_KEY]])
+                    ->willReturn($row[$headers[ColumnKeys::URL_KEY]]);
         $mockSubject->expects($this->exactly(4))
                     ->method('persistUrlRewrite')
                     ->withConsecutive(
