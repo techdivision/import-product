@@ -139,6 +139,7 @@
               "observers": [
                 {
                   "pre-import" : [
+                    "import.observer.attribute.set",
                     "import_product_media.observer.file.upload"
                   ],
                   "import": [
@@ -259,6 +260,7 @@
               "observers": [
                 {
                   "pre-import" : [
+                    "import.observer.attribute.set",
                     "import_product_media.observer.file.upload"
                   ],
                   "import": [

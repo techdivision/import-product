@@ -15,6 +15,7 @@ To do that, open a MySQL command line and enter the following SQL statement
  
 ```sql
 $ ALTER TABLE `magento`.`url_rewrite` ADD INDEX `URL_REWRITE_ENTITY_ID` (`entity_id` ASC);
+$ ALTER TABLE `magento`.`catalog_product_entity_varchar` ADD INDEX `CATALOG_PRODUCT_ENTITY_VALUE` (`value` ASC);
 ```
 
 > This also improves performance of the Magento 2 standard import functionality, but not at

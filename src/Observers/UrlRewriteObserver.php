@@ -25,6 +25,7 @@ use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 use TechDivision\Import\Utils\Filter\ConvertLiteralUrl;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
+use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
  * Observer that creates/updates the product's URL rewrites.
@@ -88,7 +89,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
 
         // try to load the URL key, return immediately if not possible
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
-            $this->urlKey = $this->getValue(ColumnKeys::URL_KEY);
+            $this->urlKey = $urlKey = $this->getValue(ColumnKeys::URL_KEY);
         } else {
             return;
         }
@@ -116,6 +117,11 @@ class UrlRewriteObserver extends AbstractProductImportObserver
                 // persist the URL rewrite product category relation
                 $this->persistUrlRewriteProductCategory($urlRewriteProductCategory);
             }
+        }
+
+        // if changed, override the URL key with the new one
+        if ($urlKey !== $this->urlKey) {
+            $this->setValue(ColumnKeys::URL_KEY, $this->urlKey);
         }
     }
 
@@ -180,6 +186,19 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     }
 
     /**
+     * Make's the passed URL key unique by adding the next number to the end.
+     *
+     * @param string  $urlKey The URL key to make unique
+     * @param integer $pk     The PK the URL key is related with
+     *
+     * @return string The unique URL key
+     */
+    protected function makeUrlKeyUnique($urlKey, $pk)
+    {
+        return $this->getSubject()->makeUrlKeyUnique($urlKey, $pk);
+    }
+
+    /**
      * Prepare the attributes of the entity that has to be persisted.
      *
      * @return array The prepared attributes
@@ -188,7 +207,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     {
 
         // load the store ID to use
-        $storeId = $this->getRowStoreId();
+        $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
 
         // load the category to create the URL rewrite for
         $category = $this->getCategory($this->categoryId);
@@ -267,13 +286,16 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     {
 
         // load the product URL suffix to use
-        $urlSuffix = $this->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, 'html');
+        $urlSuffix = $this->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html');
+
+        // create a unique URL key, if this is a new URL rewrite
+        $this->urlKey = $this->makeUrlKeyUnique($this->urlKey, $this->getPrimaryKey());
 
         // query whether or not, the category is the root category
         if ($this->isRootCategory($category)) {
-            $requestPath = sprintf('%s.%s', $this->urlKey, $urlSuffix);
+            $requestPath = sprintf('%s%s', $this->urlKey, $urlSuffix);
         } else {
-            $requestPath = sprintf('%s/%s.%s', $category[MemberNames::URL_PATH], $this->urlKey, $urlSuffix);
+            $requestPath = sprintf('%s/%s%s', $category[MemberNames::URL_PATH], $this->urlKey, $urlSuffix);
         }
 
         // return the request path

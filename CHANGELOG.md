@@ -1,3 +1,13 @@
+# Version 1.0.0-beta3
+
+## Bugfixes
+
+* Bugfix invalid URL rewrite creation if the CSV file has NO url_key specified
+
+## Features
+
+* None
+
 # Version 1.0.0-beta2
 
 ## Bugfixes

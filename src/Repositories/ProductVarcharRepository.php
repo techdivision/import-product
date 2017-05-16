@@ -43,6 +43,14 @@ class ProductVarcharRepository extends AbstractRepository
     protected $productVarcharStmt;
 
     /**
+     * The prepared statement to load the existing product varchar attribute with the passed attribute code
+     * entity type/store ID as well as the passed value.
+     *
+     * @var \PDOStatement
+     */
+    protected $productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt;
+
+    /**
      * Initializes the repository's prepared statements.
      *
      * @return void
@@ -55,6 +63,7 @@ class ProductVarcharRepository extends AbstractRepository
 
         // initialize the prepared statements
         $this->productVarcharStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT_VARCHAR);
+        $this->productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE);
     }
 
     /**
@@ -79,5 +88,31 @@ class ProductVarcharRepository extends AbstractRepository
         // load and return the product varchar attribute with the passed store/entity/attribute ID
         $this->productVarcharStmt->execute($params);
         return $this->productVarcharStmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Load's and return's the varchar attribute with the passed params.
+     *
+     * @param integer $attributeCode The attribute code of the varchar attribute
+     * @param integer $entityTypeId  The entity type ID of the varchar attribute
+     * @param integer $storeId       The store ID of the varchar attribute
+     * @param string  $value         The value of the varchar attribute
+     *
+     * @return array|null The varchar attribute
+     */
+    public function findOneByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value)
+    {
+
+        // prepare the params
+        $params = array(
+            MemberNames::ATTRIBUTE_CODE => $attributeCode,
+            MemberNames::ENTITY_TYPE_ID => $entityTypeId,
+            MemberNames::STORE_ID       => $storeId,
+            MemberNames::VALUE          => $value
+        );
+
+        // load and return the product varchar attribute with the passed parameters
+        $this->productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt->execute($params);
+        return $this->productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt->fetch(\PDO::FETCH_ASSOC);
     }
 }

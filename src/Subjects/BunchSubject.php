@@ -20,11 +20,12 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
-use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Subjects\ExportableTrait;
 use TechDivision\Import\Subjects\ExportableSubjectInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\RegistryKeys;
+use TechDivision\Import\Product\Utils\VisibilityKeys;
+use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -113,6 +114,41 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
         'bundle_price_view'    => array('import_product_bundle.callback.bundle.price.view'),
         'bundle_shipment_type' => array('import_product_bundle.callback.bundle.shipment.type')
     );
+
+    /**
+     * The used URL keys.
+     *
+     * @var array
+     */
+    protected $usedUrlKeys = array();
+
+    /**
+     * The available entity types.
+     *
+     * @var array
+     */
+    protected $entityTypes = array();
+
+    /**
+     * Intializes the previously loaded global data for exactly one bunch.
+     *
+     * @param string $serial The serial of the actual import
+     *
+     * @return void
+     * @see \Importer\Csv\Actions\ProductImportAction::prepare()
+     */
+    public function setUp($serial)
+    {
+
+        // load the status of the actual import
+        $status = $this->getRegistryProcessor()->getAttribute($serial);
+
+        // load the global data we've prepared initially
+        $this->entityTypes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ENTITY_TYPES];
+
+        // invoke the parent method
+        parent::setUp($serial);
+    }
 
     /**
      * Clean up the global data after importing the bunch.
@@ -231,6 +267,116 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
 
         // temporary persist the pre-loaded SKU => entity ID mapping
         $this->preLoadedEntityIds[$sku]= $product[MemberNames::ENTITY_ID];
+    }
+
+    /**
+     * Make's the passed URL key unique by adding the next number to the end.
+     *
+     * @param string  $urlKey The URL key to make unique
+     * @param integer $pk     The PK the URL key is related with
+     *
+     * @return string The unique URL key
+     */
+    public function makeUrlKeyUnique($urlKey, $pk)
+    {
+
+        // initialize the entity type ID
+        $entityType = $this->getEntityType();
+        $entityTypeId = $entityType[MemberNames::ENTITY_TYPE_ID];
+
+        // initialize the query parameters
+        $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
+
+        // initialize the counter
+        $counter = 0;
+
+        // initialize the counters
+        $matchingCounters = array();
+        $notMatchingCounters = array();
+
+        // pre-initialze the URL key to query for
+        $value = $urlKey;
+
+        do {
+            // try to load the attribute
+            $productVarcharAttribute = $this->getProductProcessor()
+                                            ->loadProductVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue(
+                                                MemberNames::URL_KEY,
+                                                $entityTypeId,
+                                                $storeId,
+                                                $value
+                                            );
+
+            // try to load the product's URL key
+            if ($productVarcharAttribute) {
+                // this IS the URL key of the passed entity
+                if ($this->isUrlKeyOf($productVarcharAttribute, $pk)) {
+                    $matchingCounters[] = $counter;
+                } else {
+                    $notMatchingCounters[] = $counter;
+                }
+
+                // prepare the next URL key to query for
+                $value = sprintf('%s-%d', $urlKey, ++$counter);
+            }
+
+        } while ($productVarcharAttribute);
+
+        // sort the array ascending according to the counter
+        asort($matchingCounters);
+        asort($notMatchingCounters);
+
+        // this IS the URL key of the passed entity => we've an UPDATE
+        if (sizeof($matchingCounters) > 0) {
+            // load highest counter
+            $counter = end($matchingCounters);
+            // if the counter is > 0, we've to append it to the new URL key
+            if ($counter > 0) {
+                return sprintf('%s-%d', $urlKey, $counter);
+            }
+        } elseif (sizeof($notMatchingCounters) > 0) {
+            // create a new URL key by raising the counter
+            $newCounter = end($notMatchingCounters);
+            return sprintf('%s-%d', $urlKey, ++$newCounter);
+        }
+
+        // return the passed URL key, if NOT
+        return $urlKey;
+    }
+
+    /**
+     * Return's the entity type for the configured entity type code.
+     *
+     * @return array The requested entity type
+     * @throws \Exception Is thrown, if the requested entity type is not available
+     */
+    protected function getEntityType()
+    {
+
+        // query whether or not the entity type with the passed code is available
+        if (isset($this->entityTypes[$entityTypeCode = $this->getEntityTypeCode()])) {
+            return $this->entityTypes[$entityTypeCode];
+        }
+
+        // throw a new exception
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Requested entity type "%s" is not available', $entityTypeCode)
+            )
+        );
+    }
+
+    /**
+     * Return's TRUE, if the passed URL key varchar value IS related with the passed PK.
+     *
+     * @param array   $productVarcharAttribute The varchar value to check
+     * @param integer $pk                      The primary key to check
+     *
+     * @return boolean TRUE if the URL key is related, else FALSE
+     */
+    protected function isUrlKeyOf(array $productVarcharAttribute, $pk)
+    {
+        return $productVarcharAttribute[MemberNames::ENTITY_ID] === $pk;
     }
 
     /**
