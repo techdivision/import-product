@@ -272,12 +272,11 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     /**
      * Make's the passed URL key unique by adding the next number to the end.
      *
-     * @param string  $urlKey The URL key to make unique
-     * @param integer $pk     The PK the URL key is related with
+     * @param string $urlKey The URL key to make unique
      *
      * @return string The unique URL key
      */
-    public function makeUrlKeyUnique($urlKey, $pk)
+    public function makeUrlKeyUnique($urlKey)
     {
 
         // initialize the entity type ID
@@ -310,7 +309,7 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
             // try to load the product's URL key
             if ($productVarcharAttribute) {
                 // this IS the URL key of the passed entity
-                if ($this->isUrlKeyOf($productVarcharAttribute, $pk)) {
+                if ($this->isUrlKeyOf($productVarcharAttribute)) {
                     $matchingCounters[] = $counter;
                 } else {
                     $notMatchingCounters[] = $counter;
@@ -332,12 +331,12 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
             $counter = end($matchingCounters);
             // if the counter is > 0, we've to append it to the new URL key
             if ($counter > 0) {
-                return sprintf('%s-%d', $urlKey, $counter);
+                $urlKey = sprintf('%s-%d', $urlKey, $counter);
             }
         } elseif (sizeof($notMatchingCounters) > 0) {
             // create a new URL key by raising the counter
             $newCounter = end($notMatchingCounters);
-            return sprintf('%s-%d', $urlKey, ++$newCounter);
+            $urlKey = sprintf('%s-%d', $urlKey, ++$newCounter);
         }
 
         // return the passed URL key, if NOT
@@ -367,16 +366,15 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     }
 
     /**
-     * Return's TRUE, if the passed URL key varchar value IS related with the passed PK.
+     * Return's TRUE, if the passed URL key varchar value IS related with the actual PK.
      *
-     * @param array   $productVarcharAttribute The varchar value to check
-     * @param integer $pk                      The primary key to check
+     * @param array $productVarcharAttribute The varchar value to check
      *
      * @return boolean TRUE if the URL key is related, else FALSE
      */
-    protected function isUrlKeyOf(array $productVarcharAttribute, $pk)
+    protected function isUrlKeyOf(array $productVarcharAttribute)
     {
-        return $productVarcharAttribute[MemberNames::ENTITY_ID] === $pk;
+        return $productVarcharAttribute[MemberNames::ENTITY_ID] === $this->getLastEntityId();
     }
 
     /**

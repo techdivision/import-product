@@ -1,3 +1,13 @@
+# Version 1.0.0-beta4
+
+## Bugfixes
+
+* Bugfix for invalid PK loading
+
+## Features
+
+* None
+
 # Version 1.0.0-beta3
 
 ## Bugfixes

@@ -188,14 +188,13 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     /**
      * Make's the passed URL key unique by adding the next number to the end.
      *
-     * @param string  $urlKey The URL key to make unique
-     * @param integer $pk     The PK the URL key is related with
+     * @param string $urlKey The URL key to make unique
      *
      * @return string The unique URL key
      */
-    protected function makeUrlKeyUnique($urlKey, $pk)
+    protected function makeUrlKeyUnique($urlKey)
     {
-        return $this->getSubject()->makeUrlKeyUnique($urlKey, $pk);
+        return $this->getSubject()->makeUrlKeyUnique($urlKey);
     }
 
     /**
@@ -262,7 +261,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     {
 
         // load the actual entity ID
-        $lastEntityId = $this->getPrimaryKey();
+        $lastEntityId = $this->getLastEntityId();
 
         // query whether or not, the category is the root category
         if ($this->isRootCategory($category)) {
@@ -289,7 +288,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         $urlSuffix = $this->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html');
 
         // create a unique URL key, if this is a new URL rewrite
-        $this->urlKey = $this->makeUrlKeyUnique($this->urlKey, $this->getPrimaryKey());
+        $this->urlKey = $this->makeUrlKeyUnique($this->urlKey);
 
         // query whether or not, the category is the root category
         if ($this->isRootCategory($category)) {
@@ -435,15 +434,5 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected function persistUrlRewriteProductCategory($row)
     {
         return $this->getSubject()->persistUrlRewriteProductCategory($row);
-    }
-
-    /**
-     * Return's the PK to create the product => attribute relation.
-     *
-     * @return integer The PK to create the relation with
-     */
-    protected function getPrimaryKey()
-    {
-        return $this->getLastEntityId();
     }
 }

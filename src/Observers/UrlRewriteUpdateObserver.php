@@ -154,12 +154,8 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
         // (re-)initialize the array for the existing URL rewrites
         $this->existingUrlRewrites = array();
 
-        // load primary key and entity type
-        $pk = $this->getPrimaryKey();
-        $entityType = UrlRewriteObserver::ENTITY_TYPE;
-
         // load the existing URL rewrites of the actual entity
-        $existingUrlRewrites = $this->getUrlRewritesByEntityTypeAndEntityId($entityType, $pk);
+        $existingUrlRewrites = $this->getUrlRewritesByEntityTypeAndEntityId(UrlRewriteObserver::ENTITY_TYPE, $this->getLastEntityId());
 
         // prepare the existing URL rewrites to improve searching them by store ID/request path
         foreach ($existingUrlRewrites as $existingUrlRewrite) {

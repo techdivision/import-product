@@ -114,7 +114,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                         array(ColumnKeys::STORE_VIEW_CODE)
                     )
                     ->willReturnOnConsecutiveCalls(0, 1, 1, 2);
-        $mockSubject->expects($this->exactly(3))
+        $mockSubject->expects($this->exactly(2))
                     ->method('getLastEntityId')
                     ->willReturn($entityId = 61413);
         $mockSubject->expects($this->once())
