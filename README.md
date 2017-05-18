@@ -14,8 +14,10 @@ necessary to manually add a missing index.
 To do that, open a MySQL command line and enter the following SQL statement
  
 ```sql
-$ ALTER TABLE `magento`.`url_rewrite` ADD INDEX `URL_REWRITE_ENTITY_ID` (`entity_id` ASC);
-$ ALTER TABLE `magento`.`catalog_product_entity_varchar` ADD INDEX `CATALOG_PRODUCT_ENTITY_VALUE` (`value` ASC);
+$ ALTER TABLE `eav_attribute_option_value` ADD INDEX `EAV_ATTRIBUTE_OPTION_VALUE_VALUE` (`value` ASC);
+$ ALTER TABLE `catalog_product_entity_varchar` ADD INDEX `CATALOG_PRODUCT_ENTITY_VALUE` (`value` ASC);
+$ ALTER TABLE `url_rewrite` ADD INDEX `URL_REWRITE_ENTITY_ID` (`entity_id` ASC);
+$ ALTER TABLE `url_rewrite` ADD INDEX `URL_REWRIRE_ENTITY_TYPE_ENTITY_ID` (`entity_id` ASC, `entity_type` ASC);
 ```
 
 > This also improves performance of the Magento 2 standard import functionality, but not at

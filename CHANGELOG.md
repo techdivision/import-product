@@ -1,3 +1,13 @@
+# Version 1.0.0-beta5
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Update README.md
+
 # Version 1.0.0-beta4
 
 ## Bugfixes
