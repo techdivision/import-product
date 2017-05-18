@@ -150,7 +150,7 @@
               ]
             },
             {
-              "id": "mport_product_link.subject.link",
+              "id": "import_product_link.subject.link",
               "prefix": "links",
               "observers": [
                 {
