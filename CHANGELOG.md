@@ -1,3 +1,14 @@
+# Version 1.0.0-beta6
+
+## Bugfixes
+
+* Add missing loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue() method to AbstracProductSubject + ProductBunchProcessor
+
+## Features
+
+* None
+
+
 # Version 1.0.0-beta5
 
 ## Bugfixes
