@@ -81,7 +81,8 @@ class ProductWebsiteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getHeader',
                                     'getHeaders',
                                     'hasBeenProcessed',
-                                    'getLastEntityId'
+                                    'getLastEntityId',
+                                    'getRow'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -89,6 +90,9 @@ class ProductWebsiteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeaders')
                     ->willReturn($headers);
+        $mockSubject->expects($this->any())
+                    ->method('getRow')
+                    ->willReturn($row);
         $mockSubject->expects($this->any())
                     ->method('hasHeader')
                     ->willReturn(true);
@@ -105,8 +109,7 @@ class ProductWebsiteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->never())
                     ->method('getLastEntityId');
 
-        // inject the subject und invoke the handle() method
-        $this->observer->setSubject($mockSubject);
-        $this->assertSame($row, $this->observer->handle($row));
+        // invoke the handle() method
+        $this->assertSame($row, $this->observer->handle($mockSubject));
     }
 }

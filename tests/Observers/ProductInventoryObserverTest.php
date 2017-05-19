@@ -119,7 +119,8 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
                                     'hasBeenProcessed',
                                     'getLastEntityId',
                                     'persistStockItem',
-                                    'persistStockStatus'
+                                    'persistStockStatus',
+                                    'getRow'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -128,6 +129,9 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->once())
                     ->method('hasBeenProcessed')
                     ->willReturn(false);
+        $mockSubject->expects($this->any())
+                    ->method('getRow')
+                    ->willReturn($row);
         $mockSubject->expects($this->exactly(2))
                     ->method('getLastEntityId')
                     ->willReturn($lastEntityId = 12345);
@@ -174,8 +178,7 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
                         )
                     );
 
-        // inject the subject und invoke the handle() method
-        $this->observer->setSubject($mockSubject);
-        $this->assertSame($row, $this->observer->handle($row));
+        // invoke the handle() method
+        $this->assertSame($row, $this->observer->handle($mockSubject));
     }
 }

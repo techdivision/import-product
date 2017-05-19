@@ -94,7 +94,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getRootCategory',
                                     'getCategory',
                                     'getCoreConfigData',
-                                    'makeUrlKeyUnique'
+                                    'makeUrlKeyUnique',
+                                    'getRow'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -102,6 +103,9 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeaders')
                     ->willReturn($headers);
+        $mockSubject->expects($this->any())
+                    ->method('getRow')
+                    ->willReturn($row);
         $mockSubject->expects($this->any())
                     ->method('hasHeader')
                     ->willReturn(true);
@@ -172,9 +176,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                         )
                     );
 
-        // inject the subject und invoke the handle() method
-        $this->observer->setSubject($mockSubject);
-        $this->assertSame($row, $this->observer->handle($row));
+        // invoke the handle() method
+        $this->assertSame($row, $this->observer->handle($mockSubject));
     }
 
     /**
@@ -220,7 +223,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getRowStoreId',
                                     'getCategory',
                                     'getCoreConfigData',
-                                    'makeUrlKeyUnique'
+                                    'makeUrlKeyUnique',
+                                    'getRow'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -228,6 +232,9 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeaders')
                     ->willReturn($headers);
+        $mockSubject->expects($this->any())
+                    ->method('getRow')
+                    ->willReturn($row);
         $mockSubject->expects($this->any())
                     ->method('hasHeader')
                     ->willReturn(true);
@@ -376,8 +383,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                         )
                     );
 
-        // inject the subject und invoke the handle() method
-        $this->observer->setSubject($mockSubject);
-        $this->assertSame($row, $this->observer->handle($row));
+        // invoke the handle() method
+        $this->assertSame($row, $this->observer->handle($mockSubject));
     }
 }

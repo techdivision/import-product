@@ -20,6 +20,8 @@
 
 namespace TechDivision\Import\Product\Callbacks;
 
+use TechDivision\Import\Observers\AttributeCodeAndValueAwareObserverInterface;
+
 /**
  * A callback implementation that converts the passed visibility.
  *
@@ -35,14 +37,17 @@ class VisibilityCallback extends AbstractProductImportCallback
     /**
      * Will be invoked by a observer it has been registered for.
      *
-     * @param string $attributeCode  The code of the attribute the passed value is for
-     * @param mixed  $attributeValue The value to handle
+     * @param \TechDivision\Import\Observers\ObserverInterface $observer The observer
      *
      * @return mixed The modified value
-     * @see \TechDivision\Import\Callbacks\CallbackInterface::handle()
      */
-    public function handle($attributeCode, $attributeValue)
+    public function handle(AttributeCodeAndValueAwareObserverInterface $observer)
     {
-        return $this->getSubject()->getVisibilityIdByValue($attributeValue);
+
+        // set the observer
+        $this->setObserver($observer);
+
+        // replace the passed attribute value into the visibility ID
+        return $this->getSubject()->getVisibilityIdByValue($observer->getAttributeValue());
     }
 }
