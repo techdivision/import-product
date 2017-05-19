@@ -80,11 +80,15 @@ class CategoryProductObserverTest extends \PHPUnit_Framework_TestCase
                                     'hasHeader',
                                     'getHeader',
                                     'getHeaders',
-                                    'hasBeenProcessed'
+                                    'hasBeenProcessed',
+                                    'getRow'
                                 )
                             )
                             ->disableOriginalConstructor()
                             ->getMock();
+        $mockSubject->expects($this->any())
+                    ->method('getRow')
+                    ->willReturn($row);
         $mockSubject->expects($this->any())
                     ->method('getHeaders')
                     ->willReturn($headers);
@@ -99,8 +103,7 @@ class CategoryProductObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('hasBeenProcessed')
                     ->willReturn('TEST-02');
 
-        // inject the subject und invoke the handle() method
-        $this->observer->setSubject($mockSubject);
-        $this->assertSame($row, $this->observer->handle($row));
+        // invoke the handle() method
+        $this->assertSame($row, $this->observer->handle($mockSubject));
     }
 }

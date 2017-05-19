@@ -1,3 +1,13 @@
+# Version 1.0.0-beta7
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Refactoring Symfony DI integration
+
 # Version 1.0.0-beta6
 
 ## Bugfixes

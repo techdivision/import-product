@@ -79,7 +79,8 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                                     'deleteStockStatus',
                                     'deleteProductWebsite',
                                     'deleteCategoryProduct',
-                                    'deleteProduct'
+                                    'deleteProduct',
+                                    'getRow'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -87,6 +88,9 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('hasHeader')
                     ->willReturn(true);
+        $mockSubject->expects($this->any())
+                    ->method('getRow')
+                    ->willReturn($row);
         $mockSubject->expects($this->any())
                     ->method('getHeader')
                     ->with(ColumnKeys::SKU)
@@ -113,8 +117,7 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('deleteProduct')
                     ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
 
-        // inject the subject und invoke the handle() method
-        $this->observer->setSubject($mockSubject);
-        $this->assertSame($row, $this->observer->handle($row));
+        // invoke the handle() method
+        $this->assertSame($row, $this->observer->handle($mockSubject));
     }
 }

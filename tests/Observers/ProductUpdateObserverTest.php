@@ -119,7 +119,8 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                     'getAttributeSet',
                                     'getSourceDateFormat',
                                     'loadProduct',
-                                    'persistProduct'
+                                    'persistProduct',
+                                    'getRow'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -127,6 +128,9 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeaders')
                     ->willReturn($headers);
+        $mockSubject->expects($this->any())
+                    ->method('getRow')
+                    ->willReturn($row);
         $mockSubject->expects($this->any())
                     ->method('hasHeader')
                     ->willReturn(true);
@@ -162,10 +166,7 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('persistProduct')
                     ->with($newProduct);
 
-        // inject the subject
-        $this->observer->setSubject($mockSubject);
-
         // query whether or not the result is as expected
-        $this->assertEquals($row, $this->observer->handle($row));
+        $this->assertEquals($row, $this->observer->handle($mockSubject));
     }
 }

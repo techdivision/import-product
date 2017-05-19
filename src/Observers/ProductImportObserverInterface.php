@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Subjects\SubjectInterface;
 use TechDivision\Import\Observers\ObserverInterface;
 
 /**
@@ -37,9 +38,10 @@ interface ProductImportObserverInterface extends ObserverInterface
     /**
      * Will be invoked by the action on the events the listener has been registered for.
      *
-     * @param array $row The row to handle
+     * @param \TechDivision\Import\Subjects\SubjectInterface $subject The subject instance
      *
      * @return array The modified row
+     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
      */
-    public function handle(array $row);
+    public function handle(SubjectInterface $subject);
 }
