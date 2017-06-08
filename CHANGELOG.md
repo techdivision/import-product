@@ -1,3 +1,13 @@
+# Version 1.0.0-beta8
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Remove archive directory from default configuration file
+
 # Version 1.0.0-beta7
 
 ## Bugfixes
