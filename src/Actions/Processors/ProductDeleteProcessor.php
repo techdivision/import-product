@@ -48,7 +48,7 @@ class ProductDeleteProcessor extends AbstractDeleteProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::DELETE_PRODUCT => $utilityClassName::DELETE_PRODUCT
+            $utilityClassName::DELETE_PRODUCT => $this->getUtilityClass()->find($utilityClassName::DELETE_PRODUCT)
         );
     }
 }

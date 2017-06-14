@@ -54,7 +54,8 @@ class ProductIntRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->productIntStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT_INT);
+        $this->productIntStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_INT));
     }
 
     /**

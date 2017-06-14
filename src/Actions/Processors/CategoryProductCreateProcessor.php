@@ -48,7 +48,7 @@ class CategoryProductCreateProcessor extends AbstractCreateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_CATEGORY_PRODUCT => $utilityClassName::CREATE_CATEGORY_PRODUCT
+            $utilityClassName::CREATE_CATEGORY_PRODUCT => $this->getUtilityClass()->find($utilityClassName::CREATE_CATEGORY_PRODUCT)
         );
     }
 }

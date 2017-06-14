@@ -54,7 +54,8 @@ class ProductTextRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->productTextStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT_TEXT);
+        $this->productTextStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_TEXT));
     }
 
     /**

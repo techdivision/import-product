@@ -48,7 +48,7 @@ class StockStatusDeleteProcessor extends AbstractDeleteProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::DELETE_STOCK_STATUS_BY_SKU => $utilityClassName::DELETE_STOCK_STATUS_BY_SKU
+            $utilityClassName::DELETE_STOCK_STATUS_BY_SKU => $this->getUtilityClass()->find($utilityClassName::DELETE_STOCK_STATUS_BY_SKU)
         );
     }
 }

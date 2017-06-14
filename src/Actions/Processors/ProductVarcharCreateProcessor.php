@@ -48,7 +48,7 @@ class ProductVarcharCreateProcessor extends AbstractCreateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_VARCHAR => $utilityClassName::CREATE_PRODUCT_VARCHAR
+            $utilityClassName::CREATE_PRODUCT_VARCHAR => $this->getUtilityClass()->find($utilityClassName::CREATE_PRODUCT_VARCHAR)
         );
     }
 }

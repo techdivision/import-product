@@ -54,7 +54,8 @@ class ProductRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->productStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT);
+        $this->productStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT));
     }
 
     /**
