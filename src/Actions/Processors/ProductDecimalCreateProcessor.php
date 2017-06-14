@@ -48,7 +48,7 @@ class ProductDecimalCreateProcessor extends AbstractCreateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_DECIMAL => $utilityClassName::CREATE_PRODUCT_DECIMAL
+            $utilityClassName::CREATE_PRODUCT_DECIMAL => $this->getUtilityClass()->find($utilityClassName::CREATE_PRODUCT_DECIMAL)
         );
     }
 }

@@ -62,8 +62,10 @@ class ProductVarcharRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->productVarcharStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT_VARCHAR);
-        $this->productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE);
+        $this->productVarcharStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_VARCHAR));
+        $this->productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt =
+                $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE));
     }
 
     /**

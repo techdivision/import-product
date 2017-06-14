@@ -54,8 +54,8 @@ class UrlRewriteProductCategoryRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->urlRewriteProductCategoryStmt = $this->getConnection()
-                                                    ->prepare($utilityClassName::URL_REWRITE_PRODUCT_CATEGORY_BY_PRODUCT_ID_AND_CATEGORY_ID);
+        $this->urlRewriteProductCategoryStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::URL_REWRITE_PRODUCT_CATEGORY_BY_PRODUCT_ID_AND_CATEGORY_ID));
     }
 
     /**

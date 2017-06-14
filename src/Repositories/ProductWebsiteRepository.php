@@ -54,7 +54,8 @@ class ProductWebsiteRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->productWebsiteStmt = $this->getConnection()->prepare($utilityClassName::PRODUCT_WEBSITE);
+        $this->productWebsiteStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_WEBSITE));
     }
 
     /**

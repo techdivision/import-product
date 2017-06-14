@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Services;
 
 use TechDivision\Import\Actions\UrlRewriteAction;
+use TechDivision\Import\Connection\ConnectionInterface;
 use TechDivision\Import\Repositories\UrlRewriteRepository;
 use TechDivision\Import\Product\Repositories\ProductRepository;
 use TechDivision\Import\Product\Repositories\ProductWebsiteRepository;
@@ -62,7 +63,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * A PDO connection initialized with the values from the Doctrine EntityManager.
      *
-     * @var \PDO
+     * @var \TechDivision\Import\Connection\ConnectionInterface
      */
     protected $connection;
 
@@ -251,7 +252,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \PDO                                                                        $connection                          The PDO connection to use
+     * @param \TechDivision\Import\Connection\ConnectionInterface                         $connection                          The connection to use
      * @param \TechDivision\Import\Product\Repositories\ProductRepository                 $productRepository                   The product repository to use
      * @param \TechDivision\Import\Product\Repositories\ProductWebsiteRepository          $productWebsiteRepository            The product website repository to use
      * @param \TechDivision\Import\Product\Repositories\ProductDatetimeRepository         $productDatetimeRepository           The product datetime repository to use
@@ -280,7 +281,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @param \TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction        $urlRewriteProductCategoryAction     The URL rewrite product category action to use
      */
     public function __construct(
-        \PDO $connection,
+        ConnectionInterface $connection,
         ProductRepository $productRepository,
         ProductWebsiteRepository $productWebsiteRepository,
         ProductDatetimeRepository $productDatetimeRepository,
@@ -340,11 +341,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the passed connection.
      *
-     * @param \PDO $connection The connection to set
+     * @param \TechDivision\Import\Connection\ConnectionInterface $connection The connection to set
      *
      * @return void
      */
-    public function setConnection(\PDO $connection)
+    public function setConnection(ConnectionInterface $connection)
     {
         $this->connection = $connection;
     }
@@ -352,7 +353,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the connection.
      *
-     * @return \PDO The connection instance
+     * @return \TechDivision\Import\Connection\ConnectionInterface The connection instance
      */
     public function getConnection()
     {

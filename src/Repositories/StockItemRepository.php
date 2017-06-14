@@ -54,7 +54,8 @@ class StockItemRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->stockItemStmt = $this->getConnection()->prepare($utilityClassName::STOCK_ITEM);
+        $this->stockItemStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::STOCK_ITEM));
     }
 
     /**

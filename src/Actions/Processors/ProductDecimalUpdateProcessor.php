@@ -48,7 +48,7 @@ class ProductDecimalUpdateProcessor extends AbstractUpdateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::UPDATE_PRODUCT_DECIMAL => $utilityClassName::UPDATE_PRODUCT_DECIMAL
+            $utilityClassName::UPDATE_PRODUCT_DECIMAL => $this->getUtilityClass()->find($utilityClassName::UPDATE_PRODUCT_DECIMAL)
         );
     }
 }

@@ -48,7 +48,7 @@ class ProductDatetimeUpdateProcessor extends AbstractUpdateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::UPDATE_PRODUCT_DATETIME => $utilityClassName::UPDATE_PRODUCT_DATETIME
+            $utilityClassName::UPDATE_PRODUCT_DATETIME => $this->getUtilityClass()->find($utilityClassName::UPDATE_PRODUCT_DATETIME)
         );
     }
 }

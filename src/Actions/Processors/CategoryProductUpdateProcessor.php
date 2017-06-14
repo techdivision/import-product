@@ -48,7 +48,7 @@ class CategoryProductUpdateProcessor extends AbstractUpdateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::UPDATE_CATEGORY_PRODUCT => $utilityClassName::UPDATE_CATEGORY_PRODUCT
+            $utilityClassName::UPDATE_CATEGORY_PRODUCT => $this->getUtilityClass()->find($utilityClassName::UPDATE_CATEGORY_PRODUCT)
         );
     }
 }

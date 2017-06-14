@@ -48,7 +48,7 @@ class ProductIntCreateProcessor extends AbstractCreateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_INT => $utilityClassName::CREATE_PRODUCT_INT
+            $utilityClassName::CREATE_PRODUCT_INT => $this->getUtilityClass()->find($utilityClassName::CREATE_PRODUCT_INT)
         );
     }
 }

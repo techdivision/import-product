@@ -48,7 +48,7 @@ class StockStatusCreateProcessor extends AbstractCreateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_STOCK_STATUS => $utilityClassName::CREATE_STOCK_STATUS
+            $utilityClassName::CREATE_STOCK_STATUS => $this->getUtilityClass()->find($utilityClassName::CREATE_STOCK_STATUS)
         );
     }
 }

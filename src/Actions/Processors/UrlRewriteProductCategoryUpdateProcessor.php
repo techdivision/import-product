@@ -48,7 +48,7 @@ class UrlRewriteProductCategoryUpdateProcessor extends AbstractUpdateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::UPDATE_URL_REWRITE_PRODUCT_CATEGORY => $utilityClassName::UPDATE_URL_REWRITE_PRODUCT_CATEGORY
+            $utilityClassName::UPDATE_URL_REWRITE_PRODUCT_CATEGORY => $this->getUtilityClass()->find($utilityClassName::UPDATE_URL_REWRITE_PRODUCT_CATEGORY)
         );
     }
 }
