@@ -235,7 +235,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     /**
      * Prepare's the URL rewrite product => category relation attributes.
      *
-     * @return arry The prepared attributes
+     * @return array The prepared attributes
      */
     protected function prepareUrlRewriteProductCategoryAttributes()
     {
@@ -294,11 +294,29 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         if ($this->isRootCategory($category)) {
             $requestPath = sprintf('%s%s', $this->urlKey, $urlSuffix);
         } else {
-            $requestPath = sprintf('%s/%s%s', $category[MemberNames::URL_PATH], $this->urlKey, $urlSuffix);
+            $categoryUrlPath = $this->getCategoryUrlPath($category);
+            $requestPath = sprintf('%s/%s%s', $categoryUrlPath, $this->urlKey, $urlSuffix);
         }
 
         // return the request path
         return $requestPath;
+    }
+
+    /**
+     * Retrieve url path from given category array
+     * Create unique path by category name, if url is not set
+     *
+     * @param array $category
+     *
+     * @return string
+     */
+    protected function getCategoryUrlPath(array $category)
+    {
+        $path = $category[MemberNames::URL_PATH];
+        if (empty($path)) {
+            $path = $this->getUrlKeyFilter()->filter($category[MemberNames::NAME]);
+        }
+        return $path;
     }
 
     /**
@@ -329,7 +347,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     /**
      * Initialize's and return's the URL key filter.
      *
-     * @return \TechDivision\Import\Utils\ConvertLiteralUrl The URL key filter
+     * @return \TechDivision\Import\Utils\Filter\ConvertLiteralUrl The URL key filter
      */
     protected function getUrlKeyFilter()
     {
