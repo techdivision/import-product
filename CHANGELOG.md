@@ -1,3 +1,13 @@
+# Version 1.0.0-beta10
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to new plugin + subject factory implementations
+
 # Version 1.0.0-beta9
 
 ## Bugfixes

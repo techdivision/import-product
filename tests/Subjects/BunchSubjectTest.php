@@ -49,11 +49,6 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
 
-        // create a mock subject configuration
-        $mockSubjectConfiguration = $this->getMockBuilder('TechDivision\Import\Configuration\SubjectConfigurationInterface')
-                                         ->setMethods(get_class_methods('TechDivision\Import\Configuration\SubjectConfigurationInterface'))
-                                         ->getMock();
-
         // create a mock registry processor
         $mockRegistryProcessor = $this->getMockBuilder('TechDivision\Import\Services\RegistryProcessorInterface')
                                       ->setMethods(get_class_methods('TechDivision\Import\Services\RegistryProcessorInterface'))
@@ -71,7 +66,6 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
 
         // create the subject to be tested
         $this->subject = new BunchSubject(
-            $mockSubjectConfiguration,
             $mockRegistryProcessor,
             $mockGenerator,
             array(),
@@ -109,8 +103,14 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
                           )
                       );
 
-        // inject the processor
+        // create a mock subject configuration
+        $mockSubjectConfiguration = $this->getMockBuilder('TechDivision\Import\Configuration\SubjectConfigurationInterface')
+                                         ->setMethods(get_class_methods('TechDivision\Import\Configuration\SubjectConfigurationInterface'))
+                                         ->getMock();
+
+        // inject the processor + configuration
         $this->subject->setProductProcessor($mockProcessor);
+        $this->subject->setConfiguration($mockSubjectConfiguration);
 
         // make sure we get the expected array with URL rewrites
         $this->assertSame($expected, $this->subject->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId));

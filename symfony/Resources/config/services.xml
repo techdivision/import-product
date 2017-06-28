@@ -266,10 +266,7 @@
         <service id="import_product.observer.url.rewrite" class="TechDivision\Import\Product\Observers\UrlRewriteObserver"/>
         <service id="import_product.observer.url.rewrite.update" class="TechDivision\Import\Product\Observers\UrlRewriteUpdateObserver"/>
 
-        <service id="configuration.import_product.subject.bunch" synthetic="true" />
-
         <service id="import_product.subject.bunch" class="TechDivision\Import\Product\Subjects\BunchSubject" shared="false">
-            <argument type="service" id="configuration.import_product.subject.bunch"/>
             <argument type="service" id="import.processor.registry"/>
             <argument type="service" id="import.generator.core.config.data.uid"/>
             <argument type="service" id="loggers"/>
