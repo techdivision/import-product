@@ -1,4 +1,4 @@
-# Version 1.0.0-beta10
+# Version 1.0.0-beta11
 
 ## Bugfixes
 
@@ -7,6 +7,16 @@
 ## Features
 
 * Switch to new plugin + subject factory implementations
+
+# Version 1.0.0-beta10
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add fallback for url paths in case categories are not indexed
 
 # Version 1.0.0-beta9
 
