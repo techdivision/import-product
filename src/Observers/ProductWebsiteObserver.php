@@ -22,6 +22,7 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
@@ -35,6 +36,33 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
  */
 class ProductWebsiteObserver extends AbstractProductImportObserver
 {
+
+    /**
+     * The product bunch processor instance.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     */
+    protected $productBunchProcessor;
+
+    /**
+     * Initialize the observer with the passed product bunch processor instance.
+     *
+     * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
+     */
+    public function __construct(ProductBunchProcessorInterface $productBunchProcessor)
+    {
+        $this->productBunchProcessor = $productBunchProcessor;
+    }
+
+    /**
+     * Return's the product bunch processor instance.
+     *
+     * @return \TechDivision\Import\Services\ProductBunchProcessorInterface The product bunch processor instance
+     */
+    protected function getProductBunchProcessor()
+    {
+        return $this->productBunchProcessor;
+    }
 
     /**
      * The actual website code that has to be processed.
@@ -147,7 +175,7 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
      */
     protected function persistProductWebsite($productWebsite)
     {
-        $this->getSubject()->persistProductWebsite($productWebsite);
+        $this->getProductBunchProcessor()->persistProductWebsite($productWebsite);
     }
 
     /**

@@ -23,6 +23,7 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\SqlStatements;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 
 /**
  * Observer that removes the product with the SKU found in the CSV file.
@@ -35,6 +36,33 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
  */
 class ClearProductObserver extends AbstractProductImportObserver
 {
+
+    /**
+     * The product bunch processor instance.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     */
+    protected $productBunchProcessor;
+
+    /**
+     * Initialize the observer with the passed product bunch processor instance.
+     *
+     * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
+     */
+    public function __construct(ProductBunchProcessorInterface $productBunchProcessor)
+    {
+        $this->productBunchProcessor = $productBunchProcessor;
+    }
+
+    /**
+     * Return's the product bunch processor instance.
+     *
+     * @return \TechDivision\Import\Services\ProductBunchProcessorInterface The product bunch processor instance
+     */
+    protected function getProductBunchProcessor()
+    {
+        return $this->productBunchProcessor;
+    }
 
     /**
      * Process the observer's business logic.
@@ -70,7 +98,7 @@ class ClearProductObserver extends AbstractProductImportObserver
      */
     public function deleteProduct($row, $name = null)
     {
-        $this->getSubject()->deleteProduct($row, $name);
+        $this->getProductBunchProcessor()->deleteProduct($row, $name);
     }
 
     /**
@@ -83,7 +111,7 @@ class ClearProductObserver extends AbstractProductImportObserver
      */
     public function deleteUrlRewrite($row, $name = null)
     {
-        $this->getSubject()->deleteUrlRewrite($row, $name);
+        $this->getProductBunchProcessor()->deleteUrlRewrite($row, $name);
     }
 
     /**
@@ -96,7 +124,7 @@ class ClearProductObserver extends AbstractProductImportObserver
      */
     public function deleteStockItem($row, $name = null)
     {
-        $this->getSubject()->deleteStockItem($row, $name);
+        $this->getProductBunchProcessor()->deleteStockItem($row, $name);
     }
 
     /**
@@ -109,7 +137,7 @@ class ClearProductObserver extends AbstractProductImportObserver
      */
     public function deleteStockStatus($row, $name = null)
     {
-        $this->getSubject()->deleteStockStatus($row, $name);
+        $this->getProductBunchProcessor()->deleteStockStatus($row, $name);
     }
 
     /**
@@ -122,7 +150,7 @@ class ClearProductObserver extends AbstractProductImportObserver
      */
     public function deleteProductWebsite($row, $name = null)
     {
-        $this->getSubject()->deleteProductWebsite($row, $name);
+        $this->getProductBunchProcessor()->deleteProductWebsite($row, $name);
     }
 
     /**
@@ -135,6 +163,6 @@ class ClearProductObserver extends AbstractProductImportObserver
      */
     public function deleteCategoryProduct($row, $name = null)
     {
-        $this->getSubject()->deleteCategoryProduct($row, $name);
+        $this->getProductBunchProcessor()->deleteCategoryProduct($row, $name);
     }
 }

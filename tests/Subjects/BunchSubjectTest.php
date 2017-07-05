@@ -20,6 +20,10 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
+use TechDivision\Import\Utils\EntityTypeCodes;
+use TechDivision\Import\Product\Utils\RegistryKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
+
 /**
  * Test class for the product action implementation.
  *
@@ -40,6 +44,33 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
     protected $subject;
 
     /**
+     * The global data.
+     *
+     * @var array
+     */
+    protected $globalData = array(
+        RegistryKeys::GLOBAL_DATA => array(
+            RegistryKeys::ENTITY_TYPES => array(
+                EntityTypeCodes::CATALOG_PRODUCT => array(
+                    MemberNames::ENTITY_TYPE_ID => 4,
+                    MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT
+                )
+            ),
+            RegistryKeys::LINK_TYPES => array(),
+            RegistryKeys::CATEGORIES => array(),
+            RegistryKeys::TAX_CLASSES => array(),
+            RegistryKeys::STORE_WEBSITES => array(),
+            RegistryKeys::EAV_ATTRIBUTES => array(),
+            RegistryKeys::ATTRIBUTE_SETS => array(),
+            RegistryKeys::STORES => array(),
+            RegistryKeys::DEFAULT_STORE => array(),
+            RegistryKeys::ROOT_CATEGORIES => array(),
+            RegistryKeys::CORE_CONFIG_DATA => array(),
+            RegistryKeys::EAV_USER_DEFINED_ATTRIBUTES => array()
+        )
+    );
+
+    /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      *
@@ -53,127 +84,64 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
         $mockRegistryProcessor = $this->getMockBuilder('TechDivision\Import\Services\RegistryProcessorInterface')
                                       ->setMethods(get_class_methods('TechDivision\Import\Services\RegistryProcessorInterface'))
                                       ->getMock();
-
-        // create a mock product processor
-        $mockProductProcessor = $this->getMockBuilder('TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
-                                     ->setMethods(get_class_methods('TechDivision\Import\Product\Services\ProductBunchProcessorInterface'))
-                                     ->getMock();
+        $mockRegistryProcessor->expects($this->any())
+                              ->method('getAttribute')
+                              ->with($serial = uniqid())
+                              ->willReturn($this->globalData);
 
         // create a generator
         $mockGenerator = $this->getMockBuilder('TechDivision\Import\Utils\Generators\GeneratorInterface')
                               ->setMethods(get_class_methods('TechDivision\Import\Utils\Generators\GeneratorInterface'))
                               ->getMock();
 
+        // create a mock configuration
+        $mockConfiguration = $this->getMockBuilder($configurationInterface = 'TechDivision\Import\ConfigurationInterface')
+                                  ->setMethods(get_class_methods($configurationInterface))
+                                  ->getMock();
+        $mockConfiguration->expects($this->any())
+                          ->method('getEntityTypeCode')
+                          ->willReturn(EntityTypeCodes::CATALOG_PRODUCT);
+
+        // create a mock subject configuration
+        $mockSubjectConfiguration = $this->getMockBuilder($subjectConfigurationInterface = 'TechDivision\Import\Configuration\SubjectConfigurationInterface')
+                                         ->setMethods(get_class_methods($subjectConfigurationInterface))
+                                         ->getMock();
+        $mockSubjectConfiguration->expects($this->any())
+                                 ->method('getConfiguration')
+                                 ->willReturn($mockConfiguration);
+        $mockSubjectConfiguration->expects($this->any())
+                                 ->method('getCallbacks')
+                                 ->willReturn(array());
+
         // create the subject to be tested
         $this->subject = new BunchSubject(
             $mockRegistryProcessor,
             $mockGenerator,
-            array(),
-            $mockProductProcessor
+            array()
         );
-    }
 
-    /**
-     * Test's the getUrlRewritesByEntityTypeAndEntityId() method successfull.
-     *
-     * @return void
-     */
-    public function testGetUrlRewritesByEntityTypeAndEntityId()
-    {
-
-        // load a mock processor
-        $mockProcessor = $this->getMockBuilder($processorInterface = 'TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
-                              ->setMethods(get_class_methods($processorInterface))
-                              ->getMock();
-        $mockProcessor->expects($this->once())
-                      ->method('getUrlRewritesByEntityTypeAndEntityId')
-                      ->with($entityType = 'product', $entityId = 61413)
-                      ->willReturn(
-                          $expected = array(
-                              'url_rewrite_id'   => 744,
-                              'entity_type'      => 'product',
-                              'entity_id'        => $entityId,
-                              'request_path'     => 'bruno-compete-hoodie-test.html',
-                              'target_path'      => sprintf('catalog/product/view/id/%d', $entityId),
-                              'redirect_type'    => 0,
-                              'store_id'         => 1,
-                              'description'      => 'A custom rewrite',
-                              'is_autogenerated' => 1,
-                              'metadata'         => null
-                          )
-                      );
-
-        // create a mock subject configuration
-        $mockSubjectConfiguration = $this->getMockBuilder('TechDivision\Import\Configuration\SubjectConfigurationInterface')
-                                         ->setMethods(get_class_methods('TechDivision\Import\Configuration\SubjectConfigurationInterface'))
-                                         ->getMock();
-
-        // inject the processor + configuration
-        $this->subject->setProductProcessor($mockProcessor);
+        // inject the mock configuration
         $this->subject->setConfiguration($mockSubjectConfiguration);
 
-        // make sure we get the expected array with URL rewrites
-        $this->assertSame($expected, $this->subject->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId));
+        // set-up the the subject
+        $this->subject->setUp($serial);
     }
 
     /**
-     * Test's the persistUrlRewrite() method successfull.
+     * Test's the getEntityType() method successfull.
      *
      * @return void
      */
-    public function testPersistUrlRewriteSuccessufull()
+    public function testGetEntityType()
     {
 
-        // load a mock processor
-        $mockProcessor = $this->getMockBuilder($processorInterface = 'TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
-                              ->setMethods(get_class_methods($processorInterface))
-                              ->getMock();
-        $mockProcessor->expects($this->once())
-                      ->method('persistUrlRewrite')
-                      ->with(
-                          $urlRewrite = array(
-                              'url_rewrite_id'   => 744,
-                              'entity_type'      => 'product',
-                              'entity_id'        => $entityId = 61413,
-                              'request_path'     => 'bruno-compete-hoodie-test.html',
-                              'target_path'      => sprintf('catalog/product/view/id/%d', $entityId),
-                              'redirect_type'    => 0,
-                              'store_id'         => 1,
-                              'description'      => 'A custom rewrite',
-                              'is_autogenerated' => 1,
-                              'metadata'         => null
-                          )
-                      )
-                      ->willReturn(null);
+        // initialize the expected entity type
+        $entityType = array(
+            MemberNames::ENTITY_TYPE_ID => 4,
+            MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT
+        );
 
-        // inject the processor
-        $this->subject->setProductProcessor($mockProcessor);
-
-        // make sure that the URL rewrite will be persisted
-        $this->assertNull($this->subject->persistUrlRewrite($urlRewrite));
-    }
-
-    /**
-     * Test's the deleteUrlRewrite() method successfull.
-     *
-     * @return void
-     */
-    public function testDeleteUrlRewriteSuccessufull()
-    {
-
-        // load a mock processor
-        $mockProcessor = $this->getMockBuilder($processorInterface = 'TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
-                              ->setMethods(get_class_methods($processorInterface))
-                              ->getMock();
-        $mockProcessor->expects($this->once())
-                      ->method('deleteUrlRewrite')
-                      ->with($urlRewrite = array('url_rewrite_id' => 744))
-                      ->willReturn(null);
-
-        // inject the processor
-        $this->subject->setProductProcessor($mockProcessor);
-
-        // make sure that the URL rewrite will be removed
-        $this->assertNull($this->subject->deleteUrlRewrite($urlRewrite));
+        // query whether or not the entity type is available
+        $this->assertEquals($entityType, $this->subject->getEntityType());
     }
 }

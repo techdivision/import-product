@@ -73,6 +73,6 @@ class ProductWebsiteUpdateObserver extends ProductWebsiteObserver
      */
     protected function loadProductWebsite($productId, $websiteId)
     {
-        return $this->getSubject()->loadProductWebsite($productId, $websiteId);
+        return $this->getProductBunchProcessor()->loadProductWebsite($productId, $websiteId);
     }
 }

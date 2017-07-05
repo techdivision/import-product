@@ -63,6 +63,6 @@ class CategoryProductUpdateObserver extends CategoryProductObserver
      */
     protected function loadCategoryProduct($categoryId, $productId)
     {
-        return $this->getSubject()->loadCategoryProduct($categoryId, $productId);
+        return $this->getProductBunchProcessor()->loadCategoryProduct($categoryId, $productId);
     }
 }

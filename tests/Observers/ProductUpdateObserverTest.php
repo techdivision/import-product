@@ -44,6 +44,13 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
     protected $observer;
 
     /**
+     * A mock processor instance.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     */
+    protected $mockProductBunchProcessor;
+
+    /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      *
@@ -52,7 +59,14 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->observer = new ProductUpdateObserver();
+
+        // initialize a mock processor instance
+        $this->mockProductBunchProcessor = $this->getMockBuilder('TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
+                                                ->setMethods(get_class_methods('TechDivision\Import\Product\Services\ProductBunchProcessorInterface'))
+                                                ->getMock();
+
+        // initialize the observer
+        $this->observer = new ProductUpdateObserver($this->mockProductBunchProcessor);
     }
 
     /**
@@ -118,8 +132,6 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                     'hasBeenProcessed',
                                     'getAttributeSet',
                                     'getSourceDateFormat',
-                                    'loadProduct',
-                                    'persistProduct',
                                     'getRow'
                                 )
                             )
@@ -158,13 +170,15 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
                             MemberNames::ATTRIBUTE_SET_NAME => $attributeSetCode
                         )
                     );
-        $mockSubject->expects($this->once())
-                    ->method('loadProduct')
-                    ->with($sku)
-                    ->willReturn($oldProduct);
-        $mockSubject->expects($this->once())
-                    ->method('persistProduct')
-                    ->with($newProduct);
+
+        // mock the processor methods
+        $this->mockProductBunchProcessor->expects($this->once())
+                                        ->method('loadProduct')
+                                        ->with($sku)
+                                        ->willReturn($oldProduct);
+        $this->mockProductBunchProcessor->expects($this->once())
+                                        ->method('persistProduct')
+                                        ->with($newProduct);
 
         // query whether or not the result is as expected
         $this->assertEquals($row, $this->observer->handle($mockSubject));

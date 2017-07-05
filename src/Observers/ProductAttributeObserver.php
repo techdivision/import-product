@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Observers\AbstractAttributeObserver;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 
 /**
  * Observer that creates/updates the product's attributes.
@@ -35,6 +36,33 @@ class ProductAttributeObserver extends AbstractAttributeObserver
 {
 
     /**
+     * The product bunch processor instance.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     */
+    protected $productBunchProcessor;
+
+    /**
+     * Initialize the observer with the passed product bunch processor instance.
+     *
+     * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
+     */
+    public function __construct(ProductBunchProcessorInterface $productBunchProcessor)
+    {
+        $this->productBunchProcessor = $productBunchProcessor;
+    }
+
+    /**
+     * Return's the product bunch processor instance.
+     *
+     * @return \TechDivision\Import\Services\ProductBunchProcessorInterface The product bunch processor instance
+     */
+    protected function getProductBunchProcessor()
+    {
+        return $this->productBunchProcessor;
+    }
+
+    /**
      * Persist's the passed varchar attribute.
      *
      * @param array $attribute The attribute to persist
@@ -43,7 +71,7 @@ class ProductAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistVarcharAttribute($attribute)
     {
-        $this->getSubject()->persistProductVarcharAttribute($attribute);
+        $this->getProductBunchProcessor()->persistProductVarcharAttribute($attribute);
     }
 
     /**
@@ -55,7 +83,7 @@ class ProductAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistIntAttribute($attribute)
     {
-        $this->getSubject()->persistProductIntAttribute($attribute);
+        $this->getProductBunchProcessor()->persistProductIntAttribute($attribute);
     }
 
     /**
@@ -67,7 +95,7 @@ class ProductAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistDecimalAttribute($attribute)
     {
-        $this->getSubject()->persistProductDecimalAttribute($attribute);
+        $this->getProductBunchProcessor()->persistProductDecimalAttribute($attribute);
     }
 
     /**
@@ -79,7 +107,7 @@ class ProductAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistDatetimeAttribute($attribute)
     {
-        $this->getSubject()->persistProductDatetimeAttribute($attribute);
+        $this->getProductBunchProcessor()->persistProductDatetimeAttribute($attribute);
     }
 
     /**
@@ -91,6 +119,6 @@ class ProductAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistTextAttribute($attribute)
     {
-        $this->getSubject()->persistProductTextAttribute($attribute);
+        $this->getProductBunchProcessor()->persistProductTextAttribute($attribute);
     }
 }

@@ -20,12 +20,12 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
-use TechDivision\Import\Utils\Filter\ConvertLiteralUrl;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
-use TechDivision\Import\Utils\StoreViewCodes;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 
 /**
  * Observer that creates/updates the product's URL rewrites.
@@ -73,6 +73,33 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      * @var array
      */
     protected $urlRewrites = array();
+
+    /**
+     * The product bunch processor instance.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     */
+    protected $productBunchProcessor;
+
+    /**
+     * Initialize the observer with the passed product bunch processor instance.
+     *
+     * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
+     */
+    public function __construct(ProductBunchProcessorInterface $productBunchProcessor)
+    {
+        $this->productBunchProcessor = $productBunchProcessor;
+    }
+
+    /**
+     * Return's the product bunch processor instance.
+     *
+     * @return \TechDivision\Import\Services\ProductBunchProcessorInterface The product bunch processor instance
+     */
+    protected function getProductBunchProcessor()
+    {
+        return $this->productBunchProcessor;
+    }
 
     /**
      * Process the observer's business logic.
@@ -183,18 +210,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
             // prepare the attributes for each URL rewrite
             $this->urlRewrites[$categoryId] = $this->prepareAttributes();
         }
-    }
-
-    /**
-     * Make's the passed URL key unique by adding the next number to the end.
-     *
-     * @param string $urlKey The URL key to make unique
-     *
-     * @return string The unique URL key
-     */
-    protected function makeUrlKeyUnique($urlKey)
-    {
-        return $this->getSubject()->makeUrlKeyUnique($urlKey);
     }
 
     /**
@@ -327,25 +342,100 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Initialize's and return's the URL key filter.
+     * Make's the passed URL key unique by adding the next number to the end.
      *
-     * @return \TechDivision\Import\Utils\ConvertLiteralUrl The URL key filter
+     * @param string $urlKey The URL key to make unique
+     *
+     * @return string The unique URL key
      */
-    protected function getUrlKeyFilter()
+    protected function makeUrlKeyUnique($urlKey)
     {
-        return new ConvertLiteralUrl();
+
+        // initialize the entity type ID
+        $entityType = $this->getEntityType();
+        $entityTypeId = $entityType[MemberNames::ENTITY_TYPE_ID];
+
+        // initialize the query parameters
+        $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
+
+        // initialize the counter
+        $counter = 0;
+
+        // initialize the counters
+        $matchingCounters = array();
+        $notMatchingCounters = array();
+
+        // pre-initialze the URL key to query for
+        $value = $urlKey;
+
+        do {
+            // try to load the attribute
+            $productVarcharAttribute = $this->getProductBunchProcessor()
+                                            ->loadProductVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue(
+                                                MemberNames::URL_KEY,
+                                                $entityTypeId,
+                                                $storeId,
+                                                $value
+                                            );
+
+            // try to load the product's URL key
+            if ($productVarcharAttribute) {
+                // this IS the URL key of the passed entity
+                if ($this->isUrlKeyOf($productVarcharAttribute)) {
+                    $matchingCounters[] = $counter;
+                } else {
+                    $notMatchingCounters[] = $counter;
+                }
+
+                // prepare the next URL key to query for
+                $value = sprintf('%s-%d', $urlKey, ++$counter);
+            }
+
+        } while ($productVarcharAttribute);
+
+        // sort the array ascending according to the counter
+        asort($matchingCounters);
+        asort($notMatchingCounters);
+
+        // this IS the URL key of the passed entity => we've an UPDATE
+        if (sizeof($matchingCounters) > 0) {
+            // load highest counter
+            $counter = end($matchingCounters);
+            // if the counter is > 0, we've to append it to the new URL key
+            if ($counter > 0) {
+                $urlKey = sprintf('%s-%d', $urlKey, $counter);
+            }
+        } elseif (sizeof($notMatchingCounters) > 0) {
+            // create a new URL key by raising the counter
+            $newCounter = end($notMatchingCounters);
+            $urlKey = sprintf('%s-%d', $urlKey, ++$newCounter);
+        }
+
+        // return the passed URL key, if NOT
+        return $urlKey;
     }
 
     /**
-     * Convert's the passed string into a valid URL key.
+     * Return's TRUE, if the passed URL key varchar value IS related with the actual PK.
      *
-     * @param string $string The string to be converted, e. g. the product name
+     * @param array $productVarcharAttribute The varchar value to check
      *
-     * @return string The converted string as valid URL key
+     * @return boolean TRUE if the URL key is related, else FALSE
      */
-    protected function convertNameToUrlKey($string)
+    protected function isUrlKeyOf(array $productVarcharAttribute)
     {
-        return $this->getUrlKeyFilter()->filter($string);
+        return $this->getSubject()->isUrlKeyOf($productVarcharAttribute);
+    }
+
+    /**
+     * Return's the entity type for the configured entity type code.
+     *
+     * @return array The requested entity type
+     * @throws \Exception Is thrown, if the requested entity type is not available
+     */
+    protected function getEntityType()
+    {
+        return $this->getSubject()->getEntityType();
     }
 
     /**
@@ -374,20 +464,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
 
         // compare the entity IDs and return the result
         return $rootCategory[MemberNames::ENTITY_ID] === $category[MemberNames::ENTITY_ID];
-    }
-
-    /**
-     * Return's the store ID of the actual row, or of the default store
-     * if no store view code is set in the CSV file.
-     *
-     * @param string|null $default The default store view code to use, if no store view code is set in the CSV file
-     *
-     * @return integer The ID of the actual store
-     * @throws \Exception Is thrown, if the store with the actual code is not available
-     */
-    protected function getRowStoreId($default = null)
-    {
-        return $this->getSubject()->getRowStoreId($default);
     }
 
     /**
@@ -421,7 +497,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      */
     protected function persistUrlRewrite($row)
     {
-        return $this->getSubject()->persistUrlRewrite($row);
+        return $this->getProductBunchProcessor()->persistUrlRewrite($row);
     }
 
     /**
@@ -433,6 +509,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      */
     protected function persistUrlRewriteProductCategory($row)
     {
-        return $this->getSubject()->persistUrlRewriteProductCategory($row);
+        return $this->getProductBunchProcessor()->persistUrlRewriteProductCategory($row);
     }
 }

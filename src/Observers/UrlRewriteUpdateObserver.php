@@ -281,7 +281,7 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
      */
     protected function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
     {
-        return $this->getSubject()->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
+        return $this->getProductBunchProcessor()->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
     }
 
     /**
@@ -295,6 +295,6 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
      */
     protected function loadUrlRewriteProductCategory($productId, $categoryId)
     {
-        return $this->getSubject()->loadUrlRewriteProductCategory($productId, $categoryId);
+        return $this->getProductBunchProcessor()->loadUrlRewriteProductCategory($productId, $categoryId);
     }
 }

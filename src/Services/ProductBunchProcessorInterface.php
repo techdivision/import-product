@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Services\ProductProcessorInterface
+ * TechDivision\Import\Product\Services\ProductBunchProcessorInterface
  *
  * NOTICE OF LICENSE
  *
@@ -20,6 +20,8 @@
 
 namespace TechDivision\Import\Product\Services;
 
+use TechDivision\Import\Services\EavAwareProcessorInterface;
+
 /**
  * Interface for a product bunch processor.
  *
@@ -29,7 +31,7 @@ namespace TechDivision\Import\Product\Services;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-interface ProductBunchProcessorInterface extends ProductProcessorInterface
+interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavAwareProcessorInterface
 {
 
     /**
@@ -149,17 +151,6 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface
      * @return \TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository The repository instance
      */
     public function getUrlRewriteProductCategoryRepository();
-
-    /**
-     * Load's and return's the EAV attribute option value with the passed code, store ID and value.
-     *
-     * @param string  $attributeCode The code of the EAV attribute option to load
-     * @param integer $storeId       The store ID of the attribute option to load
-     * @param string  $value         The value of the attribute option to load
-     *
-     * @return array The EAV attribute option value
-     */
-    public function loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value);
 
     /**
      * Return's an array with the available EAV attributes for the passed is user defined flag.
