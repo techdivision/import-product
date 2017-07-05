@@ -76,7 +76,7 @@ class ProductAttributeUpdateObserver extends ProductAttributeObserver
      */
     protected function loadDatetimeAttribute($entityId, $attributeId, $storeId)
     {
-        return $this->getSubject()->loadProductDatetimeAttribute($entityId, $attributeId, $storeId);
+        return $this->getProductBunchProcessor()->loadProductDatetimeAttribute($entityId, $attributeId, $storeId);
     }
 
     /**
@@ -90,7 +90,7 @@ class ProductAttributeUpdateObserver extends ProductAttributeObserver
      */
     protected function loadDecimalAttribute($entityId, $attributeId, $storeId)
     {
-        return $this->getSubject()->loadProductDecimalAttribute($entityId, $attributeId, $storeId);
+        return $this->getProductBunchProcessor()->loadProductDecimalAttribute($entityId, $attributeId, $storeId);
     }
 
     /**
@@ -104,7 +104,7 @@ class ProductAttributeUpdateObserver extends ProductAttributeObserver
      */
     protected function loadIntAttribute($entityId, $attributeId, $storeId)
     {
-        return $this->getSubject()->loadProductIntAttribute($entityId, $attributeId, $storeId);
+        return $this->getProductBunchProcessor()->loadProductIntAttribute($entityId, $attributeId, $storeId);
     }
 
     /**
@@ -118,7 +118,7 @@ class ProductAttributeUpdateObserver extends ProductAttributeObserver
      */
     protected function loadTextAttribute($entityId, $attributeId, $storeId)
     {
-        return $this->getSubject()->loadProductTextAttribute($entityId, $attributeId, $storeId);
+        return $this->getProductBunchProcessor()->loadProductTextAttribute($entityId, $attributeId, $storeId);
     }
 
     /**
@@ -132,6 +132,6 @@ class ProductAttributeUpdateObserver extends ProductAttributeObserver
      */
     protected function loadVarcharAttribute($entityId, $attributeId, $storeId)
     {
-        return $this->getSubject()->loadProductVarcharAttribute($entityId, $attributeId, $storeId);
+        return $this->getProductBunchProcessor()->loadProductVarcharAttribute($entityId, $attributeId, $storeId);
     }
 }

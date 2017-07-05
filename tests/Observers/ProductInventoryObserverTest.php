@@ -42,6 +42,13 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
     protected $observer;
 
     /**
+     * A mock processor instance.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     */
+    protected $mockProductBunchProcessor;
+
+    /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      *
@@ -50,7 +57,14 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->observer = new ProductInventoryObserver();
+
+        // initialize a mock processor instance
+        $this->mockProductBunchProcessor = $this->getMockBuilder('TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
+                                                ->setMethods(get_class_methods('TechDivision\Import\Product\Services\ProductBunchProcessorInterface'))
+                                                ->getMock();
+
+        // initialize the observer
+        $this->observer = new ProductInventoryObserver($this->mockProductBunchProcessor);
     }
 
     /**
@@ -118,8 +132,6 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
                                 array(
                                     'hasBeenProcessed',
                                     'getLastEntityId',
-                                    'persistStockItem',
-                                    'persistStockStatus',
                                     'getRow'
                                 )
                             )
@@ -135,48 +147,50 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->exactly(2))
                     ->method('getLastEntityId')
                     ->willReturn($lastEntityId = 12345);
-        $mockSubject->expects($this->once())
-                    ->method('persistStockItem')
-                    ->with(
-                        array(
-                            'product_id'                  => $lastEntityId,
-                            'website_id'                  => 0,
-                            'stock_id'                    => 1,
-                            'qty'                         => 0.0,
-                            'min_qty'                     => 0.0,
-                            'use_config_min_qty'          => 0,
-                            'is_qty_decimal'              => 0,
-                            'backorders'                  => 0,
-                            'use_config_backorders'       => 0,
-                            'min_sale_qty'                => 0.0,
-                            'use_config_min_sale_qty'     => 0,
-                            'max_sale_qty'                => 0.0,
-                            'use_config_max_sale_qty'     => 0,
-                            'is_in_stock'                 => 0,
-                            'notify_stock_qty'            => 0.0,
-                            'use_config_notify_stock_qty' => 0,
-                            'manage_stock'                => 0,
-                            'use_config_manage_stock'     => 0,
-                            'use_config_qty_increments'   => 0,
-                            'qty_increments'              => 0.0,
-                            'use_config_enable_qty_inc'   => 0,
-                            'enable_qty_increments'       => 0,
-                            'is_decimal_divided'          => 0,
-                            EntityStatus::MEMBER_NAME     => EntityStatus::STATUS_CREATE
-                        )
-                    );
-        $mockSubject->expects($this->once())
-                    ->method('persistStockStatus')
-                    ->with(
-                        array(
-                            'product_id'              => $lastEntityId,
-                            'website_id'              => 0,
-                            'stock_id'                => 1,
-                            'stock_status'            => 0,
-                            'qty'                     => 0.000,
-                            EntityStatus::MEMBER_NAME => EntityStatus::STATUS_CREATE
-                        )
-                    );
+
+        // mock the processor methods
+        $this->mockProductBunchProcessor->expects($this->once())
+                                        ->method('persistStockItem')
+                                        ->with(
+                                            array(
+                                                'product_id'                  => $lastEntityId,
+                                                'website_id'                  => 0,
+                                                'stock_id'                    => 1,
+                                                'qty'                         => 0.0,
+                                                'min_qty'                     => 0.0,
+                                                'use_config_min_qty'          => 0,
+                                                'is_qty_decimal'              => 0,
+                                                'backorders'                  => 0,
+                                                'use_config_backorders'       => 0,
+                                                'min_sale_qty'                => 0.0,
+                                                'use_config_min_sale_qty'     => 0,
+                                                'max_sale_qty'                => 0.0,
+                                                'use_config_max_sale_qty'     => 0,
+                                                'is_in_stock'                 => 0,
+                                                'notify_stock_qty'            => 0.0,
+                                                'use_config_notify_stock_qty' => 0,
+                                                'manage_stock'                => 0,
+                                                'use_config_manage_stock'     => 0,
+                                                'use_config_qty_increments'   => 0,
+                                                'qty_increments'              => 0.0,
+                                                'use_config_enable_qty_inc'   => 0,
+                                                'enable_qty_increments'       => 0,
+                                                'is_decimal_divided'          => 0,
+                                                EntityStatus::MEMBER_NAME     => EntityStatus::STATUS_CREATE
+                                            )
+                                        );
+        $this->mockProductBunchProcessor->expects($this->once())
+                                        ->method('persistStockStatus')
+                                        ->with(
+                                            array(
+                                                'product_id'              => $lastEntityId,
+                                                'website_id'              => 0,
+                                                'stock_id'                => 1,
+                                                'stock_status'            => 0,
+                                                'qty'                     => 0.000,
+                                                EntityStatus::MEMBER_NAME => EntityStatus::STATUS_CREATE
+                                            )
+                                        );
 
         // invoke the handle() method
         $this->assertSame($row, $this->observer->handle($mockSubject));

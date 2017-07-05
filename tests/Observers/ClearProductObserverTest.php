@@ -42,6 +42,13 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
     protected $observer;
 
     /**
+     * A mock processor instance.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     */
+    protected $mockProductBunchProcessor;
+
+    /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      *
@@ -50,7 +57,14 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->observer = new ClearProductObserver();
+
+        // initialize a mock processor instance
+        $this->mockProductBunchProcessor = $this->getMockBuilder('TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
+                                                ->setMethods(get_class_methods('TechDivision\Import\Product\Services\ProductBunchProcessorInterface'))
+                                                ->getMock();
+
+        // initialize the observer
+        $this->observer = new ClearProductObserver($this->mockProductBunchProcessor);
     }
 
     /**
@@ -74,12 +88,6 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                                     'hasHeader',
                                     'getHeader',
                                     'getLastSku',
-                                    'deleteUrlRewrite',
-                                    'deleteStockItem',
-                                    'deleteStockStatus',
-                                    'deleteProductWebsite',
-                                    'deleteCategoryProduct',
-                                    'deleteProduct',
                                     'getRow'
                                 )
                             )
@@ -98,24 +106,26 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->once())
                     ->method('getLastSku')
                     ->willReturn('TEST-02');
-        $mockSubject->expects($this->once())
-                    ->method('deleteUrlRewrite')
-                    ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
-        $mockSubject->expects($this->once())
-                    ->method('deleteStockItem')
-                    ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
-        $mockSubject->expects($this->once())
-                    ->method('deleteStockStatus')
-                    ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
-        $mockSubject->expects($this->once())
-                    ->method('deleteProductWebsite')
-                    ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
-        $mockSubject->expects($this->once())
-                    ->method('deleteCategoryProduct')
-                    ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
-        $mockSubject->expects($this->once())
-                    ->method('deleteProduct')
-                    ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
+
+        // mock the processor methods
+        $this->mockProductBunchProcessor->expects($this->once())
+                                        ->method('deleteUrlRewrite')
+                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
+        $this->mockProductBunchProcessor->expects($this->once())
+                                        ->method('deleteStockItem')
+                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
+        $this->mockProductBunchProcessor->expects($this->once())
+                                        ->method('deleteStockStatus')
+                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
+        $this->mockProductBunchProcessor->expects($this->once())
+                                        ->method('deleteProductWebsite')
+                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
+        $this->mockProductBunchProcessor->expects($this->once())
+                                        ->method('deleteCategoryProduct')
+                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
+        $this->mockProductBunchProcessor->expects($this->once())
+                                        ->method('deleteProduct')
+                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
 
         // invoke the handle() method
         $this->assertSame($row, $this->observer->handle($mockSubject));

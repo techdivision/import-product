@@ -22,6 +22,7 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 
 /**
  * Observer that pre-loads the entity ID of the product with the SKU found in the CSV file.
@@ -34,6 +35,33 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
  */
 class PreLoadEntityIdObserver extends AbstractProductImportObserver
 {
+
+    /**
+     * The product bunch processor instance.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     */
+    protected $productBunchProcessor;
+
+    /**
+     * Initialize the observer with the passed product bunch processor instance.
+     *
+     * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
+     */
+    public function __construct(ProductBunchProcessorInterface $productBunchProcessor)
+    {
+        $this->productBunchProcessor = $productBunchProcessor;
+    }
+
+    /**
+     * Return's the product bunch processor instance.
+     *
+     * @return \TechDivision\Import\Services\ProductBunchProcessorInterface The product bunch processor instance
+     */
+    protected function getProductBunchProcessor()
+    {
+        return $this->productBunchProcessor;
+    }
 
     /**
      * Process the observer's business logic.
@@ -49,18 +77,30 @@ class PreLoadEntityIdObserver extends AbstractProductImportObserver
         }
 
         // preserve the entity ID for the product with the passed SKU
-        $this->preLoadEntityId($sku);
+        $this->preLoadEntityId($this->loadProduct($sku));
     }
 
     /**
-     * Pre-load the entity ID for the product with the passed SKU.
+     * Pre-load the entity ID for the passed product.
      *
-     * @param string $sku The SKU of the product to pre-load
+     * @param array $product The product to be pre-loaded
      *
      * @return void
      */
-    protected function preLoadEntityId($sku)
+    protected function preLoadEntityId(array $product)
     {
-        return $this->getSubject()->preLoadEntityId($sku);
+        return $this->getSubject()->preLoadEntityId($product);
+    }
+
+    /**
+     * Load's and return's the product with the passed SKU.
+     *
+     * @param string $sku The SKU of the product to load
+     *
+     * @return array The product
+     */
+    protected function loadProduct($sku)
+    {
+        return $this->getProductBunchProcessor()->loadProduct($sku);
     }
 }

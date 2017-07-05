@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use Zend\Filter\FilterInterface;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Utils\Filter\UrlKeyFilterTrait;
 
@@ -42,6 +43,16 @@ class UrlKeyObserver extends AbstractProductImportObserver
      * @var \TechDivision\Import\Utils\Filter\UrlKeyFilterTrait
      */
     use UrlKeyFilterTrait;
+
+    /**
+     * Initialize the observer with the passed product bunch processor instance.
+     *
+     * @param \Zend\Filter\FilterInterface $convertLiteralUrlFilter The URL filter instance
+     */
+    public function __construct(FilterInterface $convertLiteralUrlFilter)
+    {
+        $this->convertLiteralUrlFilter = $convertLiteralUrlFilter;
+    }
 
     /**
      * Process the observer's business logic.

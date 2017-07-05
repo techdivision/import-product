@@ -97,7 +97,7 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
      */
     protected function loadStockStatus($productId, $websiteId, $stockId)
     {
-        return $this->getSubject()->loadStockStatus($productId, $websiteId, $stockId);
+        return $this->getProductBunchProcessor()->loadStockStatus($productId, $websiteId, $stockId);
     }
 
     /**
@@ -111,6 +111,6 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
      */
     protected function loadStockItem($productId, $websiteId, $stockId)
     {
-        return $this->getSubject()->loadStockItem($productId, $websiteId, $stockId);
+        return $this->getProductBunchProcessor()->loadStockItem($productId, $websiteId, $stockId);
     }
 }

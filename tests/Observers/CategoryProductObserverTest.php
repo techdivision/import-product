@@ -50,7 +50,14 @@ class CategoryProductObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->observer = new CategoryProductObserver();
+
+        // initialize a mock processor instance
+        $mockProductBunchProcessor = $this->getMockBuilder('TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
+                                          ->setMethods(get_class_methods('TechDivision\Import\Product\Services\ProductBunchProcessorInterface'))
+                                          ->getMock();
+
+        // initialize the observer
+        $this->observer = new CategoryProductObserver($mockProductBunchProcessor);
     }
 
     /**

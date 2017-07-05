@@ -23,6 +23,7 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 
 /**
  * Observer that creates/updates the category product relations.
@@ -42,6 +43,33 @@ class CategoryProductObserver extends AbstractProductImportObserver
      * @var string
      */
     protected $path;
+
+    /**
+     * The product bunch processor instance.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     */
+    protected $productBunchProcessor;
+
+    /**
+     * Initialize the observer with the passed product bunch processor instance.
+     *
+     * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
+     */
+    public function __construct(ProductBunchProcessorInterface $productBunchProcessor)
+    {
+        $this->productBunchProcessor = $productBunchProcessor;
+    }
+
+    /**
+     * Return's the product bunch processor instance.
+     *
+     * @return \TechDivision\Import\Services\ProductBunchProcessorInterface The product bunch processor instance
+     */
+    protected function getProductBunchProcessor()
+    {
+        return $this->productBunchProcessor;
+    }
 
     /**
      * Process the observer's business logic.
@@ -140,18 +168,6 @@ class CategoryProductObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Persist's the passed category product relation.
-     *
-     * @param array $categoryProduct The category product relation to persist
-     *
-     * @return void
-     */
-    protected function persistCategoryProduct($categoryProduct)
-    {
-        $this->getSubject()->persistCategoryProduct($categoryProduct);
-    }
-
-    /**
      * Return's the category with the passed path.
      *
      * @param string $path The path of the category to return
@@ -161,5 +177,17 @@ class CategoryProductObserver extends AbstractProductImportObserver
     protected function getCategoryByPath($path)
     {
         return $this->getSubject()->getCategoryByPath($path);
+    }
+
+    /**
+     * Persist's the passed category product relation.
+     *
+     * @param array $categoryProduct The category product relation to persist
+     *
+     * @return void
+     */
+    protected function persistCategoryProduct($categoryProduct)
+    {
+        $this->getProductBunchProcessor()->persistCategoryProduct($categoryProduct);
     }
 }

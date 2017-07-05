@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Utils\EntityTypeCodes;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
@@ -45,6 +46,13 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
     protected $observer;
 
     /**
+     * A mock processor instance.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     */
+    protected $mockProductBunchProcessor;
+
+    /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      *
@@ -53,7 +61,14 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->observer = new UrlRewriteUpdateObserver();
+
+        // initialize a mock processor instance
+        $this->mockProductBunchProcessor = $this->getMockBuilder('TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
+                                                ->setMethods(get_class_methods('TechDivision\Import\Product\Services\ProductBunchProcessorInterface'))
+                                                ->getMock();
+
+        // initialize the observer
+        $this->observer = new UrlRewriteUpdateObserver($this->mockProductBunchProcessor);
     }
 
     /**
@@ -148,12 +163,8 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                         'getRootCategory',
                                         'getRowStoreId',
                                         'getCategory',
-                                        'persistUrlRewrite',
-                                        'persistUrlRewriteProductCategory',
-                                        'getUrlRewritesByEntityTypeAndEntityId',
-                                        'loadUrlRewriteProductCategory',
                                         'getCoreConfigData',
-                                        'makeUrlKeyUnique',
+                                        'getEntityType',
                                         'getRow'
                                     )
                                 )
@@ -178,9 +189,6 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                     )
                     ->willReturnOnConsecutiveCalls(0, 1, 1, 2);
         $mockSubject->expects($this->any())
-                    ->method('loadUrlRewriteProductCategory')
-                    ->willReturn(array());
-        $mockSubject->expects($this->any())
                     ->method('getLastEntityId')
                     ->willReturn($entityId);
         $mockSubject->expects($this->exactly(4))
@@ -204,10 +212,6 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getRowStoreId')
                     ->willReturn($storeId = 1);
-        $mockSubject->expects($this->once())
-                    ->method('getUrlRewritesByEntityTypeAndEntityId')
-                    ->with(UrlRewriteObserver::ENTITY_TYPE, $entityId)
-                    ->willReturn($urlRewrites);
         $mockSubject->expects($this->exactly(8))
                     ->method('getCoreConfigData')
                     ->withConsecutive(
@@ -222,10 +226,18 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                     )
                     ->willReturnOnConsecutiveCalls(true, '.html', '.html', '.html', '.html', '.html', '.html', '.html');
         $mockSubject->expects($this->exactly(7))
-                    ->method('makeUrlKeyUnique')
-                    ->with($row[$headers[ColumnKeys::URL_KEY]])
-                    ->willReturn($row[$headers[ColumnKeys::URL_KEY]]);
-        $mockSubject->expects($this->exactly(7))
+                    ->method('getEntityType')
+                    ->willReturn(array(MemberNames::ENTITY_TYPE_ID => 1, MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT));
+
+        // mock the processor methods
+        $this->mockProductBunchProcessor->expects($this->any())
+                    ->method('loadUrlRewriteProductCategory')
+                    ->willReturn(array());
+        $this->mockProductBunchProcessor->expects($this->once())
+                    ->method('getUrlRewritesByEntityTypeAndEntityId')
+                    ->with(UrlRewriteObserver::ENTITY_TYPE, $entityId)
+                    ->willReturn($urlRewrites);
+        $this->mockProductBunchProcessor->expects($this->exactly(7))
                     ->method('persistUrlRewrite')
                     ->withConsecutive(
                         array(
@@ -332,7 +344,7 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                         )
                     )
                     ->willReturnOnConsecutiveCalls(1000, 1001, 1002, 1003, 1004, 1005, 1006);
-        $mockSubject->expects($this->exactly(3))
+        $this->mockProductBunchProcessor->expects($this->exactly(3))
                     ->method('persistUrlRewriteProductCategory')
                     ->withConsecutive(
                         array(

@@ -242,35 +242,71 @@
             <argument type="service" id="import_product.action.url.rewrite.product.category"/>
         </service>
 
+        <service id="import_product.filter.convert.literal.url" class="TechDivision\Import\Utils\Filter\ConvertLiteralUrl"/>
+
         <service id="import_product.callback.boolean" class="TechDivision\Import\Product\Callbacks\BooleanCallback"/>
-        <service id="import_product.callback.multiselect" class="TechDivision\Import\Product\Callbacks\MultiselectCallback"/>
-        <service id="import_product.callback.select" class="TechDivision\Import\Product\Callbacks\SelectCallback"/>
         <service id="import_product.callback.tax.class" class="TechDivision\Import\Product\Callbacks\TaxClassCallback"/>
         <service id="import_product.callback.visibility" class="TechDivision\Import\Product\Callbacks\VisibilityCallback"/>
+        <service id="import_product.callback.multiselect" class="TechDivision\Import\Product\Callbacks\MultiselectCallback">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.callback.select" class="TechDivision\Import\Product\Callbacks\SelectCallback">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
 
-        <service id="import_product.observer.category.product" class="TechDivision\Import\Product\Observers\CategoryProductObserver"/>
-        <service id="import_product.observer.category.product.update" class="TechDivision\Import\Product\Observers\CategoryProductUpdateObserver"/>
         <service id="import_product.observer.clean.up" class="TechDivision\Import\Product\Observers\CleanUpObserver"/>
-        <service id="import_product.observer.clear.product" class="TechDivision\Import\Product\Observers\ClearProductObserver"/>
-        <service id="import_product.observer.pre.load.entity.id" class="TechDivision\Import\Product\Observers\PreLoadEntityIdObserver"/>
-        <service id="import_product.observer.product.attribute" class="TechDivision\Import\Product\Observers\ProductAttributeObserver"/>
-        <service id="import_product.observer.product.attribute.update" class="TechDivision\Import\Product\Observers\ProductAttributeUpdateObserver"/>
-        <service id="import_product.observer.product.inventory" class="TechDivision\Import\Product\Observers\ProductInventoryObserver"/>
-        <service id="import_product.observer.product.inventory.update" class="TechDivision\Import\Product\Observers\ProductInventoryUpdateObserver"/>
-        <service id="import_product.observer.product" class="TechDivision\Import\Product\Observers\ProductObserver"/>
-        <service id="import_product.observer.product.update" class="TechDivision\Import\Product\Observers\ProductUpdateObserver"/>
-        <service id="import_product.observer.product.website" class="TechDivision\Import\Product\Observers\ProductWebsiteObserver"/>
-        <service id="import_product.observer.product.website.update" class="TechDivision\Import\Product\Observers\ProductWebsiteUpdateObserver"/>
         <service id="import_product.observer.quality.and.stock.status" class="TechDivision\Import\Product\Observers\QuantityAndStockStatusObserver"/>
-        <service id="import_product.observer.url.key" class="TechDivision\Import\Product\Observers\UrlKeyObserver"/>
-        <service id="import_product.observer.url.rewrite" class="TechDivision\Import\Product\Observers\UrlRewriteObserver"/>
-        <service id="import_product.observer.url.rewrite.update" class="TechDivision\Import\Product\Observers\UrlRewriteUpdateObserver"/>
+        <service id="import_product.observer.url.key" class="TechDivision\Import\Product\Observers\UrlKeyObserver">
+            <argument type="service" id="import_product.filter.convert.literal.url"/>
+        </service>
+        <service id="import_product.observer.category.product" class="TechDivision\Import\Product\Observers\CategoryProductObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.category.product.update" class="TechDivision\Import\Product\Observers\CategoryProductUpdateObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.clear.product" class="TechDivision\Import\Product\Observers\ClearProductObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.pre.load.entity.id" class="TechDivision\Import\Product\Observers\PreLoadEntityIdObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.product.attribute" class="TechDivision\Import\Product\Observers\ProductAttributeObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.product.attribute.update" class="TechDivision\Import\Product\Observers\ProductAttributeUpdateObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.product.inventory" class="TechDivision\Import\Product\Observers\ProductInventoryObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.product.inventory.update" class="TechDivision\Import\Product\Observers\ProductInventoryUpdateObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.product" class="TechDivision\Import\Product\Observers\ProductObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.product.update" class="TechDivision\Import\Product\Observers\ProductUpdateObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.product.website" class="TechDivision\Import\Product\Observers\ProductWebsiteObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.product.website.update" class="TechDivision\Import\Product\Observers\ProductWebsiteUpdateObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.url.rewrite" class="TechDivision\Import\Product\Observers\UrlRewriteObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+            <argument type="service" id="import_product.filter.convert.literal.url"/>
+        </service>
+        <service id="import_product.observer.url.rewrite.update" class="TechDivision\Import\Product\Observers\UrlRewriteUpdateObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
 
         <service id="import_product.subject.bunch" class="TechDivision\Import\Product\Subjects\BunchSubject" shared="false">
             <argument type="service" id="import.processor.registry"/>
             <argument type="service" id="import.generator.core.config.data.uid"/>
             <argument type="service" id="loggers"/>
-            <argument type="service" id="import_product.processor.product.bunch"/>
         </service>
 
     </services>

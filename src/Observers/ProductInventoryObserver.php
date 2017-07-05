@@ -23,6 +23,7 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 
 /**
  * Observer that creates/updates the product's inventory.
@@ -35,6 +36,33 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
  */
 class ProductInventoryObserver extends AbstractProductImportObserver
 {
+
+    /**
+     * The product bunch processor instance.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     */
+    protected $productBunchProcessor;
+
+    /**
+     * Initialize the observer with the passed product bunch processor instance.
+     *
+     * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
+     */
+    public function __construct(ProductBunchProcessorInterface $productBunchProcessor)
+    {
+        $this->productBunchProcessor = $productBunchProcessor;
+    }
+
+    /**
+     * Return's the product bunch processor instance.
+     *
+     * @return \TechDivision\Import\Services\ProductBunchProcessorInterface The product bunch processor instance
+     */
+    protected function getProductBunchProcessor()
+    {
+        return $this->productBunchProcessor;
+    }
 
     /**
      * Process the observer's business logic.
@@ -140,6 +168,16 @@ class ProductInventoryObserver extends AbstractProductImportObserver
     }
 
     /**
+     * Return's the appings for the table column => CSV column header.
+     *
+     * @return array The header stock mappings
+     */
+    protected function getHeaderStockMappings()
+    {
+        return $this->getSubject()->getHeaderStockMappings();
+    }
+
+    /**
      * Persist's the passed stock item data and return's the ID.
      *
      * @param array $stockItem The stock item data to persist
@@ -148,7 +186,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver
      */
     protected function persistStockItem($stockItem)
     {
-        $this->getSubject()->persistStockItem($stockItem);
+        $this->getProductBunchProcessor()->persistStockItem($stockItem);
     }
 
     /**
@@ -160,16 +198,6 @@ class ProductInventoryObserver extends AbstractProductImportObserver
      */
     protected function persistStockStatus($stockStatus)
     {
-        $this->getSubject()->persistStockStatus($stockStatus);
-    }
-
-    /**
-     * Return's the appings for the table column => CSV column header.
-     *
-     * @return array The header stock mappings
-     */
-    protected function getHeaderStockMappings()
-    {
-        return $this->getSubject()->getHeaderStockMappings();
+        $this->getProductBunchProcessor()->persistStockStatus($stockStatus);
     }
 }

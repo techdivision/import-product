@@ -22,11 +22,8 @@ namespace TechDivision\Import\Product\Subjects;
 
 use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Utils\FrontendInputTypes;
-use TechDivision\Import\Utils\Generators\GeneratorInterface;
-use TechDivision\Import\Subjects\AbstractEavSubject;
-use TechDivision\Import\Services\RegistryProcessorInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Services\ProductProcessorInterface;
+use TechDivision\Import\Subjects\AbstractEavSubject;
 
 /**
  * The abstract product subject implementation that provides basic product
@@ -40,13 +37,6 @@ use TechDivision\Import\Product\Services\ProductProcessorInterface;
  */
 abstract class AbstractProductSubject extends AbstractEavSubject
 {
-
-    /**
-     * The processor to read/write the necessary product data.
-     *
-     * @var \TechDivision\Import\Product\Services\ProductProcessorInterface
-     */
-    protected $productProcessor;
 
     /**
      * The available stores.
@@ -162,28 +152,6 @@ abstract class AbstractProductSubject extends AbstractEavSubject
     );
 
     /**
-     * Initialize the subject instance.
-     *
-     * @param \TechDivision\Import\Services\RegistryProcessorInterface        $registryProcessor          The registry processor instance
-     * @param \TechDivision\Import\Utils\Generators\GeneratorInterface        $coreConfigDataUidGenerator The UID generator for the core config data
-     * @param array                                                           $systemLoggers              The array with the system logger instances
-     * @param \TechDivision\Import\Product\Services\ProductProcessorInterface $productProcessor           The product processor instance
-     */
-    public function __construct(
-        RegistryProcessorInterface $registryProcessor,
-        GeneratorInterface $coreConfigDataUidGenerator,
-        array $systemLoggers,
-        ProductProcessorInterface $productProcessor
-    ) {
-
-        // pass the arguments to the parent constructor
-        parent::__construct($registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
-
-        // initialize the product processor
-        $this->productProcessor = $productProcessor;
-    }
-
-    /**
      * Return's the default callback frontend input mappings for the user defined attributes.
      *
      * @return array The default frontend input callback mappings
@@ -201,28 +169,6 @@ abstract class AbstractProductSubject extends AbstractEavSubject
     public function getLinkTypes()
     {
         return $this->linkTypes;
-    }
-
-    /**
-     * Set's the product processor instance.
-     *
-     * @param \TechDivision\Import\Product\Services\ProductProcessorInterface $productProcessor The product processor instance
-     *
-     * @return void
-     */
-    public function setProductProcessor(ProductProcessorInterface $productProcessor)
-    {
-        $this->productProcessor = $productProcessor;
-    }
-
-    /**
-     * Return's the product processor instance.
-     *
-     * @return \TechDivision\Import\Services\ProductProcessorInterface The product processor instance
-     */
-    public function getProductProcessor()
-    {
-        return $this->productProcessor;
     }
 
     /**
@@ -365,32 +311,6 @@ abstract class AbstractProductSubject extends AbstractEavSubject
     public function getHeaderMappings()
     {
         return $this->headerMappings;
-    }
-
-    /**
-     * Return's an array with the available EAV attributes for the passed is user defined flag.
-     *
-     * @param integer $isUserDefined The flag itself
-     *
-     * @return array The array with the EAV attributes matching the passed flag
-     */
-    public function getEavAttributeByIsUserDefined($isUserDefined = 1)
-    {
-        return $this->getProductProcessor()->getEavAttributeByIsUserDefined($isUserDefined);
-    }
-
-    /**
-     * Load's and return's the EAV attribute option value with the passed code, store ID and value.
-     *
-     * @param string  $attributeCode The code of the EAV attribute option to load
-     * @param integer $storeId       The store ID of the attribute option to load
-     * @param string  $value         The value of the attribute option to load
-     *
-     * @return array The EAV attribute option value
-     */
-    public function loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value)
-    {
-        return $this->getProductProcessor()->loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value);
     }
 
     /**

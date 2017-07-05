@@ -62,6 +62,6 @@ class ProductUpdateObserver extends ProductObserver
      */
     protected function loadProduct($sku)
     {
-        return $this->getSubject()->loadProduct($sku);
+        return $this->getProductBunchProcessor()->loadProduct($sku);
     }
 }
