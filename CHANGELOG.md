@@ -1,3 +1,13 @@
+# Version 1.0.0-beta13
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add self explaining exception message for missing category attribute "url_path" when creating product URL rewrites
+
 # Version 1.0.0-beta12
 
 ## Bugfixes

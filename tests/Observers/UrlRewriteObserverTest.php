@@ -146,7 +146,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->once())
                     ->method('getCategory')
                     ->with($categoryId)
-                    ->willReturn($category = array(MemberNames::ENTITY_ID => $categoryId, MemberNames::URL_PATH));
+                    ->willReturn($category = array(MemberNames::ENTITY_ID => $categoryId, MemberNames::URL_PATH => null));
         $mockSubject->expects($this->exactly(4))
                     ->method('getRootCategory')
                     ->willReturn($category);
