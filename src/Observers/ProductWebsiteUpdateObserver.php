@@ -50,11 +50,9 @@ class ProductWebsiteUpdateObserver extends ProductWebsiteObserver
             // throw a runtime exception, if the relation already exists
             throw new \RuntimeException(
                 sprintf(
-                    'Product website relation %d => %d already exsits in file %s on line %s',
+                    'Product website relation %d => %d already exsits',
                     $attr[MemberNames::PRODUCT_ID],
-                    $attr[MemberNames::WEBSITE_ID],
-                    $this->getFilename(),
-                    $this->getLineNumber()
+                    $attr[MemberNames::WEBSITE_ID]
                 )
             );
         }

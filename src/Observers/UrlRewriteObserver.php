@@ -295,6 +295,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      * @param array $category The categroy with the URL path
      *
      * @return string The request path
+     * @throws \RuntimeException Is thrown, if the passed category has no or an empty value for attribute "url_path"
      */
     protected function prepareRequestPath(array $category)
     {
@@ -307,13 +308,22 @@ class UrlRewriteObserver extends AbstractProductImportObserver
 
         // query whether or not, the category is the root category
         if ($this->isRootCategory($category)) {
-            $requestPath = sprintf('%s%s', $this->urlKey, $urlSuffix);
+            return sprintf('%s%s', $this->urlKey, $urlSuffix);
         } else {
-            $requestPath = sprintf('%s/%s%s', $category[MemberNames::URL_PATH], $this->urlKey, $urlSuffix);
+            // query whether or not the category's "url_path" attribute, necessary to create a valid "request_path", is available
+            if (isset($category[MemberNames::URL_PATH]) && $category[MemberNames::URL_PATH]) {
+                return sprintf('%s/%s%s', $category[MemberNames::URL_PATH], $this->urlKey, $urlSuffix);
+            }
         }
 
-        // return the request path
-        return $requestPath;
+        // throw an exception if the category's "url_path" attribute is NOT available
+        throw new \RuntimeException(
+            sprintf(
+                'Can\'t find mandatory attribute "%s" for category ID "%d", necessary to build a valid "request_path"',
+                MemberNames::URL_PATH,
+                $category[MemberNames::ENTITY_ID]
+            )
+        );
     }
 
     /**
