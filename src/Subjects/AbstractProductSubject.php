@@ -24,6 +24,7 @@ use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Utils\FrontendInputTypes;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Subjects\AbstractEavSubject;
+use TechDivision\Import\Subjects\EntitySubjectInterface;
 
 /**
  * The abstract product subject implementation that provides basic product
@@ -35,7 +36,7 @@ use TechDivision\Import\Subjects\AbstractEavSubject;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-abstract class AbstractProductSubject extends AbstractEavSubject
+abstract class AbstractProductSubject extends AbstractEavSubject implements EntitySubjectInterface
 {
 
     /**

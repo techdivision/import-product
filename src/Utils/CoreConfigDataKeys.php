@@ -45,4 +45,11 @@ class CoreConfigDataKeys extends \TechDivision\Import\Utils\CoreConfigDataKeys
      * @var string
      */
     const CATALOG_SEO_PRODUCT_USE_CATEGORIES = 'catalog/seo/product_use_categories';
+
+    /**
+     * Name for the column 'catalog/seo/save_rewrites_history'.
+     *
+     * @var string
+     */
+    const CATALOG_SEO_SAVE_REWRITES_HISTORY = 'catalog/seo/save_rewrites_history';
 }
