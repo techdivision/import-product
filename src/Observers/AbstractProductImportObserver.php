@@ -20,8 +20,8 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Subjects\SubjectInterface;
 use TechDivision\Import\Observers\AbstractObserver;
+use TechDivision\Import\Subjects\SubjectInterface;
 
 /**
  * Abstract category observer that handles the process to import product bunches.
@@ -41,7 +41,7 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      * @param \TechDivision\Import\Subjects\SubjectInterface $subject The subject instance
      *
      * @return array The modified row
-     * @see \TechDivision\Import\Product\Observers\ImportObserverInterface::handle()
+     * @see \TechDivision\Import\Observers\ObserverInterface::handle()
      */
     public function handle(SubjectInterface $subject)
     {

@@ -20,9 +20,9 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Utils\EntityStatus;
-use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Utils\EntityStatus;
 
 /**
  * Test class for the product update observer implementation.
@@ -39,7 +39,7 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * The observer we want to test.
      *
-     * @var \TechDivision\Import\Product\Observers\PreImport\ProductUpdateObserver
+     * @var \TechDivision\Import\Product\Observers\ProductUpdateObserver
      */
     protected $observer;
 

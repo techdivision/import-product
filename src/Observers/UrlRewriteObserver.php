@@ -20,12 +20,11 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Utils\StoreViewCodes;
-use TechDivision\Import\Product\Utils\ColumnKeys;
-use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
-use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
  * Observer that creates/updates the product's URL rewrites.
@@ -94,7 +93,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     /**
      * Return's the product bunch processor instance.
      *
-     * @return \TechDivision\Import\Services\ProductBunchProcessorInterface The product bunch processor instance
+     * @return \TechDivision\Import\Product\Services\ProductBunchProcessorInterface The product bunch processor instance
      */
     protected function getProductBunchProcessor()
     {
@@ -250,7 +249,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     /**
      * Prepare's the URL rewrite product => category relation attributes.
      *
-     * @return arry The prepared attributes
+     * @return array The prepared attributes
      */
     protected function prepareUrlRewriteProductCategoryAttributes()
     {
