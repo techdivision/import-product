@@ -20,11 +20,11 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Utils\EntityTypeCodes;
-use TechDivision\Import\Product\Utils\ColumnKeys;
-use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 
 /**
  * Test class for the product URL rewrite update observer implementation.
@@ -212,19 +212,20 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getRowStoreId')
                     ->willReturn($storeId = 1);
-        $mockSubject->expects($this->exactly(8))
+        $mockSubject->expects($this->exactly(9))
                     ->method('getCoreConfigData')
                     ->withConsecutive(
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_USE_CATEGORIES, false),
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_SAVE_REWRITES_HISTORY, true),
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html')
                     )
-                    ->willReturnOnConsecutiveCalls(true, '.html', '.html', '.html', '.html', '.html', '.html', '.html');
+                    ->willReturnOnConsecutiveCalls(true, '.html', '.html', '.html', true, '.html', '.html', '.html', '.html');
         $mockSubject->expects($this->exactly(7))
                     ->method('getEntityType')
                     ->willReturn(array(MemberNames::ENTITY_TYPE_ID => 1, MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT));

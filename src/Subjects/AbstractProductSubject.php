@@ -20,10 +20,11 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
-use TechDivision\Import\Utils\RegistryKeys;
-use TechDivision\Import\Utils\FrontendInputTypes;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Subjects\AbstractEavSubject;
+use TechDivision\Import\Subjects\EntitySubjectInterface;
+use TechDivision\Import\Utils\FrontendInputTypes;
+use TechDivision\Import\Utils\RegistryKeys;
 
 /**
  * The abstract product subject implementation that provides basic product
@@ -35,7 +36,7 @@ use TechDivision\Import\Subjects\AbstractEavSubject;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-abstract class AbstractProductSubject extends AbstractEavSubject
+abstract class AbstractProductSubject extends AbstractEavSubject implements EntitySubjectInterface
 {
 
     /**
@@ -258,7 +259,6 @@ abstract class AbstractProductSubject extends AbstractEavSubject
      * @param string $serial The serial of the actual import
      *
      * @return void
-     * @see \Importer\Csv\Actions\ProductImportAction::prepare()
      */
     public function setUp($serial)
     {

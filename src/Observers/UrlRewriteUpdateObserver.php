@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 
 /**
  * Observer that creates/updates the product's URL rewrites.
@@ -151,20 +152,23 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
         // prepare the new URL rewrites first
         parent::prepareUrlRewrites();
 
-        // (re-)initialize the array for the existing URL rewrites
-        $this->existingUrlRewrites = array();
+        // query whether or not 301 redirects have to be created
+        if ($this->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_SAVE_REWRITES_HISTORY, true)) {
+            // (re-)initialize the array for the existing URL rewrites
+            $this->existingUrlRewrites = array();
 
-        // load the existing URL rewrites of the actual entity
-        $existingUrlRewrites = $this->getUrlRewritesByEntityTypeAndEntityId(UrlRewriteObserver::ENTITY_TYPE, $this->getLastEntityId());
+            // load the existing URL rewrites of the actual entity
+            $existingUrlRewrites = $this->getUrlRewritesByEntityTypeAndEntityId(UrlRewriteObserver::ENTITY_TYPE, $this->getLastEntityId());
 
-        // prepare the existing URL rewrites to improve searching them by store ID/request path
-        foreach ($existingUrlRewrites as $existingUrlRewrite) {
-            // load store ID and request path from the existing URL rewrite
-            $storeId = (integer) $existingUrlRewrite[MemberNames::STORE_ID];
-            $requestPath = $existingUrlRewrite[MemberNames::REQUEST_PATH];
+            // prepare the existing URL rewrites to improve searching them by store ID/request path
+            foreach ($existingUrlRewrites as $existingUrlRewrite) {
+                // load store ID and request path from the existing URL rewrite
+                $storeId = (integer) $existingUrlRewrite[MemberNames::STORE_ID];
+                $requestPath = $existingUrlRewrite[MemberNames::REQUEST_PATH];
 
-            // append the URL rewrite with its store ID/request path
-            $this->existingUrlRewrites[$storeId][$requestPath] = $existingUrlRewrite;
+                // append the URL rewrite with its store ID/request path
+                $this->existingUrlRewrites[$storeId][$requestPath] = $existingUrlRewrite;
+            }
         }
     }
 

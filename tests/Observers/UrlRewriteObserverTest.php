@@ -20,11 +20,11 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Utils\EntityTypeCodes;
-use TechDivision\Import\Product\Utils\ColumnKeys;
-use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 
 /**
  * Test class for the product URL rewrite observer implementation.

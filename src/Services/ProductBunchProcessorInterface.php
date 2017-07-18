@@ -141,7 +141,7 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     /**
      * Return's the repository to load the URL rewrites with.
      *
-     * @return \TechDivision\Import\Product\Repositories\UrlRewriteRepository The repository instance
+     * @return \TechDivision\Import\Repositories\UrlRewriteRepository The repository instance
      */
     public function getUrlRewriteRepository();
 

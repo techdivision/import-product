@@ -55,7 +55,7 @@ class ProductAttributeObserver extends AbstractAttributeObserver
     /**
      * Return's the product bunch processor instance.
      *
-     * @return \TechDivision\Import\Services\ProductBunchProcessorInterface The product bunch processor instance
+     * @return \TechDivision\Import\Product\Services\ProductBunchProcessorInterface The product bunch processor instance
      */
     protected function getProductBunchProcessor()
     {

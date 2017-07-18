@@ -1,37 +1,41 @@
 {
-	"name" : "techdivision/import-product",
-	"description" : "M2IF library providing basic Magento 2 product import functionality",
-	"minimum-stability" : "alpha",
-	"license" : "OSL-3.0",
-	"require" : {
-		"php" : ">=5.6.0",
-		"goodby/csv" : "~1.0",
-		"league/flysystem" : "~1.0",
-		"techdivision/import" : "~1.0",
-		"zendframework/zend-filter" : "~2.0"
-	},
-	"require-dev" : {
-		"phpmd/phpmd" : "2.5.*",
-		"phploc/phploc" : "2.0.*",
-		"pdepend/pdepend" : "2.0.*",
-		"phpunit/phpunit" : "4.4.*",
-		"sebastian/phpcpd" : "2.0.*",
-		"squizlabs/php_codesniffer" : "2.2.*",
-		"phpdocumentor/phpdocumentor" : "2.8.*",
-		"consolidation/robo" : "~1.0"
-	},
-	"authors" : [{
-			"name" : "Tim Wagner",
-			"email" : "t.wagner@techdivision.com"
-		}
-	],
-	"autoload" : {
-		"psr-4" : {
-			"TechDivision\\Import\\Product\\" : [
-				"src/",
-				"tests/",
-				"symfony/"
-			]
-		}
-	}
+    "name": "techdivision/import-product",
+    "description": "M2IF library providing basic Magento 2 product import functionality",
+    "minimum-stability": "alpha",
+    "license": "OSL-3.0",
+    "require": {
+        "php": ">=5.6.0",
+        "goodby/csv": "~1.0",
+        "league/flysystem": "~1.0",
+        "techdivision/import": "~1.0",
+        "zendframework/zend-filter": "~2.0"
+    },
+    "require-dev": {
+        "phpmd/phpmd": "2.5.*",
+        "phploc/phploc": "2.0.*",
+        "pdepend/pdepend": "2.0.*",
+        "doctrine/dbal": "~2.0",
+        "symfony/config": "~2.8|~3.0",
+        "symfony/http-kernel": "~2.8|~3.0",
+        "phpunit/phpunit": "4.4.*",
+        "sebastian/phpcpd": "2.0.*",
+        "squizlabs/php_codesniffer": "2.2.*",
+        "phpdocumentor/phpdocumentor": "2.8.*",
+        "consolidation/robo": "~1.0"
+    },
+    "authors": [
+        {
+            "name": "Tim Wagner",
+            "email": "t.wagner@techdivision.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TechDivision\\Import\\Product\\": [
+                "src/",
+                "tests/",
+                "symfony/"
+            ]
+        }
+    }
 }
