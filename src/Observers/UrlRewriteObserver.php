@@ -221,7 +221,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     {
 
         // load the store ID to use
-        $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
+        $storeId = $this->getRowStoreId();
 
         // load the category to create the URL rewrite for
         $category = $this->getCategory($this->categoryId);
