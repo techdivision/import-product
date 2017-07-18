@@ -1,3 +1,13 @@
+# Version 1.0.0-beta14
+
+## Bugfixes
+
+* Remove unnecessary admin store code
+
+## Features
+
+* None
+
 # Version 1.0.0-beta13
 
 ## Bugfixes
