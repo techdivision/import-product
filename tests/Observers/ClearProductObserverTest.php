@@ -37,7 +37,7 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * The observer we want to test.
      *
-     * @var \TechDivision\Import\Product\Observers\PreImport\ClearProductObserver
+     * @var \TechDivision\Import\Product\Observers\ClearProductObserver
      */
     protected $observer;
 

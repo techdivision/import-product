@@ -20,11 +20,11 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
-use TechDivision\Import\Subjects\ExportableTrait;
-use TechDivision\Import\Subjects\ExportableSubjectInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\RegistryKeys;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
+use TechDivision\Import\Subjects\ExportableSubjectInterface;
+use TechDivision\Import\Subjects\ExportableTrait;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -134,7 +134,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      * @param string $serial The serial of the actual import
      *
      * @return void
-     * @see \Importer\Csv\Actions\ProductImportAction::prepare()
      */
     public function setUp($serial)
     {

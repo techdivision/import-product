@@ -20,10 +20,9 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
-use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 
 /**
  * Observer that create's the product itself.
@@ -57,7 +56,7 @@ class ProductObserver extends AbstractProductImportObserver
     /**
      * Return's the product bunch processor instance.
      *
-     * @return \TechDivision\Import\Services\ProductBunchProcessorInterface The product bunch processor instance
+     * @return \TechDivision\Import\Product\Services\ProductBunchProcessorInterface The product bunch processor instance
      */
     protected function getProductBunchProcessor()
     {

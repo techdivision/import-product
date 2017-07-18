@@ -20,9 +20,8 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Product\Utils\ColumnKeys;
-use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Product\Utils\ColumnKeys;
 
 /**
  * Observer that pre-loads the entity ID of the product with the SKU found in the CSV file.
@@ -56,7 +55,7 @@ class PreLoadEntityIdObserver extends AbstractProductImportObserver
     /**
      * Return's the product bunch processor instance.
      *
-     * @return \TechDivision\Import\Services\ProductBunchProcessorInterface The product bunch processor instance
+     * @return \TechDivision\Import\Product\Services\ProductBunchProcessorInterface The product bunch processor instance
      */
     protected function getProductBunchProcessor()
     {

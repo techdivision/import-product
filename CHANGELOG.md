@@ -1,3 +1,13 @@
+# Version 1.0.0-beta15
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Use EntitySubjectInterface for entity related subjects
+
 # Version 1.0.0-beta14
 
 ## Bugfixes
