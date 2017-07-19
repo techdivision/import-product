@@ -1,3 +1,13 @@
+# Version 1.0.0-beta16
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Replace array with system loggers with a collection
+
 # Version 1.0.0-beta15
 
 ## Bugfixes

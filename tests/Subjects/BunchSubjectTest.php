@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use TechDivision\Import\Utils\EntityTypeCodes;
 use TechDivision\Import\Product\Utils\RegistryKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
@@ -117,7 +118,7 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
         $this->subject = new BunchSubject(
             $mockRegistryProcessor,
             $mockGenerator,
-            array()
+            new ArrayCollection()
         );
 
         // inject the mock configuration
