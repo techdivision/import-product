@@ -1,3 +1,13 @@
+# Version 1.0.0-beta17
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add custom system logger to default configuration
+
 # Version 1.0.0-beta16
 
 ## Bugfixes
