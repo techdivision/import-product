@@ -113,8 +113,11 @@ class CategoryProductObserver extends AbstractProductImportObserver
     protected function prepareAttributes()
     {
 
+        // load the subject
+        $subject = $this->getSubject();
+
         // load the ID of the product that has been created recently
-        $lastEntityId = $this->getLastEntityId();
+        $lastEntityId = $subject->getLastEntityId();
 
         try {
             // load the category for the found path
@@ -130,15 +133,12 @@ class CategoryProductObserver extends AbstractProductImportObserver
             );
 
         } catch (\Exception $e) {
-            // query whether or not, debug mode is enabled
-            if ($this->isDebugMode()) {
-                // log a warning and return immediately
-                $this->getSystemLogger()->warning($e->getMessage());
-                return;
+            // query whether or not debug mode has been enabled
+            if ($subject->isDebugMode()) {
+                $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($e->getMessage()));
+            } else {
+                throw $e;
             }
-
-            // if we're NOT in debug mode, re-throw the exception
-            throw $e;
         }
     }
 

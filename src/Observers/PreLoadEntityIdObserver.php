@@ -66,6 +66,7 @@ class PreLoadEntityIdObserver extends AbstractProductImportObserver
      * Process the observer's business logic.
      *
      * @return array The processed row
+     * @throws \Exception Is thrown, if the product with the SKU can not be loaded
      */
     protected function process()
     {
@@ -76,7 +77,20 @@ class PreLoadEntityIdObserver extends AbstractProductImportObserver
         }
 
         // preserve the entity ID for the product with the passed SKU
-        $this->preLoadEntityId($this->loadProduct($sku));
+        if ($product = $this->loadProduct($sku)) {
+            $this->preLoadEntityId($product);
+        } else {
+            // initialize the error message
+            $message = sprintf('Can\'t pre-load product with SKU %s', $sku);
+            // load the subject
+            $subject = $this->getSubject();
+            // query whether or not debug mode has been enabled
+            if ($subject->isDebugMode()) {
+                $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($message));
+            } else {
+                throw new \Exception($message);
+            }
+        }
     }
 
     /**
@@ -88,7 +102,7 @@ class PreLoadEntityIdObserver extends AbstractProductImportObserver
      */
     protected function preLoadEntityId(array $product)
     {
-        return $this->getSubject()->preLoadEntityId($product);
+        $this->getSubject()->preLoadEntityId($product);
     }
 
     /**

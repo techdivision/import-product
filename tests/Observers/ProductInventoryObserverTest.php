@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Product\Utils\ColumnKeys;
 
 /**
  * Test class for the product inventory observer implementation.
@@ -191,6 +192,55 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
                                                 EntityStatus::MEMBER_NAME => EntityStatus::STATUS_CREATE
                                             )
                                         );
+
+        // invoke the handle() method
+        $this->assertSame($row, $this->observer->handle($mockSubject));
+    }
+
+    /**
+     * Test's the handle() method with the SKU same as parent.
+     *
+     * @return void
+     */
+    public function testHandleWithParentSku()
+    {
+
+        // create a dummy CSV file header
+        $row = array(
+            0 => 'TEST-01'
+        );
+
+        // mock the loadProduct() method
+        $this->mockProductBunchProcessor->expects($this->never())
+                                        ->method('loadProduct');
+
+        // create a mock subject
+        $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
+                            ->setMethods(
+                                array(
+                                    'hasHeader',
+                                    'getHeader',
+                                    'getHeaders',
+                                    'hasBeenProcessed',
+                                    'getRow',
+                                    'preLoadEntityId'
+                                )
+                            )
+                            ->disableOriginalConstructor()
+                            ->getMock();
+        $mockSubject->expects($this->once())
+                    ->method('hasBeenProcessed')
+                    ->willReturn('TEST-01');
+        $mockSubject->expects($this->once())
+                    ->method('getRow')
+                    ->willReturn($row);
+        $mockSubject->expects($this->once())
+                    ->method('hasHeader')
+                    ->willReturn(true);
+        $mockSubject->expects($this->once())
+                    ->method('getHeader')
+                    ->with(ColumnKeys::SKU)
+                    ->willReturn(0);
 
         // invoke the handle() method
         $this->assertSame($row, $this->observer->handle($mockSubject));
