@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Observers\ClearProductObserverTest
+ * TechDivision\Import\Product\Observers\PreLoadEntityIdObserverTest
  *
  * NOTICE OF LICENSE
  *
@@ -21,9 +21,10 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
 
 /**
- * Test class for the observer implementation that clear's a product's URL rewrites.
+ * Test class for the product category observer implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,18 +32,18 @@ use TechDivision\Import\Product\Utils\ColumnKeys;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
+class PreLoadEntityIdObserverTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
      * The observer we want to test.
      *
-     * @var \TechDivision\Import\Product\Observers\ClearProductObserver
+     * @var \TechDivision\Import\Product\Observers\PreLoadEntityIdObserver
      */
     protected $observer;
 
     /**
-     * A mock processor instance.
+     * The mock product bunch processor instance.
      *
      * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
      */
@@ -64,11 +65,11 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                                                 ->getMock();
 
         // initialize the observer
-        $this->observer = new ClearProductObserver($this->mockProductBunchProcessor);
+        $this->observer = new PreLoadEntityIdObserver($this->mockProductBunchProcessor);
     }
 
     /**
-     * Test's the handle() method when the URL rewrites has successfully been removed.
+     * Test's the handle() method.
      *
      * @return void
      */
@@ -76,10 +77,15 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
     {
 
         // create a dummy CSV file header
-        $headers = array('sku' => 0 );
+        $row = array(
+            0 => $sku = 'TEST-02'
+        );
 
-        // create a dummy CSV file row
-        $row = array(0 => 'TEST-01');
+        // mock the loadProduct() method
+        $this->mockProductBunchProcessor->expects($this->once())
+                                        ->method('loadProduct')
+                                        ->with($sku)
+                                        ->willReturn($product = array(MemberNames::ENTITY_ID => 123, MemberNames::SKU => $sku));
 
         // create a mock subject
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
@@ -87,45 +93,31 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                                 array(
                                     'hasHeader',
                                     'getHeader',
+                                    'getHeaders',
                                     'getLastSku',
-                                    'getRow'
+                                    'getRow',
+                                    'preLoadEntityId'
                                 )
                             )
                             ->disableOriginalConstructor()
                             ->getMock();
-        $mockSubject->expects($this->any())
-                    ->method('hasHeader')
-                    ->willReturn(true);
-        $mockSubject->expects($this->any())
+        $mockSubject->expects($this->once())
+                    ->method('getLastSku')
+                    ->willReturn('TEST-01');
+        $mockSubject->expects($this->once())
                     ->method('getRow')
                     ->willReturn($row);
-        $mockSubject->expects($this->any())
+        $mockSubject->expects($this->once())
+                    ->method('hasHeader')
+                    ->willReturn(true);
+        $mockSubject->expects($this->once())
                     ->method('getHeader')
                     ->with(ColumnKeys::SKU)
                     ->willReturn(0);
         $mockSubject->expects($this->once())
-                    ->method('getLastSku')
-                    ->willReturn('TEST-02');
-
-        // mock the processor methods
-        $this->mockProductBunchProcessor->expects($this->once())
-                                        ->method('deleteUrlRewrite')
-                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
-        $this->mockProductBunchProcessor->expects($this->once())
-                                        ->method('deleteStockItem')
-                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
-        $this->mockProductBunchProcessor->expects($this->once())
-                                        ->method('deleteStockStatus')
-                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
-        $this->mockProductBunchProcessor->expects($this->once())
-                                        ->method('deleteProductWebsite')
-                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
-        $this->mockProductBunchProcessor->expects($this->once())
-                                        ->method('deleteCategoryProduct')
-                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
-        $this->mockProductBunchProcessor->expects($this->once())
-                                        ->method('deleteProduct')
-                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
+                    ->method('preLoadEntityId')
+                    ->with($product)
+                    ->willReturn(null);
 
         // invoke the handle() method
         $this->assertSame($row, $this->observer->handle($mockSubject));
@@ -175,6 +167,64 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getHeader')
                     ->with(ColumnKeys::SKU)
                     ->willReturn(0);
+
+        // invoke the handle() method
+        $this->assertSame($row, $this->observer->handle($mockSubject));
+    }
+
+    /**
+     * Test's the handle() method.
+     *
+     * @return void
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Can't pre-load product with SKU TEST-02
+     */
+    public function testHandleWithException()
+    {
+
+        // create a dummy CSV file header
+        $row = array(
+            0 => $sku = 'TEST-02'
+        );
+
+        // mock the loadProduct() method
+        $this->mockProductBunchProcessor->expects($this->once())
+                                        ->method('loadProduct')
+                                        ->with($sku)
+                                        ->willReturn(null);
+
+        // create a mock subject
+        $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
+                            ->setMethods(
+                                array(
+                                    'hasHeader',
+                                    'getHeader',
+                                    'getHeaders',
+                                    'getLastSku',
+                                    'getRow',
+                                    'preLoadEntityId',
+                                    'isDebugMode'
+                                )
+                            )
+                            ->disableOriginalConstructor()
+                            ->getMock();
+        $mockSubject->expects($this->once())
+                    ->method('getLastSku')
+                    ->willReturn('TEST-01');
+        $mockSubject->expects($this->once())
+                    ->method('getRow')
+                    ->willReturn($row);
+        $mockSubject->expects($this->once())
+                    ->method('hasHeader')
+                    ->willReturn(true);
+        $mockSubject->expects($this->once())
+                    ->method('getHeader')
+                    ->with(ColumnKeys::SKU)
+                    ->willReturn(0);
+        $mockSubject->expects($this->once())
+                    ->method('isDebugMode')
+                    ->willReturn(false);
 
         // invoke the handle() method
         $this->assertSame($row, $this->observer->handle($mockSubject));

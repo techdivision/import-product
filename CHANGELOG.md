@@ -1,3 +1,14 @@
+# Version 1.0.0-beta18
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Allow missing products when SKU can't be pre-loaded in debug-mode, else throw an exception
+* Add PHPUnit tests for PreLoadEntityIdObserver class
+
 # Version 1.0.0-beta17
 
 ## Bugfixes
