@@ -10,8 +10,6 @@
 * Add generic configurations for product price + inventory import
 * Add generic LastEntityIdObserver that loads the product by the SKU found in the CSV file and set the entity ID as lastEntityId
 
-* Add PHPUnit tests for BunchSubject class
-
 # Version 1.0.0-beta18
 
 ## Bugfixes
