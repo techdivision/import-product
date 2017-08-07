@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Observers\ProductUpdateObserverTest
+ * TechDivision\Import\Product\Observers\ProductObserverTest
  *
  * NOTICE OF LICENSE
  *
@@ -33,13 +33,13 @@ use TechDivision\Import\Utils\EntityStatus;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
+class ProductObserverTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
      * The observer we want to test.
      *
-     * @var \TechDivision\Import\Product\Observers\ProductUpdateObserver
+     * @var \TechDivision\Import\Product\Observers\ProductObserver
      */
     protected $observer;
 
@@ -66,7 +66,7 @@ class ProductUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                                 ->getMock();
 
         // initialize the observer
-        $this->observer = new ProductUpdateObserver($this->mockProductBunchProcessor);
+        $this->observer = new ProductObserver($this->mockProductBunchProcessor);
     }
 
     /**

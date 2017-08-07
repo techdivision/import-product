@@ -1,3 +1,17 @@
+# Version 1.0.0-beta19
+
+## Bugfixes
+
+* Fixed #75 [Invalid creation of product entities in a multi-store environment with replace operation](https://github.com/techdivision/import-product/issues/75)
+
+## Features
+
+* Make available image types configurable
+* Add generic configurations for product price + inventory import
+* Add generic LastEntityIdObserver that loads the product by the SKU found in the CSV file and set the entity ID as lastEntityId
+
+* Add PHPUnit tests for BunchSubject class
+
 # Version 1.0.0-beta18
 
 ## Bugfixes

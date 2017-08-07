@@ -286,9 +286,6 @@
         <service id="import_product.observer.product" class="TechDivision\Import\Product\Observers\ProductObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
         </service>
-        <service id="import_product.observer.product.update" class="TechDivision\Import\Product\Observers\ProductUpdateObserver">
-            <argument type="service" id="import_product.processor.product.bunch"/>
-        </service>
         <service id="import_product.observer.product.website" class="TechDivision\Import\Product\Observers\ProductWebsiteObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
         </service>
@@ -300,6 +297,9 @@
             <argument type="service" id="import_product.filter.convert.literal.url"/>
         </service>
         <service id="import_product.observer.url.rewrite.update" class="TechDivision\Import\Product\Observers\UrlRewriteUpdateObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.observer.last.entity.id" class="TechDivision\Import\Product\Observers\LastEntityIdObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
         </service>
 
