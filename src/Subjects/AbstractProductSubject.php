@@ -117,28 +117,40 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     protected $skuStoreViewCodeMapping = array();
 
     /**
+     * The array with the available image types and their label columns.
+     *
+     * @var array
+     */
+    protected $imageTypes = array(
+        'base_image'      => 'base_image_label',
+        'small_image'     => 'small_image_label',
+        'swatch_image'    => 'swatch_image_label',
+        'thumbnail_image' => 'thumbnail_image_label'
+    );
+
+    /**
      * Mappings for attribute code => CSV column header.
      *
      * @var array
      */
     protected $headerMappings = array(
-        'product_online' => 'status',
-        'tax_class_name' => 'tax_class_id',
-        'bundle_price_type' => 'price_type',
-        'bundle_sku_type' => 'sku_type',
-        'bundle_price_view' => 'price_view',
-        'bundle_weight_type' => 'weight_type',
-        'base_image' => 'image',
-        'base_image_label' => 'image_label',
-        'thumbnail_image' => 'thumbnail',
+        'product_online'       => 'status',
+        'tax_class_name'       => 'tax_class_id',
+        'bundle_price_type'    => 'price_type',
+        'bundle_sku_type'      => 'sku_type',
+        'bundle_price_view'    => 'price_view',
+        'bundle_weight_type'   => 'weight_type',
+        'base_image'           => 'image',
+        'base_image_label'     => 'image_label',
+        'thumbnail_image'      => 'thumbnail',
         'thumbnail_image_label'=> 'thumbnail_label',
         'bundle_shipment_type' => 'shipment_type',
-        'related_skus' => 'relation_skus',
-        'related_position' => 'relation_position',
-        'crosssell_skus' => 'cross_sell_skus',
-        'crosssell_position' => 'cross_sell_position',
-        'upsell_skus' => 'up_sell_skus',
-        'upsell_position' => 'up_sell_position'
+        'related_skus'         => 'relation_skus',
+        'related_position'     => 'relation_position',
+        'crosssell_skus'       => 'cross_sell_skus',
+        'crosssell_position'   => 'cross_sell_position',
+        'upsell_skus'          => 'up_sell_skus',
+        'upsell_position'      => 'up_sell_position'
     );
 
     /**
@@ -272,6 +284,9 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
         $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
 
+        // merge the image types with the values found in the configuration
+        $this->imageTypes = array_merge($this->imageTypes, $this->getConfiguration()->getImageTypes());
+
         // invoke the parent method
         parent::setUp($serial);
     }
@@ -304,13 +319,13 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     }
 
     /**
-     * Return's the header mappings for the actual entity.
+     * Return's the available image types.
      *
-     * @return array The header mappings
+     * @return array The array with the available image types
      */
-    public function getHeaderMappings()
+    public function getImageTypes()
     {
-        return $this->headerMappings;
+        return $this->imageTypes;
     }
 
     /**

@@ -238,7 +238,7 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      */
     public function preLoadEntityId(array $product)
     {
-        $this->preLoadedEntityIds[$product[MemberNames::SKU]]= $product[MemberNames::ENTITY_ID];
+        $this->preLoadedEntityIds[$product[MemberNames::SKU]] = $product[MemberNames::ENTITY_ID];
     }
 
     /**

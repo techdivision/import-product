@@ -113,6 +113,12 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
         $mockSubjectConfiguration->expects($this->any())
                                  ->method('getCallbacks')
                                  ->willReturn(array());
+        $mockSubjectConfiguration->expects($this->any())
+                                 ->method('getHeaderMappings')
+                                 ->willReturn(array());
+        $mockSubjectConfiguration->expects($this->any())
+                                 ->method('getImageTypes')
+                                 ->willReturn(array());
 
         // create the subject to be tested
         $this->subject = new BunchSubject(
@@ -144,5 +150,44 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
 
         // query whether or not the entity type is available
         $this->assertEquals($entityType, $this->subject->getEntityType());
+    }
+
+    /**
+     * Test the mapAttributeCodeByHeaderMapping() method.
+     *
+     * @return void
+     * @dataProvider headerMappingProvider()
+     */
+    public function testMapAttributeCodeByHeaderMapping($columnName, $attributeCode)
+    {
+        $this->assertSame($attributeCode, $this->subject->mapAttributeCodeByHeaderMapping($columnName));
+    }
+
+    /**
+     * Data provider for column name => attribute code mappings.
+     *
+     * @return array The mappings
+     */
+    public function headerMappingProvider()
+    {
+        return array(
+            array('product_online', 'status'),
+            array('tax_class_name', 'tax_class_id'),
+            array('bundle_price_type', 'price_type'),
+            array('bundle_sku_type', 'sku_type'),
+            array('bundle_price_view', 'price_view'),
+            array('bundle_weight_type', 'weight_type'),
+            array('base_image', 'image'),
+            array('base_image_label', 'image_label'),
+            array('thumbnail_image', 'thumbnail'),
+            array('thumbnail_image_label', 'thumbnail_label'),
+            array('bundle_shipment_type', 'shipment_type'),
+            array('related_skus', 'relation_skus'),
+            array('related_position', 'relation_position'),
+            array('crosssell_skus', 'cross_sell_skus'),
+            array('crosssell_position', 'cross_sell_position'),
+            array('upsell_skus', 'up_sell_skus'),
+            array('upsell_position', 'up_sell_position')
+        );
     }
 }

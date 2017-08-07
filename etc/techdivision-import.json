@@ -154,8 +154,7 @@
               "prefix": "media",
               "params" : [
                 {
-                  "copy-images" : false,
-                  "root-directory" : "/"
+                  "copy-images" : false
                 }
               ],
               "observers": [
@@ -220,7 +219,7 @@
                 },
                 {
                   "import": [
-                    "import_product.observer.product.update",
+                    "import_product.observer.product",
                     "import_product.observer.product.website.update",
                     "import_product.observer.category.product.update",
                     "import_product.observer.product.inventory.update",
@@ -275,8 +274,7 @@
               "prefix": "media",
               "params" : [
                 {
-                  "copy-images" : false,
-                  "root-directory" : "/"
+                  "copy-images" : false
                 }
               ],
               "observers": [

@@ -126,7 +126,26 @@ class ProductObserver extends AbstractProductImportObserver
      */
     protected function initializeProduct(array $attr)
     {
+
+        // load the product with the passed SKU and merge it with the attributes
+        if ($entity = $this->loadProduct($attr[MemberNames::SKU])) {
+            return $this->mergeEntity($entity, $attr);
+        }
+
+        // otherwise simply return the attributes
         return $attr;
+    }
+
+    /**
+     * Load's and return's the product with the passed SKU.
+     *
+     * @param string $sku The SKU of the product to load
+     *
+     * @return array The product
+     */
+    protected function loadProduct($sku)
+    {
+        return $this->getProductBunchProcessor()->loadProduct($sku);
     }
 
     /**
