@@ -1,4 +1,4 @@
-# Version 1.0.0-beta20
+# Version 1.0.0-beta19
 
 ## Bugfixes
 
@@ -9,14 +9,6 @@
 * Make available image types configurable
 * Add generic configurations for product price + inventory import
 * Add generic LastEntityIdObserver that loads the product by the SKU found in the CSV file and set the entity ID as lastEntityId
-
-# Version 1.0.0-beta19
-
-## Bugfixes
-
-* None
-
-## Features
 
 * Add PHPUnit tests for BunchSubject class
 
