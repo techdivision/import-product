@@ -20,11 +20,11 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
-use TechDivision\Import\Product\Utils\ColumnKeys;
-use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
-use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Utils\StoreViewCodes;
+use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 
 /**
  * Observer that creates/updates the product's URL rewrites.
@@ -67,11 +67,25 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected $entityId;
 
     /**
+     * The ID of the recently created URL rewrite.
+     *
+     * @var integer
+     */
+    protected $urlRewriteId;
+
+    /**
      * The array with the URL rewrites that has to be created.
      *
      * @var array
      */
     protected $urlRewrites = array();
+
+    /**
+     * The array with the category IDs related with the product.
+     *
+     * @var array
+     */
+    protected $productCategoryIds = array();
 
     /**
      * The product bunch processor instance.
@@ -108,11 +122,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected function process()
     {
 
-        // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->hasBeenProcessed($this->getValue(ColumnKeys::SKU))) {
-            return;
-        }
-
         // try to load the URL key, return immediately if not possible
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
             $this->urlKey = $urlKey = $this->getValue(ColumnKeys::URL_KEY);
@@ -121,7 +130,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         }
 
         // initialize the store view code
-        $this->prepareStoreViewCode();
+        $this->getSubject()->prepareStoreViewCode();
 
         // prepare the URL rewrites
         $this->prepareUrlRewrites();
@@ -184,30 +193,78 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected function prepareUrlRewrites()
     {
 
-        // (re-)initialize the array for the URL rewrites
+        // (re-)initialize the array for the URL rewrites and the product category IDs
         $this->urlRewrites = array();
+        $this->productCategoryIds = array();
 
         // load the root category, because we need that to create the default product URL rewrite
         $rootCategory = $this->getRootCategory();
 
         // query whether or not categories has to be used as product URL suffix
-        $productCategoryIds = array();
-        if ($this->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_USE_CATEGORIES, false)) {
+        if ($this->getSubject()->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_USE_CATEGORIES, false)) {
             // if yes, add the category IDs of the products
-            $productCategoryIds = $this->getProductCategoryIds();
+            foreach ($this->getProductCategoryIds() as $categoryId => $entityId) {
+                $this->resolveCategoryIds($categoryId, $entityId, true);
+            }
         }
 
         // at least, add the root category ID to the category => product relations
-        $productCategoryIds[$rootCategory[MemberNames::ENTITY_ID]] = $this->getLastEntityId();
+        $this->productCategoryIds[$rootCategory[MemberNames::ENTITY_ID]] = $this->getSubject()->getLastEntityId();
 
         // prepare the URL rewrites
-        foreach ($productCategoryIds as $categoryId => $entityId) {
+        foreach ($this->productCategoryIds as $categoryId => $entityId) {
             // set category/entity ID
-            $this->categoryId = $categoryId;
             $this->entityId = $entityId;
+            $this->categoryId = $categoryId;
 
             // prepare the attributes for each URL rewrite
             $this->urlRewrites[$categoryId] = $this->prepareAttributes();
+        }
+    }
+
+    /**
+     * Resolve's the parent categories of the category with the passed ID and relate's
+     * it with the product with the passed ID, if the category is top level OR has the
+     * anchor flag set.
+     *
+     * @param integer $categoryId The ID of the category to resolve the parents
+     * @param integer $entityId   The ID of the product entity to relate the category with
+     * @param boolean $topLevel   TRUE if the passed category has top level, else FALSE
+     *
+     * @return void
+     */
+    protected function resolveCategoryIds($categoryId, $entityId, $topLevel = false)
+    {
+
+        // return immediately if this is the absolute root node
+        if ((integer) $categoryId === 1) {
+            return;
+        }
+
+        // load the data of the category with the passed ID
+        $category = $this->getCategory($categoryId);
+
+        // query whether or not the product has already been related
+        if (!isset($this->productCategoryIds[$categoryId])) {
+            if ($topLevel) {
+                // relate it, if the category is top level
+                $this->productCategoryIds[$categoryId] = $entityId;
+            } elseif ((integer) $category[MemberNames::IS_ANCHOR] === 1) {
+                // relate it, if the category is not top level, but has the anchor flag set
+                $this->productCategoryIds[$categoryId] = $entityId;
+            } else {
+                $this->getSubject()
+                     ->getSystemLogger()
+                     ->debug(sprintf('Can\'t create URL rewrite for category "%s" because of missing anchor flag', $category[MemberNames::PATH]));
+            }
+        }
+
+        // load the root category
+        $rootCategory = $this->getRootCategory();
+
+        // try to resolve the parent category IDs
+        if ($rootCategory[MemberNames::ENTITY_ID] !== ($parentId = $category[MemberNames::PARENT_ID])) {
+            $this->resolveCategoryIds($parentId, $entityId, false);
         }
     }
 
@@ -220,7 +277,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     {
 
         // load the store ID to use
-        $storeId = $this->getRowStoreId();
+        $storeId = $this->getSubject()->getRowStoreId();
 
         // load the category to create the URL rewrite for
         $category = $this->getCategory($this->categoryId);

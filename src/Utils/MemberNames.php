@@ -255,4 +255,18 @@ class MemberNames extends \TechDivision\Import\Utils\MemberNames
      * @var string
      */
     const URL_KEY = 'url_key';
+
+    /**
+     * Name for the member 'is_anchor'.
+     *
+     * @var string
+     */
+    const IS_ANCHOR = 'is_anchor';
+
+    /**
+     * Name for the member 'parent_id'.
+     *
+     * @var string
+     */
+    const PARENT_ID = 'parent_id';
 }

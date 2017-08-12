@@ -55,26 +55,23 @@ class UrlRewriteProductCategoryRepository extends AbstractRepository
 
         // initialize the prepared statements
         $this->urlRewriteProductCategoryStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::URL_REWRITE_PRODUCT_CATEGORY_BY_PRODUCT_ID_AND_CATEGORY_ID));
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::URL_REWRITE_PRODUCT_CATEGORY));
     }
 
     /**
      * Return's the URL rewrite product category relation for the passed
-     * product and category ID.
+     * URL rewrite ID.
      *
-     * @param integer $productId  The product ID to load the URL rewrite product category relation for
-     * @param integer $categoryId The category ID to load the URL rewrite product category relation for
+     * @param integer $urlRewriteId The URL rewrite ID to load the URL rewrite product category relation for
      *
-     * @return array|false The URL rewrite product category relations
+     * @return array|false The URL rewrite product category relation
      */
-    public function findOneByProductIdAndCategoryId($productId, $categoryId)
+    public function load($urlRewriteId)
     {
 
         // initialize the parameters
-        $params = array(
-            MemberNames::PRODUCT_ID => $productId,
-            MemberNames::CATEGORY_ID => $categoryId
-        );
+        $params = array(MemberNames::URL_REWRITE_ID => $urlRewriteId);
+
         // load and return the URL rewrite product category relation
         $this->urlRewriteProductCategoryStmt->execute($params);
         return $this->urlRewriteProductCategoryStmt->fetch(\PDO::FETCH_ASSOC);

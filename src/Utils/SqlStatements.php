@@ -314,11 +314,11 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
     const DELETE_CATEGORY_PRODUCT_BY_SKU = 'delete.category_product.by.sku';
 
     /**
-     * The SQL statement to load the URL rewrite product category relation for the passed product/category ID.
+     * The SQL statement to load the URL rewrite product category relation with the passed ID.
      *
      * @var string
      */
-    const URL_REWRITE_PRODUCT_CATEGORY_BY_PRODUCT_ID_AND_CATEGORY_ID = 'ur_rewrite_product_category.by.product_id.and.category_id';
+    const URL_REWRITE_PRODUCT_CATEGORY = 'ur_rewrite_product_category';
 
     /**
      * The SQL statements.
@@ -655,9 +655,9 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                      :product_id)',
         SqlStatements::UPDATE_URL_REWRITE_PRODUCT_CATEGORY =>
             'UPDATE catalog_url_rewrite_product_category
-                SET url_rewrite_id = :url_rewrite_id
-              WHERE category_id = :category_id
-                AND product_id = :product_id',
+                SET category_id = :category_id,
+                    product_id = :product_id
+              WHERE url_rewrite_id = :url_rewrite_id',
         SqlStatements::DELETE_URL_REWRITE_PRODUCT_CATEGORY =>
             'DELETE
                FROM catalog_url_rewrite_product_category
@@ -690,11 +690,10 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
          INNER JOIN catalog_product_entity
               WHERE catalog_product_entity.sku = :sku
                 AND catalog_category_product.product_id = catalog_product_entity.entity_id',
-        SqlStatements::URL_REWRITE_PRODUCT_CATEGORY_BY_PRODUCT_ID_AND_CATEGORY_ID =>
+        SqlStatements::URL_REWRITE_PRODUCT_CATEGORY =>
             'SELECT *
                FROM catalog_url_rewrite_product_category
-              WHERE product_id = :product_id
-                AND category_id = :category_id'
+              WHERE url_rewrite_id = :url_rewrite_id'
     );
 
     /**

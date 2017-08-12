@@ -1,3 +1,13 @@
+# Version 1.0.0-beta20
+
+## Bugfixes
+
+* Fixed invalid URL rewrite handling in multi store environments
+
+## Features
+
+* None
+
 # Version 1.0.0-beta19
 
 ## Bugfixes

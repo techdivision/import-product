@@ -172,6 +172,17 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
 
     /**
+     * Return's the URL rewrites for the passed URL entity type and ID.
+     *
+     * @param string  $entityType The entity type to load the URL rewrites for
+     * @param integer $entityId   The entity ID to load the URL rewrites for
+     * @param integer $storeId    The store ID to load the URL rewrites for
+     *
+     * @return array The URL rewrites
+     */
+    public function getUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId);
+
+    /**
      * Load's and return's the product with the passed SKU.
      *
      * @param string $sku The SKU of the product to load
@@ -291,14 +302,13 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
 
     /**
      * Return's the URL rewrite product category relation for the passed
-     * product and category ID.
+     * URL rewrite ID.
      *
-     * @param integer $productId  The product ID to load the URL rewrite product category relation for
-     * @param integer $categoryId The category ID to load the URL rewrite product category relation for
+     * @param integer $urlRewriteId The URL rewrite ID to load the URL rewrite product category relation for
      *
-     * @return array|null The URL rewrite product category relations
+     * @return array|false The URL rewrite product category relation
      */
-    public function loadUrlRewriteProductCategory($productId, $categoryId);
+    public function loadUrlRewriteProductCategory($urlRewriteId);
 
     /**
      * Persist's the passed product data and return's the ID.

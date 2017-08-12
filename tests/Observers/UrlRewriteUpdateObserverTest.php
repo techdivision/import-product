@@ -157,7 +157,6 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                         'hasHeader',
                                         'getHeader',
                                         'getHeaders',
-                                        'hasBeenProcessed',
                                         'getLastEntityId',
                                         'getProductCategoryIds',
                                         'getRootCategory',
@@ -182,7 +181,6 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeader')
                     ->withConsecutive(
-                        array(ColumnKeys::SKU),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::STORE_VIEW_CODE)
@@ -191,21 +189,20 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getLastEntityId')
                     ->willReturn($entityId);
-        $mockSubject->expects($this->exactly(4))
+        $mockSubject->expects($this->exactly(6))
                     ->method('getCategory')
-                    ->withConsecutive(array(19), array(35), array(2), array(2), array(16), array(37), array(13))
+                    ->withConsecutive(array(19), array(35), array(19), array(35), array(2), array(2), array(16), array(37), array(13))
                     ->willReturnOnConsecutiveCalls(
-                        array(MemberNames::ENTITY_ID => 19, MemberNames::URL_PATH => 'men/bottoms-men/pants-men'),
-                        array(MemberNames::ENTITY_ID => 35, MemberNames::URL_PATH => 'collections/erin-recommends'),
-                        array(MemberNames::ENTITY_ID =>  2, MemberNames::URL_PATH => null),
-                        array(MemberNames::ENTITY_ID =>  2, MemberNames::URL_PATH => null)
+                        array(MemberNames::ENTITY_ID => 19, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'men/bottoms-men/pants-men'),
+                        array(MemberNames::ENTITY_ID => 35, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'collections/erin-recommends'),
+                        array(MemberNames::ENTITY_ID => 19, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'men/bottoms-men/pants-men'),
+                        array(MemberNames::ENTITY_ID => 35, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'collections/erin-recommends'),
+                        array(MemberNames::ENTITY_ID =>  2, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => null),
+                        array(MemberNames::ENTITY_ID =>  2, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => null)
                     );
-        $mockSubject->expects($this->once())
-                    ->method('hasBeenProcessed')
-                    ->willReturn(false);
         $mockSubject->expects($this->any())
                     ->method('getRootCategory')
-                    ->willReturn(array(MemberNames::ENTITY_ID =>  2, MemberNames::URL_PATH => null));
+                    ->willReturn(array(MemberNames::ENTITY_ID =>  2, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => null));
         $mockSubject->expects($this->once())
                     ->method('getProductCategoryIds')
                     ->willReturn(array(19 => $entityId, 35 => $entityId));
@@ -235,8 +232,8 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('loadUrlRewriteProductCategory')
                     ->willReturn(array());
         $this->mockProductBunchProcessor->expects($this->once())
-                    ->method('getUrlRewritesByEntityTypeAndEntityId')
-                    ->with(UrlRewriteObserver::ENTITY_TYPE, $entityId)
+                    ->method('getUrlRewritesByEntityTypeAndEntityIdAndStoreId')
+                    ->with(UrlRewriteObserver::ENTITY_TYPE, $entityId, $storeId)
                     ->willReturn($urlRewrites);
         $this->mockProductBunchProcessor->expects($this->exactly(7))
                     ->method('persistUrlRewrite')
