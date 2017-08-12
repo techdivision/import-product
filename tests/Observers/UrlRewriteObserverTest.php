@@ -100,7 +100,6 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'hasHeader',
                                     'getHeader',
                                     'getHeaders',
-                                    'hasBeenProcessed',
                                     'getLastEntityId',
                                     'getProductCategoryIds',
                                     'getRootCategory',
@@ -125,7 +124,6 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeader')
                     ->withConsecutive(
-                        array(ColumnKeys::SKU),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::STORE_VIEW_CODE)
@@ -135,19 +133,16 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getLastEntityId')
                     ->willReturn($entityId = 61413);
         $mockSubject->expects($this->once())
-                    ->method('hasBeenProcessed')
-                    ->willReturn(false);
-        $mockSubject->expects($this->once())
                     ->method('getProductCategoryIds')
                     ->willReturn(array($categoryId = 2 => $entityId));
         $mockSubject->expects($this->exactly(2))
                     ->method('getRowStoreId')
                     ->willReturn($storeId = 1);
-        $mockSubject->expects($this->once())
+        $mockSubject->expects($this->exactly(2))
                     ->method('getCategory')
                     ->with($categoryId)
-                    ->willReturn($category = array(MemberNames::ENTITY_ID => $categoryId, MemberNames::URL_PATH => null));
-        $mockSubject->expects($this->exactly(4))
+                    ->willReturn($category = array(MemberNames::ENTITY_ID => $categoryId, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => null));
+        $mockSubject->expects($this->exactly(5))
                     ->method('getRootCategory')
                     ->willReturn($category);
         $mockSubject->expects($this->exactly(2))
@@ -233,7 +228,6 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'hasHeader',
                                     'getHeader',
                                     'getHeaders',
-                                    'hasBeenProcessed',
                                     'getLastEntityId',
                                     'getProductCategoryIds',
                                     'getRootCategory',
@@ -258,7 +252,6 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeader')
                     ->withConsecutive(
-                        array(ColumnKeys::SKU),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::STORE_VIEW_CODE)
@@ -267,21 +260,22 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getLastEntityId')
                     ->willReturn($entityId);
-        $mockSubject->expects($this->any())
+        $mockSubject->expects($this->exactly(8))
                     ->method('getCategory')
-                    ->withConsecutive(array(2), array(16), array(37), array(13))
+                    ->withConsecutive(array(2), array(16), array(37), array(13), array(2), array(16), array(37), array(13))
                     ->willReturnOnConsecutiveCalls(
-                         array(MemberNames::ENTITY_ID =>  2, MemberNames::URL_PATH => null),
-                         array(MemberNames::ENTITY_ID => 16, MemberNames::URL_PATH => 'men/tops-men/hoodies-and-sweatshirts-men'),
-                         array(MemberNames::ENTITY_ID => 37, MemberNames::URL_PATH => 'collections/eco-friendly'),
-                         array(MemberNames::ENTITY_ID => 13, MemberNames::URL_PATH => 'men/tops-men')
+                         array(MemberNames::ENTITY_ID =>  2, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => null),
+                         array(MemberNames::ENTITY_ID => 16, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'men/tops-men/hoodies-and-sweatshirts-men'),
+                         array(MemberNames::ENTITY_ID => 37, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'collections/eco-friendly'),
+                         array(MemberNames::ENTITY_ID => 13, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'men/tops-men'),
+                         array(MemberNames::ENTITY_ID =>  2, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => null),
+                         array(MemberNames::ENTITY_ID => 16, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'men/tops-men/hoodies-and-sweatshirts-men'),
+                         array(MemberNames::ENTITY_ID => 37, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'collections/eco-friendly'),
+                         array(MemberNames::ENTITY_ID => 13, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'men/tops-men')
                      );
-        $mockSubject->expects($this->once())
-                    ->method('hasBeenProcessed')
-                    ->willReturn(false);
         $mockSubject->expects($this->any())
                     ->method('getRootCategory')
-                    ->willReturn(array(MemberNames::ENTITY_ID =>  2, MemberNames::URL_PATH => null));
+                    ->willReturn(array(MemberNames::ENTITY_ID =>  2, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => null));
         $mockSubject->expects($this->once())
                     ->method('getProductCategoryIds')
                     ->willReturn(array(2 => $entityId, 16 => $entityId, 37 => $entityId, 13 => $entityId));

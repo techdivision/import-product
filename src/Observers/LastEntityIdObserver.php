@@ -98,6 +98,8 @@ class LastEntityIdObserver extends AbstractProductImportObserver
      * Temporarily persist's the IDs of the passed product.
      *
      * @param array $product The product to temporarily persist the IDs for
+     *
+     * @return void
      */
     protected function setIds(array $product)
     {
