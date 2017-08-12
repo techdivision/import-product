@@ -1,3 +1,13 @@
+# Version 1.0.0-beta21
+
+## Bugfixes
+
+* Fixed exception when creating URL rewrites if history flag in Magento 2 configuration is set to No
+
+## Features
+
+* None
+
 # Version 1.0.0-beta20
 
 ## Bugfixes
