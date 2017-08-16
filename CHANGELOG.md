@@ -1,3 +1,13 @@
+# Version 1.0.0-beta23
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Remove unnecessary error_log() statement
+
 # Version 1.0.0-beta22
 
 ## Bugfixes

@@ -519,6 +519,11 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         return $urlKey;
     }
 
+    /**
+     * Query whether or not the actual entity is visible or not.
+     *
+     * @return boolean TRUE if the entity is NOT visible, else FALSE
+     */
     protected function isNotVisible()
     {
         return $this->getVisibilityIdMapping() === VisibilityKeys::VISIBILITY_NOT_VISIBLE;
