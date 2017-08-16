@@ -1,3 +1,13 @@
+# Version 1.0.0-beta24
+
+## Bugfixes
+
+* Fixed invalid URL rewrite handling in replace operation
+
+## Features
+
+* None
+
 # Version 1.0.0-beta23
 
 ## Bugfixes

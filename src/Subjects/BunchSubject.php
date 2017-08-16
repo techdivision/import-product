@@ -214,9 +214,7 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
         // query whether or not, the requested visibility is available
         if (isset($this->availableVisibilities[$visibility])) {
             // load the visibility ID, add the mapping and return the ID
-            $visibilityId = $this->availableVisibilities[$visibility];
-            $this->entityIdVisibilityIdMapping[$this->getLastEntityId()] = $visibilityId;
-            return $visibilityId;
+            return $this->availableVisibilities[$visibility];
         }
 
         // throw an exception, if not
@@ -228,6 +226,18 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     }
 
     /**
+     * Add the entity ID => visibility mapping for the actual entity ID.
+     *
+     * @param string $visibility The visibility of the actual entity to map
+     *
+     * @return void
+     */
+    public function addEntityIdVisibilityIdMapping($visibility)
+    {
+        $this->entityIdVisibilityIdMapping[$this->getLastEntityId()] = $this->getVisibilityIdByValue($visibility);
+    }
+
+    /**
      * Return's the visibility for the passed entity ID, if it already has been mapped. The mapping will be created
      * by calling <code>\TechDivision\Import\Product\Subjects\BunchSubject::getVisibilityIdByValue</code> which will
      * be done by the <code>\TechDivision\Import\Product\Callbacks\VisibilityCallback</code>.
@@ -236,7 +246,7 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      * @throws \Exception Is thrown, if the entity ID has not been mapped
      * @see \TechDivision\Import\Product\Subjects\BunchSubject::getVisibilityIdByValue()
      */
-    public function getVisibilityIdMapping()
+    public function getEntityIdVisibilityIdMapping()
     {
 
         // query whether or not the SKU has already been mapped to it's visibility
@@ -327,6 +337,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      */
     public function isUrlKeyOf(array $productVarcharAttribute)
     {
-        return $productVarcharAttribute[MemberNames::ENTITY_ID] === $this->getLastEntityId();
+        return ($productVarcharAttribute[MemberNames::ENTITY_ID] === $this->getLastEntityId()) && ((integer) $productVarcharAttribute[MemberNames::STORE_ID] === $this->getRowStoreId());
     }
 }

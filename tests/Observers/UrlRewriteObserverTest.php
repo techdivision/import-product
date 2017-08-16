@@ -84,14 +84,16 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $headers = array(
             'sku'             => 0,
             'url_key'         => 1,
-            'store_view_code' => 2
+            'store_view_code' => 2,
+            'visibility'      => 3,
         );
 
         // create a dummy CSV file row
         $row = array(
             0 => 'TEST-01',
             1 => 'bruno-compete-hoodie-test',
-            2 => null
+            2 => null,
+            3 => 'Catalog, Search'
         );
 
         // create a mock subject
@@ -109,7 +111,9 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getEntityType',
                                     'getRowStoreId',
                                     'getRow',
-                                    'getVisibilityIdMapping'
+                                    'hasBeenProcessed',
+                                    'addEntityIdVisibilityIdMapping',
+                                    'getEntityIdVisibilityIdMapping'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -128,11 +132,15 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     ->withConsecutive(
                         array(ColumnKeys::STORE_VIEW_CODE),
                         array(ColumnKeys::SKU),
+                        array(ColumnKeys::VISIBILITY),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::STORE_VIEW_CODE)
                     )
-                    ->willReturnOnConsecutiveCalls(2, 0, 1, 1, 2);
+                    ->willReturnOnConsecutiveCalls(2, 0, 3, 1, 1, 2);
+        $mockSubject->expects($this->once())
+                    ->method('hasBeenProcessed')
+                    ->willReturn(false);
         $mockSubject->expects($this->exactly(2))
                     ->method('getLastEntityId')
                     ->willReturn($entityId = 61413);
@@ -140,7 +148,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getProductCategoryIds')
                     ->willReturn(array($categoryId = 2 => $entityId));
         $mockSubject->expects($this->once())
-                    ->method('getVisibilityIdMapping')
+                    ->method('getEntityIdVisibilityIdMapping')
                     ->willReturn(VisibilityKeys::VISIBILITY_BOTH);
         $mockSubject->expects($this->exactly(2))
                     ->method('getRowStoreId')
@@ -217,7 +225,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
             'sku'             => 0,
             'url_key'         => 1,
             'categories'      => 2,
-            'store_view_code' => 3
+            'store_view_code' => 3,
+            'visibility'      => 4
         );
 
         // create a dummy CSV file header
@@ -225,7 +234,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
             0 => 'TEST-01',
             1 => 'bruno-compete-hoodie',
             2 => 'Default Category/Men/Tops/Hoodies & Sweatshirts,Default Category/Collections/Eco Friendly,Default Category',
-            3 => null
+            3 => null,
+            4 => 'Catalog, Search'
         );
 
         // create a mock subject
@@ -243,7 +253,9 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getCoreConfigData',
                                     'getEntityType',
                                     'getRow',
-                                    'getVisibilityIdMapping'
+                                    'hasBeenProcessed',
+                                    'addEntityIdVisibilityIdMapping',
+                                    'getEntityIdVisibilityIdMapping'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -262,12 +274,16 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     ->withConsecutive(
                         array(ColumnKeys::STORE_VIEW_CODE),
                         array(ColumnKeys::SKU),
+                        array(ColumnKeys::VISIBILITY),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::STORE_VIEW_CODE)
                     )
-                    ->willReturnOnConsecutiveCalls(3, 0, 1, 1, 2);
-        $mockSubject->expects($this->any())
+                    ->willReturnOnConsecutiveCalls(3, 0, 4, 1, 1, 2);
+        $mockSubject->expects($this->once())
+                    ->method('hasBeenProcessed')
+                    ->willReturn(false);
+        $mockSubject->expects($this->exactly(5))
                     ->method('getLastEntityId')
                     ->willReturn($entityId);
         $mockSubject->expects($this->exactly(8))
@@ -290,7 +306,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getProductCategoryIds')
                     ->willReturn(array(2 => $entityId, 16 => $entityId, 37 => $entityId, 13 => $entityId));
         $mockSubject->expects($this->once())
-                    ->method('getVisibilityIdMapping')
+                    ->method('getEntityIdVisibilityIdMapping')
                     ->willReturn(VisibilityKeys::VISIBILITY_BOTH);
         $mockSubject->expects($this->any())
                     ->method('getRowStoreId')
