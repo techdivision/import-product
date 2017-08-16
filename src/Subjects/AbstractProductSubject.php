@@ -276,7 +276,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
      */
     public function addSkuStoreViewCodeMapping($sku, $storeViewCode)
     {
-        $this->skuStoreViewCodeMapping[$sku] = $storeViewCode;
+        $this->skuStoreViewCodeMapping[$sku][] = $storeViewCode;
     }
 
     /**
