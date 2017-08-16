@@ -129,7 +129,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     );
 
     /**
-     * Mappings for attribute code => CSV column header.
+     * Mappings for CSV column header => attribute code.
      *
      * @var array
      */
@@ -151,7 +151,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         'crosssell_position'   => 'cross_sell_position',
         'upsell_skus'          => 'up_sell_skus',
         'upsell_position'      => 'up_sell_position',
-        'msrp'                 => 'msrp_price'
+        'msrp_price'           => 'msrp'
     );
 
     /**
