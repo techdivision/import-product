@@ -294,7 +294,6 @@
         </service>
         <service id="import_product.observer.url.rewrite" class="TechDivision\Import\Product\Observers\UrlRewriteObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
-            <argument type="service" id="import_product.filter.convert.literal.url"/>
         </service>
         <service id="import_product.observer.url.rewrite.update" class="TechDivision\Import\Product\Observers\UrlRewriteUpdateObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>

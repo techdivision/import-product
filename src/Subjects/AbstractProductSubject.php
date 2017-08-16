@@ -150,7 +150,8 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         'crosssell_skus'       => 'cross_sell_skus',
         'crosssell_position'   => 'cross_sell_position',
         'upsell_skus'          => 'up_sell_skus',
-        'upsell_position'      => 'up_sell_position'
+        'upsell_position'      => 'up_sell_position',
+        'msrp'                 => 'msrp_price'
     );
 
     /**
@@ -238,6 +239,19 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     public function hasBeenProcessed($sku)
     {
         return isset($this->skuEntityIdMapping[$sku]);
+    }
+
+    /**
+     * Queries whether or not the passed PK and store view code has already been processed.
+     *
+     * @param string $pk            The PK to check been processed
+     * @param string $storeViewCode The store view code to check been processed
+     *
+     * @return boolean TRUE if the PK and store view code has been processed, else FALSE
+     */
+    public function storeViewHasBeenProcessed($pk, $storeViewCode)
+    {
+        return isset($this->skuEntityIdMapping[$pk]) && isset($this->skuStoreViewCodeMapping[$pk]) && in_array($storeViewCode, $this->skuStoreViewCodeMapping);
     }
 
     /**

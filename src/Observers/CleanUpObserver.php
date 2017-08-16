@@ -44,7 +44,7 @@ class CleanUpObserver extends AbstractProductImportObserver
 
         // add the SKU => entity ID/store view code mapping
         $this->addSkuEntityIdMapping($sku = $this->getValue(ColumnKeys::SKU));
-        $this->addSkuStoreViewCodeMapping($sku, $this->getValue(ColumnKeys::STORE_VIEW_CODE));
+        $this->addSkuStoreViewCodeMapping($sku, $this->getSubject()->getStoreViewCode());
 
         // temporary persist the SKU
         $this->setLastSku($sku);

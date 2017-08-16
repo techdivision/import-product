@@ -95,7 +95,7 @@ class ClearProductObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function deleteProduct($row, $name = null)
+    protected function deleteProduct($row, $name = null)
     {
         $this->getProductBunchProcessor()->deleteProduct($row, $name);
     }
@@ -108,7 +108,7 @@ class ClearProductObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function deleteUrlRewrite($row, $name = null)
+    protected function deleteUrlRewrite($row, $name = null)
     {
         $this->getProductBunchProcessor()->deleteUrlRewrite($row, $name);
     }
@@ -121,7 +121,7 @@ class ClearProductObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function deleteStockItem($row, $name = null)
+    protected function deleteStockItem($row, $name = null)
     {
         $this->getProductBunchProcessor()->deleteStockItem($row, $name);
     }
@@ -134,7 +134,7 @@ class ClearProductObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function deleteStockStatus($row, $name = null)
+    protected function deleteStockStatus($row, $name = null)
     {
         $this->getProductBunchProcessor()->deleteStockStatus($row, $name);
     }
@@ -147,7 +147,7 @@ class ClearProductObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function deleteProductWebsite($row, $name = null)
+    protected function deleteProductWebsite($row, $name = null)
     {
         $this->getProductBunchProcessor()->deleteProductWebsite($row, $name);
     }
@@ -160,7 +160,7 @@ class ClearProductObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function deleteCategoryProduct($row, $name = null)
+    protected function deleteCategoryProduct($row, $name = null)
     {
         $this->getProductBunchProcessor()->deleteCategoryProduct($row, $name);
     }

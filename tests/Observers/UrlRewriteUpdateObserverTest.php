@@ -25,6 +25,7 @@ use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Utils\EntityTypeCodes;
+use TechDivision\Import\Product\Utils\VisibilityKeys;
 
 /**
  * Test class for the product URL rewrite update observer implementation.
@@ -164,7 +165,8 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                         'getCategory',
                                         'getCoreConfigData',
                                         'getEntityType',
-                                        'getRow'
+                                        'getRow',
+                                        'getVisibilityIdMapping'
                                     )
                                 )
                                 ->disableOriginalConstructor()
@@ -181,23 +183,24 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeader')
                     ->withConsecutive(
+                        array(ColumnKeys::STORE_VIEW_CODE),
+                        array(ColumnKeys::SKU),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::STORE_VIEW_CODE)
                     )
-                    ->willReturnOnConsecutiveCalls(0, 1, 1, 2);
+                    ->willReturnOnConsecutiveCalls(0, 3, 1, 1, 2);
         $mockSubject->expects($this->any())
                     ->method('getLastEntityId')
                     ->willReturn($entityId);
-        $mockSubject->expects($this->exactly(6))
+        $mockSubject->expects($this->exactly(5))
                     ->method('getCategory')
-                    ->withConsecutive(array(19), array(35), array(19), array(35), array(2), array(2), array(16), array(37), array(13))
+                    ->withConsecutive(array(19), array(35), array(19), array(35), array(2))
                     ->willReturnOnConsecutiveCalls(
                         array(MemberNames::ENTITY_ID => 19, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'men/bottoms-men/pants-men'),
                         array(MemberNames::ENTITY_ID => 35, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'collections/erin-recommends'),
                         array(MemberNames::ENTITY_ID => 19, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'men/bottoms-men/pants-men'),
                         array(MemberNames::ENTITY_ID => 35, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => 'collections/erin-recommends'),
-                        array(MemberNames::ENTITY_ID =>  2, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => null),
                         array(MemberNames::ENTITY_ID =>  2, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => null)
                     );
         $mockSubject->expects($this->any())
@@ -206,10 +209,13 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->once())
                     ->method('getProductCategoryIds')
                     ->willReturn(array(19 => $entityId, 35 => $entityId));
+        $mockSubject->expects($this->once())
+                    ->method('getVisibilityIdMapping')
+                    ->willReturn(VisibilityKeys::VISIBILITY_BOTH);
         $mockSubject->expects($this->any())
                     ->method('getRowStoreId')
                     ->willReturn($storeId = 1);
-        $mockSubject->expects($this->exactly(9))
+        $mockSubject->expects($this->exactly(10))
                     ->method('getCoreConfigData')
                     ->withConsecutive(
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_USE_CATEGORIES, false),
@@ -218,12 +224,13 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
                         array(CoreConfigDataKeys::CATALOG_SEO_SAVE_REWRITES_HISTORY, true),
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_SAVE_REWRITES_HISTORY, true),
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
-                        array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html'),
+                        array(CoreConfigDataKeys::CATALOG_SEO_SAVE_REWRITES_HISTORY, true),
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html')
                     )
-                    ->willReturnOnConsecutiveCalls(true, '.html', '.html', '.html', true, '.html', '.html', '.html', '.html');
-        $mockSubject->expects($this->exactly(7))
+                    ->willReturnOnConsecutiveCalls(true, '.html', '.html', '.html', true, '.html', true, '.html', true, '.html', '.html');
+        $mockSubject->expects($this->exactly(6))
                     ->method('getEntityType')
                     ->willReturn(array(MemberNames::ENTITY_TYPE_ID => 1, MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT));
 
@@ -235,7 +242,7 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getUrlRewritesByEntityTypeAndEntityIdAndStoreId')
                     ->with(UrlRewriteObserver::ENTITY_TYPE, $entityId, $storeId)
                     ->willReturn($urlRewrites);
-        $this->mockProductBunchProcessor->expects($this->exactly(7))
+        $this->mockProductBunchProcessor->expects($this->exactly(6))
                     ->method('persistUrlRewrite')
                     ->withConsecutive(
                         array(
@@ -268,8 +275,9 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                         ),
                         array(
                             array(
-                                EntityStatus::MEMBER_NAME     => EntityStatus::STATUS_CREATE,
+                                EntityStatus::MEMBER_NAME     => EntityStatus::STATUS_UPDATE,
                                 MemberNames::ENTITY_TYPE      => UrlRewriteObserver::ENTITY_TYPE,
+                                MemberNames::URL_REWRITE_ID   => 744,
                                 MemberNames::ENTITY_ID        => $entityId,
                                 MemberNames::REQUEST_PATH     => sprintf('%s.html', $row[$headers[ColumnKeys::URL_KEY]]),
                                 MemberNames::TARGET_PATH      => sprintf('catalog/product/view/id/%s', $entityId),
@@ -277,21 +285,6 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                 MemberNames::STORE_ID         => $storeId,
                                 MemberNames::DESCRIPTION      => null,
                                 MemberNames::IS_AUTOGENERATED => 1,
-                                MemberNames::METADATA         => serialize(array())
-                            )
-                        ),
-                        array(
-                            array(
-                                EntityStatus::MEMBER_NAME     => EntityStatus::STATUS_UPDATE,
-                                MemberNames::ENTITY_TYPE      => UrlRewriteObserver::ENTITY_TYPE,
-                                MemberNames::URL_REWRITE_ID   => 744,
-                                MemberNames::ENTITY_ID        => $entityId,
-                                MemberNames::REQUEST_PATH     => sprintf('%s-old.html', $row[$headers[ColumnKeys::URL_KEY]]),
-                                MemberNames::TARGET_PATH      => sprintf('%s.html', $row[$headers[ColumnKeys::URL_KEY]]),
-                                MemberNames::REDIRECT_TYPE    => 301,
-                                MemberNames::STORE_ID         => $storeId,
-                                MemberNames::DESCRIPTION      => null,
-                                MemberNames::IS_AUTOGENERATED => 0,
                                 MemberNames::METADATA         => serialize(array())
                             )
                         ),

@@ -46,6 +46,13 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     use ExportableTrait;
 
     /**
+     * The mapping for the SKU => visibility.
+     *
+     * @var array
+     */
+    protected $entityIdVisibilityIdMapping = array();
+
+    /**
      * The array with the pre-loaded entity IDs.
      *
      * @var array
@@ -204,15 +211,45 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     public function getVisibilityIdByValue($visibility)
     {
 
+        error_log(__METHOD__ . ':' . __LINE__);
+
         // query whether or not, the requested visibility is available
         if (isset($this->availableVisibilities[$visibility])) {
-            return $this->availableVisibilities[$visibility];
+            // load the visibility ID, add the mapping and return the ID
+            $visibilityId = $this->availableVisibilities[$visibility];
+            $this->entityIdVisibilityIdMapping[$this->getLastEntityId()] = $visibilityId;
+            return $visibilityId;
         }
 
         // throw an exception, if not
         throw new \Exception(
             $this->appendExceptionSuffix(
                 sprintf('Found invalid visibility %s', $visibility)
+            )
+        );
+    }
+
+    /**
+     * Return's the visibility for the passed entity ID, if it already has been mapped. The mapping will be created
+     * by calling <code>\TechDivision\Import\Product\Subjects\BunchSubject::getVisibilityIdByValue</code> which will
+     * be done by the <code>\TechDivision\Import\Product\Callbacks\VisibilityCallback</code>.
+     *
+     * @return integer The visibility ID
+     * @throws \Exception Is thrown, if the entity ID has not been mapped
+     * @see \TechDivision\Import\Product\Subjects\BunchSubject::getVisibilityIdByValue()
+     */
+    public function getVisibilityIdMapping()
+    {
+
+        // query whether or not the SKU has already been mapped to it's visibility
+        if (isset($this->entityIdVisibilityIdMapping[$entityId = $this->getLastEntityId()])) {
+            return $this->entityIdVisibilityIdMapping[$entityId];
+        }
+
+        // throw a new exception
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Can\'t find visibility mapping for entity ID "%d"', $entityId)
             )
         );
     }

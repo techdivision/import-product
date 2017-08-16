@@ -20,8 +20,9 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Observers\AbstractObserver;
+use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Subjects\SubjectInterface;
+use TechDivision\Import\Observers\AbstractObserver;
 
 /**
  * Abstract category observer that handles the process to import product bunches.
@@ -65,6 +66,16 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     abstract protected function process();
 
     /**
+     * Return's the column name that contains the primary key.
+     *
+     * @return string the column name that contains the primary key
+     */
+    protected function getPrimaryKeyColumnName()
+    {
+        return ColumnKeys::SKU;
+    }
+
+    /**
      * Queries whether or not the SKU has already been processed.
      *
      * @param string $sku The SKU to check been processed
@@ -74,6 +85,19 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     protected function hasBeenProcessed($sku)
     {
         return $this->getSubject()->hasBeenProcessed($sku);
+    }
+
+    /**
+     * Queries whether or not the passed SKU and store view code has already been processed.
+     *
+     * @param string $sku           The SKU to check been processed
+     * @param string $storeViewCode The store view code to check been processed
+     *
+     * @return boolean TRUE if the SKU and store view code has been processed, else FALSE
+     */
+    protected function storeViewHasBeenProcessed($sku, $storeViewCode)
+    {
+        return $this->getSubject()->storeViewHasBeenProcessed($sku, $storeViewCode);
     }
 
     /**
