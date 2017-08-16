@@ -25,6 +25,7 @@ use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Product\Utils\VisibilityKeys;
 
 /**
  * Observer that creates/updates the product's URL rewrites.
@@ -44,6 +45,13 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      * @var string
      */
     const ENTITY_TYPE = 'product';
+
+    /**
+     * The key for the category in the metadata.
+     *
+     * @var string
+     */
+    const CATEGORY_ID = 'category_id';
 
     /**
      * The URL key from the CSV file column that has to be processed by the observer.
@@ -122,6 +130,30 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected function process()
     {
 
+        // initialize the store view code
+        $this->getSubject()->prepareStoreViewCode();
+
+        // load the SKU and the store view code
+        $sku = $this->getValue($this->getPrimaryKeyColumnName());
+        $storeViewCode = $this->getSubject()->getStoreViewCode();
+
+        // query whether or not the row has already been processed
+        if ($this->storeViewHasBeenProcessed($sku, $storeViewCode)) {
+            // log a message
+            $this->getSubject()
+                 ->getSystemLogger()
+                 ->warning(
+                     sprintf(
+                         'URL rewrites for SKU + store view "%s" + "%s" has already been processed',
+                         $sku,
+                         $storeViewCode
+                     )
+                 );
+
+            // return immediately
+            return;
+        };
+
         // try to load the URL key, return immediately if not possible
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
             $this->urlKey = $urlKey = $this->getValue(ColumnKeys::URL_KEY);
@@ -129,11 +161,14 @@ class UrlRewriteObserver extends AbstractProductImportObserver
             return;
         }
 
-        // initialize the store view code
-        $this->getSubject()->prepareStoreViewCode();
-
         // prepare the URL rewrites
         $this->prepareUrlRewrites();
+
+        // do NOT create new URL rewrites, if the product is NOT visible (any more), BUT
+        // handle existing URL rewrites, e. g. to remove and clean up the URL rewrites
+        if ($this->isNotVisible()) {
+            return;
+        }
 
         // iterate over the categories and create the URL rewrites
         foreach ($this->urlRewrites as $categoryId => $urlRewrite) {
@@ -154,7 +189,10 @@ class UrlRewriteObserver extends AbstractProductImportObserver
             }
         }
 
-        // if changed, override the URL key with the new one
+        // if changed, e. g. the request path of the URL rewrite has been suffixed with a
+        // number because another one with the same request path for an other entity and
+        // a different store view already exists, then override the old URL key with the
+        // new generated one
         if ($urlKey !== $this->urlKey) {
             $this->setValue(ColumnKeys::URL_KEY, $this->urlKey);
         }
@@ -401,7 +439,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         }
 
         // if not, set the category ID in the metadata
-        $metadata['category_id'] = $category[MemberNames::ENTITY_ID];
+        $metadata[UrlRewriteObserver::CATEGORY_ID] = $category[MemberNames::ENTITY_ID];
 
         // return the metadata
         return $metadata;
@@ -479,6 +517,24 @@ class UrlRewriteObserver extends AbstractProductImportObserver
 
         // return the passed URL key, if NOT
         return $urlKey;
+    }
+
+    protected function isNotVisible()
+    {
+        return $this->getVisibilityIdMapping() === VisibilityKeys::VISIBILITY_NOT_VISIBLE;
+    }
+
+    /**
+     * Return's the visibility for the passed entity ID, if it already has been mapped. The mapping will be created
+     * by calling <code>\TechDivision\Import\Product\Subjects\BunchSubject::getVisibilityIdByValue</code> which will
+     * be done by the <code>\TechDivision\Import\Product\Callbacks\VisibilityCallback</code>.
+     *
+     * @return integer The visibility ID
+     * @throws \Exception Is thrown, if the entity ID has not been mapped
+     */
+    protected function getVisibilityIdMapping()
+    {
+        return $this->getSubject()->getVisibilityIdMapping();
     }
 
     /**
@@ -576,5 +632,28 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected function persistUrlRewriteProductCategory($row)
     {
         return $this->getProductBunchProcessor()->persistUrlRewriteProductCategory($row);
+    }
+
+    /**
+     * Return's the column name that contains the primary key.
+     *
+     * @return string the column name that contains the primary key
+     */
+    protected function getPrimaryKeyColumnName()
+    {
+        return ColumnKeys::SKU;
+    }
+
+    /**
+     * Queries whether or not the passed SKU and store view code has already been processed.
+     *
+     * @param string $sku           The SKU to check been processed
+     * @param string $storeViewCode The store view code to check been processed
+     *
+     * @return boolean TRUE if the SKU and store view code has been processed, else FALSE
+     */
+    protected function storeViewHasBeenProcessed($sku, $storeViewCode)
+    {
+        return $this->getSubject()->storeViewHasBeenProcessed($sku, $storeViewCode);
     }
 }

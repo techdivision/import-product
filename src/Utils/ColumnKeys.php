@@ -124,4 +124,11 @@ class ColumnKeys extends FallbackColumnKeys
      * @var string
      */
     const NAME = 'name';
+
+    /**
+     * Name for the column 'visibility'.
+     *
+     * @var string
+     */
+    const VISIBILITY = 'visibility';
 }

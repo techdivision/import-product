@@ -25,6 +25,7 @@ use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Utils\EntityTypeCodes;
+use TechDivision\Import\Product\Utils\VisibilityKeys;
 
 /**
  * Test class for the product URL rewrite observer implementation.
@@ -107,7 +108,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getCoreConfigData',
                                     'getEntityType',
                                     'getRowStoreId',
-                                    'getRow'
+                                    'getRow',
+                                    'getVisibilityIdMapping'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -124,17 +126,22 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeader')
                     ->withConsecutive(
+                        array(ColumnKeys::STORE_VIEW_CODE),
+                        array(ColumnKeys::SKU),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::STORE_VIEW_CODE)
                     )
-                    ->willReturnOnConsecutiveCalls(0, 1, 1, 2);
+                    ->willReturnOnConsecutiveCalls(2, 0, 1, 1, 2);
         $mockSubject->expects($this->exactly(2))
                     ->method('getLastEntityId')
                     ->willReturn($entityId = 61413);
         $mockSubject->expects($this->once())
                     ->method('getProductCategoryIds')
                     ->willReturn(array($categoryId = 2 => $entityId));
+        $mockSubject->expects($this->once())
+                    ->method('getVisibilityIdMapping')
+                    ->willReturn(VisibilityKeys::VISIBILITY_BOTH);
         $mockSubject->expects($this->exactly(2))
                     ->method('getRowStoreId')
                     ->willReturn($storeId = 1);
@@ -235,7 +242,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getCategory',
                                     'getCoreConfigData',
                                     'getEntityType',
-                                    'getRow'
+                                    'getRow',
+                                    'getVisibilityIdMapping'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -252,11 +260,13 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getHeader')
                     ->withConsecutive(
+                        array(ColumnKeys::STORE_VIEW_CODE),
+                        array(ColumnKeys::SKU),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::URL_KEY),
                         array(ColumnKeys::STORE_VIEW_CODE)
                     )
-                    ->willReturnOnConsecutiveCalls(0, 1, 1, 2);
+                    ->willReturnOnConsecutiveCalls(3, 0, 1, 1, 2);
         $mockSubject->expects($this->any())
                     ->method('getLastEntityId')
                     ->willReturn($entityId);
@@ -279,6 +289,9 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->once())
                     ->method('getProductCategoryIds')
                     ->willReturn(array(2 => $entityId, 16 => $entityId, 37 => $entityId, 13 => $entityId));
+        $mockSubject->expects($this->once())
+                    ->method('getVisibilityIdMapping')
+                    ->willReturn(VisibilityKeys::VISIBILITY_BOTH);
         $mockSubject->expects($this->any())
                     ->method('getRowStoreId')
                     ->willReturn($storeId = 1);

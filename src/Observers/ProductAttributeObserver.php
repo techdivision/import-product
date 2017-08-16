@@ -22,6 +22,7 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Observers\AbstractAttributeObserver;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Product\Utils\ColumnKeys;
 
 /**
  * Observer that creates/updates the product's attributes.
@@ -60,6 +61,29 @@ class ProductAttributeObserver extends AbstractAttributeObserver
     protected function getProductBunchProcessor()
     {
         return $this->productBunchProcessor;
+    }
+
+    /**
+     * Return's the column name that contains the primary key.
+     *
+     * @return string the column name that contains the primary key
+     */
+    protected function getPrimaryKeyColumnName()
+    {
+        return ColumnKeys::SKU;
+    }
+
+    /**
+     * Queries whether or not the passed PK and store view code has already been processed.
+     *
+     * @param string $pk            The PK to check been processed
+     * @param string $storeViewCode The store view code to check been processed
+     *
+     * @return boolean TRUE if the PK and store view code has been processed, else FALSE
+     */
+    protected function storeViewHasBeenProcessed($pk, $storeViewCode)
+    {
+        return $this->getSubject()->storeViewHasBeenProcessed($pk, $storeViewCode);
     }
 
     /**
