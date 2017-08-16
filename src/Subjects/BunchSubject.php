@@ -211,8 +211,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     public function getVisibilityIdByValue($visibility)
     {
 
-        error_log(__METHOD__ . ':' . __LINE__);
-
         // query whether or not, the requested visibility is available
         if (isset($this->availableVisibilities[$visibility])) {
             // load the visibility ID, add the mapping and return the ID
