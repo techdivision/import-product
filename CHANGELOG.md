@@ -6,7 +6,7 @@
 
 ## Features
 
-* Remove unnecessaray error_log() statement
+* Remove unnecessary error_log() statement
 
 # Version 1.0.0-beta22
 
