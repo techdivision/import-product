@@ -251,7 +251,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
      */
     public function storeViewHasBeenProcessed($pk, $storeViewCode)
     {
-        return isset($this->skuEntityIdMapping[$pk]) && isset($this->skuStoreViewCodeMapping[$pk]) && in_array($storeViewCode, $this->skuStoreViewCodeMapping);
+        return isset($this->skuEntityIdMapping[$pk]) && isset($this->skuStoreViewCodeMapping[$pk]) && in_array($storeViewCode, $this->skuStoreViewCodeMapping[$pk]);
     }
 
     /**
