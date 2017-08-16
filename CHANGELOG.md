@@ -1,3 +1,13 @@
+# Version 1.0.0-beta27
+
+## Bugfixes
+
+* Fixed issue when invoking AbstractProductSubject::storeViewHasBeenProcessed($pk, $storeViewCode) method always returns false
+
+## Features
+
+* None
+
 # Version 1.0.0-beta26
 
 ## Bugfixes
