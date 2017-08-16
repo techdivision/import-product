@@ -23,9 +23,9 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
-use TechDivision\Import\Product\Utils\VisibilityKeys;
 
 /**
  * Observer that creates/updates the product's URL rewrites.
@@ -136,6 +136,11 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         // load the SKU and the store view code
         $sku = $this->getValue($this->getPrimaryKeyColumnName());
         $storeViewCode = $this->getSubject()->getStoreViewCode();
+
+        // only map the visibility of the product with the default store view
+        if (!$this->hasBeenProcessed($sku)) {
+            $this->addEntityIdVisibilityIdMapping($this->getValue(ColumnKeys::VISIBILITY));
+        }
 
         // query whether or not the row has already been processed
         if ($this->storeViewHasBeenProcessed($sku, $storeViewCode)) {
@@ -288,12 +293,12 @@ class UrlRewriteObserver extends AbstractProductImportObserver
                 // relate it, if the category is top level
                 $this->productCategoryIds[$categoryId] = $entityId;
             } elseif ((integer) $category[MemberNames::IS_ANCHOR] === 1) {
-                // relate it, if the category is not top level, but has the anchor flag set
+                // also relate it, if the category is not top level, but has the anchor flag set
                 $this->productCategoryIds[$categoryId] = $entityId;
             } else {
                 $this->getSubject()
                      ->getSystemLogger()
-                     ->debug(sprintf('Can\'t create URL rewrite for category "%s" because of missing anchor flag', $category[MemberNames::PATH]));
+                     ->debug(sprintf('Don\'t create URL rewrite for category "%s" because of missing anchor flag', $category[MemberNames::PATH]));
             }
         }
 
@@ -526,7 +531,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      */
     protected function isNotVisible()
     {
-        return $this->getVisibilityIdMapping() === VisibilityKeys::VISIBILITY_NOT_VISIBLE;
+        return $this->getEntityIdVisibilityIdMapping() === VisibilityKeys::VISIBILITY_NOT_VISIBLE;
     }
 
     /**
@@ -536,10 +541,11 @@ class UrlRewriteObserver extends AbstractProductImportObserver
      *
      * @return integer The visibility ID
      * @throws \Exception Is thrown, if the entity ID has not been mapped
+     * @see \TechDivision\Import\Product\Subjects\BunchSubject::getVisibilityIdByValue()
      */
-    protected function getVisibilityIdMapping()
+    protected function getEntityIdVisibilityIdMapping()
     {
-        return $this->getSubject()->getVisibilityIdMapping();
+        return $this->getSubject()->getEntityIdVisibilityIdMapping();
     }
 
     /**
@@ -660,5 +666,17 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected function storeViewHasBeenProcessed($sku, $storeViewCode)
     {
         return $this->getSubject()->storeViewHasBeenProcessed($sku, $storeViewCode);
+    }
+
+    /**
+     * Add the entity ID => visibility mapping for the actual entity ID.
+     *
+     * @param string $visibility The visibility of the actual entity to map
+     *
+     * @return void
+     */
+    protected function addEntityIdVisibilityIdMapping($visibility)
+    {
+        $this->getSubject()->addEntityIdVisibilityIdMapping($visibility);
     }
 }
