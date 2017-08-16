@@ -1,3 +1,13 @@
+# Version 1.0.0-beta25
+
+## Bugfixes
+
+* Fixed issue with missing URL rewrites for additional store views in a multi website setup
+
+## Features
+
+* None
+
 # Version 1.0.0-beta24
 
 ## Bugfixes
