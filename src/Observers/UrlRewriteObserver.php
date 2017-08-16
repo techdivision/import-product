@@ -20,7 +20,6 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
@@ -465,7 +464,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         $entityTypeId = $entityType[MemberNames::ENTITY_TYPE_ID];
 
         // initialize the query parameters
-        $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
+        $storeId = $this->getSubject()->getRowStoreId();
 
         // initialize the counter
         $counter = 0;
