@@ -26,6 +26,7 @@ use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Utils\EntityTypeCodes;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
+use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
  * Test class for the product URL rewrite update observer implementation.
@@ -97,7 +98,7 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
             0 => 'TEST-01',
             1 => 'bruno-compete-hoodie',
             2 => 'Default Category/Men/Bottoms/Pants,Default Category/Collections/Erin Recommends,Default Category',
-            3 => null,
+            3 => $storeViewCode = 'default',
             4 => 'Catalog, Search'
         );
 
@@ -170,7 +171,8 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                         'getRow',
                                         'hasBeenProcessed',
                                         'addEntityIdVisibilityIdMapping',
-                                        'getEntityIdVisibilityIdMapping'
+                                        'getEntityIdVisibilityIdMapping',
+                                        'getStoreViewCode'
                                     )
                                 )
                                 ->disableOriginalConstructor()
@@ -215,6 +217,10 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getRootCategory')
                     ->willReturn(array(MemberNames::ENTITY_ID =>  2, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => null));
         $mockSubject->expects($this->once())
+                    ->method('getStoreViewCode')
+                    ->with(StoreViewCodes::ADMIN)
+                    ->willReturn($storeViewCode);
+        $mockSubject->expects($this->once())
                     ->method('getProductCategoryIds')
                     ->willReturn(array(19 => $entityId, 35 => $entityId));
         $mockSubject->expects($this->once())
@@ -238,7 +244,7 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html')
                     )
                     ->willReturnOnConsecutiveCalls(true, '.html', '.html', '.html', true, '.html', true, '.html', true, '.html', '.html');
-        $mockSubject->expects($this->exactly(6))
+        $mockSubject->expects($this->exactly(1))
                     ->method('getEntityType')
                     ->willReturn(array(MemberNames::ENTITY_TYPE_ID => 1, MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT));
 

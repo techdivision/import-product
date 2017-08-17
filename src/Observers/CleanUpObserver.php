@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 
 /**
@@ -44,7 +45,7 @@ class CleanUpObserver extends AbstractProductImportObserver
 
         // add the SKU => entity ID/store view code mapping
         $this->addSkuEntityIdMapping($sku = $this->getValue(ColumnKeys::SKU));
-        $this->addSkuStoreViewCodeMapping($sku, $this->getSubject()->getStoreViewCode());
+        $this->addSkuStoreViewCodeMapping($sku, $this->getSubject()->getStoreViewCode(StoreViewCodes::ADMIN));
 
         // temporary persist the SKU
         $this->setLastSku($sku);
