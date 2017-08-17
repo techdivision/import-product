@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
@@ -132,13 +133,21 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         // initialize the store view code
         $this->getSubject()->prepareStoreViewCode();
 
-        // load the SKU and the store view code
+        // load the SKU
         $sku = $this->getValue($this->getPrimaryKeyColumnName());
-        $storeViewCode = $this->getSubject()->getStoreViewCode();
+
+        // load the store view - if no store view has been set we use the admin store view as default
+        $storeViewCode = $this->getSubject()->getStoreViewCode(StoreViewCodes::ADMIN);
 
         // only map the visibility of the product with the default store view
         if (!$this->hasBeenProcessed($sku)) {
             $this->addEntityIdVisibilityIdMapping($this->getValue(ColumnKeys::VISIBILITY));
+        }
+
+        // query whether or not we're in the admin store view
+        if ($storeViewCode === StoreViewCodes::ADMIN) {
+            // stop processing as we don't want to create URL rewrites for the admin store view
+            return;
         }
 
         // query whether or not the row has already been processed
@@ -148,7 +157,7 @@ class UrlRewriteObserver extends AbstractProductImportObserver
                  ->getSystemLogger()
                  ->warning(
                      sprintf(
-                         'URL rewrites for SKU + store view "%s" + "%s" has already been processed',
+                         'URL rewrites for SKU "%s" + store view code "%s" has already been processed',
                          $sku,
                          $storeViewCode
                      )
@@ -164,6 +173,9 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         } else {
             return;
         }
+
+        // create a unique URL key, if this is a new URL rewrite
+        $this->urlKey = $this->makeUrlKeyUnique($this->urlKey);
 
         // prepare the URL rewrites
         $this->prepareUrlRewrites();
@@ -401,9 +413,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         // load the product URL suffix to use
         $urlSuffix = $this->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html');
 
-        // create a unique URL key, if this is a new URL rewrite
-        $this->urlKey = $this->makeUrlKeyUnique($this->urlKey);
-
         // query whether or not, the category is the root category
         if ($this->isRootCategory($category)) {
             return sprintf('%s%s', $this->urlKey, $urlSuffix);
@@ -461,10 +470,11 @@ class UrlRewriteObserver extends AbstractProductImportObserver
 
         // initialize the entity type ID
         $entityType = $this->getEntityType();
-        $entityTypeId = $entityType[MemberNames::ENTITY_TYPE_ID];
+        $entityTypeId = (integer) $entityType[MemberNames::ENTITY_TYPE_ID];
 
-        // initialize the query parameters
-        $storeId = $this->getSubject()->getRowStoreId();
+        // initialize the store view ID, use the admin store view if no store view has
+        // been set, because the default url_key value has been set in admin store view
+        $storeId = $this->getSubject()->getRowStoreId(StoreViewCodes::ADMIN);
 
         // initialize the counter
         $counter = 0;

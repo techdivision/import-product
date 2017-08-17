@@ -26,6 +26,7 @@ use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Utils\EntityTypeCodes;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
+use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
  * Test class for the product URL rewrite observer implementation.
@@ -92,7 +93,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $row = array(
             0 => 'TEST-01',
             1 => 'bruno-compete-hoodie-test',
-            2 => null,
+            2 => $storeViewCode = 'default',
             3 => 'Catalog, Search'
         );
 
@@ -113,7 +114,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getRow',
                                     'hasBeenProcessed',
                                     'addEntityIdVisibilityIdMapping',
-                                    'getEntityIdVisibilityIdMapping'
+                                    'getEntityIdVisibilityIdMapping',
+                                    'getStoreViewCode'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -160,6 +162,10 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->exactly(5))
                     ->method('getRootCategory')
                     ->willReturn($category);
+        $mockSubject->expects($this->once())
+                    ->method('getStoreViewCode')
+                    ->with(StoreViewCodes::ADMIN)
+                    ->willReturn($storeViewCode);
         $mockSubject->expects($this->exactly(2))
                     ->method('getCoreConfigData')
                     ->withConsecutive(
@@ -234,7 +240,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
             0 => 'TEST-01',
             1 => 'bruno-compete-hoodie',
             2 => 'Default Category/Men/Tops/Hoodies & Sweatshirts,Default Category/Collections/Eco Friendly,Default Category',
-            3 => null,
+            3 => $storeViewCode = 'default',
             4 => 'Catalog, Search'
         );
 
@@ -255,7 +261,8 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getRow',
                                     'hasBeenProcessed',
                                     'addEntityIdVisibilityIdMapping',
-                                    'getEntityIdVisibilityIdMapping'
+                                    'getEntityIdVisibilityIdMapping',
+                                    'getStoreViewCode'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -303,6 +310,10 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                     ->method('getRootCategory')
                     ->willReturn(array(MemberNames::ENTITY_ID =>  2, MemberNames::PARENT_ID => 1, MemberNames::IS_ANCHOR => null, MemberNames::URL_PATH => null));
         $mockSubject->expects($this->once())
+                    ->method('getStoreViewCode')
+                    ->with(StoreViewCodes::ADMIN)
+                    ->willReturn($storeViewCode);
+        $mockSubject->expects($this->once())
                     ->method('getProductCategoryIds')
                     ->willReturn(array(2 => $entityId, 16 => $entityId, 37 => $entityId, 13 => $entityId));
         $mockSubject->expects($this->once())
@@ -321,7 +332,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html')
                     )
                     ->willReturnOnConsecutiveCalls(true, '.html', '.html', '.html', '.html');
-        $mockSubject->expects($this->exactly(4))
+        $mockSubject->expects($this->exactly(1))
                     ->method('getEntityType')
                     ->willReturn(array(MemberNames::ENTITY_TYPE_ID => 1, MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT));
 

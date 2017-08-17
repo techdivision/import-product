@@ -1,4 +1,18 @@
+# Version 1.0.0-beta28
+
+## Features
+
+* None
+
+## Bugfixes
+
+* Fixed invalid URL rewrite creation
+
 # Version 1.0.0-beta27
+
+## Features
+
+* None
 
 ## Bugfixes
 
