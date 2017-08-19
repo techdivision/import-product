@@ -141,7 +141,7 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     /**
      * Return's the repository to load the URL rewrites with.
      *
-     * @return \TechDivision\Import\Repositories\UrlRewriteRepository The repository instance
+     * @return \TechDivision\Import\Product\Repositories\UrlRewriteRepository The repository instance
      */
     public function getUrlRewriteRepository();
 
@@ -181,6 +181,24 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
      * @return array The URL rewrites
      */
     public function getUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId);
+
+    /**
+     * Return's an array with the URL rewrites for the passed SKU.
+     *
+     * @param string $sku The SKU to load the URL rewrites for
+     *
+     * @return array The URL rewrites
+     */
+    public function getUrlRewritesBySku($sku);
+
+    /**
+     * Return's an array with the URL rewrite product category relations for the passed SKU.
+     *
+     * @param string $sku The SKU to load the URL rewrite product category relations for
+     *
+     * @return array The URL rewrite product category relations
+     */
+    public function getUrlRewriteProductCategoriesBySku($sku);
 
     /**
      * Load's and return's the product with the passed SKU.

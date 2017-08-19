@@ -1,3 +1,13 @@
+# Version 1.0.0-beta29
+
+## Features
+
+* Add functionality to load URL rewrites and their relations (for integration testing purposes)
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-beta28
 
 ## Features
@@ -18,29 +28,25 @@
 
 * Fixed issue when invoking AbstractProductSubject::storeViewHasBeenProcessed($pk, $storeViewCode) method always returns false
 
+# Version 1.0.0-beta26
+
 ## Features
 
 * None
-
-# Version 1.0.0-beta26
 
 ## Bugfixes
 
 * Fixed issue with product import `add-update` operation that toggles between none and `-1` .html suffix for URL rewrites
 
+# Version 1.0.0-beta25
+
 ## Features
 
 * None
-
-# Version 1.0.0-beta25
 
 ## Bugfixes
 
 * Fixed issue with missing URL rewrites for additional store views in a multi website setup
-
-## Features
-
-* None
 
 # Version 1.0.0-beta24
 
