@@ -42,6 +42,8 @@ class UrlRewriteProductCategoryRepository extends AbstractRepository
      */
     protected $urlRewriteProductCategoryStmt;
 
+    protected $urlRewriteProductCategoriesBySkuStmt;
+
     /**
      * Initializes the repository's prepared statements.
      *
@@ -56,6 +58,8 @@ class UrlRewriteProductCategoryRepository extends AbstractRepository
         // initialize the prepared statements
         $this->urlRewriteProductCategoryStmt =
             $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::URL_REWRITE_PRODUCT_CATEGORY));
+        $this->urlRewriteProductCategoriesBySkuStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::URL_REWRITE_PRODUCT_CATEGORIES_BY_SKU));
     }
 
     /**
@@ -75,5 +79,23 @@ class UrlRewriteProductCategoryRepository extends AbstractRepository
         // load and return the URL rewrite product category relation
         $this->urlRewriteProductCategoryStmt->execute($params);
         return $this->urlRewriteProductCategoryStmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Return's an array with the URL rewrite product category relations for the passed SKU.
+     *
+     * @param string $sku The SKU to load the URL rewrite product category relations for
+     *
+     * @return array The URL rewrite product category relations
+     */
+    public function findAllBySku($sku)
+    {
+
+        // initialize the params
+        $params = array(MemberNames::SKU => $sku);
+
+        // load and return the URL rewrite product category relations for the passed SKU
+        $this->urlRewriteProductCategoriesBySkuStmt->execute($params);
+        return $this->urlRewriteProductCategoriesBySkuStmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

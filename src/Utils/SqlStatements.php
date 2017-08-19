@@ -321,6 +321,20 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
     const URL_REWRITE_PRODUCT_CATEGORY = 'ur_rewrite_product_category';
 
     /**
+     * The SQL statement to load the URL rewrites by a SKU.
+     *
+     * @var string
+     */
+    const URL_REWRITES_BY_SKU = 'ur_rewrites.by.sku';
+
+    /**
+     * The SQL statement to load the URL rewrite product category relations for the passed SKU.
+     *
+     * @var string
+     */
+    const URL_REWRITE_PRODUCT_CATEGORIES_BY_SKU = 'ur_rewrite_product_categories.by.sku';
+
+    /**
      * The SQL statements.
      *
      * @var array
@@ -693,7 +707,23 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
         SqlStatements::URL_REWRITE_PRODUCT_CATEGORY =>
             'SELECT *
                FROM catalog_url_rewrite_product_category
-              WHERE url_rewrite_id = :url_rewrite_id'
+              WHERE url_rewrite_id = :url_rewrite_id',
+        SqlStatements::URL_REWRITES_BY_SKU =>
+            'SELECT t2.*
+               FROM catalog_product_entity t1,
+                    url_rewrite t2
+              WHERE t1.sku = :sku
+                AND t2.entity_id = t1.entity_id
+                AND t2.entity_type = \'product\'',
+        SqlStatements::URL_REWRITE_PRODUCT_CATEGORIES_BY_SKU =>
+            'SELECT t3.*
+               FROM catalog_product_entity t1,
+                    url_rewrite t2,
+                    catalog_url_rewrite_product_category t3
+              WHERE t1.sku = :sku
+                AND t2.entity_id = t1.entity_id
+                AND t2.entity_type = \'product\'
+                AND t3.url_rewrite_id = t2.url_rewrite_id'
     );
 
     /**
