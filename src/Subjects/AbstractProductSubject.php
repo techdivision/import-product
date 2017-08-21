@@ -501,4 +501,41 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
             )
         );
     }
+
+    /**
+     * Returns an array with the codes of the store views related with the passed website code.
+     *
+     * @param string $websiteCode The code of the website to return the store view codes for
+     *
+     * @return array The array with the matching store view codes
+     */
+    public function getStoreViewCodesByWebsiteCode($websiteCode)
+    {
+
+        // query whether or not the website with the passed code exists
+        if (!isset($this->storeWebsites[$websiteCode])) {
+            // throw an exception if the website is NOT available
+            throw new \Exception(
+                $this->appendExceptionSuffix(
+                    sprintf('Website with code "%s" is not available', $websiteCode)
+                )
+            );
+        }
+
+        // initialize the array for the store view codes
+        $storeViewCodes = array();
+
+        // load the website ID
+        $websiteId = (integer) $this->storeWebsites[$websiteCode][MemberNames::WEBSITE_ID];
+
+        // iterate over the available stores to find the one of the website
+        foreach ($this->stores as $storeCode => $store) {
+            if ((integer) $store[MemberNames::WEBSITE_ID] === $websiteId) {
+                $storeViewCodes[] = $storeCode;
+            }
+        }
+
+        // return the array with the matching store view codes
+        return $storeViewCodes;
+    }
 }

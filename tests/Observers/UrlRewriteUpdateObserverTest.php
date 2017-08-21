@@ -20,13 +20,12 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Utils\EntityStatus;
-use TechDivision\Import\Utils\EntityTypeCodes;
-use TechDivision\Import\Product\Utils\VisibilityKeys;
-use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
  * Test class for the product URL rewrite update observer implementation.
@@ -167,7 +166,6 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                                         'getRowStoreId',
                                         'getCategory',
                                         'getCoreConfigData',
-                                        'getEntityType',
                                         'getRow',
                                         'hasBeenProcessed',
                                         'addEntityIdVisibilityIdMapping',
@@ -244,9 +242,6 @@ class UrlRewriteUpdateObserverTest extends \PHPUnit_Framework_TestCase
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html')
                     )
                     ->willReturnOnConsecutiveCalls(true, '.html', '.html', '.html', true, '.html', true, '.html', true, '.html', '.html');
-        $mockSubject->expects($this->exactly(1))
-                    ->method('getEntityType')
-                    ->willReturn(array(MemberNames::ENTITY_TYPE_ID => 1, MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT));
 
         // mock the processor methods
         $this->mockProductBunchProcessor->expects($this->any())

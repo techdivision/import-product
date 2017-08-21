@@ -169,13 +169,10 @@ class UrlRewriteObserver extends AbstractProductImportObserver
 
         // try to load the URL key, return immediately if not possible
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
-            $this->urlKey = $urlKey = $this->getValue(ColumnKeys::URL_KEY);
+            $this->urlKey = $this->getValue(ColumnKeys::URL_KEY);
         } else {
             return;
         }
-
-        // create a unique URL key, if this is a new URL rewrite
-        $this->urlKey = $this->makeUrlKeyUnique($this->urlKey);
 
         // prepare the URL rewrites
         $this->prepareUrlRewrites();
@@ -190,27 +187,31 @@ class UrlRewriteObserver extends AbstractProductImportObserver
         foreach ($this->urlRewrites as $categoryId => $urlRewrite) {
             // initialize and persist the URL rewrite
             if ($urlRewrite = $this->initializeUrlRewrite($urlRewrite)) {
-                // initialize URL rewrite and catagory ID
+                // initialize URL rewrite and entity ID
                 $this->categoryId = $categoryId;
                 $this->entityId = $urlRewrite[MemberNames::ENTITY_ID];
-                $this->urlRewriteId = $this->persistUrlRewrite($urlRewrite);
 
-                // initialize and persist the URL rewrite product => category relation
-                $urlRewriteProductCategory = $this->initializeUrlRewriteProductCategory(
-                    $this->prepareUrlRewriteProductCategoryAttributes()
-                );
+                try {
+                    // persist the URL rewrite
+                    $this->urlRewriteId = $this->persistUrlRewrite($urlRewrite);
 
-                // persist the URL rewrite product category relation
-                $this->persistUrlRewriteProductCategory($urlRewriteProductCategory);
+                    // initialize and persist the URL rewrite product => category relation
+                    $urlRewriteProductCategory = $this->initializeUrlRewriteProductCategory(
+                        $this->prepareUrlRewriteProductCategoryAttributes()
+                    );
+
+                    // persist the URL rewrite product category relation
+                    $this->persistUrlRewriteProductCategory($urlRewriteProductCategory);
+
+                } catch (\Exception $e) {
+                    // query whether or not debug mode has been enabled
+                    if ($this->getSubject()->isDebugMode()) {
+                        $this->getSubject()->getSystemLogger()->warning($this->getSubject()->appendExceptionSuffix($e->getMessage()));
+                    } else {
+                        throw $e;
+                    }
+                }
             }
-        }
-
-        // if changed, e. g. the request path of the URL rewrite has been suffixed with a
-        // number because another one with the same request path for an other entity and
-        // a different store view already exists, then override the old URL key with the
-        // new generated one
-        if ($urlKey !== $this->urlKey) {
-            $this->setValue(ColumnKeys::URL_KEY, $this->urlKey);
         }
     }
 
@@ -459,81 +460,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Make's the passed URL key unique by adding the next number to the end.
-     *
-     * @param string $urlKey The URL key to make unique
-     *
-     * @return string The unique URL key
-     */
-    protected function makeUrlKeyUnique($urlKey)
-    {
-
-        // initialize the entity type ID
-        $entityType = $this->getEntityType();
-        $entityTypeId = (integer) $entityType[MemberNames::ENTITY_TYPE_ID];
-
-        // initialize the store view ID, use the admin store view if no store view has
-        // been set, because the default url_key value has been set in admin store view
-        $storeId = $this->getSubject()->getRowStoreId(StoreViewCodes::ADMIN);
-
-        // initialize the counter
-        $counter = 0;
-
-        // initialize the counters
-        $matchingCounters = array();
-        $notMatchingCounters = array();
-
-        // pre-initialze the URL key to query for
-        $value = $urlKey;
-
-        do {
-            // try to load the attribute
-            $productVarcharAttribute = $this->getProductBunchProcessor()
-                                            ->loadProductVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue(
-                                                MemberNames::URL_KEY,
-                                                $entityTypeId,
-                                                $storeId,
-                                                $value
-                                            );
-
-            // try to load the product's URL key
-            if ($productVarcharAttribute) {
-                // this IS the URL key of the passed entity
-                if ($this->isUrlKeyOf($productVarcharAttribute)) {
-                    $matchingCounters[] = $counter;
-                } else {
-                    $notMatchingCounters[] = $counter;
-                }
-
-                // prepare the next URL key to query for
-                $value = sprintf('%s-%d', $urlKey, ++$counter);
-            }
-
-        } while ($productVarcharAttribute);
-
-        // sort the array ascending according to the counter
-        asort($matchingCounters);
-        asort($notMatchingCounters);
-
-        // this IS the URL key of the passed entity => we've an UPDATE
-        if (sizeof($matchingCounters) > 0) {
-            // load highest counter
-            $counter = end($matchingCounters);
-            // if the counter is > 0, we've to append it to the new URL key
-            if ($counter > 0) {
-                $urlKey = sprintf('%s-%d', $urlKey, $counter);
-            }
-        } elseif (sizeof($notMatchingCounters) > 0) {
-            // create a new URL key by raising the counter
-            $newCounter = end($notMatchingCounters);
-            $urlKey = sprintf('%s-%d', $urlKey, ++$newCounter);
-        }
-
-        // return the passed URL key, if NOT
-        return $urlKey;
-    }
-
-    /**
      * Query whether or not the actual entity is visible or not.
      *
      * @return boolean TRUE if the entity is NOT visible, else FALSE
@@ -555,29 +481,6 @@ class UrlRewriteObserver extends AbstractProductImportObserver
     protected function getEntityIdVisibilityIdMapping()
     {
         return $this->getSubject()->getEntityIdVisibilityIdMapping();
-    }
-
-    /**
-     * Return's TRUE, if the passed URL key varchar value IS related with the actual PK.
-     *
-     * @param array $productVarcharAttribute The varchar value to check
-     *
-     * @return boolean TRUE if the URL key is related, else FALSE
-     */
-    protected function isUrlKeyOf(array $productVarcharAttribute)
-    {
-        return $this->getSubject()->isUrlKeyOf($productVarcharAttribute);
-    }
-
-    /**
-     * Return's the entity type for the configured entity type code.
-     *
-     * @return array The requested entity type
-     * @throws \Exception Is thrown, if the requested entity type is not available
-     */
-    protected function getEntityType()
-    {
-        return $this->getSubject()->getEntityType();
     }
 
     /**
