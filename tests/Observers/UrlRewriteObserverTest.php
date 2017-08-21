@@ -20,13 +20,12 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Product\Utils\ColumnKeys;
-use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
-use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Utils\EntityStatus;
-use TechDivision\Import\Utils\EntityTypeCodes;
-use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
+use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\VisibilityKeys;
+use TechDivision\Import\Product\Utils\CoreConfigDataKeys;
 
 /**
  * Test class for the product URL rewrite observer implementation.
@@ -109,7 +108,6 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getRootCategory',
                                     'getCategory',
                                     'getCoreConfigData',
-                                    'getEntityType',
                                     'getRowStoreId',
                                     'getRow',
                                     'hasBeenProcessed',
@@ -152,7 +150,7 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->once())
                     ->method('getEntityIdVisibilityIdMapping')
                     ->willReturn(VisibilityKeys::VISIBILITY_BOTH);
-        $mockSubject->expects($this->exactly(2))
+        $mockSubject->expects($this->exactly(1))
                     ->method('getRowStoreId')
                     ->willReturn($storeId = 1);
         $mockSubject->expects($this->exactly(2))
@@ -173,14 +171,6 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html')
                     )
                     ->willReturnOnConsecutiveCalls(true, '.html');
-        $mockSubject->expects($this->once())
-                    ->method('getEntityType')
-                    ->willReturn(
-                        array(
-                            MemberNames::ENTITY_TYPE_ID => 1,
-                            MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT
-                        )
-                    );
 
         // mock the processor methods
         $this->mockProductBunchProcessor->expects($this->once())
@@ -257,7 +247,6 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getRowStoreId',
                                     'getCategory',
                                     'getCoreConfigData',
-                                    'getEntityType',
                                     'getRow',
                                     'hasBeenProcessed',
                                     'addEntityIdVisibilityIdMapping',
@@ -332,9 +321,6 @@ class UrlRewriteObserverTest extends \PHPUnit_Framework_TestCase
                         array(CoreConfigDataKeys::CATALOG_SEO_PRODUCT_URL_SUFFIX, '.html')
                     )
                     ->willReturnOnConsecutiveCalls(true, '.html', '.html', '.html', '.html');
-        $mockSubject->expects($this->exactly(1))
-                    ->method('getEntityType')
-                    ->willReturn(array(MemberNames::ENTITY_TYPE_ID => 1, MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT));
 
         // mock the processor methods
         $this->mockProductBunchProcessor->expects($this->exactly(4))

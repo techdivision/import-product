@@ -261,6 +261,7 @@
         <service id="import_product.observer.clean.up" class="TechDivision\Import\Product\Observers\CleanUpObserver"/>
         <service id="import_product.observer.quality.and.stock.status" class="TechDivision\Import\Product\Observers\QuantityAndStockStatusObserver"/>
         <service id="import_product.observer.url.key" class="TechDivision\Import\Product\Observers\UrlKeyObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
             <argument type="service" id="import_product.filter.convert.literal.url"/>
         </service>
         <service id="import_product.observer.category.product" class="TechDivision\Import\Product\Observers\CategoryProductObserver">

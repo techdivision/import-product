@@ -1,3 +1,13 @@
+# Version 1.0.0-beta30
+
+## Features
+
+* None
+
+## Bugfixes
+
+* Move functionality to make URL unique from UrlRewriteObserver to UrlKeyObserver
+
 # Version 1.0.0-beta29
 
 ## Features
