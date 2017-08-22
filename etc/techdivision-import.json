@@ -189,7 +189,6 @@
               "observers": [
                 {
                   "import": [
-                    "import_product_url_rewrite.observer.clear.url.rewrite",
                     "import_product_url_rewrite.observer.url.rewrite"
                   ]
                 }
