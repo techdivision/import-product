@@ -78,7 +78,6 @@ class ClearProductObserver extends AbstractProductImportObserver
 
         // FIRST delete the data related with the product with the passed SKU
         $this->deleteStockItem(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_STOCK_ITEM_BY_SKU);
-        $this->deleteUrlRewrite(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_URL_REWRITE_BY_SKU);
         $this->deleteStockStatus(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_STOCK_STATUS_BY_SKU);
         $this->deleteProductWebsite(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_PRODUCT_WEBSITE_BY_SKU);
         $this->deleteCategoryProduct(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_CATEGORY_PRODUCT_BY_SKU);

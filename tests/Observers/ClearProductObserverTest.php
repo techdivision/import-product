@@ -109,9 +109,6 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
 
         // mock the processor methods
         $this->mockProductBunchProcessor->expects($this->once())
-                                        ->method('deleteUrlRewrite')
-                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
-        $this->mockProductBunchProcessor->expects($this->once())
                                         ->method('deleteStockItem')
                                         ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
         $this->mockProductBunchProcessor->expects($this->once())

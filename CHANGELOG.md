@@ -1,3 +1,13 @@
+# Version 1.0.0-beta31
+
+## Features
+
+* None
+
+## Bugfixes
+
+* Completely remove URL rewrite handling
+
 # Version 1.0.0-beta30
 
 ## Features

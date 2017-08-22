@@ -111,13 +111,6 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     public function getUrlRewriteAction();
 
     /**
-     * Return's the action with the URL rewrite product category CRUD methods.
-     *
-     * @return \TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction The action instance
-     */
-    public function getUrlRewriteProductCategoryAction();
-
-    /**
      * Return's the repository to load the products with.
      *
      * @return \TechDivision\Import\Product\Repositories\ProductRepository The repository instance
@@ -139,20 +132,6 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     public function getCategoryProductRepository();
 
     /**
-     * Return's the repository to load the URL rewrites with.
-     *
-     * @return \TechDivision\Import\Product\Repositories\UrlRewriteRepository The repository instance
-     */
-    public function getUrlRewriteRepository();
-
-    /**
-     * Return's the repository to load the URL rewrite product category relations with.
-     *
-     * @return \TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository The repository instance
-     */
-    public function getUrlRewriteProductCategoryRepository();
-
-    /**
      * Return's an array with the available EAV attributes for the passed is user defined flag.
      *
      * @param integer $isUserDefined The flag itself
@@ -160,45 +139,6 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
      * @return array The array with the EAV attributes matching the passed flag
      */
     public function getEavAttributeByIsUserDefined($isUserDefined = 1);
-
-    /**
-     * Return's the URL rewrites for the passed URL entity type and ID.
-     *
-     * @param string  $entityType The entity type to load the URL rewrites for
-     * @param integer $entityId   The entity ID to laod the rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
-
-    /**
-     * Return's the URL rewrites for the passed URL entity type and ID.
-     *
-     * @param string  $entityType The entity type to load the URL rewrites for
-     * @param integer $entityId   The entity ID to load the URL rewrites for
-     * @param integer $storeId    The store ID to load the URL rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    public function getUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId);
-
-    /**
-     * Return's an array with the URL rewrites for the passed SKU.
-     *
-     * @param string $sku The SKU to load the URL rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    public function getUrlRewritesBySku($sku);
-
-    /**
-     * Return's an array with the URL rewrite product category relations for the passed SKU.
-     *
-     * @param string $sku The SKU to load the URL rewrite product category relations for
-     *
-     * @return array The URL rewrite product category relations
-     */
-    public function getUrlRewriteProductCategoriesBySku($sku);
 
     /**
      * Load's and return's the product with the passed SKU.
@@ -319,16 +259,6 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     public function loadProductVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value);
 
     /**
-     * Return's the URL rewrite product category relation for the passed
-     * URL rewrite ID.
-     *
-     * @param integer $urlRewriteId The URL rewrite ID to load the URL rewrite product category relation for
-     *
-     * @return array|false The URL rewrite product category relation
-     */
-    public function loadUrlRewriteProductCategory($urlRewriteId);
-
-    /**
      * Persist's the passed product data and return's the ID.
      *
      * @param array       $product The product data to persist
@@ -427,26 +357,6 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
      * @return void
      */
     public function persistStockStatus($stockStatus, $name = null);
-
-    /**
-     * Persist's the URL write with the passed data.
-     *
-     * @param array       $row  The URL rewrite to persist
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return string The ID of the persisted entity
-     */
-    public function persistUrlRewrite($row, $name = null);
-
-    /**
-     * Persist's the URL rewrite product => category relation with the passed data.
-     *
-     * @param array       $row  The URL rewrite product => category relation to persist
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return void
-     */
-    public function persistUrlRewriteProductCategory($row, $name = null);
 
     /**
      * Delete's the entity with the passed attributes.

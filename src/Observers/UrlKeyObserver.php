@@ -80,12 +80,20 @@ class UrlKeyObserver extends AbstractProductImportObserver
      * Process the observer's business logic.
      *
      * @return void
+     * @throws \Exception Is thrown, if either column "url_key" or "name" have a value set
      */
     protected function process()
     {
 
         // prepare the store view code
         $this->getSubject()->prepareStoreViewCode();
+
+        // set the entity ID for the product with the passed SKU
+        if ($product = $this->loadProduct($this->getValue(ColumnKeys::SKU))) {
+            $this->setIds($product);
+        } else {
+            $this->setIds(array());
+        }
 
         // query whether or not the URL key column has a value
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
@@ -99,14 +107,46 @@ class UrlKeyObserver extends AbstractProductImportObserver
             return;
         }
 
-        // throw an exception, that the URL key can not be initialized
-        $this->getSystemLogger()->debug(
-            sprintf(
-                'Can\'t initialize the URL key in CSV file %s on line %d',
-                $this->getSubject()->getFilename(),
-                $this->getSubject()->getLineNumber()
-            )
-        );
+        // throw an exception, that the URL key can not be initialized and we're in admin store view
+        if ($this->getSubject()->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
+            throw new \Exception('Can\'t initialize the URL key because either columns "url_key" or "name" have a value set for default store view');
+        }
+    }
+
+    /**
+     * Temporarily persist's the IDs of the passed product.
+     *
+     * @param array $product The product to temporarily persist the IDs for
+     *
+     * @return void
+     */
+    protected function setIds(array $product)
+    {
+        $this->setLastEntityId(isset($product[MemberNames::ENTITY_ID]) ? $product[MemberNames::ENTITY_ID] : null);
+    }
+
+    /**
+     * Set's the ID of the product that has been created recently.
+     *
+     * @param string $lastEntityId The entity ID
+     *
+     * @return void
+     */
+    protected function setLastEntityId($lastEntityId)
+    {
+        $this->getSubject()->setLastEntityId($lastEntityId);
+    }
+
+    /**
+     * Load's and return's the product with the passed SKU.
+     *
+     * @param string $sku The SKU of the product to load
+     *
+     * @return array The product
+     */
+    protected function loadProduct($sku)
+    {
+        return $this->getProductBunchProcessor()->loadProduct($sku);
     }
 
     /**

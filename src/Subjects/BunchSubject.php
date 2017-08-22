@@ -25,6 +25,7 @@ use TechDivision\Import\Product\Utils\RegistryKeys;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Subjects\ExportableSubjectInterface;
 use TechDivision\Import\Subjects\ExportableTrait;
+use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -44,13 +45,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      * @var \TechDivision\Import\Subjects\ExportableTrait
      */
     use ExportableTrait;
-
-    /**
-     * The mapping for the SKU => visibility.
-     *
-     * @var array
-     */
-    protected $entityIdVisibilityIdMapping = array();
 
     /**
      * The array with the pre-loaded entity IDs.
@@ -226,43 +220,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     }
 
     /**
-     * Add the entity ID => visibility mapping for the actual entity ID.
-     *
-     * @param string $visibility The visibility of the actual entity to map
-     *
-     * @return void
-     */
-    public function addEntityIdVisibilityIdMapping($visibility)
-    {
-        $this->entityIdVisibilityIdMapping[$this->getLastEntityId()] = $this->getVisibilityIdByValue($visibility);
-    }
-
-    /**
-     * Return's the visibility for the passed entity ID, if it already has been mapped. The mapping will be created
-     * by calling <code>\TechDivision\Import\Product\Subjects\BunchSubject::getVisibilityIdByValue</code> which will
-     * be done by the <code>\TechDivision\Import\Product\Callbacks\VisibilityCallback</code>.
-     *
-     * @return integer The visibility ID
-     * @throws \Exception Is thrown, if the entity ID has not been mapped
-     * @see \TechDivision\Import\Product\Subjects\BunchSubject::getVisibilityIdByValue()
-     */
-    public function getEntityIdVisibilityIdMapping()
-    {
-
-        // query whether or not the SKU has already been mapped to it's visibility
-        if (isset($this->entityIdVisibilityIdMapping[$entityId = $this->getLastEntityId()])) {
-            return $this->entityIdVisibilityIdMapping[$entityId];
-        }
-
-        // throw a new exception
-        throw new \Exception(
-            $this->appendExceptionSuffix(
-                sprintf('Can\'t find visibility mapping for entity ID "%d"', $entityId)
-            )
-        );
-    }
-
-    /**
      * Add the passed category ID to the product's category list.
      *
      * @param integer $categoryId The category ID to add
@@ -337,6 +294,7 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      */
     public function isUrlKeyOf(array $productVarcharAttribute)
     {
-        return ($productVarcharAttribute[MemberNames::ENTITY_ID] === $this->getLastEntityId()) && ((integer) $productVarcharAttribute[MemberNames::STORE_ID] === $this->getRowStoreId());
+        return ((integer) $productVarcharAttribute[MemberNames::ENTITY_ID] === (integer) $this->getLastEntityId()) &&
+               ((integer) $productVarcharAttribute[MemberNames::STORE_ID] === (integer) $this->getRowStoreId(StoreViewCodes::ADMIN));
     }
 }
