@@ -32,7 +32,6 @@ use TechDivision\Import\Product\Actions\ProductVarcharAction;
 use TechDivision\Import\Product\Actions\ProductWebsiteAction;
 use TechDivision\Import\Product\Actions\StockItemAction;
 use TechDivision\Import\Product\Actions\StockStatusAction;
-use TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction;
 use TechDivision\Import\Product\Repositories\CategoryProductRepository;
 use TechDivision\Import\Product\Repositories\ProductDatetimeRepository;
 use TechDivision\Import\Product\Repositories\ProductDecimalRepository;
@@ -43,8 +42,6 @@ use TechDivision\Import\Product\Repositories\ProductVarcharRepository;
 use TechDivision\Import\Product\Repositories\ProductWebsiteRepository;
 use TechDivision\Import\Product\Repositories\StockItemRepository;
 use TechDivision\Import\Product\Repositories\StockStatusRepository;
-use TechDivision\Import\Product\Repositories\UrlRewriteRepository;
-use TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepository;
 use TechDivision\Import\Repositories\EavAttributeRepository;
 
@@ -159,13 +156,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     protected $urlRewriteAction;
 
     /**
-     * The action for URL rewrite product category CRUD methods.
-     *
-     * @var \TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction
-     */
-    protected $urlRewriteProductCategoryAction;
-
-    /**
      * The repository to load the products with.
      *
      * @var \TechDivision\Import\Product\Repositories\ProductRepository
@@ -236,49 +226,32 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     protected $stockItemRepository;
 
     /**
-     * The repository to load the URL rewrites with.
-     *
-     * @var \TechDivision\Import\Product\Repositories\UrlRewriteRepository
-     */
-    protected $urlRewriteRepository;
-
-    /**
-     * The repository to load the URL rewrite product category relations with.
-     *
-     * @var \TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository
-     */
-    protected $urlRewriteProductCategoryRepository;
-
-    /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \TechDivision\Import\Connection\ConnectionInterface                           $connection                          The connection to use
-     * @param \TechDivision\Import\Product\Repositories\ProductRepository                   $productRepository                   The product repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductWebsiteRepository            $productWebsiteRepository            The product website repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductDatetimeRepository           $productDatetimeRepository           The product datetime repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductDecimalRepository            $productDecimalRepository            The product decimal repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductIntRepository                $productIntRepository                The product integer repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductTextRepository               $productTextRepository               The product text repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepository            $productVarcharRepository            The product varchar repository to use
-     * @param \TechDivision\Import\Product\Repositories\CategoryProductRepository           $categoryProductRepository           The category product repository to use
-     * @param \TechDivision\Import\Product\Repositories\StockStatusRepository               $stockStatusRepository               The stock status repository to use
-     * @param \TechDivision\Import\Product\Repositories\StockItemRepository                 $stockItemRepository                 The stock item repository to use
-     * @param \TechDivision\Import\Product\Repositories\UrlRewriteRepository                $urlRewriteRepository                The URL rewrite repository to use
-     * @param \TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository $urlRewriteProductCategoryRepository The URL rewrite product category repository to use
-     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepository           $eavAttributeOptionValueRepository   The EAV attribute option value repository to use
-     * @param \TechDivision\Import\Repositories\EavAttributeRepository                      $eavAttributeRepository              The EAV attribute repository to use
-     * @param \TechDivision\Import\Product\Actions\CategoryProductAction                    $categoryProductAction               The category product action to use
-     * @param \TechDivision\Import\Product\Actions\ProductDatetimeAction                    $productDatetimeAction               The product datetime action to use
-     * @param \TechDivision\Import\Product\Actions\ProductDecimalAction                     $productDecimalAction                The product decimal action to use
-     * @param \TechDivision\Import\Product\Actions\ProductIntAction                         $productIntAction                    The product integer action to use
-     * @param \TechDivision\Import\Product\Actions\ProductAction                            $productAction                       The product action to use
-     * @param \TechDivision\Import\Product\Actions\ProductTextAction                        $productTextAction                   The product text action to use
-     * @param \TechDivision\Import\Product\Actions\ProductVarcharAction                     $productVarcharAction                The product varchar action to use
-     * @param \TechDivision\Import\Product\Actions\ProductWebsiteAction                     $productWebsiteAction                The product website action to use
-     * @param \TechDivision\Import\Product\Actions\StockItemAction                          $stockItemAction                     The stock item action to use
-     * @param \TechDivision\Import\Product\Actions\StockStatusAction                        $stockStatusAction                   The stock status action to use
-     * @param \TechDivision\Import\Actions\UrlRewriteAction                                 $urlRewriteAction                    The URL rewrite action to use
-     * @param \TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction          $urlRewriteProductCategoryAction     The URL rewrite product category action to use
+     * @param \TechDivision\Import\Connection\ConnectionInterface                 $connection                        The connection to use
+     * @param \TechDivision\Import\Product\Repositories\ProductRepository         $productRepository                 The product repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductWebsiteRepository  $productWebsiteRepository          The product website repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductDatetimeRepository $productDatetimeRepository         The product datetime repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductDecimalRepository  $productDecimalRepository          The product decimal repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductIntRepository      $productIntRepository              The product integer repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductTextRepository     $productTextRepository             The product text repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepository  $productVarcharRepository          The product varchar repository to use
+     * @param \TechDivision\Import\Product\Repositories\CategoryProductRepository $categoryProductRepository         The category product repository to use
+     * @param \TechDivision\Import\Product\Repositories\StockStatusRepository     $stockStatusRepository             The stock status repository to use
+     * @param \TechDivision\Import\Product\Repositories\StockItemRepository       $stockItemRepository               The stock item repository to use
+     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepository $eavAttributeOptionValueRepository The EAV attribute option value repository to use
+     * @param \TechDivision\Import\Repositories\EavAttributeRepository            $eavAttributeRepository            The EAV attribute repository to use
+     * @param \TechDivision\Import\Product\Actions\CategoryProductAction          $categoryProductAction             The category product action to use
+     * @param \TechDivision\Import\Product\Actions\ProductDatetimeAction          $productDatetimeAction             The product datetime action to use
+     * @param \TechDivision\Import\Product\Actions\ProductDecimalAction           $productDecimalAction              The product decimal action to use
+     * @param \TechDivision\Import\Product\Actions\ProductIntAction               $productIntAction                  The product integer action to use
+     * @param \TechDivision\Import\Product\Actions\ProductAction                  $productAction                     The product action to use
+     * @param \TechDivision\Import\Product\Actions\ProductTextAction              $productTextAction                 The product text action to use
+     * @param \TechDivision\Import\Product\Actions\ProductVarcharAction           $productVarcharAction              The product varchar action to use
+     * @param \TechDivision\Import\Product\Actions\ProductWebsiteAction           $productWebsiteAction              The product website action to use
+     * @param \TechDivision\Import\Product\Actions\StockItemAction                $stockItemAction                   The stock item action to use
+     * @param \TechDivision\Import\Product\Actions\StockStatusAction              $stockStatusAction                 The stock status action to use
+     * @param \TechDivision\Import\Actions\UrlRewriteAction                       $urlRewriteAction                  The URL rewrite action to use
      */
     public function __construct(
         ConnectionInterface $connection,
@@ -292,8 +265,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         CategoryProductRepository $categoryProductRepository,
         StockStatusRepository $stockStatusRepository,
         StockItemRepository $stockItemRepository,
-        UrlRewriteRepository $urlRewriteRepository,
-        UrlRewriteProductCategoryRepository $urlRewriteProductCategoryRepository,
         EavAttributeOptionValueRepository $eavAttributeOptionValueRepository,
         EavAttributeRepository $eavAttributeRepository,
         CategoryProductAction $categoryProductAction,
@@ -306,8 +277,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         ProductWebsiteAction $productWebsiteAction,
         StockItemAction $stockItemAction,
         StockStatusAction $stockStatusAction,
-        UrlRewriteAction $urlRewriteAction,
-        UrlRewriteProductCategoryAction $urlRewriteProductCategoryAction
+        UrlRewriteAction $urlRewriteAction
     ) {
         $this->setConnection($connection);
         $this->setProductRepository($productRepository);
@@ -320,8 +290,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         $this->setCategoryProductRepository($categoryProductRepository);
         $this->setStockStatusRepository($stockStatusRepository);
         $this->setStockItemRepository($stockItemRepository);
-        $this->setUrlRewriteRepository($urlRewriteRepository);
-        $this->setUrlRewriteProductCategoryRepository($urlRewriteProductCategoryRepository);
         $this->setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository);
         $this->setEavAttributeRepository($eavAttributeRepository);
         $this->setCategoryProductAction($categoryProductAction);
@@ -335,7 +303,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         $this->setStockItemAction($stockItemAction);
         $this->setStockStatusAction($stockStatusAction);
         $this->setUrlRewriteAction($urlRewriteAction);
-        $this->setUrlRewriteProductCategoryAction($urlRewriteProductCategoryAction);
     }
 
     /**
@@ -703,28 +670,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
-     * Set's the action with the URL rewrite product category CRUD methods.
-     *
-     * @param \TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction $urlRewriteProductCategoryAction The action with the URL rewrite CRUD methods
-     *
-     * @return void
-     */
-    public function setUrlRewriteProductCategoryAction($urlRewriteProductCategoryAction)
-    {
-        $this->urlRewriteProductCategoryAction = $urlRewriteProductCategoryAction;
-    }
-
-    /**
-     * Return's the action with the URL rewrite product category CRUD methods.
-     *
-     * @return \TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction The action instance
-     */
-    public function getUrlRewriteProductCategoryAction()
-    {
-        return $this->urlRewriteProductCategoryAction;
-    }
-
-    /**
      * Set's the repository to load the products with.
      *
      * @param \TechDivision\Import\Product\Repositories\ProductRepository $productRepository The repository instance
@@ -945,50 +890,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
-     * Set's the repository to load the URL rewrites with.
-     *
-     * @param \TechDivision\Import\Product\Repositories\UrlRewriteRepository $urlRewriteRepository The repository instance
-     *
-     * @return void
-     */
-    public function setUrlRewriteRepository($urlRewriteRepository)
-    {
-        $this->urlRewriteRepository = $urlRewriteRepository;
-    }
-
-    /**
-     * Return's the repository to load the URL rewrites with.
-     *
-     * @return \TechDivision\Import\Product\Repositories\UrlRewriteRepository The repository instance
-     */
-    public function getUrlRewriteRepository()
-    {
-        return $this->urlRewriteRepository;
-    }
-
-    /**
-     * Set's the repository to load the URL rewrite product category relations with.
-     *
-     * @param \TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository $urlRewriteProductCategoryRepository The repository instance
-     *
-     * @return void
-     */
-    public function setUrlRewriteProductCategoryRepository($urlRewriteProductCategoryRepository)
-    {
-        $this->urlRewriteProductCategoryRepository = $urlRewriteProductCategoryRepository;
-    }
-
-    /**
-     * Return's the repository to load the URL rewrite product category relations with.
-     *
-     * @return \TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository The repository instance
-     */
-    public function getUrlRewriteProductCategoryRepository()
-    {
-        return $this->urlRewriteProductCategoryRepository;
-    }
-
-    /**
      * Load's and return's the EAV attribute option value with the passed code, store ID and value.
      *
      * @param string  $attributeCode The code of the EAV attribute option to load
@@ -1000,57 +901,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value)
     {
         return $this->getEavAttributeOptionValueRepository()->findOneByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value);
-    }
-
-    /**
-     * Return's the URL rewrites for the passed URL entity type and ID.
-     *
-     * @param string  $entityType The entity type to load the URL rewrites for
-     * @param integer $entityId   The entity ID to laod the rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
-    {
-        return $this->getUrlRewriteRepository()->findAllByEntityTypeAndEntityId($entityType, $entityId);
-    }
-
-    /**
-     * Return's the URL rewrites for the passed URL entity type and ID.
-     *
-     * @param string  $entityType The entity type to load the URL rewrites for
-     * @param integer $entityId   The entity ID to load the URL rewrites for
-     * @param integer $storeId    The store ID to load the URL rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    public function getUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId)
-    {
-        return $this->getUrlRewriteRepository()->findAllByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId);
-    }
-
-    /**
-     * Return's an array with the URL rewrites for the passed SKU.
-     *
-     * @param string $sku The SKU to load the URL rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    public function getUrlRewritesBySku($sku)
-    {
-        return $this->getUrlRewriteRepository()->findAllBySku($sku);
-    }
-
-    /**
-     * Return's an array with the URL rewrite product category relations for the passed SKU.
-     *
-     * @param string $sku The SKU to load the URL rewrite product category relations for
-     *
-     * @return array The URL rewrite product category relations
-     */
-    public function getUrlRewriteProductCategoriesBySku($sku)
-    {
-        return $this->getUrlRewriteProductCategoryRepository()->findAllBySku($sku);
     }
 
     /**
@@ -1205,19 +1055,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
-     * Return's the URL rewrite product category relation for the passed
-     * URL rewrite ID.
-     *
-     * @param integer $urlRewriteId The URL rewrite ID to load the URL rewrite product category relation for
-     *
-     * @return array|false The URL rewrite product category relation
-     */
-    public function loadUrlRewriteProductCategory($urlRewriteId)
-    {
-        return $this->getUrlRewriteProductCategoryRepository()->load($urlRewriteId);
-    }
-
-    /**
      * Persist's the passed product data and return's the ID.
      *
      * @param array       $product The product data to persist
@@ -1345,32 +1182,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function persistStockStatus($stockStatus, $name = null)
     {
         $this->getStockStatusAction()->persist($stockStatus, $name);
-    }
-
-    /**
-     * Persist's the URL write with the passed data.
-     *
-     * @param array       $row  The URL rewrite to persist
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return string The ID of the persisted entity
-     */
-    public function persistUrlRewrite($row, $name = null)
-    {
-        return $this->getUrlRewriteAction()->persist($row, $name);
-    }
-
-    /**
-     * Persist's the URL rewrite product => category relation with the passed data.
-     *
-     * @param array       $row  The URL rewrite product => category relation to persist
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return void
-     */
-    public function persistUrlRewriteProductCategory($row, $name = null)
-    {
-        $this->getUrlRewriteProductCategoryAction()->persist($row, $name);
     }
 
     /**

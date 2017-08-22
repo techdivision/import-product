@@ -6,7 +6,6 @@
   "archive-artefacts" : true,
   "debug-mode" : false,
   "entity-type-code" : "catalog_product_inventory",
-  "system-name" : "system-name/product-import-inventory",
   "databases" : [
   ],
   "loggers": [

@@ -47,14 +47,6 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.utility.class.name"/>
         </service>
-        <service id="import_product.repository.url.rewrite.product.category" class="TechDivision\Import\Product\Repositories\UrlRewriteProductCategoryRepository">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.utility.class.name"/>
-        </service>
-        <service id="import_product.repository.url.rewrite" class="TechDivision\Import\Product\Repositories\UrlRewriteRepository">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.utility.class.name"/>
-        </service>
 
         <service id="import_product.action.processor.category.product.create" class="TechDivision\Import\Product\Actions\Processors\CategoryProductCreateProcessor">
             <argument type="service" id="connection"/>
@@ -152,18 +144,6 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.utility.class.name"/>
         </service>
-        <service id="import_product.action.processor.url.rewrite.product.category.create" class="TechDivision\Import\Product\Actions\Processors\UrlRewriteProductCategoryCreateProcessor">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.utility.class.name"/>
-        </service>
-        <service id="import_product.action.processor.url.rewrite.product.category.delete" class="TechDivision\Import\Product\Actions\Processors\UrlRewriteProductCategoryDeleteProcessor">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.utility.class.name"/>
-        </service>
-        <service id="import_product.action.processor.url.rewrite.product.category.update" class="TechDivision\Import\Product\Actions\Processors\UrlRewriteProductCategoryUpdateProcessor">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.utility.class.name"/>
-        </service>
 
         <service id="import_product.action.category.product" class="TechDivision\Import\Product\Actions\CategoryProductAction">
             <argument type="service" id="import_product.action.processor.category.product.create"/>
@@ -210,11 +190,6 @@
             <argument type="service" id="import_product.action.processor.stock.status.update"/>
             <argument type="service" id="import_product.action.processor.stock.status.delete"/>
         </service>
-        <service id="import_product.action.url.rewrite.product.category" class="TechDivision\Import\Product\Actions\UrlRewriteProductCategoryAction">
-            <argument type="service" id="import_product.action.processor.url.rewrite.product.category.create"/>
-            <argument type="service" id="import_product.action.processor.url.rewrite.product.category.update"/>
-            <argument type="service" id="import_product.action.processor.url.rewrite.product.category.delete"/>
-        </service>
 
         <service id="import_product.processor.product.bunch" class="TechDivision\Import\Product\Services\ProductBunchProcessor">
             <argument type="service" id="connection"/>
@@ -228,8 +203,6 @@
             <argument type="service" id="import_product.repository.category.product"/>
             <argument type="service" id="import_product.repository.stock.status"/>
             <argument type="service" id="import_product.repository.stock.item"/>
-            <argument type="service" id="import_product.repository.url.rewrite"/>
-            <argument type="service" id="import_product.repository.url.rewrite.product.category"/>
             <argument type="service" id="import.repository.eav.attribute.option.value"/>
             <argument type="service" id="import.repository.eav.attribute"/>
             <argument type="service" id="import_product.action.category.product"/>
@@ -243,7 +216,6 @@
             <argument type="service" id="import_product.action.stock.item"/>
             <argument type="service" id="import_product.action.stock.status"/>
             <argument type="service" id="import.action.url.rewrite"/>
-            <argument type="service" id="import_product.action.url.rewrite.product.category"/>
         </service>
 
         <service id="import_product.filter.convert.literal.url" class="TechDivision\Import\Utils\Filter\ConvertLiteralUrl"/>
@@ -295,12 +267,6 @@
             <argument type="service" id="import_product.processor.product.bunch"/>
         </service>
         <service id="import_product.observer.product.website.update" class="TechDivision\Import\Product\Observers\ProductWebsiteUpdateObserver">
-            <argument type="service" id="import_product.processor.product.bunch"/>
-        </service>
-        <service id="import_product.observer.url.rewrite" class="TechDivision\Import\Product\Observers\UrlRewriteObserver">
-            <argument type="service" id="import_product.processor.product.bunch"/>
-        </service>
-        <service id="import_product.observer.url.rewrite.update" class="TechDivision\Import\Product\Observers\UrlRewriteUpdateObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
         </service>
         <service id="import_product.observer.last.entity.id" class="TechDivision\Import\Product\Observers\LastEntityIdObserver">
