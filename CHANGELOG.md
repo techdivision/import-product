@@ -1,4 +1,4 @@
-# Version 1.0.0-beta31
+# Version 1.0.0-beta32
 
 ## Features
 
@@ -6,17 +6,27 @@
 
 ## Bugfixes
 
+* Removed invalid clear URL rewrite observer from default configuration file
+
+# Version 1.0.0-beta31
+
+## Features
+
 * Completely remove URL rewrite handling
+
+## Bugfixes
+
+* None
 
 # Version 1.0.0-beta30
 
 ## Features
 
-* None
+* Move functionality to make URL unique from UrlRewriteObserver to UrlKeyObserver
 
 ## Bugfixes
 
-* Move functionality to make URL unique from UrlRewriteObserver to UrlKeyObserver
+* None
 
 # Version 1.0.0-beta29
 
