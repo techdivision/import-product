@@ -15,7 +15,10 @@ To do that, open a MySQL command line and enter the following SQL statement
  
 ```sql
 $ ALTER TABLE `eav_attribute_option_value` ADD INDEX `EAV_ATTRIBUTE_OPTION_VALUE_VALUE` (`value` ASC);
-$ ALTER TABLE `catalog_product_entity_varchar` ADD INDEX `CATALOG_PRODUCT_ENTITY_VALUE` (`value` ASC);
+$ ALTER TABLE `catalog_product_entity_int` ADD INDEX `CATALOG_PRODUCT_ENTITY_INT_VALUE` (`value` ASC);
+$ ALTER TABLE `catalog_product_entity_varchar` ADD INDEX `CATALOG_PRODUCT_ENTITY_VARCHAR_VALUE` (`value` ASC);
+$ ALTER TABLE `catalog_product_entity_decimal` ADD INDEX `CATALOG_PRODUCT_ENTITY_DECIMAL_VALUE` (`value` ASC);
+$ ALTER TABLE `catalog_product_entity_datetime` ADD INDEX `CATALOG_PRODUCT_ENTITY_DATETIME_VALUE` (`value` ASC);
 $ ALTER TABLE `url_rewrite` ADD INDEX `URL_REWRITE_ENTITY_ID` (`entity_id` ASC);
 $ ALTER TABLE `url_rewrite` ADD INDEX `URL_REWRIRE_ENTITY_TYPE_ENTITY_ID` (`entity_id` ASC, `entity_type` ASC);
 ```

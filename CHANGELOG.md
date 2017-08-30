@@ -1,3 +1,13 @@
+# Version 1.0.0-beta33
+
+## Features
+
+* Add configurable functionality to remove category product relations that not longer exists in the CSV file
+
+## Bugfixes
+
+* None
+
 # Version 1.0.0-beta32
 
 ## Features

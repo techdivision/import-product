@@ -97,6 +97,13 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
     const CATEGORY_PRODUCT = 'category_product';
 
     /**
+     * The SQL statement to load the category product relations with the passed product SKU.
+     *
+     * @var string
+     */
+    const CATEGORY_PRODUCT_BY_SKU = 'category_product.by.sku';
+
+    /**
      * The SQL statement to load the stock status with the passed product/website/stock ID.
      *
      * @var string
@@ -272,6 +279,13 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
     const DELETE_PRODUCT_WEBSITE_BY_SKU = 'delete.product_website.by.sku';
 
     /**
+     * The SQL statement to remove all product category relations for the product.
+     *
+     * @var string
+     */
+    const DELETE_CATEGORY_PRODUCT = 'delete.category_product';
+
+    /**
      * The SQL statement to remove all product category relations for the product with the SKU passed as parameter.
      *
      * @var string
@@ -329,6 +343,12 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                 AND t1.value = :value',
         SqlStatements::CATEGORY_PRODUCT =>
             'SELECT * FROM catalog_category_product WHERE category_id = :category_id AND product_id = :product_id',
+        SqlStatements::CATEGORY_PRODUCT_BY_SKU =>
+            'SELECT t1.*
+               FROM catalog_category_product t1,
+                    catalog_product_entity t2
+              WHERE t2.sku = :sku
+                AND t1.product_id = t2.entity_id',
         SqlStatements::STOCK_STATUS =>
             'SELECT * FROM cataloginventory_stock_status WHERE product_id = :product_id AND website_id = :website_id AND stock_id = :stock_id',
         SqlStatements::STOCK_ITEM =>
@@ -591,6 +611,10 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
          INNER JOIN catalog_product_entity
               WHERE catalog_product_entity.sku = :sku
                 AND catalog_product_website.product_id = catalog_product_entity.entity_id',
+        SqlStatements::DELETE_CATEGORY_PRODUCT =>
+            'DELETE
+               FROM catalog_category_product
+              WHERE entity_id = :entity_id',
         SqlStatements::DELETE_CATEGORY_PRODUCT_BY_SKU =>
             'DELETE catalog_category_product
                FROM catalog_category_product
