@@ -20,8 +20,8 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Repositories\AbstractRepository;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
  * Repository implementation to load product data.
@@ -40,7 +40,14 @@ class CategoryProductRepository extends AbstractRepository
      *
      * @var \PDOStatement
      */
-    protected $productCategoryStmt;
+    protected $categoryProductStmt;
+
+    /**
+     * The prepared statement to load the existing category product relations for the product with the given SKU.
+     *
+     * @var \PDOStatement
+     */
+    protected $categoryProductsBySkuStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -54,8 +61,10 @@ class CategoryProductRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->productCategoryStmt =
+        $this->categoryProductStmt =
             $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_PRODUCT));
+        $this->categoryProductsBySkuStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_PRODUCT_BY_SKU));
     }
 
     /**
@@ -76,7 +85,35 @@ class CategoryProductRepository extends AbstractRepository
         );
 
         // load and return the product category relation with the passed category/product ID
-        $this->productCategoryStmt->execute($params);
-        return $this->productCategoryStmt->fetch(\PDO::FETCH_ASSOC);
+        $this->categoryProductStmt->execute($params);
+        return $this->categoryProductStmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Return's the category product relations for the product with the passed SKU.
+     *
+     * @param string $sku The product SKU to load the category relations for
+     *
+     * @return array The category product relations for the product with the passed SKU
+     */
+    public function findAllBySku($sku)
+    {
+
+        // prepare the params
+        $params = array(MemberNames::SKU => $sku);
+
+        // initialize the array for the category product relations
+        $categoryProducts = array();
+
+        // load and return the product category relation for the passed product SKU
+        $this->categoryProductsBySkuStmt->execute($params);
+
+        // prepare the result by using the category ID as key
+        foreach ($this->categoryProductsBySkuStmt->fetchAll(\PDO::FETCH_ASSOC) as $categoryProduct) {
+            $categoryProducts[$categoryProduct[MemberNames::CATEGORY_ID]] = $categoryProduct;
+        }
+
+        // return the category product relations
+        return $categoryProducts;
     }
 }

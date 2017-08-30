@@ -20,9 +20,10 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
 
 /**
  * Observer that creates/updates the category product relations.
@@ -79,28 +80,64 @@ class CategoryProductObserver extends AbstractProductImportObserver
     {
 
         // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->hasBeenProcessed($this->getValue(ColumnKeys::SKU))) {
+        if ($this->hasBeenProcessed($sku = $this->getValue(ColumnKeys::SKU))) {
             return;
         }
 
-        // query whether or not, product => website relations has been specified
-        if (!$this->hasValue(ColumnKeys::CATEGORIES)) {
-            return;
-        }
+        // initialize the arrays for the new category product relations
+        $categoryProducts = array();
 
-        // append the category => product relations found
-        $paths = $this->getValue(ColumnKeys::CATEGORIES, array(), array($this, 'explode'));
-        foreach ($paths as $path) {
+        // load the category product relations found in the CSV file
+        foreach ($this->getValue(ColumnKeys::CATEGORIES, array(), array($this, 'explode')) as $path) {
             // load the category for the found path
             $this->path = trim($path);
-            // prepare the product website relation attributes
-            if ($attr = $this->prepareAttributes()) {
-                // create the category product relation
-                $categoryProduct = $this->initializeCategoryProduct($attr);
-                $this->persistCategoryProduct($categoryProduct);
 
-                // add the category ID to the list => necessary to create the URL rewrites later!
-                $this->addProductCategoryId($categoryProduct[MemberNames::CATEGORY_ID]);
+            // prepare the product category relation attributes
+            if ($attr = $this->prepareAttributes()) {
+                // initialize and persist the category product relation relation and add the
+                // category ID to the list => necessary to create the URL rewrites later!
+                $this->persistCategoryProduct($categoryProduct = $this->initializeCategoryProduct($attr));
+                $this->addProductCategoryId($categoryId = $categoryProduct[MemberNames::CATEGORY_ID]);
+
+                // tempoary persist the category ID
+                $categoryProducts[] = $categoryId;
+            }
+        }
+
+        // query whether or not we've to clean up existing category product relations
+        if ($this->getSubject()->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_CATEGORY_PRODUCT_RELATIONS) &&
+            $this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_CATEGORY_PRODUCT_RELATIONS)
+        ) {
+            // load the existing category product relations for the product with the given SKU
+            $existingCategoryProducts = $this->getProductBunchProcessor()->getCategoryProductsBySku($sku);
+
+            // initialize the counter for the deleted category product relations
+            $counter = 0;
+
+            // clean up the existing category product relations
+            foreach ($existingCategoryProducts as $categoryId => $categoryProduct) {
+                // query whether or not the category product relation exists in the CSV file
+                if (!in_array($categoryId, $categoryProducts)) {
+                    // if not, delete it from the database
+                    $this->getProductBunchProcessor()
+                         ->deleteCategoryProduct(array(MemberNames::ENTITY_ID => $categoryProduct[MemberNames::ENTITY_ID]));
+
+                    // raise the counter for the deleted category product relations
+                    $counter++;
+                }
+            }
+
+            // log a message (if any category product relations have been cleaned-up)
+            if ($counter > 0) {
+                $this->getSubject()
+                     ->getSystemLogger()
+                     ->notice(
+                         sprintf(
+                             'Cleaned-up %d category product relation(s) for product with SKU "%s"',
+                             $counter,
+                             $sku
+                         )
+                     );
             }
         }
     }
@@ -154,6 +191,17 @@ class CategoryProductObserver extends AbstractProductImportObserver
         return $attr;
     }
 
+
+    /**
+     * Return's the list with category IDs the product is related with.
+     *
+     * @return array The product's category IDs
+     */
+    protected function getProductCategoryIds()
+    {
+        return $this->getSubject()->getProductCategoryIds();
+    }
+
     /**
      * Add the passed category ID to the product's category list.
      *
@@ -183,10 +231,10 @@ class CategoryProductObserver extends AbstractProductImportObserver
      *
      * @param array $categoryProduct The category product relation to persist
      *
-     * @return void
+     * @return string The ID of the persisted entity
      */
     protected function persistCategoryProduct($categoryProduct)
     {
-        $this->getProductBunchProcessor()->persistCategoryProduct($categoryProduct);
+        return $this->getProductBunchProcessor()->persistCategoryProduct($categoryProduct);
     }
 }

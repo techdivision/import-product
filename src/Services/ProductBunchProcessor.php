@@ -890,6 +890,18 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
+     * Return's the category product relations for the product with the passed SKU.
+     *
+     * @param string $sku The product SKU to load the category relations for
+     *
+     * @return array The category product relations for the product with the passed SKU
+     */
+    public function getCategoryProductsBySku($sku)
+    {
+        return $this->getCategoryProductRepository()->findAllBySku($sku);
+    }
+
+    /**
      * Load's and return's the EAV attribute option value with the passed code, store ID and value.
      *
      * @param string  $attributeCode The code of the EAV attribute option to load
