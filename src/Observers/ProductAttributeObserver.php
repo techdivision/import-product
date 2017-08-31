@@ -20,9 +20,10 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Observers\AbstractAttributeObserver;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
-use TechDivision\Import\Product\Utils\ColumnKeys;
 
 /**
  * Observer that creates/updates the product's attributes.
@@ -61,6 +62,26 @@ class ProductAttributeObserver extends AbstractAttributeObserver
     protected function getProductBunchProcessor()
     {
         return $this->productBunchProcessor;
+    }
+
+    /**
+     * Return's the PK to create the product => attribute relation.
+     *
+     * @return integer The PK to create the relation with
+     */
+    protected function getPrimaryKey()
+    {
+        return $this->getSubject()->getLastEntityId();
+    }
+
+    /**
+     * Return's the PK column name to create the product => attribute relation.
+     *
+     * @return string The PK column name
+     */
+    protected function getPrimaryKeyMemberName()
+    {
+        return MemberNames::ENTITY_ID;
     }
 
     /**
@@ -144,5 +165,70 @@ class ProductAttributeObserver extends AbstractAttributeObserver
     protected function persistTextAttribute($attribute)
     {
         $this->getProductBunchProcessor()->persistProductTextAttribute($attribute);
+    }
+
+    /**
+     * Delete's the datetime attribute with the passed value ID.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    protected function deleteDatetimeAttribute(array $row, $name = null)
+    {
+        $this->getProductBunchProcessor()->deleteProductDatetimeAttribute($row, $name);
+    }
+
+    /**
+     * Delete's the decimal attribute with the passed value ID.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    protected function deleteDecimalAttribute(array $row, $name = null)
+    {
+        $this->getProductBunchProcessor()->deleteProductDecimalAttribute($row, $name);
+    }
+
+    /**
+     * Delete's the integer attribute with the passed value ID.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    protected function deleteIntAttribute(array $row, $name = null)
+    {
+        $this->getProductBunchProcessor()->deleteProductIntAttribute($row, $name);
+    }
+
+    /**
+     * Delete's the text attribute with the passed value ID.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    protected function deleteTextAttribute(array $row, $name = null)
+    {
+        $this->getProductBunchProcessor()->deleteProductTextAttribute($row, $name);
+    }
+
+    /**
+     * Delete's the varchar attribute with the passed value ID.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    protected function deleteVarcharAttribute(array $row, $name = null)
+    {
+        return $this->getProductBunchProcessor()->deleteProductVarcharAttribute($row, $name);
     }
 }

@@ -76,11 +76,19 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.utility.class.name"/>
         </service>
+        <service id="import_product.action.processor.product.datetime.delete" class="TechDivision\Import\Product\Actions\Processors\ProductDatetimeDeleteProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.utility.class.name"/>
+        </service>
         <service id="import_product.action.processor.product.datetime.update" class="TechDivision\Import\Product\Actions\Processors\ProductDatetimeUpdateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.utility.class.name"/>
         </service>
         <service id="import_product.action.processor.product.decimal.create" class="TechDivision\Import\Product\Actions\Processors\ProductDecimalCreateProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.utility.class.name"/>
+        </service>
+        <service id="import_product.action.processor.product.decimal.delete" class="TechDivision\Import\Product\Actions\Processors\ProductDecimalDeleteProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.utility.class.name"/>
         </service>
@@ -92,6 +100,10 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.utility.class.name"/>
         </service>
+        <service id="import_product.action.processor.product.int.delete" class="TechDivision\Import\Product\Actions\Processors\ProductIntDeleteProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.utility.class.name"/>
+        </service>
         <service id="import_product.action.processor.product.int.update" class="TechDivision\Import\Product\Actions\Processors\ProductIntUpdateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.utility.class.name"/>
@@ -100,11 +112,19 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.utility.class.name"/>
         </service>
+        <service id="import_product.action.processor.product.text.delete" class="TechDivision\Import\Product\Actions\Processors\ProductTextDeleteProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.utility.class.name"/>
+        </service>
         <service id="import_product.action.processor.product.text.update" class="TechDivision\Import\Product\Actions\Processors\ProductTextUpdateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.utility.class.name"/>
         </service>
         <service id="import_product.action.processor.product.varchar.create" class="TechDivision\Import\Product\Actions\Processors\ProductVarcharCreateProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.utility.class.name"/>
+        </service>
+        <service id="import_product.action.processor.product.varchar.delete" class="TechDivision\Import\Product\Actions\Processors\ProductVarcharDeleteProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.utility.class.name"/>
         </service>
@@ -163,22 +183,27 @@
         <service id="import_product.action.product.datetime" class="TechDivision\Import\Product\Actions\ProductDatetimeAction">
             <argument type="service" id="import_product.action.processor.product.datetime.create"/>
             <argument type="service" id="import_product.action.processor.product.datetime.update"/>
+            <argument type="service" id="import_product.action.processor.product.datetime.delete"/>
         </service>
         <service id="import_product.action.product.decimal" class="TechDivision\Import\Product\Actions\ProductDecimalAction">
             <argument type="service" id="import_product.action.processor.product.decimal.create"/>
             <argument type="service" id="import_product.action.processor.product.decimal.update"/>
+            <argument type="service" id="import_product.action.processor.product.decimal.delete"/>
         </service>
         <service id="import_product.action.product.int" class="TechDivision\Import\Product\Actions\ProductIntAction">
             <argument type="service" id="import_product.action.processor.product.int.create"/>
             <argument type="service" id="import_product.action.processor.product.int.update"/>
+            <argument type="service" id="import_product.action.processor.product.int.delete"/>
         </service>
         <service id="import_product.action.product.text" class="TechDivision\Import\Product\Actions\ProductTextAction">
             <argument type="service" id="import_product.action.processor.product.text.create"/>
             <argument type="service" id="import_product.action.processor.product.text.update"/>
+            <argument type="service" id="import_product.action.processor.product.text.delete"/>
         </service>
         <service id="import_product.action.product.varchar" class="TechDivision\Import\Product\Actions\ProductVarcharAction">
             <argument type="service" id="import_product.action.processor.product.varchar.create"/>
             <argument type="service" id="import_product.action.processor.product.varchar.update"/>
+            <argument type="service" id="import_product.action.processor.product.varchar.delete"/>
         </service>
         <service id="import_product.action.stock.item" class="TechDivision\Import\Product\Actions\StockItemAction">
             <argument type="service" id="import_product.action.processor.stock.item.create"/>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductTextCreateProcessor
+ * TechDivision\Import\Product\Actions\Processors\ProductDatetimeDeleteProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
+use TechDivision\Import\Actions\Processors\AbstractDeleteProcessor;
 
 /**
- * The product text attribute create processor implementation.
+ * The product datetime attribute delete processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductTextCreateProcessor extends AbstractCreateProcessor
+class ProductDatetimeDeleteProcessor extends AbstractDeleteProcessor
 {
 
     /**
@@ -48,7 +48,7 @@ class ProductTextCreateProcessor extends AbstractCreateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_TEXT => $this->getUtilityClass()->find($utilityClassName::CREATE_PRODUCT_TEXT)
+            $utilityClassName::DELETE_PRODUCT_DATETIME => $this->getUtilityClass()->find($utilityClassName::DELETE_PRODUCT_DATETIME)
         );
     }
 }
