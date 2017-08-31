@@ -426,4 +426,54 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
      * @return void
      */
     public function deleteCategoryProduct($row, $name = null);
+
+    /**
+     * Delete's the product datetime attribute with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteProductDatetimeAttribute($row, $name = null);
+
+    /**
+     * Delete's the product decimal attribute with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteProductDecimalAttribute($row, $name = null);
+
+    /**
+     * Delete's the product integer attribute with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteProductIntAttribute($row, $name = null);
+
+    /**
+     * Delete's the product text attribute with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteProductTextAttribute($row, $name = null);
+
+    /**
+     * Delete's the product varchar attribute with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteProductVarcharAttribute($row, $name = null);
 }

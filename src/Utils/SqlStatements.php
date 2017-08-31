@@ -167,6 +167,13 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
     const UPDATE_PRODUCT_DATETIME = 'update.product_datetime';
 
     /**
+     * The SQL statement to delete an existing product datetime value.
+     *
+     * @var string
+     */
+    const DELETE_PRODUCT_DATETIME = 'delete.product_datetime';
+
+    /**
      * The SQL statement to create a new product decimal value.
      *
      * @var string
@@ -179,6 +186,13 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
      * @var string
      */
     const UPDATE_PRODUCT_DECIMAL = 'update.product_decimal';
+
+    /**
+     * The SQL statement to delete an existing product decimal value.
+     *
+     * @var string
+     */
+    const DELETE_PRODUCT_DECIMAL = 'delete.product_decimal';
 
     /**
      * The SQL statement to create a new product integer value.
@@ -195,6 +209,13 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
     const UPDATE_PRODUCT_INT = 'update.product_int';
 
     /**
+     * The SQL statement to delete an existing product integer value.
+     *
+     * @var string
+     */
+    const DELETE_PRODUCT_INT = 'delete.product_int';
+
+    /**
      * The SQL statement to create a new product varchar value.
      *
      * @var string
@@ -209,6 +230,13 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
     const UPDATE_PRODUCT_VARCHAR = 'update.product_varchar';
 
     /**
+     * The SQL statement to delete an existing product varchar value.
+     *
+     * @var string
+     */
+    const DELETE_PRODUCT_VARCHAR = 'delete.product_varchar';
+
+    /**
      * The SQL statement to create a new product text value.
      *
      * @var string
@@ -221,6 +249,13 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
      * @var string
      */
     const UPDATE_PRODUCT_TEXT = 'update.product_text';
+
+    /**
+     * The SQL statement to delete an existing product text value.
+     *
+     * @var string
+     */
+    const DELETE_PRODUCT_TEXT = 'delete.product_text';
 
     /**
      * The SQL statement to create a product's stock status.
@@ -420,6 +455,10 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
+        SqlStatements::DELETE_PRODUCT_DATETIME =>
+            'DELETE
+               FROM catalog_product_entity_datetime
+              WHERE value_id = :value_id',
         SqlStatements::CREATE_PRODUCT_DECIMAL =>
             'INSERT
                INTO catalog_product_entity_decimal
@@ -437,6 +476,10 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
+              WHERE value_id = :value_id',
+        SqlStatements::DELETE_PRODUCT_DECIMAL =>
+            'DELETE
+               FROM catalog_product_entity_decimal
               WHERE value_id = :value_id',
         SqlStatements::CREATE_PRODUCT_INT =>
             'INSERT
@@ -456,6 +499,10 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
+        SqlStatements::DELETE_PRODUCT_INT =>
+            'DELETE
+               FROM catalog_product_entity_int
+              WHERE value_id = :value_id',
         SqlStatements::CREATE_PRODUCT_VARCHAR =>
             'INSERT
                INTO catalog_product_entity_varchar
@@ -474,6 +521,10 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
+        SqlStatements::DELETE_PRODUCT_VARCHAR =>
+            'DELETE
+               FROM catalog_product_entity_varchar
+              WHERE value_id = :value_id',
         SqlStatements::CREATE_PRODUCT_TEXT =>
             'INSERT
                INTO catalog_product_entity_text
@@ -491,6 +542,10 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
+              WHERE value_id = :value_id',
+        SqlStatements::DELETE_PRODUCT_TEXT =>
+            'DELETE
+               FROM catalog_product_entity_text
               WHERE value_id = :value_id',
         SqlStatements::CREATE_STOCK_STATUS =>
             'INSERT
