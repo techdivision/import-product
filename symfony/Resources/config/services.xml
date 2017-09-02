@@ -255,6 +255,7 @@
             <argument type="service" id="import_product.processor.product.bunch"/>
         </service>
 
+        <service id="import_product.observer.file.upload" class="TechDivision\Import\Product\Observers\FileUploadObserver"/>
         <service id="import_product.observer.clean.up" class="TechDivision\Import\Product\Observers\CleanUpObserver"/>
         <service id="import_product.observer.quality.and.stock.status" class="TechDivision\Import\Product\Observers\QuantityAndStockStatusObserver"/>
         <service id="import_product.observer.url.key" class="TechDivision\Import\Product\Observers\UrlKeyObserver">
