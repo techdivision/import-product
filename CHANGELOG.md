@@ -1,3 +1,13 @@
+# Version 1.0.0-beta36
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch log level for removing categories that are not longer available in the CSV file from notice to warning
+
 # Version 1.0.0-beta35
 
 ## Bugfixes

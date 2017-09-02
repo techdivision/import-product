@@ -131,7 +131,7 @@ class CategoryProductObserver extends AbstractProductImportObserver
             if ($counter > 0) {
                 $this->getSubject()
                      ->getSystemLogger()
-                     ->notice(
+                     ->warning(
                          sprintf(
                              'Cleaned-up %d category product relation(s) for product with SKU "%s"',
                              $counter,
