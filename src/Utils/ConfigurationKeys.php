@@ -33,6 +33,27 @@ class ConfigurationKeys extends \TechDivision\Import\Utils\ConfigurationKeys
 {
 
     /**
+     * Name for the column 'media-directory'.
+     *
+     * @var string
+     */
+    const MEDIA_DIRECTORY = 'media-directory';
+
+    /**
+     * Name for the column 'images-file-directory'.
+     *
+     * @var string
+     */
+    const IMAGES_FILE_DIRECTORY = 'images-file-directory';
+
+    /**
+     * Name for the column 'copy-images'.
+     *
+     * @var string
+     */
+    const COPY_IMAGES = 'copy-images';
+
+    /**
      * Name for the configuration key 'clean-up-category-product-relations'.
      *
      * @var string

@@ -20,12 +20,15 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
+use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\RegistryKeys;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
-use TechDivision\Import\Subjects\ExportableSubjectInterface;
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Subjects\ExportableTrait;
-use TechDivision\Import\Utils\StoreViewCodes;
+use TechDivision\Import\Subjects\FileUploadTrait;
+use TechDivision\Import\Subjects\ExportableSubjectInterface;
+use TechDivision\Import\Subjects\FileUploadSubjectInterface;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -36,7 +39,7 @@ use TechDivision\Import\Utils\StoreViewCodes;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class BunchSubject extends AbstractProductSubject implements ExportableSubjectInterface
+class BunchSubject extends AbstractProductSubject implements ExportableSubjectInterface, FileUploadSubjectInterface
 {
 
     /**
@@ -45,6 +48,13 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      * @var \TechDivision\Import\Subjects\ExportableTrait
      */
     use ExportableTrait;
+
+    /**
+     * The trait that provides file upload functionality.
+     *
+     * @var \TechDivision\Import\Subjects\FileUploadTrait
+     */
+    use FileUploadTrait;
 
     /**
      * The array with the pre-loaded entity IDs.
@@ -144,6 +154,29 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
 
         // load the global data we've prepared initially
         $this->entityTypes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ENTITY_TYPES];
+
+        // initialize the flag whether to copy images or not
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::COPY_IMAGES)) {
+            $this->setCopyImages($this->getConfiguration()->getParam(ConfigurationKeys::COPY_IMAGES));
+        }
+
+        // initialize media directory => can be absolute or relative
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::MEDIA_DIRECTORY)) {
+            $this->setMediaDir(
+                $this->resolvePath(
+                    $this->getConfiguration()->getParam(ConfigurationKeys::MEDIA_DIRECTORY)
+                )
+            );
+        }
+
+        // initialize images directory => can be absolute or relative
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)) {
+            $this->setImagesFileDir(
+                $this->resolvePath(
+                    $this->getConfiguration()->getParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)
+                )
+            );
+        }
 
         // invoke the parent method
         parent::setUp($serial);

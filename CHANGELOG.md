@@ -1,3 +1,13 @@
+# Version 1.0.0-beta35
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Refactor file upload functionality
+
 # Version 1.0.0-beta34
 
 ## Bugfixes

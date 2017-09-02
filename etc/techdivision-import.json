@@ -21,9 +21,9 @@
             "params" : [
               {
                 "format": "[%datetime%] %channel%.%level_name%: %message% %context% %extra%",
-                "dateFormat": "Y-m-d H:i:s",
-                "allowInlineLineBreaks": true,
-                "ignoreEmptyContextAndExtra": false
+                "date-format": "Y-m-d H:i:s",
+                "allow-inline-line-breaks": true,
+                "ignore-empty-context-and-extra": false
               }
             ]
           }
@@ -71,6 +71,9 @@
       "name" : "replace",
       "plugins" : [
         {
+          "id": "import.plugin.cache.warmer"
+        },
+        {
           "id": "import.plugin.global.data"
         },
         {
@@ -86,6 +89,11 @@
               "id": "import_product.subject.bunch",
               "identifier": "files",
               "prefix": "product-import",
+              "params" : [
+                {
+                  "copy-images" : false
+                }
+              ],
               "observers": [
                 {
                   "pre-import": [
@@ -95,6 +103,7 @@
                     "import.observer.attribute.set",
                     "import.observer.additional.attribute",
                     "import_product.observer.url.key",
+                    "import_product.observer.file.upload",
                     "import_product.observer.quality.and.stock.status"
                   ]
                 },
@@ -153,16 +162,10 @@
             {
               "id": "import_product_media.subject.media",
               "prefix": "media",
-              "params" : [
-                {
-                  "copy-images" : false
-                }
-              ],
               "observers": [
                 {
                   "pre-import" : [
-                    "import.observer.attribute.set",
-                    "import_product_media.observer.file.upload"
+                    "import.observer.attribute.set"
                   ],
                   "import": [
                     "import_product_media.observer.media.gallery",
@@ -205,6 +208,9 @@
       "name" : "add-update",
       "plugins" : [
         {
+          "id": "import.plugin.cache.warmer"
+        },
+        {
           "id": "import.plugin.global.data"
         },
         {
@@ -220,12 +226,19 @@
               "id": "import_product.subject.bunch",
               "identifier": "files",
               "prefix": "product-import",
+              "params" : [
+                {
+                  "copy-images" : false,
+                  "clean-up-empty-columns" : [ "base_image", "small_image", "swatch_image", "thumbnail_image" ]
+                }
+              ],
               "observers": [
                 {
                   "pre-import": [
                     "import.observer.attribute.set",
                     "import.observer.additional.attribute",
                     "import_product.observer.url.key",
+                    "import_product.observer.file.upload",
                     "import_product.observer.quality.and.stock.status"
                   ]
                 },
@@ -240,6 +253,7 @@
                     "import_product_variant.observer.product.variant",
                     "import_product_bundle.observer.product.bundle",
                     "import_product_media.observer.product.media",
+                    "import_product_media.observer.clear.media.gallery",
                     "import_product_link.observer.product.link"
                   ]
                 },
@@ -284,16 +298,10 @@
             {
               "id": "import_product_media.subject.media",
               "prefix": "media",
-              "params" : [
-                {
-                  "copy-images" : false
-                }
-              ],
               "observers": [
                 {
                   "pre-import" : [
-                    "import.observer.attribute.set",
-                    "import_product_media.observer.file.upload"
+                    "import.observer.attribute.set"
                   ],
                   "import": [
                     "import_product_media.observer.media.gallery.update",

@@ -131,4 +131,11 @@ class ColumnKeys extends FallbackColumnKeys
      * @var string
      */
     const VISIBILITY = 'visibility';
+
+    /**
+     * Name for the column 'additional_images'.
+     *
+     * @var string
+     */
+    const ADDITIONAL_IMAGES = 'additional_images';
 }
