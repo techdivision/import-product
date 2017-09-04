@@ -132,10 +132,12 @@ class CategoryProductObserver extends AbstractProductImportObserver
                 $this->getSubject()
                      ->getSystemLogger()
                      ->warning(
-                         sprintf(
-                             'Cleaned-up %d category product relation(s) for product with SKU "%s"',
-                             $counter,
-                             $sku
+                         $this->getSubject()->appendExceptionSuffix(
+                             sprintf(
+                                 'Cleaned-up %d category product relation(s) for product with SKU "%s"',
+                                 $counter,
+                                 $sku
+                             )
                          )
                      );
             }
