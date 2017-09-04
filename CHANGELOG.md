@@ -1,3 +1,13 @@
+# Version 1.0.0-beta37
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Append filename + linenumber for log message when categories that are not longer available in the CSV file
+
 # Version 1.0.0-beta36
 
 ## Bugfixes
