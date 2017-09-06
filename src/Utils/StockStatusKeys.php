@@ -32,8 +32,18 @@ namespace TechDivision\Import\Product\Utils;
 class StockStatusKeys
 {
 
+    /**
+     * The integer representation for the product out of stock status.
+     *
+     * @var integer
+     */
     const STATUS_OUT_OF_STOCK = 0;
 
+    /**
+     * The integer representation for the product in stock status.
+     *
+     * @var integer
+     */
     const STATUS_IN_STOCK = 1;
 
     /**

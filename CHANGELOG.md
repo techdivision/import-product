@@ -1,3 +1,13 @@
+# Version 1.0.0-beta38
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Minor refactoring
+
 # Version 1.0.0-beta37
 
 ## Bugfixes

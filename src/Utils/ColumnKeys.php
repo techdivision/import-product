@@ -20,8 +20,6 @@
 
 namespace TechDivision\Import\Product\Utils;
 
-use TechDivision\Import\Utils\ColumnKeys as FallbackColumnKeys;
-
 /**
  * Utility class containing the CSV column names.
  *
@@ -31,7 +29,7 @@ use TechDivision\Import\Utils\ColumnKeys as FallbackColumnKeys;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ColumnKeys extends FallbackColumnKeys
+class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
 {
 
     /**
