@@ -87,7 +87,10 @@ class LastEntityIdObserver extends AbstractProductImportObserver
             $subject = $this->getSubject();
             // query whether or not debug mode has been enabled
             if ($subject->isDebugMode()) {
+                // log a warning, that the product with the given SKU can not be loaded
                 $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($message));
+                // skip processing the actual row
+                $subject->skipRow();
             } else {
                 throw new \Exception($message);
             }

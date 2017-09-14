@@ -1,3 +1,13 @@
+# Version 1.0.0-beta39
+
+## Bugfixes
+
+* Skip row instead of continue processing (in debug mode) when product with SKU can not be loaded in LastEntityIdObserver
+
+## Features
+
+* None
+
 # Version 1.0.0-beta38
 
 ## Bugfixes
