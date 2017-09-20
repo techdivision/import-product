@@ -282,9 +282,11 @@
         </service>
         <service id="import_product.observer.product.inventory" class="TechDivision\Import\Product\Observers\ProductInventoryObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
+            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
         </service>
         <service id="import_product.observer.product.inventory.update" class="TechDivision\Import\Product\Observers\ProductInventoryUpdateObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
+            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
         </service>
         <service id="import_product.observer.product" class="TechDivision\Import\Product\Observers\ProductObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
