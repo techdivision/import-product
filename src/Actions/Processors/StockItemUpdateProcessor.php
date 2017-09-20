@@ -20,6 +20,9 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
+use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\SqlStatements;
 use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 
 /**
@@ -35,20 +38,55 @@ class StockItemUpdateProcessor extends AbstractCreateProcessor
 {
 
     /**
-     * Return's the array with the SQL statements that has to be prepared.
+     * Implements the CRUD functionality the processor is responsible for,
+     * can be one of CREATE, READ, UPDATE or DELETE a entity.
      *
-     * @return array The SQL statements to be prepared
-     * @see \TechDivision\Import\Actions\Processors\AbstractBaseProcessor::getStatements()
+     * @param array       $row  The data to handle
+     * @param string|null $name The name of the prepared statement to execute
+     *
+     * @return void
      */
-    protected function getStatements()
+    public function execute($row, $name = null)
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
+        // load the field names
+        $keys = array_keys($row);
 
-        // return the array with the SQL statements that has to be prepared
-        return array(
-            $utilityClassName::UPDATE_STOCK_ITEM => $this->getUtilityClass()->find($utilityClassName::UPDATE_STOCK_ITEM)
-        );
+        // create a unique name for the prepared statement
+        $name = sprintf('%s-%s', $name, md5(implode('-', $keys)));
+
+        // query whether or not the statement has been prepared
+        if (!$this->hasPreparedStatement($name)) {
+            // initialize the array for the primary key fields
+            $pks = array();
+            // load the last value as PK from the array with the keys
+            $pks[] = $keys[array_search(MemberNames::ITEM_ID, $row, true)];
+
+            // remove the entity status and the primary key from the keys
+            unset($keys[array_search(MemberNames::ITEM_ID, $keys, true)]);
+            unset($keys[array_search(EntityStatus::MEMBER_NAME, $keys, true)]);
+
+            // prepare the SET part of the SQL statement
+            array_walk($keys, function (&$value, $key) {
+                $value = sprintf('%s=:%s', $value, $value);
+            });
+
+            // prepare the SET part of the SQL statement
+            array_walk($pks, function (&$value, $key) {
+                $value = sprintf('%s=:%s', $value, $value);
+            });
+
+            // create the prepared UPDATE statement
+            $statement = sprintf($this->getUtilityClass()->find(SqlStatements::UPDATE_STOCK_ITEM), implode(',', $keys), implode(',', $pks));
+
+            error_log($statement);
+            error_log(print_r($row, true));
+
+            // prepare the statement
+            $this->addPreparedStatement($name, $this->getConnection()->prepare($statement));
+        }
+
+        // pass the call to the parent method
+        return parent::execute($row, $name);
     }
 }

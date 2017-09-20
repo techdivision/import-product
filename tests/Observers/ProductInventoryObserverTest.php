@@ -22,6 +22,7 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Observers\DynamicAttributeLoader;
 
 /**
  * Test class for the product inventory observer implementation.
@@ -65,7 +66,7 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
                                                 ->getMock();
 
         // initialize the observer
-        $this->observer = new ProductInventoryObserver($this->mockProductBunchProcessor);
+        $this->observer = new ProductInventoryObserver($this->mockProductBunchProcessor, new DynamicAttributeLoader());
     }
 
     /**
@@ -73,7 +74,7 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testHandleWithEmptyValue()
+    public function testHandleWithEmptyStockValue()
     {
 
         // create a dummy CSV file row
@@ -105,8 +106,8 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
         // create a dummy CSV file header
         $row = array(
             0  => 'TEST-01',
-            1  => '',
-            2  => '',
+            1  => '1',
+            2  => '100',
             4  => '',
             5  => '',
             6  => '',
@@ -155,28 +156,9 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
                                         ->with(
                                             array(
                                                 'product_id'                  => $lastEntityId,
-                                                'website_id'                  => 0,
+                                                'website_id'                  => 1,
                                                 'stock_id'                    => 1,
-                                                'qty'                         => 0.0,
-                                                'min_qty'                     => 0.0,
-                                                'use_config_min_qty'          => 0,
-                                                'is_qty_decimal'              => 0,
-                                                'backorders'                  => 0,
-                                                'use_config_backorders'       => 0,
-                                                'min_sale_qty'                => 0.0,
-                                                'use_config_min_sale_qty'     => 0,
-                                                'max_sale_qty'                => 0.0,
-                                                'use_config_max_sale_qty'     => 0,
-                                                'is_in_stock'                 => 0,
-                                                'notify_stock_qty'            => 0.0,
-                                                'use_config_notify_stock_qty' => 0,
-                                                'manage_stock'                => 0,
-                                                'use_config_manage_stock'     => 0,
-                                                'use_config_qty_increments'   => 0,
-                                                'qty_increments'              => 0.0,
-                                                'use_config_enable_qty_inc'   => 0,
-                                                'enable_qty_increments'       => 0,
-                                                'is_decimal_divided'          => 0,
+                                                'qty'                         => 100,
                                                 EntityStatus::MEMBER_NAME     => EntityStatus::STATUS_CREATE
                                             )
                                         );
@@ -185,10 +167,10 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
                                         ->with(
                                             array(
                                                 'product_id'              => $lastEntityId,
-                                                'website_id'              => 0,
+                                                'website_id'              => 1,
                                                 'stock_id'                => 1,
-                                                'stock_status'            => 0,
-                                                'qty'                     => 0.000,
+                                                'qty'                     => 100,
+                                                'stock_status'            => 1,
                                                 EntityStatus::MEMBER_NAME => EntityStatus::STATUS_CREATE
                                             )
                                         );

@@ -20,9 +20,12 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Observers\AttributeLoaderInterface;
+use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Utils\BackendTypeKeys;
 
 /**
  * Observer that creates/updates the product's inventory.
@@ -33,7 +36,7 @@ use TechDivision\Import\Product\Utils\MemberNames;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductInventoryObserver extends AbstractProductImportObserver
+class ProductInventoryObserver extends AbstractProductImportObserver implements DynamicAttributeObserverInterface
 {
 
     /**
@@ -44,13 +47,24 @@ class ProductInventoryObserver extends AbstractProductImportObserver
     protected $productBunchProcessor;
 
     /**
+     * The attribute loader instance.
+     *
+     * @var \TechDivision\Import\Observers\AttributeLoaderInterface
+     */
+    protected $attributeLoader;
+
+    /**
      * Initialize the observer with the passed product bunch processor instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
+     * @param \TechDivision\Import\Observers\AttributeLoaderInterface              $attributeLoader       The attribute loader instance
      */
-    public function __construct(ProductBunchProcessorInterface $productBunchProcessor)
-    {
+    public function __construct(
+        ProductBunchProcessorInterface $productBunchProcessor,
+        AttributeLoaderInterface $attributeLoader
+    ) {
         $this->productBunchProcessor = $productBunchProcessor;
+        $this->attributeLoader = $attributeLoader;
     }
 
     /**
@@ -82,6 +96,30 @@ class ProductInventoryObserver extends AbstractProductImportObserver
     }
 
     /**
+     * Prepare the basic attributes of the stock status/item entity that has to be persisted.
+     *
+     * @return array The prepared stock status/item attributes
+     */
+    protected function prepareAttributes()
+    {
+
+        // load the ID of the product that has been created recently
+        $lastEntityId = $this->getSubject()->getLastEntityId();
+
+        // initialize the stock status data
+        $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID, 0);
+
+        // return the prepared stock status
+        return $this->initializeEntity(
+            array(
+                MemberNames::PRODUCT_ID   => $lastEntityId,
+                MemberNames::WEBSITE_ID   => $websiteId,
+                MemberNames::STOCK_ID     => 1
+            )
+        );
+    }
+
+    /**
      * Prepare the stock status attributes of the entity that has to be persisted.
      *
      * @return array The prepared stock status attributes
@@ -89,23 +127,20 @@ class ProductInventoryObserver extends AbstractProductImportObserver
     protected function prepareStockStatusAttributes()
     {
 
-        // load the ID of the product that has been created recently
-        $lastEntityId = $this->getLastEntityId();
-
-        // initialize the stock status data
-        $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID, 0);
-        $qty = $this->castValueByBackendType('float', $this->getValue(ColumnKeys::QTY));
-
-        // return the prepared stock status
-        return $this->initializeEntity(
-            array(
-                MemberNames::PRODUCT_ID   => $lastEntityId,
-                MemberNames::WEBSITE_ID   => $websiteId,
-                MemberNames::STOCK_ID     => 1,
-                MemberNames::STOCK_STATUS => $qty > 0 ? 1 : 0,
-                MemberNames::QTY          => $qty
-            )
+        // initialize the stock status
+        $stockStatus = array_merge(
+            $this->prepareAttributes(),
+            array(MemberNames::STOCK_STATUS => 0),
+            $this->attributeLoader->load($this, array(MemberNames::QTY => array(ColumnKeys::QTY, BackendTypeKeys::BACKEND_TYPE_FLOAT)))
         );
+
+        // initialize the stock status depending on the quantity
+        if (isset($stockStatus[MemberNames::QTY]) && $stockStatus[MemberNames::QTY] > 0) {
+            $stockStatus[MemberNames::STOCK_STATUS] = 1;
+        }
+
+        // return the stock status
+        return $stockStatus;
     }
 
     /**
@@ -127,31 +162,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver
      */
     protected function prepareStockItemAttributes()
     {
-
-        // load the ID of the product that has been created recently
-        $lastEntityId = $this->getLastEntityId();
-
-        // initialize the stock status data
-        $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID, 0);
-
-        // initialize the stock item with the basic data
-        $stockItem = $this->initializeEntity(
-            array(
-                MemberNames::PRODUCT_ID  => $lastEntityId,
-                MemberNames::WEBSITE_ID  => $websiteId,
-                MemberNames::STOCK_ID    => 1
-            )
-        );
-
-        // append the row values to the stock item
-        $headerStockMappings = $this->getHeaderStockMappings();
-        foreach ($headerStockMappings as $columnName => $header) {
-            list ($headerName, $backendType) = $header;
-            $stockItem[$columnName] = $this->castValueByBackendType($backendType, $this->getValue($headerName));
-        }
-
-        // return the prepared stock item
-        return $stockItem;
+        return array_merge($this->prepareAttributes(), $this->attributeLoader->load($this, $this->getHeaderStockMappings()));
     }
 
     /**
