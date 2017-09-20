@@ -1,3 +1,13 @@
+# Version 1.0.0-beta41
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Remove unnecessary error_log statements
+
 # Version 1.0.0-beta40
 
 ## Bugfixes

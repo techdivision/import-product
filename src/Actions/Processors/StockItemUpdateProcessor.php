@@ -79,9 +79,6 @@ class StockItemUpdateProcessor extends AbstractCreateProcessor
             // create the prepared UPDATE statement
             $statement = sprintf($this->getUtilityClass()->find(SqlStatements::UPDATE_STOCK_ITEM), implode(',', $keys), implode(',', $pks));
 
-            error_log($statement);
-            error_log(print_r($row, true));
-
             // prepare the statement
             $this->addPreparedStatement($name, $this->getConnection()->prepare($statement));
         }
