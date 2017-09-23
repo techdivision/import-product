@@ -61,10 +61,10 @@ class StockStatusUpdateProcessor extends AbstractUpdateProcessor
         if (!$this->hasPreparedStatement($name)) {
             // initialize the array for the primary key fields
             $pks = array();
-            // remove the last value as PK from the array with the keys
-            $pks[] = $keys[array_search(MemberNames::PRODUCT_ID, $row, true)];
-            $pks[] = $keys[array_search(MemberNames::WEBSITE_ID, $row, true)];
-            $pks[] = $keys[array_search(MemberNames::STOCK_ID, $row, true)];
+            // load the PKs from the array with the keys
+            $pks[] = $keys[array_search(MemberNames::PRODUCT_ID, $keys, true)];
+            $pks[] = $keys[array_search(MemberNames::WEBSITE_ID, $keys, true)];
+            $pks[] = $keys[array_search(MemberNames::STOCK_ID, $keys, true)];
 
             // remove the entity status from the keys
             unset($keys[array_search(MemberNames::ATTRIBUTE_ID, $keys, true)]);

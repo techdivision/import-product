@@ -1,3 +1,13 @@
+# Version 1.0.0-beta42
+
+## Bugfixes
+
+* Fixed error in SQL statement preparation for stock status updates
+
+## Features
+
+* None
+
 # Version 1.0.0-beta41
 
 ## Bugfixes
