@@ -60,7 +60,7 @@ class StockItemUpdateProcessor extends AbstractCreateProcessor
             // initialize the array for the primary key fields
             $pks = array();
             // load the last value as PK from the array with the keys
-            $pks[] = $keys[array_search(MemberNames::ITEM_ID, $row, true)];
+            $pks[] = $keys[array_search(MemberNames::ITEM_ID, $keys, true)];
 
             // remove the entity status and the primary key from the keys
             unset($keys[array_search(MemberNames::ITEM_ID, $keys, true)]);
