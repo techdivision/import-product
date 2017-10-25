@@ -40,13 +40,6 @@ class CoreConfigDataKeys extends \TechDivision\Import\Utils\CoreConfigDataKeys
     const CATALOG_SEO_PRODUCT_URL_SUFFIX = 'catalog/seo/product_url_suffix';
 
     /**
-     * Name for the column 'catalog/seo/product_use_categories'.
-     *
-     * @var string
-     */
-    const CATALOG_SEO_PRODUCT_USE_CATEGORIES = 'catalog/seo/product_use_categories';
-
-    /**
      * Name for the column 'catalog/seo/save_rewrites_history'.
      *
      * @var string

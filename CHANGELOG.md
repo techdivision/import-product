@@ -1,3 +1,13 @@
+# Version 1.0.0-beta43
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Remove unnecessary configuration key from utility class CoreConfigDataKeys
+
 # Version 1.0.0-beta42
 
 ## Bugfixes
