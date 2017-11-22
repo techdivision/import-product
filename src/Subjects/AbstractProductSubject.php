@@ -297,6 +297,26 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         // merge the image types with the values found in the configuration
         $this->imageTypes = array_merge($this->imageTypes, $this->getConfiguration()->getImageTypes());
 
+        // extend the header mappings, if image types has been found
+        if (sizeof($this->imageTypes) > 0) {
+            // initialize the array for the header mappings
+            $imageTypeHeaderMappings = array();
+
+            // iterate over the image types and extend the header mappings
+            foreach ($this->imageTypes as $value) {
+                // load the image and the image label
+                $valueImage = $value . '_image';
+                $valueImageLabel = $value . '_image_label';
+
+                // extend the header mappings for the image type/label
+                $imageTypeHeaderMappings[$valueImage] = $value;
+                $imageTypeHeaderMappings[$valueImageLabel] = $value . '_label';
+            }
+
+            // extend the header mappings with the header mappings for the image types
+            $this->headerMappings = array_merge($this->headerMappings, $imageTypeHeaderMappings);
+        }
+
         // invoke the parent method
         parent::setUp($serial);
     }
