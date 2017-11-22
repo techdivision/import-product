@@ -301,25 +301,6 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         parent::setUp($serial);
     }
 
-    /**
-     * Return's the header mappings for the actual entity.
-     *
-     * @return array The header mappings
-     */
-    public function getHeaderMappings()
-    {
-
-        $localHeaderMappings = array();
-
-        foreach ($this->imageTypes as $key => $value) {
-            $valueImage = $value . '_image';
-            $valueImageLabel = $value . '_image_label';
-            $localHeaderMappings[$valueImage] = $value;
-            $localHeaderMappings[$valueImageLabel] = $value . '_label';
-        }
-
-        return array_merge($this->headerMappings, $localHeaderMappings);
-    }
 
     /**
      * Clean up the global data after importing the bunch.
