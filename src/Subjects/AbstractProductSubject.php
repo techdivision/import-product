@@ -121,12 +121,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
      *
      * @var array
      */
-    protected $imageTypes = array(
-        'base_image'      => 'base_image_label',
-        'small_image'     => 'small_image_label',
-        'swatch_image'    => 'swatch_image_label',
-        'thumbnail_image' => 'thumbnail_image_label'
-    );
+    protected $imageTypes = array();
 
     /**
      * Mappings for CSV column header => attribute code.
@@ -297,6 +292,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
         $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
+        $this->imageTypes =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::IMAGE_TYPES];
 
         // merge the image types with the values found in the configuration
         $this->imageTypes = array_merge($this->imageTypes, $this->getConfiguration()->getImageTypes());
@@ -304,6 +300,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         // invoke the parent method
         parent::setUp($serial);
     }
+
 
     /**
      * Clean up the global data after importing the bunch.
