@@ -135,10 +135,6 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         'bundle_sku_type'      => 'sku_type',
         'bundle_price_view'    => 'price_view',
         'bundle_weight_type'   => 'weight_type',
-        'base_image'           => 'image',
-        'base_image_label'     => 'image_label',
-        'thumbnail_image'      => 'thumbnail',
-        'thumbnail_image_label'=> 'thumbnail_label',
         'bundle_shipment_type' => 'shipment_type',
         'related_skus'         => 'relation_skus',
         'related_position'     => 'relation_position',
@@ -303,14 +299,14 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
             $imageTypeHeaderMappings = array();
 
             // iterate over the image types and extend the header mappings
-            foreach ($this->imageTypes as $value) {
+            foreach ($this->imageTypes as $key => $value) {
                 // load the image and the image label
-                $valueImage = $value . '_image';
-                $valueImageLabel = $value . '_image_label';
+                $valueImage = $value['image'];
+                $valueImageLabel = $value['image_label'];
 
                 // extend the header mappings for the image type/label
-                $imageTypeHeaderMappings[$valueImage] = $value;
-                $imageTypeHeaderMappings[$valueImageLabel] = $value . '_label';
+                $imageTypeHeaderMappings[$valueImage] = $key;
+                $imageTypeHeaderMappings[$valueImageLabel] = $key . '_label';
             }
 
             // extend the header mappings with the header mappings for the image types
