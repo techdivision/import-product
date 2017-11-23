@@ -59,6 +59,7 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
             ),
             RegistryKeys::LINK_TYPES => array(),
             RegistryKeys::CATEGORIES => array(),
+            RegistryKeys::IMAGE_TYPES => array(),
             RegistryKeys::TAX_CLASSES => array(),
             RegistryKeys::STORE_WEBSITES => array(),
             RegistryKeys::EAV_ATTRIBUTES => array(),

@@ -1,3 +1,13 @@
+# Version 1.0.0-beta44
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Make image types dynamic and extensible
+
 # Version 1.0.0-beta43
 
 ## Bugfixes
