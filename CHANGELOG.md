@@ -1,3 +1,13 @@
+# Version 1.0.0-beta45
+
+## Bugfixes
+
+* Fixed exception when querying if clean-up-empty-image-columns is NOT set
+
+## Features
+
+* None
+
 # Version 1.0.0-beta44
 
 ## Bugfixes
