@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
-use TechDivision\Import\Utils\ConfigurationKeys;
 use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Utils\FrontendInputTypes;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Subjects\EntitySubjectInterface;
 
@@ -535,19 +535,31 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     }
 
     /**
-     * Merge the columns from the configuration with all image type columns to define which columns should be cleaned up
+     * Merge the columns from the configuration with all image type columns to define which
+     * columns should be cleaned-up.
      *
-     * @return array|string
+     * @return array The columns that has to be cleaned-up
      */
     public function getCleanUpColumns()
     {
-        $configurationCleanUpColumns = $this->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_EMPTY_COLUMNS);
-        if ($this->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_EMPTY_IMAGE_COLUMNS, false) === true) {
+
+        // load the colums that has to be cleaned-up
+        $cleanUpColumns = $this->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_EMPTY_COLUMNS);
+
+        // query whether or not the image columns has to be cleaned-up also
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_EMPTY_IMAGE_COLUMNS) &&
+            $this->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_EMPTY_IMAGE_COLUMNS, false)
+        ) {
+            // if yes load the image column names
             $imageTypes = array_keys($this->getImageTypes());
+
+            // and append them to the column names from the configuration
             foreach ($imageTypes as $imageAttribute) {
-                $configurationCleanUpColumns[] = $imageAttribute;
+                $cleanUpColumns[] = $imageAttribute;
             }
         }
-        return $configurationCleanUpColumns;
+
+        // return the array with the column names that has to be cleaned-up
+        return $cleanUpColumns;
     }
 }
