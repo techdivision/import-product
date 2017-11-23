@@ -20,11 +20,11 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
+use TechDivision\Import\Utils\RegistryKeys;
+use TechDivision\Import\Utils\FrontendInputTypes;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Subjects\EntitySubjectInterface;
-use TechDivision\Import\Utils\FrontendInputTypes;
-use TechDivision\Import\Utils\RegistryKeys;
 
 /**
  * The abstract product subject implementation that provides basic product
@@ -142,7 +142,11 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         'crosssell_position'   => 'cross_sell_position',
         'upsell_skus'          => 'up_sell_skus',
         'upsell_position'      => 'up_sell_position',
-        'msrp_price'           => 'msrp'
+        'msrp_price'           => 'msrp',
+        'base_image'           => 'image',
+        'base_image_label'     => 'image_label',
+        'thumbnail_image'      => 'thumbnail',
+        'thumbnail_image_label'=> 'thumbnail_label'
     );
 
     /**
@@ -287,31 +291,8 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         $this->linkTypes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::LINK_TYPES];
         $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
-        $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
         $this->imageTypes =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::IMAGE_TYPES];
-
-        // merge the image types with the values found in the configuration
-        $this->imageTypes = array_merge($this->imageTypes, $this->getConfiguration()->getImageTypes());
-
-        // extend the header mappings, if image types has been found
-        if (sizeof($this->imageTypes) > 0) {
-            // initialize the array for the header mappings
-            $imageTypeHeaderMappings = array();
-
-            // iterate over the image types and extend the header mappings
-            foreach ($this->imageTypes as $key => $value) {
-                // load the image and the image label
-                $valueImage = $value['image'];
-                $valueImageLabel = $value['image_label'];
-
-                // extend the header mappings for the image type/label
-                $imageTypeHeaderMappings[$valueImage] = $key;
-                $imageTypeHeaderMappings[$valueImageLabel] = $key . '_label';
-            }
-
-            // extend the header mappings with the header mappings for the image types
-            $this->headerMappings = array_merge($this->headerMappings, $imageTypeHeaderMappings);
-        }
+        $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
 
         // invoke the parent method
         parent::setUp($serial);
