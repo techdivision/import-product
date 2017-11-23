@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
+use TechDivision\Import\Utils\ConfigurationKeys;
 use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Utils\FrontendInputTypes;
 use TechDivision\Import\Product\Utils\MemberNames;
@@ -531,5 +532,22 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // return the array with the matching store view codes
         return $storeViewCodes;
+    }
+
+    /**
+     * Merge the columns from the configuration with all image type columns to define which columns should be cleaned up
+     *
+     * @return array|string
+     */
+    public function getCleanUpColumns()
+    {
+        $configurationCleanUpColumns = $this->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_EMPTY_COLUMNS);
+        if ($this->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_EMPTY_IMAGE_COLUMNS, false) === true) {
+            $imageTypes = array_keys($this->getImageTypes());
+            foreach ($imageTypes as $imageAttribute) {
+                $configurationCleanUpColumns[] = $imageAttribute;
+            }
+        }
+        return $configurationCleanUpColumns;
     }
 }
