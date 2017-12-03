@@ -1,3 +1,13 @@
+# Version 1.0.0-beta46
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Remove update of processed file status, because of moving it to AbstractSubject
+
 # Version 1.0.0-beta45
 
 ## Bugfixes
