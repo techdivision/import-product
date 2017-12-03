@@ -320,7 +320,6 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         $registryProcessor->mergeAttributesRecursive(
             $serial,
             array(
-                RegistryKeys::FILES => array($this->getFilename() => array(RegistryKeys::STATUS => 1)),
                 RegistryKeys::SKU_ENTITY_ID_MAPPING => $this->skuEntityIdMapping,
                 RegistryKeys::SKU_STORE_VIEW_CODE_MAPPING => $this->skuStoreViewCodeMapping
             )

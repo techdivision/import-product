@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Media\Observers\FileUploadObserver
+ * TechDivision\Import\Product\Observers\FileUploadObserver
  *
  * NOTICE OF LICENSE
  *
