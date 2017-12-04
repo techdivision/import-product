@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Actions\Processors\AbstractDeleteProcessor;
 
 /**
@@ -43,13 +44,10 @@ class CategoryProductDeleteProcessor extends AbstractDeleteProcessor
     protected function getStatements()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::DELETE_CATEGORY_PRODUCT        => $this->getUtilityClass()->find($utilityClassName::DELETE_CATEGORY_PRODUCT),
-            $utilityClassName::DELETE_CATEGORY_PRODUCT_BY_SKU => $this->getUtilityClass()->find($utilityClassName::DELETE_CATEGORY_PRODUCT_BY_SKU)
+            SqlStatementKeys::DELETE_CATEGORY_PRODUCT        => $this->loadStatement(SqlStatementKeys::DELETE_CATEGORY_PRODUCT),
+            SqlStatementKeys::DELETE_CATEGORY_PRODUCT_BY_SKU => $this->loadStatement(SqlStatementKeys::DELETE_CATEGORY_PRODUCT_BY_SKU)
         );
     }
 }

@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Repositories;
 
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
@@ -50,12 +51,9 @@ class ProductDecimalRepository extends AbstractRepository
     public function init()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
         $this->productDecimalStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_DECIMAL));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_DECIMAL));
     }
 
     /**

@@ -20,8 +20,9 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Repositories\AbstractRepository;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
+use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
  * Repository implementation to load product data.
@@ -50,12 +51,9 @@ class ProductRepository extends AbstractRepository
     public function init()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
         $this->productStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT));
     }
 
     /**

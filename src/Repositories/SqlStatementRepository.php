@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Utils\SqlStatements
+ * TechDivision\Import\Product\Repositories\SqlStatementKeys
  *
  * NOTICE OF LICENSE
  *
@@ -18,10 +18,12 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Utils;
+namespace TechDivision\Import\Product\Repositories;
+
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
 
 /**
- * Utility class with the SQL statements to use.
+ * Repository class with the SQL statements to use.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -29,303 +31,8 @@ namespace TechDivision\Import\Product\Utils;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
+class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatementRepository
 {
-
-    /**
-     * The SQL statement to load the product with the passed SKU.
-     *
-     * @var string
-     */
-    const PRODUCT = 'product';
-
-    /**
-     * The SQL statement to load the product website relations with the passed product/website ID.
-     *
-     * @var string
-     */
-    const PRODUCT_WEBSITE = 'product_website';
-
-    /**
-     * The SQL statement to load the product datetime attribute with the passed entity/attribute/store ID.
-     *
-     * @var string
-     */
-    const PRODUCT_DATETIME = 'product_datetime';
-
-    /**
-     * The SQL statement to load the product decimal attribute with the passed entity/attribute/store ID.
-     *
-     * @var string
-     */
-    const PRODUCT_DECIMAL = 'product_decimal';
-
-    /**
-     * The SQL statement to load the product integer attribute with the passed entity/attribute/store ID.
-     *
-     * @var string
-     */
-    const PRODUCT_INT = 'product_int';
-
-    /**
-     * The SQL statement to load the product text attribute with the passed entity/attribute/store ID.
-     *
-     * @var string
-     */
-    const PRODUCT_TEXT = 'product_text';
-
-    /**
-     * The SQL statement to load the product varchar attribute with the passed entity/attribute/store ID.
-     *
-     * @var string
-     */
-    const PRODUCT_VARCHAR = 'product_varchar';
-
-    /**
-     * The SQL statement to load a product varchar attribute by the passed attribute code,
-     * entity typy and store ID as well as the passed value.
-     *
-     * @var string
-     */
-    const PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE = 'product_varchar.by.attribute_code.and.entity_type_id.and.store_id.and.value';
-
-    /**
-     * The SQL statement to load the category product relations with the passed product/website ID.
-     *
-     * @var string
-     */
-    const CATEGORY_PRODUCT = 'category_product';
-
-    /**
-     * The SQL statement to load the category product relations with the passed product SKU.
-     *
-     * @var string
-     */
-    const CATEGORY_PRODUCT_BY_SKU = 'category_product.by.sku';
-
-    /**
-     * The SQL statement to load the stock status with the passed product/website/stock ID.
-     *
-     * @var string
-     */
-    const STOCK_STATUS = 'stock_status';
-
-    /**
-     * The SQL statement to load the stock item with the passed product/website/stock ID.
-     *
-     * @var string
-     */
-    const STOCK_ITEM = 'stock_item';
-
-    /**
-     * The SQL statement to create new products.
-     *
-     * @var string
-     */
-    const CREATE_PRODUCT = 'create.product';
-
-    /**
-     * The SQL statement to update an existing product.
-     *
-     * @var string
-     */
-    const UPDATE_PRODUCT = 'update.product';
-
-    /**
-     * The SQL statement to create a new product website relation.
-     *
-     * @var string
-     */
-    const CREATE_PRODUCT_WEBSITE = 'create.product_website';
-
-    /**
-     * The SQL statement to create a new category product relation.
-     *
-     * @var string
-     */
-    const CREATE_CATEGORY_PRODUCT = 'create.category_product';
-
-    /**
-     * The SQL statement to update an existing category product relation.
-     *
-     * @var string
-     */
-    const UPDATE_CATEGORY_PRODUCT = 'update.category_product';
-
-    /**
-     * The SQL statement to create a new product datetime value.
-     *
-     * @var string
-     */
-    const CREATE_PRODUCT_DATETIME = 'create.product_datetime';
-
-    /**
-     * The SQL statement to update an existing product datetime value.
-     *
-     * @var string
-     */
-    const UPDATE_PRODUCT_DATETIME = 'update.product_datetime';
-
-    /**
-     * The SQL statement to delete an existing product datetime value.
-     *
-     * @var string
-     */
-    const DELETE_PRODUCT_DATETIME = 'delete.product_datetime';
-
-    /**
-     * The SQL statement to create a new product decimal value.
-     *
-     * @var string
-     */
-    const CREATE_PRODUCT_DECIMAL = 'create.product_decimal';
-
-    /**
-     * The SQL statement to update an existing product decimal value.
-     *
-     * @var string
-     */
-    const UPDATE_PRODUCT_DECIMAL = 'update.product_decimal';
-
-    /**
-     * The SQL statement to delete an existing product decimal value.
-     *
-     * @var string
-     */
-    const DELETE_PRODUCT_DECIMAL = 'delete.product_decimal';
-
-    /**
-     * The SQL statement to create a new product integer value.
-     *
-     * @var string
-     */
-    const CREATE_PRODUCT_INT = 'create.product.int';
-
-    /**
-     * The SQL statement to update an existing product integer value.
-     *
-     * @var string
-     */
-    const UPDATE_PRODUCT_INT = 'update.product_int';
-
-    /**
-     * The SQL statement to delete an existing product integer value.
-     *
-     * @var string
-     */
-    const DELETE_PRODUCT_INT = 'delete.product_int';
-
-    /**
-     * The SQL statement to create a new product varchar value.
-     *
-     * @var string
-     */
-    const CREATE_PRODUCT_VARCHAR = 'create.product_varchar';
-
-    /**
-     * The SQL statement to update an existing product varchar value.
-     *
-     * @var string
-     */
-    const UPDATE_PRODUCT_VARCHAR = 'update.product_varchar';
-
-    /**
-     * The SQL statement to delete an existing product varchar value.
-     *
-     * @var string
-     */
-    const DELETE_PRODUCT_VARCHAR = 'delete.product_varchar';
-
-    /**
-     * The SQL statement to create a new product text value.
-     *
-     * @var string
-     */
-    const CREATE_PRODUCT_TEXT = 'create.product_text';
-
-    /**
-     * The SQL statement to update an existing product text value.
-     *
-     * @var string
-     */
-    const UPDATE_PRODUCT_TEXT = 'update.product_text';
-
-    /**
-     * The SQL statement to delete an existing product text value.
-     *
-     * @var string
-     */
-    const DELETE_PRODUCT_TEXT = 'delete.product_text';
-
-    /**
-     * The SQL statement to create a product's stock status.
-     *
-     * @var string
-     */
-    const CREATE_STOCK_STATUS = 'create.stock_status';
-
-    /**
-     * The SQL statement to update an existing stock status.
-     *
-     * @var string
-     */
-    const UPDATE_STOCK_STATUS = 'update.stock_status';
-
-    /**
-     * The SQL statement to create a product's stock status.
-     *
-     * @var string
-     */
-    const CREATE_STOCK_ITEM = 'create.stock_item';
-
-    /**
-     * The SQL statement to create a product's stock status.
-     *
-     * @var string
-     */
-    const UPDATE_STOCK_ITEM = 'update.stock_item';
-
-    /**
-     * The SQL statement to remove a existing product.
-     *
-     * @var string
-     */
-    const DELETE_PRODUCT = 'delete.product';
-
-    /**
-     * The SQL statement to remove all existing stock status related with the SKU passed as parameter.
-     *
-     * @var string
-     */
-    const DELETE_STOCK_STATUS_BY_SKU = 'delete.stock_status.by.sku';
-
-    /**
-     * The SQL statement to remove all existing stock item related with the SKU passed as parameter.
-     *
-     * @var string
-     */
-    const DELETE_STOCK_ITEM_BY_SKU = 'delete.stock_item.by.sku';
-
-    /**
-     * The SQL statement to remove all product website relations for the product with the SKU passed as parameter.
-     *
-     * @var string
-     */
-    const DELETE_PRODUCT_WEBSITE_BY_SKU = 'delete.product_website.by.sku';
-
-    /**
-     * The SQL statement to remove all product category relations for the product.
-     *
-     * @var string
-     */
-    const DELETE_CATEGORY_PRODUCT = 'delete.category_product';
-
-    /**
-     * The SQL statement to remove all product category relations for the product with the SKU passed as parameter.
-     *
-     * @var string
-     */
-    const DELETE_CATEGORY_PRODUCT_BY_SKU = 'delete.category_product.by.sku';
 
     /**
      * The SQL statements.
@@ -333,41 +40,41 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
      * @var array
      */
     private $statements = array(
-        SqlStatements::PRODUCT =>
+        SqlStatementKeys::PRODUCT =>
             'SELECT * FROM catalog_product_entity WHERE sku = :sku',
-        SqlStatements::PRODUCT_WEBSITE =>
+        SqlStatementKeys::PRODUCT_WEBSITE =>
             'SELECT * FROM catalog_product_website WHERE product_id = :product_id AND website_id = :website_id',
-        SqlStatements::PRODUCT_DATETIME =>
+        SqlStatementKeys::PRODUCT_DATETIME =>
             'SELECT *
                FROM catalog_product_entity_datetime
               WHERE entity_id = :entity_id
                 AND attribute_id = :attribute_id
                 AND store_id = :store_id',
-        SqlStatements::PRODUCT_DECIMAL =>
+        SqlStatementKeys::PRODUCT_DECIMAL =>
             'SELECT *
                FROM catalog_product_entity_decimal
               WHERE entity_id = :entity_id
                 AND attribute_id = :attribute_id
                 AND store_id = :store_id',
-        SqlStatements::PRODUCT_INT =>
+        SqlStatementKeys::PRODUCT_INT =>
             'SELECT *
                FROM catalog_product_entity_int
               WHERE entity_id = :entity_id
                 AND attribute_id = :attribute_id
                 AND store_id = :store_id',
-        SqlStatements::PRODUCT_TEXT =>
+        SqlStatementKeys::PRODUCT_TEXT =>
             'SELECT *
                FROM catalog_product_entity_text
               WHERE entity_id = :entity_id
                 AND attribute_id = :attribute_id
                 AND store_id = :store_id',
-        SqlStatements::PRODUCT_VARCHAR =>
+        SqlStatementKeys::PRODUCT_VARCHAR =>
             'SELECT *
                FROM catalog_product_entity_varchar
               WHERE entity_id = :entity_id
                 AND attribute_id = :attribute_id
                 AND store_id = :store_id',
-        SqlStatements::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE =>
+        SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE =>
             'SELECT t1.*
                FROM catalog_product_entity_varchar t1,
                     eav_attribute t2
@@ -376,19 +83,19 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                 AND t1.attribute_id = t2.attribute_id
                 AND t1.store_id = :store_id
                 AND t1.value = :value',
-        SqlStatements::CATEGORY_PRODUCT =>
+        SqlStatementKeys::CATEGORY_PRODUCT =>
             'SELECT * FROM catalog_category_product WHERE category_id = :category_id AND product_id = :product_id',
-        SqlStatements::CATEGORY_PRODUCT_BY_SKU =>
+        SqlStatementKeys::CATEGORY_PRODUCT_BY_SKU =>
             'SELECT t1.*
                FROM catalog_category_product t1,
                     catalog_product_entity t2
               WHERE t2.sku = :sku
                 AND t1.product_id = t2.entity_id',
-        SqlStatements::STOCK_STATUS =>
+        SqlStatementKeys::STOCK_STATUS =>
             'SELECT * FROM cataloginventory_stock_status WHERE product_id = :product_id AND website_id = :website_id AND stock_id = :stock_id',
-        SqlStatements::STOCK_ITEM =>
+        SqlStatementKeys::STOCK_ITEM =>
             'SELECT * FROM cataloginventory_stock_item WHERE product_id = :product_id AND website_id = :website_id AND stock_id = :stock_id',
-        SqlStatements::CREATE_PRODUCT =>
+        SqlStatementKeys::CREATE_PRODUCT =>
             'INSERT
                INTO catalog_product_entity
                     (sku,
@@ -405,7 +112,7 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                      :required_options,
                      :type_id,
                      :attribute_set_id)',
-        SqlStatements::UPDATE_PRODUCT =>
+        SqlStatementKeys::UPDATE_PRODUCT =>
             'UPDATE catalog_product_entity
                 SET sku = :sku,
                    created_at = :created_at,
@@ -415,14 +122,14 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                     type_id = :type_id,
                     attribute_set_id = :attribute_set_id
               WHERE entity_id = :entity_id',
-        SqlStatements::CREATE_PRODUCT_WEBSITE =>
+        SqlStatementKeys::CREATE_PRODUCT_WEBSITE =>
             'INSERT
                INTO catalog_product_website
                     (product_id,
                      website_id)
              VALUES (:product_id,
                      :website_id)',
-        SqlStatements::CREATE_CATEGORY_PRODUCT =>
+        SqlStatementKeys::CREATE_CATEGORY_PRODUCT =>
             'INSERT
                INTO catalog_category_product
                     (category_id,
@@ -431,13 +138,13 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
              VALUES (:category_id,
                      :product_id,
                      :position)',
-        SqlStatements::UPDATE_CATEGORY_PRODUCT =>
+        SqlStatementKeys::UPDATE_CATEGORY_PRODUCT =>
             'UPDATE catalog_category_product
                 SET category_id = :category_id,
                     product_id = :product_id,
                     position = :position
              WHERE  entity_id = :entity_id',
-        SqlStatements::CREATE_PRODUCT_DATETIME =>
+        SqlStatementKeys::CREATE_PRODUCT_DATETIME =>
             'INSERT
                INTO catalog_product_entity_datetime
                     (entity_id,
@@ -448,18 +155,18 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                     :attribute_id,
                     :store_id,
                     :value)',
-        SqlStatements::UPDATE_PRODUCT_DATETIME =>
+        SqlStatementKeys::UPDATE_PRODUCT_DATETIME =>
             'UPDATE catalog_product_entity_datetime
                 SET entity_id = :entity_id,
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
-        SqlStatements::DELETE_PRODUCT_DATETIME =>
+        SqlStatementKeys::DELETE_PRODUCT_DATETIME =>
             'DELETE
                FROM catalog_product_entity_datetime
               WHERE value_id = :value_id',
-        SqlStatements::CREATE_PRODUCT_DECIMAL =>
+        SqlStatementKeys::CREATE_PRODUCT_DECIMAL =>
             'INSERT
                INTO catalog_product_entity_decimal
                     (entity_id,
@@ -470,18 +177,18 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                     :attribute_id,
                     :store_id,
                     :value)',
-        SqlStatements::UPDATE_PRODUCT_DECIMAL =>
+        SqlStatementKeys::UPDATE_PRODUCT_DECIMAL =>
             'UPDATE catalog_product_entity_decimal
                 SET entity_id = :entity_id,
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
-        SqlStatements::DELETE_PRODUCT_DECIMAL =>
+        SqlStatementKeys::DELETE_PRODUCT_DECIMAL =>
             'DELETE
                FROM catalog_product_entity_decimal
               WHERE value_id = :value_id',
-        SqlStatements::CREATE_PRODUCT_INT =>
+        SqlStatementKeys::CREATE_PRODUCT_INT =>
             'INSERT
                INTO catalog_product_entity_int
                     (entity_id,
@@ -492,18 +199,18 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                      :attribute_id,
                      :store_id,
                      :value)',
-        SqlStatements::UPDATE_PRODUCT_INT =>
+        SqlStatementKeys::UPDATE_PRODUCT_INT =>
             'UPDATE catalog_product_entity_int
                 SET entity_id = :entity_id,
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
-        SqlStatements::DELETE_PRODUCT_INT =>
+        SqlStatementKeys::DELETE_PRODUCT_INT =>
             'DELETE
                FROM catalog_product_entity_int
               WHERE value_id = :value_id',
-        SqlStatements::CREATE_PRODUCT_VARCHAR =>
+        SqlStatementKeys::CREATE_PRODUCT_VARCHAR =>
             'INSERT
                INTO catalog_product_entity_varchar
                     (entity_id,
@@ -514,18 +221,18 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                      :attribute_id,
                      :store_id,
                      :value)',
-        SqlStatements::UPDATE_PRODUCT_VARCHAR =>
+        SqlStatementKeys::UPDATE_PRODUCT_VARCHAR =>
             'UPDATE catalog_product_entity_varchar
                 SET entity_id = :entity_id,
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
-        SqlStatements::DELETE_PRODUCT_VARCHAR =>
+        SqlStatementKeys::DELETE_PRODUCT_VARCHAR =>
             'DELETE
                FROM catalog_product_entity_varchar
               WHERE value_id = :value_id',
-        SqlStatements::CREATE_PRODUCT_TEXT =>
+        SqlStatementKeys::CREATE_PRODUCT_TEXT =>
             'INSERT
                INTO catalog_product_entity_text
                     (entity_id,
@@ -536,52 +243,52 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                      :attribute_id,
                      :store_id,
                      :value)',
-        SqlStatements::UPDATE_PRODUCT_TEXT =>
+        SqlStatementKeys::UPDATE_PRODUCT_TEXT =>
             'UPDATE catalog_product_entity_text
                 SET entity_id = :entity_id,
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
-        SqlStatements::DELETE_PRODUCT_TEXT =>
+        SqlStatementKeys::DELETE_PRODUCT_TEXT =>
             'DELETE
                FROM catalog_product_entity_text
               WHERE value_id = :value_id',
-        SqlStatements::CREATE_STOCK_STATUS =>
+        SqlStatementKeys::CREATE_STOCK_STATUS =>
             'INSERT INTO cataloginventory_stock_status (%s) VALUES (:%s)',
-        SqlStatements::UPDATE_STOCK_STATUS =>
+        SqlStatementKeys::UPDATE_STOCK_STATUS =>
             'UPDATE cataloginventory_stock_status SET %s WHERE %s',
-        SqlStatements::CREATE_STOCK_ITEM =>
+        SqlStatementKeys::CREATE_STOCK_ITEM =>
             'INSERT INTO cataloginventory_stock_item (%s) VALUES (:%s)',
-        SqlStatements::UPDATE_STOCK_ITEM =>
+        SqlStatementKeys::UPDATE_STOCK_ITEM =>
             'UPDATE cataloginventory_stock_item SET %s WHERE %s',
-        SqlStatements::DELETE_PRODUCT =>
+        SqlStatementKeys::DELETE_PRODUCT =>
             'DELETE
                FROM catalog_product_entity
               WHERE sku = :sku',
-        SqlStatements::DELETE_STOCK_STATUS_BY_SKU =>
+        SqlStatementKeys::DELETE_STOCK_STATUS_BY_SKU =>
             'DELETE cataloginventory_stock_status
                FROM cataloginventory_stock_status
          INNER JOIN catalog_product_entity
               WHERE catalog_product_entity.sku = :sku
                 AND cataloginventory_stock_status.product_id = catalog_product_entity.entity_id',
-        SqlStatements::DELETE_STOCK_ITEM_BY_SKU =>
+        SqlStatementKeys::DELETE_STOCK_ITEM_BY_SKU =>
             'DELETE cataloginventory_stock_item
                FROM cataloginventory_stock_item
          INNER JOIN catalog_product_entity
               WHERE catalog_product_entity.sku = :sku
                 AND cataloginventory_stock_item.product_id = catalog_product_entity.entity_id',
-        SqlStatements::DELETE_PRODUCT_WEBSITE_BY_SKU =>
+        SqlStatementKeys::DELETE_PRODUCT_WEBSITE_BY_SKU =>
             'DELETE catalog_product_website
                FROM catalog_product_website
          INNER JOIN catalog_product_entity
               WHERE catalog_product_entity.sku = :sku
                 AND catalog_product_website.product_id = catalog_product_entity.entity_id',
-        SqlStatements::DELETE_CATEGORY_PRODUCT =>
+        SqlStatementKeys::DELETE_CATEGORY_PRODUCT =>
             'DELETE
                FROM catalog_category_product
               WHERE entity_id = :entity_id',
-        SqlStatements::DELETE_CATEGORY_PRODUCT_BY_SKU =>
+        SqlStatementKeys::DELETE_CATEGORY_PRODUCT_BY_SKU =>
             'DELETE catalog_category_product
                FROM catalog_category_product
          INNER JOIN catalog_product_entity

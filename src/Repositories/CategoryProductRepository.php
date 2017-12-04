@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Repositories;
 
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
@@ -57,14 +58,11 @@ class CategoryProductRepository extends AbstractRepository
     public function init()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
         $this->categoryProductStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_PRODUCT));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_PRODUCT));
         $this->categoryProductsBySkuStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_PRODUCT_BY_SKU));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_PRODUCT_BY_SKU));
     }
 
     /**

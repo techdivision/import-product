@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Repositories;
 
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
@@ -58,14 +59,11 @@ class ProductVarcharRepository extends AbstractRepository
     public function init()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
         $this->productVarcharStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_VARCHAR));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_VARCHAR));
         $this->productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt =
-                $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE));
+                $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE));
     }
 
     /**

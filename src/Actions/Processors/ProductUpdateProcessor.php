@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Actions\Processors;
 
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
 
 /**
@@ -44,12 +45,9 @@ class ProductUpdateProcessor extends AbstractUpdateProcessor
     protected function getStatements()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::UPDATE_PRODUCT => $this->getUtilityClass()->find($utilityClassName::UPDATE_PRODUCT)
+            SqlStatementKeys::UPDATE_PRODUCT => $this->loadStatement(SqlStatementKeys::UPDATE_PRODUCT)
         );
     }
 

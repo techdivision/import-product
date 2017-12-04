@@ -20,9 +20,9 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 use TechDivision\Import\Product\Utils\ColumnKeys;
-use TechDivision\Import\Product\Utils\SqlStatements;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 
 /**
  * Observer that removes the product with the SKU found in the CSV file.
@@ -77,10 +77,10 @@ class ClearProductObserver extends AbstractProductImportObserver
         }
 
         // FIRST delete the data related with the product with the passed SKU
-        $this->deleteStockItem(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_STOCK_ITEM_BY_SKU);
-        $this->deleteStockStatus(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_STOCK_STATUS_BY_SKU);
-        $this->deleteProductWebsite(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_PRODUCT_WEBSITE_BY_SKU);
-        $this->deleteCategoryProduct(array(ColumnKeys::SKU => $sku), SqlStatements::DELETE_CATEGORY_PRODUCT_BY_SKU);
+        $this->deleteStockItem(array(ColumnKeys::SKU => $sku), SqlStatementKeys::DELETE_STOCK_ITEM_BY_SKU);
+        $this->deleteStockStatus(array(ColumnKeys::SKU => $sku), SqlStatementKeys::DELETE_STOCK_STATUS_BY_SKU);
+        $this->deleteProductWebsite(array(ColumnKeys::SKU => $sku), SqlStatementKeys::DELETE_PRODUCT_WEBSITE_BY_SKU);
+        $this->deleteCategoryProduct(array(ColumnKeys::SKU => $sku), SqlStatementKeys::DELETE_CATEGORY_PRODUCT_BY_SKU);
 
         // delete the product with the passed SKU
         $this->deleteProduct(array(ColumnKeys::SKU => $sku));

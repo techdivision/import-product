@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Product\Utils\SqlStatements;
+use TechDivision\Import\Product\Repositories\SqlStatementRepository;
 
 /**
  * Test class for the stock status update processor.
@@ -64,7 +64,7 @@ class StockStatusUpdateProcessorTest extends \PHPUnit_Framework_TestCase
                                      ->getMock();
 
         // initialize the processor we want to test
-        $this->processor = new StockStatusUpdateProcessor($this->mockConnection, new SqlStatements());
+        $this->processor = new StockStatusUpdateProcessor($this->mockConnection, new SqlStatementRepository());
     }
 
     /**
