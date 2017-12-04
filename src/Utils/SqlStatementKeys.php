@@ -199,7 +199,7 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
      *
      * @var string
      */
-    const CREATE_PRODUCT_INT = 'create.product.int';
+    const CREATE_PRODUCT_INT = 'create.product_int';
 
     /**
      * The SQL statement to update an existing product integer value.
