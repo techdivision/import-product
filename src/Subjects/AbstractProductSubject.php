@@ -26,6 +26,7 @@ use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Subjects\EntitySubjectInterface;
+use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
  * The abstract product subject implementation that provides basic product
@@ -69,11 +70,11 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     protected $taxClasses = array();
 
     /**
-     * The available categories.
+     * The available categories per store view.
      *
      * @var array
      */
-    protected $categories = array();
+    protected $categoriesPerStoreView = array();
 
     /**
      * The available link types.
@@ -290,7 +291,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // load the global data we've prepared initially
         $this->linkTypes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::LINK_TYPES];
-        $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
+        $this->categoriesPerStoreView = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES_PER_STORE_VIEW];
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
         $this->imageTypes =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::IMAGE_TYPES];
         $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
@@ -320,6 +321,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         $registryProcessor->mergeAttributesRecursive(
             $serial,
             array(
+                RegistryKeys::FILES => array($this->getFilename() => array(RegistryKeys::STATUS => 1)),
                 RegistryKeys::SKU_ENTITY_ID_MAPPING => $this->skuEntityIdMapping,
                 RegistryKeys::SKU_STORE_VIEW_CODE_MAPPING => $this->skuStoreViewCodeMapping
             )
@@ -422,16 +424,18 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
      * Return's the category with the passed path.
      *
      * @param string $path The path of the category to return
+     * @param string $storeViewCode The code of a store view; Default 'admin'
      *
      * @return array The category
      * @throws \Exception Is thrown, if the requested category is not available
      */
-    public function getCategoryByPath($path)
+    public function getCategoryByPath($path, $storeViewCode = StoreViewCodes::ADMIN)
     {
+        $categories = $this->getCategoriesByStoreViewCode($storeViewCode);
 
         // query whether or not the category with the passed path exists
-        if (isset($this->categories[$path])) {
-            return $this->categories[$path];
+        if (isset($categories[$path])) {
+            return $categories[$path];
         }
 
         // throw an exception, if not
@@ -443,18 +447,30 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     }
 
     /**
+     * Retrieve categories by given store view code
+     * @param string $storeViewCode
+     * @return array
+     */
+    public function getCategoriesByStoreViewCode($storeViewCode)
+    {
+        return $this->categoriesPerStoreView[$storeViewCode] ?? [];
+    }
+
+    /**
      * Return's the category with the passed ID.
      *
      * @param integer $categoryId The ID of the category to return
+     * @param string $storeViewCode The code of a store view; Default 'admin'
      *
      * @return array The category data
      * @throws \Exception Is thrown, if the category is not available
      */
-    public function getCategory($categoryId)
+    public function getCategory($categoryId, $storeViewCode = StoreViewCodes::ADMIN)
     {
+        $categories = $this->getCategoriesByStoreViewCode($storeViewCode);
 
         // try to load the category with the passed ID
-        foreach ($this->categories as $category) {
+        foreach ($categories as $category) {
             if ($category[MemberNames::ENTITY_ID] == $categoryId) {
                 return $category;
             }
