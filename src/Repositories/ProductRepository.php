@@ -20,8 +20,8 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Repositories\AbstractRepository;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Repositories\AbstractCachedRepository;
 
 /**
  * Repository implementation to load product data.
@@ -32,15 +32,32 @@ use TechDivision\Import\Product\Utils\MemberNames;
  * @link      https://github.com/techdivision/import
  * @link      http://www.techdivision.com
  */
-class ProductRepository extends AbstractRepository
+class ProductRepository extends AbstractCachedRepository implements ProductRepositoryInterface
 {
+
+    /**
+     * The prepared statement to load a product with the passed SKU.
+     *
+     * @var \PDOStatement
+     */
+    protected $productStmt;
 
     /**
      * The prepared statement to load the existing products.
      *
      * @var \PDOStatement
      */
-    protected $productStmt;
+    protected $productsStmt;
+
+    /**
+     * Return's the primary key name of the entity.
+     *
+     * @return string The name of the entity's primary key
+     */
+    public function getPrimaryKeyName()
+    {
+        return MemberNames::ENTITY_ID;
+    }
 
     /**
      * Initializes the repository's prepared statements.
@@ -56,6 +73,20 @@ class ProductRepository extends AbstractRepository
         // initialize the prepared statements
         $this->productStmt =
             $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT));
+        $this->productsStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCTS));
+    }
+
+    /**
+     * Return's the available products.
+     *
+     * @return array The available products
+     */
+    public function findAll()
+    {
+        // load and return the available products
+        $this->productsStmt->execute();
+        return $this->productsStmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -63,12 +94,29 @@ class ProductRepository extends AbstractRepository
      *
      * @param string $sku The SKU of the product to return
      *
-     * @return array The product
+     * @return array|null The product
      */
     public function findOneBySku($sku)
     {
-        // load and return the product with the passed SKU
+
+        // return the cached result if available
+        if ($this->isCached($sku)) {
+            return $this->fromCache($sku);
+        }
+
+        // if not, try to load the product with the passed SKU
         $this->productStmt->execute(array(MemberNames::SKU => $sku));
-        return $this->productStmt->fetch(\PDO::FETCH_ASSOC);
+
+        // query whether or not the product is available in the database
+        if ($product = $this->productStmt->fetch(\PDO::FETCH_ASSOC)) {
+            // add the product to the cache, register the SKU reference as well
+            $this->toCache(
+                $product[$this->getPrimaryKeyName()],
+                $product,
+                array($sku => $product[$this->getPrimaryKeyName()])
+            );
+            // finally, return it
+            return $product;
+        }
     }
 }

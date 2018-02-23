@@ -48,6 +48,10 @@
             <argument type="service" id="import_product.utility.class.name"/>
         </service>
 
+        <service id="import_product.repository.cache.warmer.product" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductCacheWarmer">
+            <argument type="service" id="import_product.repository.product"/>
+        </service>
+
         <service id="import_product.action.processor.category.product.create" class="TechDivision\Import\Product\Actions\Processors\CategoryProductCreateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.utility.class.name"/>
