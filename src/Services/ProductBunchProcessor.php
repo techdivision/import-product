@@ -22,6 +22,7 @@ namespace TechDivision\Import\Product\Services;
 
 use TechDivision\Import\Actions\UrlRewriteAction;
 use TechDivision\Import\Connection\ConnectionInterface;
+use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Actions\CategoryProductAction;
 use TechDivision\Import\Product\Actions\ProductAction;
 use TechDivision\Import\Product\Actions\ProductDatetimeAction;
@@ -1076,7 +1077,15 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function persistProduct($product, $name = null)
     {
-        return $this->getProductAction()->persist($product, $name);
+
+        // persist the new entity and return the ID
+        $id = $this->getProductAction()->persist($product, $name);
+
+        // add the product to the cache, register the SKU reference as well
+        $this->getProductRepository()->toCache($product[MemberNames::SKU], $product, array($product[MemberNames::SKU] => $id));
+
+        // return the ID of the persisted product
+        return $id;
     }
 
     /**

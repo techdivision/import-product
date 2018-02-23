@@ -40,6 +40,13 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
     const PRODUCT = 'product';
 
     /**
+     * The SQL statement to load the available products.
+     *
+     * @var string
+     */
+    const PRODUCTS = 'products';
+
+    /**
      * The SQL statement to load the product website relations with the passed product/website ID.
      *
      * @var string
@@ -335,6 +342,8 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
     private $statements = array(
         SqlStatements::PRODUCT =>
             'SELECT * FROM catalog_product_entity WHERE sku = :sku',
+        SqlStatements::PRODUCTS =>
+            'SELECT * FROM catalog_product_entity',
         SqlStatements::PRODUCT_WEBSITE =>
             'SELECT * FROM catalog_product_website WHERE product_id = :product_id AND website_id = :website_id',
         SqlStatements::PRODUCT_DATETIME =>
