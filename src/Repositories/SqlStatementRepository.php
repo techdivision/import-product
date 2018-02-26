@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Repositories\SqlStatementKeys
+ * TechDivision\Import\Product\Utils\SqlStatements
  *
  * NOTICE OF LICENSE
  *
@@ -42,6 +42,8 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
     private $statements = array(
         SqlStatementKeys::PRODUCT =>
             'SELECT * FROM catalog_product_entity WHERE sku = :sku',
+        SqlStatementKeys::PRODUCTS =>
+            'SELECT * FROM catalog_product_entity',
         SqlStatementKeys::PRODUCT_WEBSITE =>
             'SELECT * FROM catalog_product_website WHERE product_id = :product_id AND website_id = :website_id',
         SqlStatementKeys::PRODUCT_DATETIME =>

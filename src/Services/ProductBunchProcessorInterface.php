@@ -476,4 +476,11 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
      * @return void
      */
     public function deleteProductVarcharAttribute($row, $name = null);
+
+    /**
+     * Clean-Up the repositories to free memory.
+     *
+     * @return void
+     */
+    public function cleanUp();
 }
