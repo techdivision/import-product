@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Repositories;
 
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractCachedRepository;
 
 /**
@@ -67,14 +68,11 @@ class ProductRepository extends AbstractCachedRepository implements ProductRepos
     public function init()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
         $this->productStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT));
         $this->productsStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCTS));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCTS));
     }
 
     /**

@@ -120,6 +120,9 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
         $mockSubjectConfiguration->expects($this->any())
                                  ->method('getImageTypes')
                                  ->willReturn(array());
+        $mockSubjectConfiguration->expects($this->any())
+                                 ->method('getFrontendInputCallbacks')
+                                 ->willReturn(array());
 
         // create the subject to be tested
         $this->subject = new BunchSubject(

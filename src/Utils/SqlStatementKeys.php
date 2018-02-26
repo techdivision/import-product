@@ -40,6 +40,13 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const PRODUCT = 'product';
 
     /**
+     * The SQL statement to load the available products.
+     *
+     * @var string
+     */
+    const PRODUCTS = 'products';
+
+    /**
      * The SQL statement to load the product website relations with the passed product/website ID.
      *
      * @var string
