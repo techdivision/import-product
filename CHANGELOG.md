@@ -1,3 +1,23 @@
+# Version 1.0.0-beta48
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add product cache warmer functionality for optimized performance
+
+# Version 1.0.0-beta47
+
+## Bugfixes
+
+* Update category path handling in order to use store view specific slugs
+
+## Features
+
+* None
+
 # Version 1.0.0-beta46
 
 ## Bugfixes

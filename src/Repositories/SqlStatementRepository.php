@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Repositories\SqlStatementKeys
+ * TechDivision\Import\Product\Utils\SqlStatements
  *
  * NOTICE OF LICENSE
  *
@@ -40,41 +40,43 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
      * @var array
      */
     private $statements = array(
-        SqlStatementKeys::PRODUCT =>
+        SqlStatements::PRODUCT =>
             'SELECT * FROM catalog_product_entity WHERE sku = :sku',
-        SqlStatementKeys::PRODUCT_WEBSITE =>
+        SqlStatements::PRODUCTS =>
+            'SELECT * FROM catalog_product_entity',
+        SqlStatements::PRODUCT_WEBSITE =>
             'SELECT * FROM catalog_product_website WHERE product_id = :product_id AND website_id = :website_id',
-        SqlStatementKeys::PRODUCT_DATETIME =>
+        SqlStatements::PRODUCT_DATETIME =>
             'SELECT *
                FROM catalog_product_entity_datetime
               WHERE entity_id = :entity_id
                 AND attribute_id = :attribute_id
                 AND store_id = :store_id',
-        SqlStatementKeys::PRODUCT_DECIMAL =>
+        SqlStatements::PRODUCT_DECIMAL =>
             'SELECT *
                FROM catalog_product_entity_decimal
               WHERE entity_id = :entity_id
                 AND attribute_id = :attribute_id
                 AND store_id = :store_id',
-        SqlStatementKeys::PRODUCT_INT =>
+        SqlStatements::PRODUCT_INT =>
             'SELECT *
                FROM catalog_product_entity_int
               WHERE entity_id = :entity_id
                 AND attribute_id = :attribute_id
                 AND store_id = :store_id',
-        SqlStatementKeys::PRODUCT_TEXT =>
+        SqlStatements::PRODUCT_TEXT =>
             'SELECT *
                FROM catalog_product_entity_text
               WHERE entity_id = :entity_id
                 AND attribute_id = :attribute_id
                 AND store_id = :store_id',
-        SqlStatementKeys::PRODUCT_VARCHAR =>
+        SqlStatements::PRODUCT_VARCHAR =>
             'SELECT *
                FROM catalog_product_entity_varchar
               WHERE entity_id = :entity_id
                 AND attribute_id = :attribute_id
                 AND store_id = :store_id',
-        SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE =>
+        SqlStatements::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE =>
             'SELECT t1.*
                FROM catalog_product_entity_varchar t1,
                     eav_attribute t2
@@ -83,19 +85,19 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                 AND t1.attribute_id = t2.attribute_id
                 AND t1.store_id = :store_id
                 AND t1.value = :value',
-        SqlStatementKeys::CATEGORY_PRODUCT =>
+        SqlStatements::CATEGORY_PRODUCT =>
             'SELECT * FROM catalog_category_product WHERE category_id = :category_id AND product_id = :product_id',
-        SqlStatementKeys::CATEGORY_PRODUCT_BY_SKU =>
+        SqlStatements::CATEGORY_PRODUCT_BY_SKU =>
             'SELECT t1.*
                FROM catalog_category_product t1,
                     catalog_product_entity t2
               WHERE t2.sku = :sku
                 AND t1.product_id = t2.entity_id',
-        SqlStatementKeys::STOCK_STATUS =>
+        SqlStatements::STOCK_STATUS =>
             'SELECT * FROM cataloginventory_stock_status WHERE product_id = :product_id AND website_id = :website_id AND stock_id = :stock_id',
-        SqlStatementKeys::STOCK_ITEM =>
+        SqlStatements::STOCK_ITEM =>
             'SELECT * FROM cataloginventory_stock_item WHERE product_id = :product_id AND website_id = :website_id AND stock_id = :stock_id',
-        SqlStatementKeys::CREATE_PRODUCT =>
+        SqlStatements::CREATE_PRODUCT =>
             'INSERT
                INTO catalog_product_entity
                     (sku,
@@ -112,7 +114,7 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                      :required_options,
                      :type_id,
                      :attribute_set_id)',
-        SqlStatementKeys::UPDATE_PRODUCT =>
+        SqlStatements::UPDATE_PRODUCT =>
             'UPDATE catalog_product_entity
                 SET sku = :sku,
                    created_at = :created_at,
@@ -122,14 +124,14 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                     type_id = :type_id,
                     attribute_set_id = :attribute_set_id
               WHERE entity_id = :entity_id',
-        SqlStatementKeys::CREATE_PRODUCT_WEBSITE =>
+        SqlStatements::CREATE_PRODUCT_WEBSITE =>
             'INSERT
                INTO catalog_product_website
                     (product_id,
                      website_id)
              VALUES (:product_id,
                      :website_id)',
-        SqlStatementKeys::CREATE_CATEGORY_PRODUCT =>
+        SqlStatements::CREATE_CATEGORY_PRODUCT =>
             'INSERT
                INTO catalog_category_product
                     (category_id,
@@ -138,13 +140,13 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
              VALUES (:category_id,
                      :product_id,
                      :position)',
-        SqlStatementKeys::UPDATE_CATEGORY_PRODUCT =>
+        SqlStatements::UPDATE_CATEGORY_PRODUCT =>
             'UPDATE catalog_category_product
                 SET category_id = :category_id,
                     product_id = :product_id,
                     position = :position
              WHERE  entity_id = :entity_id',
-        SqlStatementKeys::CREATE_PRODUCT_DATETIME =>
+        SqlStatements::CREATE_PRODUCT_DATETIME =>
             'INSERT
                INTO catalog_product_entity_datetime
                     (entity_id,
@@ -155,18 +157,18 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                     :attribute_id,
                     :store_id,
                     :value)',
-        SqlStatementKeys::UPDATE_PRODUCT_DATETIME =>
+        SqlStatements::UPDATE_PRODUCT_DATETIME =>
             'UPDATE catalog_product_entity_datetime
                 SET entity_id = :entity_id,
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
-        SqlStatementKeys::DELETE_PRODUCT_DATETIME =>
+        SqlStatements::DELETE_PRODUCT_DATETIME =>
             'DELETE
                FROM catalog_product_entity_datetime
               WHERE value_id = :value_id',
-        SqlStatementKeys::CREATE_PRODUCT_DECIMAL =>
+        SqlStatements::CREATE_PRODUCT_DECIMAL =>
             'INSERT
                INTO catalog_product_entity_decimal
                     (entity_id,
@@ -177,18 +179,18 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                     :attribute_id,
                     :store_id,
                     :value)',
-        SqlStatementKeys::UPDATE_PRODUCT_DECIMAL =>
+        SqlStatements::UPDATE_PRODUCT_DECIMAL =>
             'UPDATE catalog_product_entity_decimal
                 SET entity_id = :entity_id,
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
-        SqlStatementKeys::DELETE_PRODUCT_DECIMAL =>
+        SqlStatements::DELETE_PRODUCT_DECIMAL =>
             'DELETE
                FROM catalog_product_entity_decimal
               WHERE value_id = :value_id',
-        SqlStatementKeys::CREATE_PRODUCT_INT =>
+        SqlStatements::CREATE_PRODUCT_INT =>
             'INSERT
                INTO catalog_product_entity_int
                     (entity_id,
@@ -199,18 +201,18 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                      :attribute_id,
                      :store_id,
                      :value)',
-        SqlStatementKeys::UPDATE_PRODUCT_INT =>
+        SqlStatements::UPDATE_PRODUCT_INT =>
             'UPDATE catalog_product_entity_int
                 SET entity_id = :entity_id,
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
-        SqlStatementKeys::DELETE_PRODUCT_INT =>
+        SqlStatements::DELETE_PRODUCT_INT =>
             'DELETE
                FROM catalog_product_entity_int
               WHERE value_id = :value_id',
-        SqlStatementKeys::CREATE_PRODUCT_VARCHAR =>
+        SqlStatements::CREATE_PRODUCT_VARCHAR =>
             'INSERT
                INTO catalog_product_entity_varchar
                     (entity_id,
@@ -221,18 +223,18 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                      :attribute_id,
                      :store_id,
                      :value)',
-        SqlStatementKeys::UPDATE_PRODUCT_VARCHAR =>
+        SqlStatements::UPDATE_PRODUCT_VARCHAR =>
             'UPDATE catalog_product_entity_varchar
                 SET entity_id = :entity_id,
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
-        SqlStatementKeys::DELETE_PRODUCT_VARCHAR =>
+        SqlStatements::DELETE_PRODUCT_VARCHAR =>
             'DELETE
                FROM catalog_product_entity_varchar
               WHERE value_id = :value_id',
-        SqlStatementKeys::CREATE_PRODUCT_TEXT =>
+        SqlStatements::CREATE_PRODUCT_TEXT =>
             'INSERT
                INTO catalog_product_entity_text
                     (entity_id,
@@ -243,52 +245,52 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                      :attribute_id,
                      :store_id,
                      :value)',
-        SqlStatementKeys::UPDATE_PRODUCT_TEXT =>
+        SqlStatements::UPDATE_PRODUCT_TEXT =>
             'UPDATE catalog_product_entity_text
                 SET entity_id = :entity_id,
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
-        SqlStatementKeys::DELETE_PRODUCT_TEXT =>
+        SqlStatements::DELETE_PRODUCT_TEXT =>
             'DELETE
                FROM catalog_product_entity_text
               WHERE value_id = :value_id',
-        SqlStatementKeys::CREATE_STOCK_STATUS =>
+        SqlStatements::CREATE_STOCK_STATUS =>
             'INSERT INTO cataloginventory_stock_status (%s) VALUES (:%s)',
-        SqlStatementKeys::UPDATE_STOCK_STATUS =>
+        SqlStatements::UPDATE_STOCK_STATUS =>
             'UPDATE cataloginventory_stock_status SET %s WHERE %s',
-        SqlStatementKeys::CREATE_STOCK_ITEM =>
+        SqlStatements::CREATE_STOCK_ITEM =>
             'INSERT INTO cataloginventory_stock_item (%s) VALUES (:%s)',
-        SqlStatementKeys::UPDATE_STOCK_ITEM =>
+        SqlStatements::UPDATE_STOCK_ITEM =>
             'UPDATE cataloginventory_stock_item SET %s WHERE %s',
-        SqlStatementKeys::DELETE_PRODUCT =>
+        SqlStatements::DELETE_PRODUCT =>
             'DELETE
                FROM catalog_product_entity
               WHERE sku = :sku',
-        SqlStatementKeys::DELETE_STOCK_STATUS_BY_SKU =>
+        SqlStatements::DELETE_STOCK_STATUS_BY_SKU =>
             'DELETE cataloginventory_stock_status
                FROM cataloginventory_stock_status
          INNER JOIN catalog_product_entity
               WHERE catalog_product_entity.sku = :sku
                 AND cataloginventory_stock_status.product_id = catalog_product_entity.entity_id',
-        SqlStatementKeys::DELETE_STOCK_ITEM_BY_SKU =>
+        SqlStatements::DELETE_STOCK_ITEM_BY_SKU =>
             'DELETE cataloginventory_stock_item
                FROM cataloginventory_stock_item
          INNER JOIN catalog_product_entity
               WHERE catalog_product_entity.sku = :sku
                 AND cataloginventory_stock_item.product_id = catalog_product_entity.entity_id',
-        SqlStatementKeys::DELETE_PRODUCT_WEBSITE_BY_SKU =>
+        SqlStatements::DELETE_PRODUCT_WEBSITE_BY_SKU =>
             'DELETE catalog_product_website
                FROM catalog_product_website
          INNER JOIN catalog_product_entity
               WHERE catalog_product_entity.sku = :sku
                 AND catalog_product_website.product_id = catalog_product_entity.entity_id',
-        SqlStatementKeys::DELETE_CATEGORY_PRODUCT =>
+        SqlStatements::DELETE_CATEGORY_PRODUCT =>
             'DELETE
                FROM catalog_category_product
               WHERE entity_id = :entity_id',
-        SqlStatementKeys::DELETE_CATEGORY_PRODUCT_BY_SKU =>
+        SqlStatements::DELETE_CATEGORY_PRODUCT_BY_SKU =>
             'DELETE catalog_category_product
                FROM catalog_category_product
          INNER JOIN catalog_product_entity
