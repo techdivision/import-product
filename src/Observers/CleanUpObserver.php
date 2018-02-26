@@ -22,6 +22,7 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 
 /**
  * A SLSB that handles the process to import product bunches.
@@ -36,6 +37,33 @@ class CleanUpObserver extends AbstractProductImportObserver
 {
 
     /**
+     * The product bunch processor instance.
+     *
+     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     */
+    protected $productBunchProcessor;
+
+    /**
+     * Initialize the observer with the passed product bunch processor instance.
+     *
+     * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
+     */
+    public function __construct(ProductBunchProcessorInterface $productBunchProcessor)
+    {
+        $this->productBunchProcessor = $productBunchProcessor;
+    }
+
+    /**
+     * Return's the product bunch processor instance.
+     *
+     * @return \TechDivision\Import\Product\Services\ProductBunchProcessorInterface The product bunch processor instance
+     */
+    protected function getProductBunchProcessor()
+    {
+        return $this->productBunchProcessor;
+    }
+
+    /**
      * Process the observer's business logic.
      *
      * @return array The processed row
@@ -46,6 +74,9 @@ class CleanUpObserver extends AbstractProductImportObserver
         // add the SKU => entity ID/store view code mapping
         $this->addSkuEntityIdMapping($sku = $this->getValue(ColumnKeys::SKU));
         $this->addSkuStoreViewCodeMapping($sku, $this->getSubject()->getStoreViewCode(StoreViewCodes::ADMIN));
+
+        // clean-up the repositories etc. to free memory
+        $this->getProductBunchProcessor()->cleanUp();
 
         // temporary persist the SKU
         $this->setLastSku($sku);

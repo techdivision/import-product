@@ -1347,4 +1347,14 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     {
         $this->getProductVarcharAction()->delete($row, $name);
     }
+
+    /**
+     * Clean-Up the repositories to free memory.
+     *
+     * @return void
+     */
+    public function cleanUp()
+    {
+        $this->getProductRepository()->flushCache();
+    }
 }
