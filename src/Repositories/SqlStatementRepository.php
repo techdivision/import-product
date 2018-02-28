@@ -46,35 +46,30 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
             'SELECT * FROM catalog_product_entity',
         SqlStatementKeys::PRODUCT_WEBSITE =>
             'SELECT * FROM catalog_product_website WHERE product_id = :product_id AND website_id = :website_id',
-        SqlStatementKeys::PRODUCT_DATETIME =>
+        SqlStatementKeys::PRODUCT_DATETIMES =>
             'SELECT *
                FROM catalog_product_entity_datetime
-              WHERE entity_id = :entity_id
-                AND attribute_id = :attribute_id
+              WHERE entity_id = :pk
                 AND store_id = :store_id',
-        SqlStatementKeys::PRODUCT_DECIMAL =>
+        SqlStatementKeys::PRODUCT_DECIMALS =>
             'SELECT *
                FROM catalog_product_entity_decimal
-              WHERE entity_id = :entity_id
-                AND attribute_id = :attribute_id
+              WHERE entity_id = :pk
                 AND store_id = :store_id',
-        SqlStatementKeys::PRODUCT_INT =>
+        SqlStatementKeys::PRODUCT_INTS =>
             'SELECT *
                FROM catalog_product_entity_int
-              WHERE entity_id = :entity_id
-                AND attribute_id = :attribute_id
+              WHERE entity_id = :pk
                 AND store_id = :store_id',
-        SqlStatementKeys::PRODUCT_TEXT =>
+        SqlStatementKeys::PRODUCT_TEXTS =>
             'SELECT *
                FROM catalog_product_entity_text
-              WHERE entity_id = :entity_id
-                AND attribute_id = :attribute_id
+              WHERE entity_id = :pk
                 AND store_id = :store_id',
-        SqlStatementKeys::PRODUCT_VARCHAR =>
+        SqlStatementKeys::PRODUCT_VARCHARS =>
             'SELECT *
                FROM catalog_product_entity_varchar
-              WHERE entity_id = :entity_id
-                AND attribute_id = :attribute_id
+              WHERE entity_id = :pk
                 AND store_id = :store_id',
         SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE =>
             'SELECT t1.*

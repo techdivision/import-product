@@ -54,39 +54,39 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const PRODUCT_WEBSITE = 'product_website';
 
     /**
-     * The SQL statement to load the product datetime attribute with the passed entity/attribute/store ID.
+     * The SQL statement to load the product datetime attributes with the passed entity/store ID.
      *
      * @var string
      */
-    const PRODUCT_DATETIME = 'product_datetime';
+    const PRODUCT_DATETIMES = 'product_datetimes';
 
     /**
-     * The SQL statement to load the product decimal attribute with the passed entity/attribute/store ID.
+     * The SQL statement to load the product decimal attributes with the passed entity/store ID.
      *
      * @var string
      */
-    const PRODUCT_DECIMAL = 'product_decimal';
+    const PRODUCT_DECIMALS = 'product_decimals';
 
     /**
-     * The SQL statement to load the product integer attribute with the passed entity/attribute/store ID.
+     * The SQL statement to load the product integer attributes with the passed entity/store ID.
      *
      * @var string
      */
-    const PRODUCT_INT = 'product_int';
+    const PRODUCT_INTS = 'product_ints';
 
     /**
-     * The SQL statement to load the product text attribute with the passed entity/attribute/store ID.
+     * The SQL statement to load the product text attributes with the passed entity/store ID.
      *
      * @var string
      */
-    const PRODUCT_TEXT = 'product_text';
+    const PRODUCT_TEXTS = 'product_texts';
 
     /**
-     * The SQL statement to load the product varchar attribute with the passed entity/attribute/store ID.
+     * The SQL statement to load the product varchar attributes with the passed entity/store ID.
      *
      * @var string
      */
-    const PRODUCT_VARCHAR = 'product_varchar';
+    const PRODUCT_VARCHARS = 'product_varchars';
 
     /**
      * The SQL statement to load a product varchar attribute by the passed attribute code,

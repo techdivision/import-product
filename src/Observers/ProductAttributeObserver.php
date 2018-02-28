@@ -55,6 +55,19 @@ class ProductAttributeObserver extends AbstractAttributeObserver
     }
 
     /**
+     * Intializes the existing attributes for the entity with the passed primary key.
+     *
+     * @param string  $pk      The primary key of the entity to load the attributes for
+     * @param integer $storeId The ID of the store view to load the attributes for
+     *
+     * @return array The entity attributes
+     */
+    protected function getAttributesByPrimaryKeyAndStoreId($pk, $storeId)
+    {
+        return array();
+    }
+
+    /**
      * Return's the product bunch processor instance.
      *
      * @return \TechDivision\Import\Product\Services\ProductBunchProcessorInterface The product bunch processor instance

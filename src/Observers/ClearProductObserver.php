@@ -84,6 +84,9 @@ class ClearProductObserver extends AbstractProductImportObserver
 
         // delete the product with the passed SKU
         $this->deleteProduct(array(ColumnKeys::SKU => $sku));
+
+        // flush the cache to remove the deleted product (which has previously been cached)
+        $this->getProductBunchProcessor()->cleanUp();
     }
 
     /**
