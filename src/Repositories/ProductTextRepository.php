@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\ParamNames;
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractRepository;
 
@@ -33,15 +33,15 @@ use TechDivision\Import\Repositories\AbstractRepository;
  * @link      https://github.com/techdivision/import
  * @link      http://www.techdivision.com
  */
-class ProductTextRepository extends AbstractRepository
+class ProductTextRepository extends AbstractRepository implements ProductTextRepositoryInterface
 {
 
     /**
-     * The prepared statement to load the existing product text attribute.
+     * The prepared statement to load the existing product text attributes with the passed entity/store ID.
      *
      * @var \PDOStatement
      */
-    protected $productTextStmt;
+    protected $productTextsStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -52,31 +52,29 @@ class ProductTextRepository extends AbstractRepository
     {
 
         // initialize the prepared statements
-        $this->productTextStmt =
-            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_TEXT));
+        $this->productTextsStmt =
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_TEXTS));
     }
 
     /**
-     * Load's and return's the text attribute with the passed entity/attribute/store ID.
+     * Load's and return's the text attributes with the passed primary key/store ID.
      *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
+     * @param integer $pk      The primary key of the attributes
+     * @param integer $storeId The store ID of the attributes
      *
-     * @return array|null The text attribute
+     * @return array The text attributes
      */
-    public function findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId)
+    public function findAllByPrimaryKeyAndStoreId($pk, $storeId)
     {
 
         // prepare the params
         $params = array(
-            MemberNames::STORE_ID      => $storeId,
-            MemberNames::ENTITY_ID     => $entityId,
-            MemberNames::ATTRIBUTE_ID  => $attributeId
+            ParamNames::PK        => $pk,
+            ParamNames::STORE_ID  => $storeId
         );
 
-        // load and return the product text attribute with the passed store/entity/attribute ID
-        $this->productTextStmt->execute($params);
-        return $this->productTextStmt->fetch(\PDO::FETCH_ASSOC);
+        // load and return the product text attributes with the passed primary key/store ID
+        $this->productTextsStmt->execute($params);
+        return $this->productTextsStmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

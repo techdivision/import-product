@@ -219,6 +219,14 @@
             <argument type="service" id="import_product.action.processor.stock.status.delete"/>
         </service>
 
+        <service id="import_product.assembler.product.attribute" class="TechDivision\Import\Product\Assemblers\ProductAttributeAssembler">
+            <argument type="service" id="import_product.repository.product.datetime"/>
+            <argument type="service" id="import_product.repository.product.decimal"/>
+            <argument type="service" id="import_product.repository.product.int"/>
+            <argument type="service" id="import_product.repository.product.text"/>
+            <argument type="service" id="import_product.repository.product.varchar"/>
+        </service>
+
         <service id="import_product.processor.product.bunch" class="TechDivision\Import\Product\Services\ProductBunchProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.product"/>
@@ -244,6 +252,7 @@
             <argument type="service" id="import_product.action.stock.item"/>
             <argument type="service" id="import_product.action.stock.status"/>
             <argument type="service" id="import.action.url.rewrite"/>
+            <argument type="service" id="import_product.assembler.product.attribute"/>
         </service>
 
         <service id="import_product.filter.convert.literal.url" class="TechDivision\Import\Utils\Filter\ConvertLiteralUrl"/>
