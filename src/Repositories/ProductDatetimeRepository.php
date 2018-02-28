@@ -69,7 +69,7 @@ class ProductDatetimeRepository extends AbstractRepository implements ProductDat
 
         // prepare the params
         $params = array(
-            ParamNames::PK         => $pk,
+            ParamNames::PK        => $pk,
             ParamNames::STORE_ID  => $storeId
         );
 
