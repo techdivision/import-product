@@ -132,6 +132,27 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     public function getCategoryProductRepository();
 
     /**
+     * Return's the repository to load the stock status with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\StockStatusRepository The repository instance
+     */
+    public function getStockStatusRepository();
+
+    /**
+     * Return's the repository to load the stock items with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\StockItemRepository The repository instance
+     */
+    public function getStockItemRepository();
+
+    /**
+     * Return's the assembler to load the product attributes with.
+     *
+     * @return \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface The assembler instance
+     */
+    public function getProductAttributeAssembler();
+
+    /**
      * Return's an array with the available EAV attributes for the passed is user defined flag.
      *
      * @param integer $isUserDefined The flag itself
