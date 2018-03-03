@@ -21,6 +21,8 @@
 namespace TechDivision\Import\Product\Repositories;
 
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\ParamNames;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
@@ -32,15 +34,15 @@ use TechDivision\Import\Repositories\AbstractRepository;
  * @link      https://github.com/techdivision/import
  * @link      http://www.techdivision.com
  */
-class ProductVarcharRepository extends AbstractRepository
+class ProductVarcharRepository extends AbstractRepository implements ProductVarcharRepositoryInterface
 {
 
     /**
-     * The prepared statement to load the existing product varchar attribute.
+     * The prepared statement to load the existing product varchar attributes with the passed entity/store ID.
      *
      * @var \PDOStatement
      */
-    protected $productVarcharStmt;
+    protected $productVarcharsStmt;
 
     /**
      * The prepared statement to load the existing product varchar attribute with the passed attribute code
@@ -58,38 +60,33 @@ class ProductVarcharRepository extends AbstractRepository
     public function init()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
-        $this->productVarcharStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_VARCHAR));
+        $this->productVarcharsStmt =
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_VARCHARS));
         $this->productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt =
-                $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE));
+                $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE));
     }
 
     /**
-     * Load's and return's the varchar attribute with the passed entity/attribute/store ID.
+     * Load's and return's the varchar attributes with the passed primary key/store ID.
      *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
+     * @param integer $pk      The primary key of the attributes
+     * @param integer $storeId The store ID of the attributes
      *
-     * @return array|null The varchar attribute
+     * @return array The varchar attributes
      */
-    public function findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId)
+    public function findAllByPrimaryKeyAndStoreId($pk, $storeId)
     {
 
         // prepare the params
         $params = array(
-            MemberNames::STORE_ID      => $storeId,
-            MemberNames::ENTITY_ID     => $entityId,
-            MemberNames::ATTRIBUTE_ID  => $attributeId
+            ParamNames::PK        => $pk,
+            ParamNames::STORE_ID  => $storeId
         );
 
-        // load and return the product varchar attribute with the passed store/entity/attribute ID
-        $this->productVarcharStmt->execute($params);
-        return $this->productVarcharStmt->fetch(\PDO::FETCH_ASSOC);
+        // load and return the product varchar attributes with the passed primary key/store ID
+        $this->productVarcharsStmt->execute($params);
+        return $this->productVarcharsStmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -107,10 +104,10 @@ class ProductVarcharRepository extends AbstractRepository
 
         // prepare the params
         $params = array(
-            MemberNames::ATTRIBUTE_CODE => $attributeCode,
-            MemberNames::ENTITY_TYPE_ID => $entityTypeId,
-            MemberNames::STORE_ID       => $storeId,
-            MemberNames::VALUE          => $value
+            ParamNames::ATTRIBUTE_CODE => $attributeCode,
+            ParamNames::ENTITY_TYPE_ID => $entityTypeId,
+            ParamNames::STORE_ID       => $storeId,
+            ParamNames::VALUE          => $value
         );
 
         // load and return the product varchar attribute with the passed parameters

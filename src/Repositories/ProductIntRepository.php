@@ -20,7 +20,8 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\ParamNames;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
@@ -32,15 +33,15 @@ use TechDivision\Import\Repositories\AbstractRepository;
  * @link      https://github.com/techdivision/import
  * @link      http://www.techdivision.com
  */
-class ProductIntRepository extends AbstractRepository
+class ProductIntRepository extends AbstractRepository implements ProductIntRepositoryInterface
 {
 
     /**
-     * The prepared statement to load the existing product integer attribute.
+     * The prepared statement to load the existing product integer attributes with the passed entity/store ID.
      *
      * @var \PDOStatement
      */
-    protected $productIntStmt;
+    protected $productIntsStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -50,35 +51,30 @@ class ProductIntRepository extends AbstractRepository
     public function init()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
-        $this->productIntStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_INT));
+        $this->productIntsStmt =
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_INTS));
     }
 
     /**
-     * Load's and return's the integer attribute with the passed entity/attribute/store ID.
+     * Load's and return's the integer attributes with the passed primary key/store ID.
      *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
+     * @param integer $pk      The primary key of the attributes
+     * @param integer $storeId The store ID of the attributes
      *
-     * @return array|null The integer attribute
+     * @return array The integer attributes
      */
-    public function findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId)
+    public function findAllByPrimaryKeyAndStoreId($pk, $storeId)
     {
 
         // prepare the params
         $params = array(
-            MemberNames::STORE_ID      => $storeId,
-            MemberNames::ENTITY_ID     => $entityId,
-            MemberNames::ATTRIBUTE_ID  => $attributeId
+            ParamNames::PK        => $pk,
+            ParamNames::STORE_ID  => $storeId
         );
 
-        // load and return the product integer attribute with the passed store/entity/attribute ID
-        $this->productIntStmt->execute($params);
-        return $this->productIntStmt->fetch(\PDO::FETCH_ASSOC);
+        // load and return the product integer attributes with the passed primary key/store ID
+        $this->productIntsStmt->execute($params);
+        return $this->productIntsStmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

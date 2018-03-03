@@ -20,7 +20,8 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\ParamNames;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
@@ -32,15 +33,15 @@ use TechDivision\Import\Repositories\AbstractRepository;
  * @link      https://github.com/techdivision/import
  * @link      http://www.techdivision.com
  */
-class ProductDatetimeRepository extends AbstractRepository
+class ProductDatetimeRepository extends AbstractRepository implements ProductDatetimeRepositoryInterface
 {
 
     /**
-     * The prepared statement to load the existing product datetime attribute.
+     * The prepared statement to load the existing product datetime attributes with the passed entity/store ID.
      *
      * @var \PDOStatement
      */
-    protected $productDatetimeStmt;
+    protected $productDatetimesStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -50,35 +51,30 @@ class ProductDatetimeRepository extends AbstractRepository
     public function init()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
-        $this->productDatetimeStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_DATETIME));
+        $this->productDatetimesStmt =
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_DATETIMES));
     }
 
     /**
-     * Load's and return's the datetime attribute with the passed entity/attribute/store ID.
+     * Load's and return's the datetime attributes for the passed primary key/store ID.
      *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
+     * @param integer $pk      The primary key of the attributes
+     * @param integer $storeId The store ID of the attributes
      *
-     * @return array|null The datetime attribute
+     * @return array The datetime attributes
      */
-    public function findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId)
+    public function findAllByPrimaryKeyAndStoreId($pk, $storeId)
     {
 
         // prepare the params
         $params = array(
-            MemberNames::STORE_ID      => $storeId,
-            MemberNames::ENTITY_ID     => $entityId,
-            MemberNames::ATTRIBUTE_ID  => $attributeId
+            ParamNames::PK        => $pk,
+            ParamNames::STORE_ID  => $storeId
         );
 
-        // load and return the product datetime attribute with the passed store/entity/attribute ID
-        $this->productDatetimeStmt->execute($params);
-        return $this->productDatetimeStmt->fetch(\PDO::FETCH_ASSOC);
+        // load and return the product datetime attributes with the passed primary key/store ID
+        $this->productDatetimesStmt->execute($params);
+        return $this->productDatetimesStmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

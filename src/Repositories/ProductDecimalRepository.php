@@ -20,7 +20,8 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\ParamNames;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
@@ -32,15 +33,15 @@ use TechDivision\Import\Repositories\AbstractRepository;
  * @link      https://github.com/techdivision/import
  * @link      http://www.techdivision.com
  */
-class ProductDecimalRepository extends AbstractRepository
+class ProductDecimalRepository extends AbstractRepository implements ProductDecimalRepositoryInterface
 {
 
     /**
-     * The prepared statement to load the existing product decimal attribute.
+     * The prepared statement to load the existing product decimal attributes with the passed entity/store ID.
      *
      * @var \PDOStatement
      */
-    protected $productDecimalStmt;
+    protected $productDecimalsStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -50,35 +51,30 @@ class ProductDecimalRepository extends AbstractRepository
     public function init()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
-        $this->productDecimalStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::PRODUCT_DECIMAL));
+        $this->productDecimalsStmt =
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_DECIMALS));
     }
 
     /**
-     * Load's and return's the decimal attribute with the passed entity/attribute/store ID.
+     * Load's and return's the decimal attributes for the passed primary key/store ID.
      *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
+     * @param integer $pk      The primary key of the attributes
+     * @param integer $storeId The store ID of the attributes
      *
-     * @return array|null The decimal attribute
+     * @return array The decimal attributes
      */
-    public function findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId)
+    public function findAllByPrimaryKeyAndStoreId($pk, $storeId)
     {
 
         // prepare the params
         $params = array(
-            MemberNames::STORE_ID      => $storeId,
-            MemberNames::ENTITY_ID     => $entityId,
-            MemberNames::ATTRIBUTE_ID  => $attributeId
+            ParamNames::PK        => $pk,
+            ParamNames::STORE_ID  => $storeId
         );
 
-        // load and return the product decimal attribute with the passed store/entity/attribute ID
-        $this->productDecimalStmt->execute($params);
-        return $this->productDecimalStmt->fetch(\PDO::FETCH_ASSOC);
+        // load and return the product decimal attributes with the passed primary key/store ID
+        $this->productDecimalsStmt->execute($params);
+        return $this->productDecimalsStmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

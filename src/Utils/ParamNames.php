@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Processors\ProductTextCreateProcessor
+ * TechDivision\Import\Product\Utils\MemberNames
  *
  * NOTICE OF LICENSE
  *
@@ -18,13 +18,10 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Actions\Processors;
-
-use TechDivision\Import\Product\Utils\SqlStatementKeys;
-use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
+namespace TechDivision\Import\Product\Utils;
 
 /**
- * The product text attribute create processor implementation.
+ * Utility class containing parameter names for prepared statements.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -32,21 +29,13 @@ use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductTextCreateProcessor extends AbstractCreateProcessor
+class ParamNames extends \TechDivision\Import\Product\Utils\MemberNames
 {
 
     /**
-     * Return's the array with the SQL statements that has to be prepared.
+     * Name for the parameter name 'pk'.
      *
-     * @return array The SQL statements to be prepared
-     * @see \TechDivision\Import\Actions\Processors\AbstractBaseProcessor::getStatements()
+     * @var string
      */
-    protected function getStatements()
-    {
-
-        // return the array with the SQL statements that has to be prepared
-        return array(
-            SqlStatementKeys::CREATE_PRODUCT_TEXT => $this->loadStatement(SqlStatementKeys::CREATE_PRODUCT_TEXT)
-        );
-    }
+    const PK = 'pk';
 }

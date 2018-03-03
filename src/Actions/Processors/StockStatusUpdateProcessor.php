@@ -22,7 +22,7 @@ namespace TechDivision\Import\Product\Actions\Processors;
 
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Utils\SqlStatements;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
 
 /**
@@ -81,7 +81,7 @@ class StockStatusUpdateProcessor extends AbstractUpdateProcessor
             });
 
             // create the prepared UPDATE statement
-            $statement = sprintf($this->getUtilityClass()->find(SqlStatements::UPDATE_STOCK_STATUS), implode(',', $keys), implode(' AND ', $pks));
+            $statement = sprintf($this->loadStatement(SqlStatementKeys::UPDATE_STOCK_STATUS), implode(',', $keys), implode(' AND ', $pks));
 
             // prepare the statement
             $this->addPreparedStatement($name, $this->getConnection()->prepare($statement));

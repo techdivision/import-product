@@ -157,9 +157,9 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
      * @var array
      */
     protected $defaultFrontendInputCallbackMappings = array(
-        FrontendInputTypes::SELECT      => 'import_product.callback.select',
-        FrontendInputTypes::MULTISELECT => 'import_product.callback.multiselect',
-        FrontendInputTypes::BOOLEAN     => 'import_product.callback.boolean'
+        FrontendInputTypes::SELECT      => array('import_product.callback.select'),
+        FrontendInputTypes::MULTISELECT => array('import_product.callback.multiselect'),
+        FrontendInputTypes::BOOLEAN     => array('import_product.callback.boolean')
     );
 
     /**

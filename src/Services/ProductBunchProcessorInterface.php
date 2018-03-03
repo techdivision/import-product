@@ -132,6 +132,27 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     public function getCategoryProductRepository();
 
     /**
+     * Return's the repository to load the stock status with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\StockStatusRepository The repository instance
+     */
+    public function getStockStatusRepository();
+
+    /**
+     * Return's the repository to load the stock items with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\StockItemRepository The repository instance
+     */
+    public function getStockItemRepository();
+
+    /**
+     * Return's the assembler to load the product attributes with.
+     *
+     * @return \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface The assembler instance
+     */
+    public function getProductAttributeAssembler();
+
+    /**
      * Return's an array with the available EAV attributes for the passed is user defined flag.
      *
      * @param integer $isUserDefined The flag itself
@@ -148,6 +169,16 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
      * @return array The category product relations for the product with the passed SKU
      */
     public function getCategoryProductsBySku($sku);
+
+    /**
+     * Intializes the existing attributes for the entity with the passed primary key.
+     *
+     * @param string  $pk      The primary key of the entity to load the attributes for
+     * @param integer $storeId The ID of the store view to load the attributes for
+     *
+     * @return array The entity attributes
+     */
+    public function getProductAttributesByPrimaryKeyAndStoreId($pk, $storeId);
 
     /**
      * Load's and return's the product with the passed SKU.
@@ -199,61 +230,6 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
      * @return array The stock item
      */
     public function loadStockItem($productId, $websiteId, $stockId);
-
-    /**
-     * Load's and return's the datetime attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The datetime attribute
-     */
-    public function loadProductDatetimeAttribute($entityId, $attributeId, $storeId);
-
-    /**
-     * Load's and return's the decimal attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The decimal attribute
-     */
-    public function loadProductDecimalAttribute($entityId, $attributeId, $storeId);
-
-    /**
-     * Load's and return's the integer attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The integer attribute
-     */
-    public function loadProductIntAttribute($entityId, $attributeId, $storeId);
-
-    /**
-     * Load's and return's the text attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The text attribute
-     */
-    public function loadProductTextAttribute($entityId, $attributeId, $storeId);
-
-    /**
-     * Load's and return's the varchar attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The varchar attribute
-     */
-    public function loadProductVarcharAttribute($entityId, $attributeId, $storeId);
 
     /**
      * Load's and return's the varchar attribute with the passed params.
@@ -476,4 +452,11 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
      * @return void
      */
     public function deleteProductVarcharAttribute($row, $name = null);
+
+    /**
+     * Clean-Up the repositories to free memory.
+     *
+     * @return void
+     */
+    public function cleanUp();
 }

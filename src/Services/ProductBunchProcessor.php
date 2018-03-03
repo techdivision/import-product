@@ -45,6 +45,7 @@ use TechDivision\Import\Product\Repositories\StockItemRepository;
 use TechDivision\Import\Product\Repositories\StockStatusRepository;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepository;
 use TechDivision\Import\Repositories\EavAttributeRepository;
+use TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface;
 
 /**
  * The product bunch processor implementation.
@@ -227,32 +228,40 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     protected $stockItemRepository;
 
     /**
+     * The assembler to load the product attributes with.
+     *
+     * @var \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface
+     */
+    protected $productAttributeAssembler;
+
+    /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \TechDivision\Import\Connection\ConnectionInterface                 $connection                        The connection to use
-     * @param \TechDivision\Import\Product\Repositories\ProductRepository         $productRepository                 The product repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductWebsiteRepository  $productWebsiteRepository          The product website repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductDatetimeRepository $productDatetimeRepository         The product datetime repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductDecimalRepository  $productDecimalRepository          The product decimal repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductIntRepository      $productIntRepository              The product integer repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductTextRepository     $productTextRepository             The product text repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepository  $productVarcharRepository          The product varchar repository to use
-     * @param \TechDivision\Import\Product\Repositories\CategoryProductRepository $categoryProductRepository         The category product repository to use
-     * @param \TechDivision\Import\Product\Repositories\StockStatusRepository     $stockStatusRepository             The stock status repository to use
-     * @param \TechDivision\Import\Product\Repositories\StockItemRepository       $stockItemRepository               The stock item repository to use
-     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepository $eavAttributeOptionValueRepository The EAV attribute option value repository to use
-     * @param \TechDivision\Import\Repositories\EavAttributeRepository            $eavAttributeRepository            The EAV attribute repository to use
-     * @param \TechDivision\Import\Product\Actions\CategoryProductAction          $categoryProductAction             The category product action to use
-     * @param \TechDivision\Import\Product\Actions\ProductDatetimeAction          $productDatetimeAction             The product datetime action to use
-     * @param \TechDivision\Import\Product\Actions\ProductDecimalAction           $productDecimalAction              The product decimal action to use
-     * @param \TechDivision\Import\Product\Actions\ProductIntAction               $productIntAction                  The product integer action to use
-     * @param \TechDivision\Import\Product\Actions\ProductAction                  $productAction                     The product action to use
-     * @param \TechDivision\Import\Product\Actions\ProductTextAction              $productTextAction                 The product text action to use
-     * @param \TechDivision\Import\Product\Actions\ProductVarcharAction           $productVarcharAction              The product varchar action to use
-     * @param \TechDivision\Import\Product\Actions\ProductWebsiteAction           $productWebsiteAction              The product website action to use
-     * @param \TechDivision\Import\Product\Actions\StockItemAction                $stockItemAction                   The stock item action to use
-     * @param \TechDivision\Import\Product\Actions\StockStatusAction              $stockStatusAction                 The stock status action to use
-     * @param \TechDivision\Import\Actions\UrlRewriteAction                       $urlRewriteAction                  The URL rewrite action to use
+     * @param \TechDivision\Import\Connection\ConnectionInterface                        $connection                        The connection to use
+     * @param \TechDivision\Import\Product\Repositories\ProductRepository                $productRepository                 The product repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductWebsiteRepository         $productWebsiteRepository          The product website repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductDatetimeRepository        $productDatetimeRepository         The product datetime repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductDecimalRepository         $productDecimalRepository          The product decimal repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductIntRepository             $productIntRepository              The product integer repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductTextRepository            $productTextRepository             The product text repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepository         $productVarcharRepository          The product varchar repository to use
+     * @param \TechDivision\Import\Product\Repositories\CategoryProductRepository        $categoryProductRepository         The category product repository to use
+     * @param \TechDivision\Import\Product\Repositories\StockStatusRepository            $stockStatusRepository             The stock status repository to use
+     * @param \TechDivision\Import\Product\Repositories\StockItemRepository              $stockItemRepository               The stock item repository to use
+     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepository        $eavAttributeOptionValueRepository The EAV attribute option value repository to use
+     * @param \TechDivision\Import\Repositories\EavAttributeRepository                   $eavAttributeRepository            The EAV attribute repository to use
+     * @param \TechDivision\Import\Product\Actions\CategoryProductAction                 $categoryProductAction             The category product action to use
+     * @param \TechDivision\Import\Product\Actions\ProductDatetimeAction                 $productDatetimeAction             The product datetime action to use
+     * @param \TechDivision\Import\Product\Actions\ProductDecimalAction                  $productDecimalAction              The product decimal action to use
+     * @param \TechDivision\Import\Product\Actions\ProductIntAction                      $productIntAction                  The product integer action to use
+     * @param \TechDivision\Import\Product\Actions\ProductAction                         $productAction                     The product action to use
+     * @param \TechDivision\Import\Product\Actions\ProductTextAction                     $productTextAction                 The product text action to use
+     * @param \TechDivision\Import\Product\Actions\ProductVarcharAction                  $productVarcharAction              The product varchar action to use
+     * @param \TechDivision\Import\Product\Actions\ProductWebsiteAction                  $productWebsiteAction              The product website action to use
+     * @param \TechDivision\Import\Product\Actions\StockItemAction                       $stockItemAction                   The stock item action to use
+     * @param \TechDivision\Import\Product\Actions\StockStatusAction                     $stockStatusAction                 The stock status action to use
+     * @param \TechDivision\Import\Actions\UrlRewriteAction                              $urlRewriteAction                  The URL rewrite action to use
+     * @param \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface $productAttributeAssembler         The assembler to load the product attributes with
      */
     public function __construct(
         ConnectionInterface $connection,
@@ -278,7 +287,8 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         ProductWebsiteAction $productWebsiteAction,
         StockItemAction $stockItemAction,
         StockStatusAction $stockStatusAction,
-        UrlRewriteAction $urlRewriteAction
+        UrlRewriteAction $urlRewriteAction,
+        ProductAttributeAssemblerInterface $productAttributeAssembler
     ) {
         $this->setConnection($connection);
         $this->setProductRepository($productRepository);
@@ -304,6 +314,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         $this->setStockItemAction($stockItemAction);
         $this->setStockStatusAction($stockStatusAction);
         $this->setUrlRewriteAction($urlRewriteAction);
+        $this->setProductAttributeAssembler($productAttributeAssembler);
     }
 
     /**
@@ -891,6 +902,28 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
+     * Set's the assembler to load the product attributes with.
+     *
+     * @param \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface $productAttributeAssembler The assembler instance
+     *
+     * @return void
+     */
+    public function setProductAttributeAssembler(ProductAttributeAssemblerInterface $productAttributeAssembler)
+    {
+        $this->productAttributeAssembler = $productAttributeAssembler;
+    }
+
+    /**
+     * Return's the assembler to load the product attributes with.
+     *
+     * @return \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface The assembler instance
+     */
+    public function getProductAttributeAssembler()
+    {
+        return $this->productAttributeAssembler;
+    }
+
+    /**
      * Return's the category product relations for the product with the passed SKU.
      *
      * @param string $sku The product SKU to load the category relations for
@@ -900,6 +933,19 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function getCategoryProductsBySku($sku)
     {
         return $this->getCategoryProductRepository()->findAllBySku($sku);
+    }
+
+    /**
+     * Intializes the existing attributes for the entity with the passed primary key.
+     *
+     * @param string  $pk      The primary key of the entity to load the attributes for
+     * @param integer $storeId The ID of the store view to load the attributes for
+     *
+     * @return array The entity attributes
+     */
+    public function getProductAttributesByPrimaryKeyAndStoreId($pk, $storeId)
+    {
+        return $this->getProductAttributeAssembler()->getProductAttributesByPrimaryKeyAndStoreId($pk, $storeId);
     }
 
     /**
@@ -980,76 +1026,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function loadStockItem($productId, $websiteId, $stockId)
     {
         return $this->getStockItemRepository()->findOneByProductIdAndWebsiteIdAndStockId($productId, $websiteId, $stockId);
-    }
-
-    /**
-     * Load's and return's the datetime attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The datetime attribute
-     */
-    public function loadProductDatetimeAttribute($entityId, $attributeId, $storeId)
-    {
-        return  $this->getProductDatetimeRepository()->findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId);
-    }
-
-    /**
-     * Load's and return's the decimal attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The decimal attribute
-     */
-    public function loadProductDecimalAttribute($entityId, $attributeId, $storeId)
-    {
-        return  $this->getProductDecimalRepository()->findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId);
-    }
-
-    /**
-     * Load's and return's the integer attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The integer attribute
-     */
-    public function loadProductIntAttribute($entityId, $attributeId, $storeId)
-    {
-        return $this->getProductIntRepository()->findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId);
-    }
-
-    /**
-     * Load's and return's the text attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The text attribute
-     */
-    public function loadProductTextAttribute($entityId, $attributeId, $storeId)
-    {
-        return $this->getProductTextRepository()->findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId);
-    }
-
-    /**
-     * Load's and return's the varchar attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The varchar attribute
-     */
-    public function loadProductVarcharAttribute($entityId, $attributeId, $storeId)
-    {
-        return $this->getProductVarcharRepository()->findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId);
     }
 
     /**
@@ -1346,5 +1322,15 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function deleteProductVarcharAttribute($row, $name = null)
     {
         $this->getProductVarcharAction()->delete($row, $name);
+    }
+
+    /**
+     * Clean-Up the repositories to free memory.
+     *
+     * @return void
+     */
+    public function cleanUp()
+    {
+        $this->getProductRepository()->flushCache();
     }
 }
