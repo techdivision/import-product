@@ -44,35 +44,35 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     /**
      * Return's the action with the product varchar attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductVarcharAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductVarcharActionInterface The action instance
      */
     public function getProductVarcharAction();
 
     /**
      * Return's the action with the product text attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductTextAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductTextActionInterface The action instance
      */
     public function getProductTextAction();
 
     /**
      * Return's the action with the product int attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductIntAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductIntActionInterface The action instance
      */
     public function getProductIntAction();
 
     /**
      * Return's the action with the product decimal attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductDecimalAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductDecimalActionInterface The action instance
      */
     public function getProductDecimalAction();
 
     /**
      * Return's the action with the product datetime attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductDatetimeAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductDatetimeActionInterface The action instance
      */
     public function getProductDatetimeAction();
 

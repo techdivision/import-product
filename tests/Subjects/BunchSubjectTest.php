@@ -124,11 +124,17 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
                                  ->method('getFrontendInputCallbacks')
                                  ->willReturn(array());
 
+        // mock the event emitter
+        $mockEmitter = $this->getMockBuilder('League\Event\EmitterInterface')
+                            ->setMethods(\get_class_methods('League\Event\EmitterInterface'))
+                            ->getMock();
+
         // create the subject to be tested
         $this->subject = new BunchSubject(
             $mockRegistryProcessor,
             $mockGenerator,
-            new ArrayCollection()
+            new ArrayCollection(),
+            $mockEmitter
         );
 
         // inject the mock configuration
