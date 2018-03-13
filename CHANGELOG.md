@@ -1,3 +1,13 @@
+# Version 1.0.0-beta50
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Use interfaces instead of classes to inject product attribute actions in bunch processor
+
 # Version 1.0.0-beta49
 
 ## Bugfixes
