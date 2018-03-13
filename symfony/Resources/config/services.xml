@@ -319,6 +319,7 @@
             <argument type="service" id="import.processor.registry"/>
             <argument type="service" id="import.generator.core.config.data.uid"/>
             <argument type="service" id="loggers"/>
+            <argument type="service" id="import.events.emitter"/>
         </service>
 
     </services>

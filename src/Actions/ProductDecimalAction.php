@@ -31,6 +31,6 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductDecimalAction extends AbstractAction
+class ProductDecimalAction extends AbstractAction implements ProductDecimalActionInterface
 {
 }

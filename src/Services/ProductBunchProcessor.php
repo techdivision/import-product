@@ -25,11 +25,11 @@ use TechDivision\Import\Connection\ConnectionInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Actions\CategoryProductAction;
 use TechDivision\Import\Product\Actions\ProductAction;
-use TechDivision\Import\Product\Actions\ProductDatetimeAction;
-use TechDivision\Import\Product\Actions\ProductDecimalAction;
-use TechDivision\Import\Product\Actions\ProductIntAction;
-use TechDivision\Import\Product\Actions\ProductTextAction;
-use TechDivision\Import\Product\Actions\ProductVarcharAction;
+use TechDivision\Import\Product\Actions\ProductDatetimeActionInterface;
+use TechDivision\Import\Product\Actions\ProductDecimalActionInterface;
+use TechDivision\Import\Product\Actions\ProductIntActionInterface;
+use TechDivision\Import\Product\Actions\ProductTextActionInterface;
+use TechDivision\Import\Product\Actions\ProductVarcharActionInterface;
 use TechDivision\Import\Product\Actions\ProductWebsiteAction;
 use TechDivision\Import\Product\Actions\StockItemAction;
 use TechDivision\Import\Product\Actions\StockStatusAction;
@@ -90,35 +90,35 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * The action for product varchar attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductVarcharAction
+     * @var \TechDivision\Import\Product\Actions\ProductVarcharActionInterface
      */
     protected $productVarcharAction;
 
     /**
      * The action for product text attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductTextAction
+     * @var \TechDivision\Import\Product\Actions\ProductTextActionInterface
      */
     protected $productTextAction;
 
     /**
      * The action for product int attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductIntAction
+     * @var \TechDivision\Import\Product\Actions\ProductIntActionInterface
      */
     protected $productIntAction;
 
     /**
      * The action for product decimal attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductDecimalAction
+     * @var \TechDivision\Import\Product\Actions\ProductDecimalActionInterface
      */
     protected $productDecimalAction;
 
     /**
      * The action for product datetime attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductDatetimeAction
+     * @var \TechDivision\Import\Product\Actions\ProductDatetimeActionInterface
      */
     protected $productDatetimeAction;
 
@@ -251,12 +251,12 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepository        $eavAttributeOptionValueRepository The EAV attribute option value repository to use
      * @param \TechDivision\Import\Repositories\EavAttributeRepository                   $eavAttributeRepository            The EAV attribute repository to use
      * @param \TechDivision\Import\Product\Actions\CategoryProductAction                 $categoryProductAction             The category product action to use
-     * @param \TechDivision\Import\Product\Actions\ProductDatetimeAction                 $productDatetimeAction             The product datetime action to use
-     * @param \TechDivision\Import\Product\Actions\ProductDecimalAction                  $productDecimalAction              The product decimal action to use
-     * @param \TechDivision\Import\Product\Actions\ProductIntAction                      $productIntAction                  The product integer action to use
+     * @param \TechDivision\Import\Product\Actions\ProductDatetimeActionInterface        $productDatetimeAction             The product datetime action to use
+     * @param \TechDivision\Import\Product\Actions\ProductDecimalActionInterface         $productDecimalAction              The product decimal action to use
+     * @param \TechDivision\Import\Product\Actions\ProductIntActionInterface             $productIntAction                  The product integer action to use
      * @param \TechDivision\Import\Product\Actions\ProductAction                         $productAction                     The product action to use
-     * @param \TechDivision\Import\Product\Actions\ProductTextAction                     $productTextAction                 The product text action to use
-     * @param \TechDivision\Import\Product\Actions\ProductVarcharAction                  $productVarcharAction              The product varchar action to use
+     * @param \TechDivision\Import\Product\Actions\ProductTextActionInterface            $productTextAction                 The product text action to use
+     * @param \TechDivision\Import\Product\Actions\ProductVarcharActionInterface         $productVarcharAction              The product varchar action to use
      * @param \TechDivision\Import\Product\Actions\ProductWebsiteAction                  $productWebsiteAction              The product website action to use
      * @param \TechDivision\Import\Product\Actions\StockItemAction                       $stockItemAction                   The stock item action to use
      * @param \TechDivision\Import\Product\Actions\StockStatusAction                     $stockStatusAction                 The stock status action to use
@@ -278,12 +278,12 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         EavAttributeOptionValueRepository $eavAttributeOptionValueRepository,
         EavAttributeRepository $eavAttributeRepository,
         CategoryProductAction $categoryProductAction,
-        ProductDatetimeAction $productDatetimeAction,
-        ProductDecimalAction $productDecimalAction,
-        ProductIntAction $productIntAction,
+        ProductDatetimeActionInterface $productDatetimeAction,
+        ProductDecimalActionInterface $productDecimalAction,
+        ProductIntActionInterface $productIntAction,
         ProductAction $productAction,
-        ProductTextAction $productTextAction,
-        ProductVarcharAction $productVarcharAction,
+        ProductTextActionInterface $productTextAction,
+        ProductVarcharActionInterface $productVarcharAction,
         ProductWebsiteAction $productWebsiteAction,
         StockItemAction $stockItemAction,
         StockStatusAction $stockStatusAction,
@@ -464,7 +464,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product varchar attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductVarcharAction $productVarcharAction The action with the product varchar attriute CRUD methods
+     * @param \TechDivision\Import\Product\Actions\ProductVarcharActionInterface $productVarcharAction The action with the product varchar attriute CRUD methods
      *
      * @return void
      */
@@ -476,7 +476,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product varchar attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductVarcharAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductVarcharActionInterface The action instance
      */
     public function getProductVarcharAction()
     {
@@ -486,7 +486,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product text attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductTextAction $productTextAction The action with the product text attriute CRUD methods
+     * @param \TechDivision\Import\Product\Actions\ProductTextActionInterface $productTextAction The action with the product text attriute CRUD methods
      *
      * @return void
      */
@@ -498,7 +498,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product text attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductTextAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductTextActionInterface The action instance
      */
     public function getProductTextAction()
     {
@@ -508,7 +508,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product int attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductIntAction $productIntAction The action with the product int attriute CRUD methods
+     * @param \TechDivision\Import\Product\Actions\ProductIntActionInterface $productIntAction The action with the product int attriute CRUD methods
      *
      * @return void
      */
@@ -520,7 +520,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product int attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductIntAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductIntActionInterface The action instance
      */
     public function getProductIntAction()
     {
@@ -530,7 +530,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product decimal attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductDecimalAction $productDecimalAction The action with the product decimal attriute CRUD methods
+     * @param \TechDivision\Import\Product\Actions\ProductDecimalActionInterface $productDecimalAction The action with the product decimal attriute CRUD methods
      *
      * @return void
      */
@@ -542,7 +542,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product decimal attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductDecimalAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductDecimalActionInterface The action instance
      */
     public function getProductDecimalAction()
     {
@@ -552,7 +552,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product datetime attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductDatetimeAction $productDatetimeAction The action with the product datetime attriute CRUD methods
+     * @param \TechDivision\Import\Product\Actions\ProductDatetimeActionInterface $productDatetimeAction The action with the product datetime attriute CRUD methods
      *
      * @return void
      */
@@ -564,7 +564,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product datetime attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductDatetimeAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductDatetimeActionInterface The action instance
      */
     public function getProductDatetimeAction()
     {

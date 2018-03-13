@@ -31,6 +31,6 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductVarcharAction extends AbstractAction
+class ProductVarcharAction extends AbstractAction implements ProductVarcharActionInterface
 {
 }
