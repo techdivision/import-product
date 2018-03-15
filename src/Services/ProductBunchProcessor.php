@@ -23,16 +23,15 @@ namespace TechDivision\Import\Product\Services;
 use TechDivision\Import\Actions\UrlRewriteAction;
 use TechDivision\Import\Connection\ConnectionInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Actions\CategoryProductAction;
+use TechDivision\Import\Product\Actions\CategoryProductActionInterface;
 use TechDivision\Import\Product\Actions\ProductAction;
 use TechDivision\Import\Product\Actions\ProductDatetimeActionInterface;
 use TechDivision\Import\Product\Actions\ProductDecimalActionInterface;
 use TechDivision\Import\Product\Actions\ProductIntActionInterface;
 use TechDivision\Import\Product\Actions\ProductTextActionInterface;
 use TechDivision\Import\Product\Actions\ProductVarcharActionInterface;
-use TechDivision\Import\Product\Actions\ProductWebsiteAction;
-use TechDivision\Import\Product\Actions\StockItemAction;
-use TechDivision\Import\Product\Actions\StockStatusAction;
+use TechDivision\Import\Product\Actions\ProductWebsiteActionInterface;
+use TechDivision\Import\Product\Actions\StockItemActionInterface;
 use TechDivision\Import\Product\Repositories\CategoryProductRepository;
 use TechDivision\Import\Product\Repositories\ProductDatetimeRepository;
 use TechDivision\Import\Product\Repositories\ProductDecimalRepository;
@@ -42,7 +41,6 @@ use TechDivision\Import\Product\Repositories\ProductTextRepository;
 use TechDivision\Import\Product\Repositories\ProductVarcharRepository;
 use TechDivision\Import\Product\Repositories\ProductWebsiteRepository;
 use TechDivision\Import\Product\Repositories\StockItemRepository;
-use TechDivision\Import\Product\Repositories\StockStatusRepository;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepository;
 use TechDivision\Import\Repositories\EavAttributeRepository;
 use TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface;
@@ -125,30 +123,23 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * The action for product website CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductWebsiteAction
+     * @var \TechDivision\Import\Product\Actions\ProductWebsiteActionInterface
      */
     protected $productWebsiteAction;
 
     /**
      * The action for category product relation CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\CategoryProductAction
+     * @var \TechDivision\Import\Product\Actions\CategoryProductActionInterface
      */
     protected $categoryProductAction;
 
     /**
      * The action for stock item CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\StockItemAction
+     * @var \TechDivision\Import\Product\Actions\StockItemActionInterface
      */
     protected $stockItemAction;
-
-    /**
-     * The action for stock status CRUD methods.
-     *
-     * @var \TechDivision\Import\Product\Actions\StockStatusAction
-     */
-    protected $stockStatusAction;
 
     /**
      * The action for URL rewrite CRUD methods.
@@ -214,13 +205,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     protected $categoryProductRepository;
 
     /**
-     * The repository to load the stock status with.
-     *
-     * @var \TechDivision\Import\Product\Repositories\StockStatusRepository
-     */
-    protected $stockStatusRepository;
-
-    /**
      * The repository to load the stock item with.
      *
      * @var \TechDivision\Import\Product\Repositories\StockItemRepository
@@ -246,20 +230,18 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @param \TechDivision\Import\Product\Repositories\ProductTextRepository            $productTextRepository             The product text repository to use
      * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepository         $productVarcharRepository          The product varchar repository to use
      * @param \TechDivision\Import\Product\Repositories\CategoryProductRepository        $categoryProductRepository         The category product repository to use
-     * @param \TechDivision\Import\Product\Repositories\StockStatusRepository            $stockStatusRepository             The stock status repository to use
      * @param \TechDivision\Import\Product\Repositories\StockItemRepository              $stockItemRepository               The stock item repository to use
      * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepository        $eavAttributeOptionValueRepository The EAV attribute option value repository to use
      * @param \TechDivision\Import\Repositories\EavAttributeRepository                   $eavAttributeRepository            The EAV attribute repository to use
-     * @param \TechDivision\Import\Product\Actions\CategoryProductAction                 $categoryProductAction             The category product action to use
+     * @param \TechDivision\Import\Product\Actions\CategoryProductActionInterface        $categoryProductAction             The category product action to use
      * @param \TechDivision\Import\Product\Actions\ProductDatetimeActionInterface        $productDatetimeAction             The product datetime action to use
      * @param \TechDivision\Import\Product\Actions\ProductDecimalActionInterface         $productDecimalAction              The product decimal action to use
      * @param \TechDivision\Import\Product\Actions\ProductIntActionInterface             $productIntAction                  The product integer action to use
      * @param \TechDivision\Import\Product\Actions\ProductAction                         $productAction                     The product action to use
      * @param \TechDivision\Import\Product\Actions\ProductTextActionInterface            $productTextAction                 The product text action to use
      * @param \TechDivision\Import\Product\Actions\ProductVarcharActionInterface         $productVarcharAction              The product varchar action to use
-     * @param \TechDivision\Import\Product\Actions\ProductWebsiteAction                  $productWebsiteAction              The product website action to use
-     * @param \TechDivision\Import\Product\Actions\StockItemAction                       $stockItemAction                   The stock item action to use
-     * @param \TechDivision\Import\Product\Actions\StockStatusAction                     $stockStatusAction                 The stock status action to use
+     * @param \TechDivision\Import\Product\Actions\ProductWebsiteActionInterface         $productWebsiteAction              The product website action to use
+     * @param \TechDivision\Import\Product\Actions\StockItemActionInterface              $stockItemAction                   The stock item action to use
      * @param \TechDivision\Import\Actions\UrlRewriteAction                              $urlRewriteAction                  The URL rewrite action to use
      * @param \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface $productAttributeAssembler         The assembler to load the product attributes with
      */
@@ -273,20 +255,18 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         ProductTextRepository $productTextRepository,
         ProductVarcharRepository $productVarcharRepository,
         CategoryProductRepository $categoryProductRepository,
-        StockStatusRepository $stockStatusRepository,
         StockItemRepository $stockItemRepository,
         EavAttributeOptionValueRepository $eavAttributeOptionValueRepository,
         EavAttributeRepository $eavAttributeRepository,
-        CategoryProductAction $categoryProductAction,
+        CategoryProductActionInterface $categoryProductAction,
         ProductDatetimeActionInterface $productDatetimeAction,
         ProductDecimalActionInterface $productDecimalAction,
         ProductIntActionInterface $productIntAction,
         ProductAction $productAction,
         ProductTextActionInterface $productTextAction,
         ProductVarcharActionInterface $productVarcharAction,
-        ProductWebsiteAction $productWebsiteAction,
-        StockItemAction $stockItemAction,
-        StockStatusAction $stockStatusAction,
+        ProductWebsiteActionInterface $productWebsiteAction,
+        StockItemActionInterface $stockItemAction,
         UrlRewriteAction $urlRewriteAction,
         ProductAttributeAssemblerInterface $productAttributeAssembler
     ) {
@@ -299,7 +279,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         $this->setProductTextRepository($productTextRepository);
         $this->setProductVarcharRepository($productVarcharRepository);
         $this->setCategoryProductRepository($categoryProductRepository);
-        $this->setStockStatusRepository($stockStatusRepository);
         $this->setStockItemRepository($stockItemRepository);
         $this->setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository);
         $this->setEavAttributeRepository($eavAttributeRepository);
@@ -312,7 +291,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         $this->setProductVarcharAction($productVarcharAction);
         $this->setProductWebsiteAction($productWebsiteAction);
         $this->setStockItemAction($stockItemAction);
-        $this->setStockStatusAction($stockStatusAction);
         $this->setUrlRewriteAction($urlRewriteAction);
         $this->setProductAttributeAssembler($productAttributeAssembler);
     }
@@ -574,7 +552,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product website CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductWebsiteAction $productWebsiteAction The action with the product website CRUD methods
+     * @param \TechDivision\Import\Product\Actions\ProductWebsiteActionInterface $productWebsiteAction The action with the product website CRUD methods
      *
      * @return void
      */
@@ -586,7 +564,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product website CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductWebsiteAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductWebsiteActionInterface The action instance
      */
     public function getProductWebsiteAction()
     {
@@ -596,7 +574,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the category product relation CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\CategoryProductAction $categoryProductAction The action with the category product relation CRUD methods
+     * @param \TechDivision\Import\Product\Actions\CategoryProductActionInterface $categoryProductAction The action with the category product relation CRUD methods
      *
      * @return void
      */
@@ -608,7 +586,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the category product relation CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\CategoryProductAction The action instance
+     * @return \TechDivision\Import\Product\Actions\CategoryProductActionInterface The action instance
      */
     public function getCategoryProductAction()
     {
@@ -618,7 +596,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the stock item CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\StockItemAction $stockItemAction The action with the stock item CRUD methods
+     * @param \TechDivision\Import\Product\Actions\StockItemActionInterface $stockItemAction The action with the stock item CRUD methods
      *
      * @return void
      */
@@ -630,33 +608,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the stock item CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\StockItemAction The action instance
+     * @return \TechDivision\Import\Product\Actions\StockItemActionInterface The action instance
      */
     public function getStockItemAction()
     {
         return $this->stockItemAction;
-    }
-
-    /**
-     * Set's the action with the stock status CRUD methods.
-     *
-     * @param \TechDivision\Import\Product\Actions\StockStatusAction $stockStatusAction The action with the stock status CRUD methods
-     *
-     * @return void
-     */
-    public function setStockStatusAction($stockStatusAction)
-    {
-        $this->stockStatusAction = $stockStatusAction;
-    }
-
-    /**
-     * Return's the action with the stock status CRUD methods.
-     *
-     * @return \TechDivision\Import\Product\Actions\StockStatusAction The action instance
-     */
-    public function getStockStatusAction()
-    {
-        return $this->stockStatusAction;
     }
 
     /**
@@ -858,28 +814,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
-     * Set's the repository to load the stock status with.
-     *
-     * @param \TechDivision\Import\Product\Repositories\StockStatusRepository $stockStatusRepository The repository instance
-     *
-     * @return void
-     */
-    public function setStockStatusRepository($stockStatusRepository)
-    {
-        $this->stockStatusRepository = $stockStatusRepository;
-    }
-
-    /**
-     * Return's the repository to load the stock status with.
-     *
-     * @return \TechDivision\Import\Product\Repositories\StockStatusRepository The repository instance
-     */
-    public function getStockStatusRepository()
-    {
-        return $this->stockStatusRepository;
-    }
-
-    /**
      * Set's the repository to load the stock items with.
      *
      * @param \TechDivision\Import\Product\Repositories\StockItemRepository $stockItemRepository The repository instance
@@ -998,20 +932,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function loadCategoryProduct($categoryId, $productId)
     {
         return $this->getCategoryProductRepository()->findOneByCategoryIdAndProductId($categoryId, $productId);
-    }
-
-    /**
-     * Load's and return's the stock status with the passed product/website/stock ID.
-     *
-     * @param integer $productId The product ID of the stock status to load
-     * @param integer $websiteId The website ID of the stock status to load
-     * @param integer $stockId   The stock ID of the stock status to load
-     *
-     * @return array The stock status
-     */
-    public function loadStockStatus($productId, $websiteId, $stockId)
-    {
-        return $this->getStockStatusRepository()->findOneByProductIdAndWebsiteIdAndStockId($productId, $websiteId, $stockId);
     }
 
     /**
@@ -1169,19 +1089,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
-     * Persist's the passed stock status data and return's the ID.
-     *
-     * @param array       $stockStatus The stock status data to persist
-     * @param string|null $name        The name of the prepared statement that has to be executed
-     *
-     * @return void
-     */
-    public function persistStockStatus($stockStatus, $name = null)
-    {
-        $this->getStockStatusAction()->persist($stockStatus, $name);
-    }
-
-    /**
      * Delete's the entity with the passed attributes.
      *
      * @param array       $row  The attributes of the entity to delete
@@ -1218,19 +1125,6 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function deleteStockItem($row, $name = null)
     {
         $this->getStockItemAction()->delete($row, $name);
-    }
-
-    /**
-     * Delete's the stock status with the passed attributes.
-     *
-     * @param array       $row  The attributes of the entity to delete
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return void
-     */
-    public function deleteStockStatus($row, $name = null)
-    {
-        $this->getStockStatusAction()->delete($row, $name);
     }
 
     /**

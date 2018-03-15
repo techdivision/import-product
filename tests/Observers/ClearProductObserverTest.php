@@ -112,9 +112,6 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
                                         ->method('deleteStockItem')
                                         ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
         $this->mockProductBunchProcessor->expects($this->once())
-                                        ->method('deleteStockStatus')
-                                        ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
-        $this->mockProductBunchProcessor->expects($this->once())
                                         ->method('deleteProductWebsite')
                                         ->with(array(ColumnKeys::SKU => $row[$headers[ColumnKeys::SKU]]));
         $this->mockProductBunchProcessor->expects($this->once())

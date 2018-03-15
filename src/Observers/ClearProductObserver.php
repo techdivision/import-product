@@ -78,7 +78,6 @@ class ClearProductObserver extends AbstractProductImportObserver
 
         // FIRST delete the data related with the product with the passed SKU
         $this->deleteStockItem(array(ColumnKeys::SKU => $sku), SqlStatementKeys::DELETE_STOCK_ITEM_BY_SKU);
-        $this->deleteStockStatus(array(ColumnKeys::SKU => $sku), SqlStatementKeys::DELETE_STOCK_STATUS_BY_SKU);
         $this->deleteProductWebsite(array(ColumnKeys::SKU => $sku), SqlStatementKeys::DELETE_PRODUCT_WEBSITE_BY_SKU);
         $this->deleteCategoryProduct(array(ColumnKeys::SKU => $sku), SqlStatementKeys::DELETE_CATEGORY_PRODUCT_BY_SKU);
 
@@ -126,19 +125,6 @@ class ClearProductObserver extends AbstractProductImportObserver
     protected function deleteStockItem($row, $name = null)
     {
         $this->getProductBunchProcessor()->deleteStockItem($row, $name);
-    }
-
-    /**
-     * Delete's the stock status with the passed attributes.
-     *
-     * @param array       $row  The attributes of the entity to delete
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return void
-     */
-    protected function deleteStockStatus($row, $name = null)
-    {
-        $this->getProductBunchProcessor()->deleteStockStatus($row, $name);
     }
 
     /**

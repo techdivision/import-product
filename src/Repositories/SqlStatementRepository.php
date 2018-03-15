@@ -88,8 +88,6 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                     catalog_product_entity t2
               WHERE t2.sku = :sku
                 AND t1.product_id = t2.entity_id',
-        SqlStatementKeys::STOCK_STATUS =>
-            'SELECT * FROM cataloginventory_stock_status WHERE product_id = :product_id AND website_id = :website_id AND stock_id = :stock_id',
         SqlStatementKeys::STOCK_ITEM =>
             'SELECT * FROM cataloginventory_stock_item WHERE product_id = :product_id AND website_id = :website_id AND stock_id = :stock_id',
         SqlStatementKeys::CREATE_PRODUCT =>
@@ -251,10 +249,6 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
             'DELETE
                FROM catalog_product_entity_text
               WHERE value_id = :value_id',
-        SqlStatementKeys::CREATE_STOCK_STATUS =>
-            'INSERT INTO cataloginventory_stock_status (%s) VALUES (:%s)',
-        SqlStatementKeys::UPDATE_STOCK_STATUS =>
-            'UPDATE cataloginventory_stock_status SET %s WHERE %s',
         SqlStatementKeys::CREATE_STOCK_ITEM =>
             'INSERT INTO cataloginventory_stock_item (%s) VALUES (:%s)',
         SqlStatementKeys::UPDATE_STOCK_ITEM =>
@@ -263,12 +257,6 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
             'DELETE
                FROM catalog_product_entity
               WHERE sku = :sku',
-        SqlStatementKeys::DELETE_STOCK_STATUS_BY_SKU =>
-            'DELETE cataloginventory_stock_status
-               FROM cataloginventory_stock_status
-         INNER JOIN catalog_product_entity
-              WHERE catalog_product_entity.sku = :sku
-                AND cataloginventory_stock_status.product_id = catalog_product_entity.entity_id',
         SqlStatementKeys::DELETE_STOCK_ITEM_BY_SKU =>
             'DELETE cataloginventory_stock_item
                FROM cataloginventory_stock_item

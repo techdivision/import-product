@@ -1,3 +1,13 @@
+# Version 1.0.0-beta51
+
+## Bugfixes
+
+* Remove stock status create/update functionality because Magento 2 indexer takes care about that
+
+## Features
+
+* Replace type hints for actions in product bunch processor with interfaces
+
 # Version 1.0.0-beta50
 
 ## Bugfixes

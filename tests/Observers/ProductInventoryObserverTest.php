@@ -146,7 +146,7 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->any())
                     ->method('getRow')
                     ->willReturn($row);
-        $mockSubject->expects($this->exactly(2))
+        $mockSubject->expects($this->once())
                     ->method('getLastEntityId')
                     ->willReturn($lastEntityId = 12345);
 
@@ -160,18 +160,6 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
                                                 'stock_id'                    => 1,
                                                 'qty'                         => 100,
                                                 EntityStatus::MEMBER_NAME     => EntityStatus::STATUS_CREATE
-                                            )
-                                        );
-        $this->mockProductBunchProcessor->expects($this->once())
-                                        ->method('persistStockStatus')
-                                        ->with(
-                                            array(
-                                                'product_id'              => $lastEntityId,
-                                                'website_id'              => 1,
-                                                'stock_id'                => 1,
-                                                'qty'                     => 100,
-                                                'stock_status'            => 1,
-                                                EntityStatus::MEMBER_NAME => EntityStatus::STATUS_CREATE
                                             )
                                         );
 
