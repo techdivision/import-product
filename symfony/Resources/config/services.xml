@@ -42,10 +42,6 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.repository.stock.status" class="TechDivision\Import\Product\Repositories\StockStatusRepository">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
 
         <service id="import_product.repository.cache.warmer.product" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductCacheWarmer">
             <argument type="service" id="import_product.repository.product"/>
@@ -155,18 +151,6 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.stock.status.create" class="TechDivision\Import\Product\Actions\Processors\StockStatusCreateProcessor">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
-        <service id="import_product.action.processor.stock.status.delete" class="TechDivision\Import\Product\Actions\Processors\StockStatusDeleteProcessor">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
-        <service id="import_product.action.processor.stock.status.update" class="TechDivision\Import\Product\Actions\Processors\StockStatusUpdateProcessor">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
 
         <service id="import_product.action.category.product" class="TechDivision\Import\Product\Actions\CategoryProductAction">
             <argument type="service" id="import_product.action.processor.category.product.create"/>
@@ -213,11 +197,6 @@
             <argument type="service" id="import_product.action.processor.stock.item.update"/>
             <argument type="service" id="import_product.action.processor.stock.item.delete"/>
         </service>
-        <service id="import_product.action.stock.status" class="TechDivision\Import\Product\Actions\StockStatusAction">
-            <argument type="service" id="import_product.action.processor.stock.status.create"/>
-            <argument type="service" id="import_product.action.processor.stock.status.update"/>
-            <argument type="service" id="import_product.action.processor.stock.status.delete"/>
-        </service>
 
         <service id="import_product.assembler.product.attribute" class="TechDivision\Import\Product\Assemblers\ProductAttributeAssembler">
             <argument type="service" id="import_product.repository.product.datetime"/>
@@ -237,7 +216,6 @@
             <argument type="service" id="import_product.repository.product.text"/>
             <argument type="service" id="import_product.repository.product.varchar"/>
             <argument type="service" id="import_product.repository.category.product"/>
-            <argument type="service" id="import_product.repository.stock.status"/>
             <argument type="service" id="import_product.repository.stock.item"/>
             <argument type="service" id="import.repository.eav.attribute.option.value"/>
             <argument type="service" id="import.repository.eav.attribute"/>
@@ -250,7 +228,6 @@
             <argument type="service" id="import_product.action.product.varchar"/>
             <argument type="service" id="import_product.action.product.website"/>
             <argument type="service" id="import_product.action.stock.item"/>
-            <argument type="service" id="import_product.action.stock.status"/>
             <argument type="service" id="import.action.url.rewrite"/>
             <argument type="service" id="import_product.assembler.product.attribute"/>
         </service>

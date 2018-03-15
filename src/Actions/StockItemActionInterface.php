@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\StockItemAction
+ * TechDivision\Import\Product\Actions\StockItemActionInterface
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions;
 
-use TechDivision\Import\Actions\AbstractAction;
+use TechDivision\Import\Actions\ActionInterface;
 
 /**
- * An action implementation that provides CRUD functionality for the stock items.
+ * Interface for stock item action implementations that provides CRUD functionality for stock items.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,6 +31,6 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class StockItemAction extends AbstractAction implements StockItemActionInterface
+interface StockItemActionInterface extends ActionInterface
 {
 }

@@ -111,13 +111,6 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const CATEGORY_PRODUCT_BY_SKU = 'category_product.by.sku';
 
     /**
-     * The SQL statement to load the stock status with the passed product/website/stock ID.
-     *
-     * @var string
-     */
-    const STOCK_STATUS = 'stock_status';
-
-    /**
      * The SQL statement to load the stock item with the passed product/website/stock ID.
      *
      * @var string
@@ -269,20 +262,6 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
      *
      * @var string
      */
-    const CREATE_STOCK_STATUS = 'create.stock_status';
-
-    /**
-     * The SQL statement to update an existing stock status.
-     *
-     * @var string
-     */
-    const UPDATE_STOCK_STATUS = 'update.stock_status';
-
-    /**
-     * The SQL statement to create a product's stock status.
-     *
-     * @var string
-     */
     const CREATE_STOCK_ITEM = 'create.stock_item';
 
     /**
@@ -298,13 +277,6 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
      * @var string
      */
     const DELETE_PRODUCT = 'delete.product';
-
-    /**
-     * The SQL statement to remove all existing stock status related with the SKU passed as parameter.
-     *
-     * @var string
-     */
-    const DELETE_STOCK_STATUS_BY_SKU = 'delete.stock_status.by.sku';
 
     /**
      * The SQL statement to remove all existing stock item related with the SKU passed as parameter.

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Utils\ColumnKeys
+ * TechDivision\Import\Product\Actions\ProductWebsiteActionInterface
  *
  * NOTICE OF LICENSE
  *
@@ -18,10 +18,12 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Utils;
+namespace TechDivision\Import\Product\Actions;
+
+use TechDivision\Import\Actions\ActionInterface;
 
 /**
- * Utility class containing the available stock status.
+ * Interface for product website action implementations that provides CRUD functionality for product website relations.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -29,37 +31,6 @@ namespace TechDivision\Import\Product\Utils;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class StockStatusKeys
+interface ProductWebsiteActionInterface extends ActionInterface
 {
-
-    /**
-     * The integer representation for the product out of stock status.
-     *
-     * @var integer
-     */
-    const STATUS_OUT_OF_STOCK = 0;
-
-    /**
-     * The integer representation for the product in stock status.
-     *
-     * @var integer
-     */
-    const STATUS_IN_STOCK = 1;
-
-    /**
-     * This is a utility class, so protect it against direct
-     * instantiation.
-     */
-    private function __construct()
-    {
-    }
-
-    /**
-     * This is a utility class, so protect it against cloning.
-     *
-     * @return void
-     */
-    private function __clone()
-    {
-    }
 }

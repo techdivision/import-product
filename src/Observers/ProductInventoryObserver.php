@@ -91,7 +91,6 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
         }
 
         // prepare, initialize and persist the stock status/item
-        $this->persistStockStatus($this->initializeStockStatus($this->prepareStockStatusAttributes()));
         $this->persistStockItem($this->initializeStockItem($this->prepareStockItemAttributes()));
     }
 
@@ -117,42 +116,6 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
                 MemberNames::STOCK_ID     => 1
             )
         );
-    }
-
-    /**
-     * Prepare the stock status attributes of the entity that has to be persisted.
-     *
-     * @return array The prepared stock status attributes
-     */
-    protected function prepareStockStatusAttributes()
-    {
-
-        // initialize the stock status
-        $stockStatus = array_merge(
-            $this->prepareAttributes(),
-            array(MemberNames::STOCK_STATUS => 0),
-            $this->attributeLoader->load($this, array(MemberNames::QTY => array(ColumnKeys::QTY, BackendTypeKeys::BACKEND_TYPE_FLOAT)))
-        );
-
-        // initialize the stock status depending on the quantity
-        if (isset($stockStatus[MemberNames::QTY]) && $stockStatus[MemberNames::QTY] > 0) {
-            $stockStatus[MemberNames::STOCK_STATUS] = 1;
-        }
-
-        // return the stock status
-        return $stockStatus;
-    }
-
-    /**
-     * Initialize the stock status with the passed attributes and returns an instance.
-     *
-     * @param array $attr The stock status attributes
-     *
-     * @return array The initialized stock status
-     */
-    protected function initializeStockStatus(array $attr)
-    {
-        return $attr;
     }
 
     /**
@@ -197,17 +160,5 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
     protected function persistStockItem($stockItem)
     {
         $this->getProductBunchProcessor()->persistStockItem($stockItem);
-    }
-
-    /**
-     * Persist's the passed stock status data and return's the ID.
-     *
-     * @param array $stockStatus The stock status data to persist
-     *
-     * @return void
-     */
-    protected function persistStockStatus($stockStatus)
-    {
-        $this->getProductBunchProcessor()->persistStockStatus($stockStatus);
     }
 }

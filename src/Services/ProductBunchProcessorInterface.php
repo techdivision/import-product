@@ -79,29 +79,22 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     /**
      * Return's the action with the product website CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductWebsiteAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductWebsiteActionInterface The action instance
      */
     public function getProductWebsiteAction();
 
     /**
      * Return's the action with the category product relation CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\CategoryProductAction The action instance
+     * @return \TechDivision\Import\Product\Actions\CategoryProductActionInterface The action instance
      */
     public function getCategoryProductAction();
     /**
      * Return's the action with the stock item CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\StockItemAction The action instance
+     * @return \TechDivision\Import\Product\Actions\StockItemActionInterface The action instance
      */
     public function getStockItemAction();
-
-    /**
-     * Return's the action with the stock status CRUD methods.
-     *
-     * @return \TechDivision\Import\Product\Actions\StockStatusAction The action instance
-     */
-    public function getStockStatusAction();
 
     /**
      * Return's the action with the stock status CRUD methods.
@@ -130,13 +123,6 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
      * @return \TechDivision\Import\Product\Repositories\CategoryProductRepository The repository instance
      */
     public function getCategoryProductRepository();
-
-    /**
-     * Return's the repository to load the stock status with.
-     *
-     * @return \TechDivision\Import\Product\Repositories\StockStatusRepository The repository instance
-     */
-    public function getStockStatusRepository();
 
     /**
      * Return's the repository to load the stock items with.
@@ -208,17 +194,6 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
      * @return array The category product relation
      */
     public function loadCategoryProduct($categoryId, $productId);
-
-    /**
-     * Load's and return's the stock status with the passed product/website/stock ID.
-     *
-     * @param integer $productId The product ID of the stock status to load
-     * @param integer $websiteId The website ID of the stock status to load
-     * @param integer $stockId   The stock ID of the stock status to load
-     *
-     * @return array The stock status
-     */
-    public function loadStockStatus($productId, $websiteId, $stockId);
 
     /**
      * Load's and return's the stock status with the passed product/website/stock ID.
@@ -334,16 +309,6 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     public function persistStockItem($stockItem, $name = null);
 
     /**
-     * Persist's the passed stock status data and return's the ID.
-     *
-     * @param array       $stockStatus The stock status data to persist
-     * @param string|null $name        The name of the prepared statement that has to be executed
-     *
-     * @return void
-     */
-    public function persistStockStatus($stockStatus, $name = null);
-
-    /**
      * Delete's the entity with the passed attributes.
      *
      * @param array       $row  The attributes of the entity to delete
@@ -372,16 +337,6 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
      * @return void
      */
     public function deleteStockItem($row, $name = null);
-
-    /**
-     * Delete's the stock status with the passed attributes.
-     *
-     * @param array       $row  The attributes of the entity to delete
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return void
-     */
-    public function deleteStockStatus($row, $name = null);
 
     /**
      * Delete's the product website relations with the passed attributes.

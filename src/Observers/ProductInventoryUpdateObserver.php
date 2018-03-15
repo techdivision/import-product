@@ -35,32 +35,6 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
 {
 
     /**
-     * Initialize the stock status with the passed attributes and returns an instance.
-     *
-     * @param array $attr The stock status attributes
-     *
-     * @return array The initialized stock status
-     */
-    protected function initializeStockStatus(array $attr)
-    {
-
-        // load the stock status with the passed product/website/stock ID
-        $entity = $this->loadStockStatus(
-            $attr[MemberNames::PRODUCT_ID],
-            $attr[MemberNames::WEBSITE_ID],
-            $attr[MemberNames::STOCK_ID]
-        );
-
-        // merge the attributes with the entity, if available
-        if ($entity) {
-            return $this->mergeEntity($entity, $attr);
-        }
-
-        // otherwise simply return the attributes
-        return $attr;
-    }
-
-    /**
      * Initialize the stock item with the passed attributes and returns an instance.
      *
      * @param array $attr The stock item attributes
@@ -84,20 +58,6 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
 
         // otherwise simply return the attributes
         return $attr;
-    }
-
-    /**
-     * Load's and return's the stock status with the passed product/website/stock ID.
-     *
-     * @param integer $productId The product ID of the stock status to load
-     * @param integer $websiteId The website ID of the stock status to load
-     * @param integer $stockId   The stock ID of the stock status to load
-     *
-     * @return array The stock status
-     */
-    protected function loadStockStatus($productId, $websiteId, $stockId)
-    {
-        return $this->getProductBunchProcessor()->loadStockStatus($productId, $websiteId, $stockId);
     }
 
     /**

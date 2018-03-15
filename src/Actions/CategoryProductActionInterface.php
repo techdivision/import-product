@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Actions\Pdo\StockStatusAction
+ * TechDivision\Import\Product\Actions\CategoryProductActionInterface
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Actions;
 
-use TechDivision\Import\Actions\AbstractAction;
+use TechDivision\Import\Actions\ActionInterface;
 
 /**
- * An action implementation that provides CRUD functionality for the stock status.
+ * Interface for category product action implementations that provides CRUD functionality for category product relations.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,6 +31,6 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class StockStatusAction extends AbstractAction
+interface CategoryProductActionInterface extends ActionInterface
 {
 }
