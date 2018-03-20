@@ -1,3 +1,13 @@
+# Version 1.0.0-beta52
+
+## Bugfixes
+
+* Fixed invalid order of method invocation in tearDown() method
+
+## Features
+
+* None
+
 # Version 1.0.0-beta51
 
 ## Bugfixes

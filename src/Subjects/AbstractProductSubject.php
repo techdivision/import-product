@@ -311,9 +311,6 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     public function tearDown($serial)
     {
 
-        // invoke the parent method
-        parent::tearDown($serial);
-
         // load the registry processor
         $registryProcessor = $this->getRegistryProcessor();
 
@@ -325,6 +322,9 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
                 RegistryKeys::SKU_STORE_VIEW_CODE_MAPPING => $this->skuStoreViewCodeMapping
             )
         );
+
+        // invoke the parent method
+        parent::tearDown($serial);
     }
 
     /**
