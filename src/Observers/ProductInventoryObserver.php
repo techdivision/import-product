@@ -25,7 +25,6 @@ use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Observers\AttributeLoaderInterface;
 use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
-use TechDivision\Import\Utils\BackendTypeKeys;
 
 /**
  * Observer that creates/updates the product's inventory.

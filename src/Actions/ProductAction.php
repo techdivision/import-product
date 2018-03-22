@@ -32,7 +32,7 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductAction extends AbstractAction
+class ProductAction extends AbstractAction implements ProductActionInterface
 {
 
     /**

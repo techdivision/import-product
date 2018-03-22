@@ -20,30 +20,30 @@
 
 namespace TechDivision\Import\Product\Services;
 
-use TechDivision\Import\Actions\UrlRewriteAction;
 use TechDivision\Import\Connection\ConnectionInterface;
+use TechDivision\Import\Actions\UrlRewriteActionInterface;
+use TechDivision\Import\Repositories\EavAttributeRepositoryInterface;
+use TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Actions\CategoryProductActionInterface;
-use TechDivision\Import\Product\Actions\ProductAction;
-use TechDivision\Import\Product\Actions\ProductDatetimeActionInterface;
-use TechDivision\Import\Product\Actions\ProductDecimalActionInterface;
+use TechDivision\Import\Product\Actions\ProductActionInterface;
+use TechDivision\Import\Product\Actions\StockItemActionInterface;
 use TechDivision\Import\Product\Actions\ProductIntActionInterface;
 use TechDivision\Import\Product\Actions\ProductTextActionInterface;
 use TechDivision\Import\Product\Actions\ProductVarcharActionInterface;
 use TechDivision\Import\Product\Actions\ProductWebsiteActionInterface;
-use TechDivision\Import\Product\Actions\StockItemActionInterface;
-use TechDivision\Import\Product\Repositories\CategoryProductRepository;
-use TechDivision\Import\Product\Repositories\ProductDatetimeRepository;
-use TechDivision\Import\Product\Repositories\ProductDecimalRepository;
-use TechDivision\Import\Product\Repositories\ProductIntRepository;
-use TechDivision\Import\Product\Repositories\ProductRepository;
-use TechDivision\Import\Product\Repositories\ProductTextRepository;
-use TechDivision\Import\Product\Repositories\ProductVarcharRepository;
-use TechDivision\Import\Product\Repositories\ProductWebsiteRepository;
-use TechDivision\Import\Product\Repositories\StockItemRepository;
-use TechDivision\Import\Repositories\EavAttributeOptionValueRepository;
-use TechDivision\Import\Repositories\EavAttributeRepository;
+use TechDivision\Import\Product\Actions\ProductDecimalActionInterface;
+use TechDivision\Import\Product\Actions\CategoryProductActionInterface;
+use TechDivision\Import\Product\Actions\ProductDatetimeActionInterface;
+use TechDivision\Import\Product\Repositories\ProductRepositoryInterface;
+use TechDivision\Import\Product\Repositories\StockItemRepositoryInterface;
+use TechDivision\Import\Product\Repositories\ProductIntRepositoryInterface;
+use TechDivision\Import\Product\Repositories\ProductTextRepositoryInterface;
 use TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface;
+use TechDivision\Import\Product\Repositories\ProductDecimalRepositoryInterface;
+use TechDivision\Import\Product\Repositories\ProductWebsiteRepositoryInterface;
+use TechDivision\Import\Product\Repositories\ProductDatetimeRepositoryInterface;
+use TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface;
+use TechDivision\Import\Product\Repositories\CategoryProductRepositoryInterface;
 
 /**
  * The product bunch processor implementation.
@@ -67,21 +67,21 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * The repository to access EAV attribute option values.
      *
-     * @var \TechDivision\Import\Repositories\EavAttributeOptionValueRepository
+     * @var \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface
      */
     protected $eavAttributeOptionValueRepository;
 
     /**
      * The repository to access EAV attributes.
      *
-     * @var \TechDivision\Import\Repositories\EavAttributeRepository
+     * @var \TechDivision\Import\Repositories\EavAttributeRepositoryInterface
      */
     protected $eavAttributeRepository;
 
     /**
      * The action for product CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductAction
+     * @var \TechDivision\Import\Product\Actions\ProductActionInterface
      */
     protected $productAction;
 
@@ -144,70 +144,70 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * The action for URL rewrite CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\UrlRewriteAction
+     * @var \TechDivision\Import\Actions\UrlRewriteActionInterface
      */
     protected $urlRewriteAction;
 
     /**
      * The repository to load the products with.
      *
-     * @var \TechDivision\Import\Product\Repositories\ProductRepository
+     * @var \TechDivision\Import\Product\Repositories\ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
      * The repository to load the product website relations with.
      *
-     * @var \TechDivision\Import\Product\Repositories\ProductWebsiteRepository
+     * @var \TechDivision\Import\Product\Repositories\ProductWebsiteRepositoryInterface
      */
     protected $productWebsiteRepository;
 
     /**
      * The repository to load the product datetime attribute with.
      *
-     * @var \TechDivision\Import\Product\Repositories\ProductDatetimeRepository
+     * @var \TechDivision\Import\Product\Repositories\ProductDatetimeRepositoryInterface
      */
     protected $productDatetimeRepository;
 
     /**
      * The repository to load the product decimal attribute with.
      *
-     * @var \TechDivision\Import\Product\Repositories\ProductDecimalRepository
+     * @var \TechDivision\Import\Product\Repositories\ProductDecimalRepositoryInterface
      */
     protected $productDecimalRepository;
 
     /**
      * The repository to load the product integer attribute with.
      *
-     * @var \TechDivision\Import\Product\Repositories\ProductIntRepository
+     * @var \TechDivision\Import\Product\Repositories\ProductIntRepositoryInterface
      */
     protected $productIntRepository;
 
     /**
      * The repository to load the product text attribute with.
      *
-     * @var \TechDivision\Import\Product\Repositories\ProductTextRepository
+     * @var \TechDivision\Import\Product\Repositories\ProductTextRepositoryInterface
      */
     protected $productTextRepository;
 
     /**
      * The repository to load the product varchar attribute with.
      *
-     * @var \TechDivision\Import\Product\Repositories\ProductVarcharRepository
+     * @var \TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface
      */
     protected $productVarcharRepository;
 
     /**
      * The repository to load the category product relations with.
      *
-     * @var \TechDivision\Import\Product\Repositories\CategoryProductRepository
+     * @var \TechDivision\Import\Product\Repositories\CategoryProductRepositoryInterface
      */
     protected $categoryProductRepository;
 
     /**
      * The repository to load the stock item with.
      *
-     * @var \TechDivision\Import\Product\Repositories\StockItemRepository
+     * @var \TechDivision\Import\Product\Repositories\StockItemRepositoryInterface
      */
     protected $stockItemRepository;
 
@@ -221,53 +221,53 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \TechDivision\Import\Connection\ConnectionInterface                        $connection                        The connection to use
-     * @param \TechDivision\Import\Product\Repositories\ProductRepository                $productRepository                 The product repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductWebsiteRepository         $productWebsiteRepository          The product website repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductDatetimeRepository        $productDatetimeRepository         The product datetime repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductDecimalRepository         $productDecimalRepository          The product decimal repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductIntRepository             $productIntRepository              The product integer repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductTextRepository            $productTextRepository             The product text repository to use
-     * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepository         $productVarcharRepository          The product varchar repository to use
-     * @param \TechDivision\Import\Product\Repositories\CategoryProductRepository        $categoryProductRepository         The category product repository to use
-     * @param \TechDivision\Import\Product\Repositories\StockItemRepository              $stockItemRepository               The stock item repository to use
-     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepository        $eavAttributeOptionValueRepository The EAV attribute option value repository to use
-     * @param \TechDivision\Import\Repositories\EavAttributeRepository                   $eavAttributeRepository            The EAV attribute repository to use
-     * @param \TechDivision\Import\Product\Actions\CategoryProductActionInterface        $categoryProductAction             The category product action to use
-     * @param \TechDivision\Import\Product\Actions\ProductDatetimeActionInterface        $productDatetimeAction             The product datetime action to use
-     * @param \TechDivision\Import\Product\Actions\ProductDecimalActionInterface         $productDecimalAction              The product decimal action to use
-     * @param \TechDivision\Import\Product\Actions\ProductIntActionInterface             $productIntAction                  The product integer action to use
-     * @param \TechDivision\Import\Product\Actions\ProductAction                         $productAction                     The product action to use
-     * @param \TechDivision\Import\Product\Actions\ProductTextActionInterface            $productTextAction                 The product text action to use
-     * @param \TechDivision\Import\Product\Actions\ProductVarcharActionInterface         $productVarcharAction              The product varchar action to use
-     * @param \TechDivision\Import\Product\Actions\ProductWebsiteActionInterface         $productWebsiteAction              The product website action to use
-     * @param \TechDivision\Import\Product\Actions\StockItemActionInterface              $stockItemAction                   The stock item action to use
-     * @param \TechDivision\Import\Actions\UrlRewriteAction                              $urlRewriteAction                  The URL rewrite action to use
-     * @param \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface $productAttributeAssembler         The assembler to load the product attributes with
+     * @param \TechDivision\Import\Connection\ConnectionInterface                          $connection                        The connection to use
+     * @param \TechDivision\Import\Product\Repositories\ProductRepositoryInterface         $productRepository                 The product repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductWebsiteRepositoryInterface  $productWebsiteRepository          The product website repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductDatetimeRepositoryInterface $productDatetimeRepository         The product datetime repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductDecimalRepositoryInterface  $productDecimalRepository          The product decimal repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductIntRepositoryInterface      $productIntRepository              The product integer repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductTextRepositoryInterface     $productTextRepository             The product text repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface  $productVarcharRepository          The product varchar repository to use
+     * @param \TechDivision\Import\Product\Repositories\CategoryProductRepositoryInterface $categoryProductRepository         The category product repository to use
+     * @param \TechDivision\Import\Product\Repositories\StockItemRepositoryInterface       $stockItemRepository               The stock item repository to use
+     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface $eavAttributeOptionValueRepository The EAV attribute option value repository to use
+     * @param \TechDivision\Import\Repositories\EavAttributeRepositoryInterface            $eavAttributeRepository            The EAV attribute repository to use
+     * @param \TechDivision\Import\Product\Actions\CategoryProductActionInterface          $categoryProductAction             The category product action to use
+     * @param \TechDivision\Import\Product\Actions\ProductDatetimeActionInterface          $productDatetimeAction             The product datetime action to use
+     * @param \TechDivision\Import\Product\Actions\ProductDecimalActionInterface           $productDecimalAction              The product decimal action to use
+     * @param \TechDivision\Import\Product\Actions\ProductIntActionInterface               $productIntAction                  The product integer action to use
+     * @param \TechDivision\Import\Product\Actions\ProductActionInterface                  $productAction                     The product action to use
+     * @param \TechDivision\Import\Product\Actions\ProductTextActionInterface              $productTextAction                 The product text action to use
+     * @param \TechDivision\Import\Product\Actions\ProductVarcharActionInterface           $productVarcharAction              The product varchar action to use
+     * @param \TechDivision\Import\Product\Actions\ProductWebsiteActionInterface           $productWebsiteAction              The product website action to use
+     * @param \TechDivision\Import\Product\Actions\StockItemActionInterface                $stockItemAction                   The stock item action to use
+     * @param \TechDivision\Import\Actions\UrlRewriteActionInterface                       $urlRewriteAction                  The URL rewrite action to use
+     * @param \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface   $productAttributeAssembler         The assembler to load the product attributes with
      */
     public function __construct(
         ConnectionInterface $connection,
-        ProductRepository $productRepository,
-        ProductWebsiteRepository $productWebsiteRepository,
-        ProductDatetimeRepository $productDatetimeRepository,
-        ProductDecimalRepository $productDecimalRepository,
-        ProductIntRepository $productIntRepository,
-        ProductTextRepository $productTextRepository,
-        ProductVarcharRepository $productVarcharRepository,
-        CategoryProductRepository $categoryProductRepository,
-        StockItemRepository $stockItemRepository,
-        EavAttributeOptionValueRepository $eavAttributeOptionValueRepository,
-        EavAttributeRepository $eavAttributeRepository,
+        ProductRepositoryInterface $productRepository,
+        ProductWebsiteRepositoryInterface $productWebsiteRepository,
+        ProductDatetimeRepositoryInterface $productDatetimeRepository,
+        ProductDecimalRepositoryInterface $productDecimalRepository,
+        ProductIntRepositoryInterface $productIntRepository,
+        ProductTextRepositoryInterface $productTextRepository,
+        ProductVarcharRepositoryInterface $productVarcharRepository,
+        CategoryProductRepositoryInterface $categoryProductRepository,
+        StockItemRepositoryInterface $stockItemRepository,
+        EavAttributeOptionValueRepositoryInterface $eavAttributeOptionValueRepository,
+        EavAttributeRepositoryInterface $eavAttributeRepository,
         CategoryProductActionInterface $categoryProductAction,
         ProductDatetimeActionInterface $productDatetimeAction,
         ProductDecimalActionInterface $productDecimalAction,
         ProductIntActionInterface $productIntAction,
-        ProductAction $productAction,
+        ProductActionInterface $productAction,
         ProductTextActionInterface $productTextAction,
         ProductVarcharActionInterface $productVarcharAction,
         ProductWebsiteActionInterface $productWebsiteAction,
         StockItemActionInterface $stockItemAction,
-        UrlRewriteAction $urlRewriteAction,
+        UrlRewriteActionInterface $urlRewriteAction,
         ProductAttributeAssemblerInterface $productAttributeAssembler
     ) {
         $this->setConnection($connection);
@@ -364,11 +364,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to access EAV attribute option values.
      *
-     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepository $eavAttributeOptionValueRepository The repository to access EAV attribute option values
+     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface $eavAttributeOptionValueRepository The repository to access EAV attribute option values
      *
      * @return void
      */
-    public function setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository)
+    public function setEavAttributeOptionValueRepository(EavAttributeOptionValueRepositoryInterface $eavAttributeOptionValueRepository)
     {
         $this->eavAttributeOptionValueRepository = $eavAttributeOptionValueRepository;
     }
@@ -376,7 +376,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the repository to access EAV attribute option values.
      *
-     * @return \TechDivision\Import\Repositories\EavAttributeOptionValueRepository The repository instance
+     * @return \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface The repository instance
      */
     public function getEavAttributeOptionValueRepository()
     {
@@ -386,11 +386,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to access EAV attributes.
      *
-     * @param \TechDivision\Import\Repositories\EavAttributeRepository $eavAttributeRepository The repository to access EAV attributes
+     * @param \TechDivision\Import\Repositories\EavAttributeRepositoryInterface $eavAttributeRepository The repository to access EAV attributes
      *
      * @return void
      */
-    public function setEavAttributeRepository($eavAttributeRepository)
+    public function setEavAttributeRepository(EavAttributeRepositoryInterface $eavAttributeRepository)
     {
         $this->eavAttributeRepository = $eavAttributeRepository;
     }
@@ -398,7 +398,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the repository to access EAV attributes.
      *
-     * @return \TechDivision\Import\Repositories\EavAttributeRepository The repository instance
+     * @return \TechDivision\Import\Repositories\EavAttributeRepositoryInterface The repository instance
      */
     public function getEavAttributeRepository()
     {
@@ -406,25 +406,13 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
-     * Return's an array with the available EAV attributes for the passed is user defined flag.
-     *
-     * @param integer $isUserDefined The flag itself
-     *
-     * @return array The array with the EAV attributes matching the passed flag
-     */
-    public function getEavAttributeByIsUserDefined($isUserDefined = 1)
-    {
-        return $this->getEavAttributeRepository()->findAllByIsUserDefined($isUserDefined);
-    }
-
-    /**
      * Set's the action with the product CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductAction $productAction The action with the product CRUD methods
+     * @param \TechDivision\Import\Product\Actions\ProductActionInterface $productAction The action with the product CRUD methods
      *
      * @return void
      */
-    public function setProductAction($productAction)
+    public function setProductAction(ProductActionInterface $productAction)
     {
         $this->productAction = $productAction;
     }
@@ -432,7 +420,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductAction The action instance
+     * @return \TechDivision\Import\Product\Actions\ProductActionInterface The action instance
      */
     public function getProductAction()
     {
@@ -446,7 +434,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      *
      * @return void
      */
-    public function setProductVarcharAction($productVarcharAction)
+    public function setProductVarcharAction(ProductVarcharActionInterface $productVarcharAction)
     {
         $this->productVarcharAction = $productVarcharAction;
     }
@@ -468,7 +456,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      *
      * @return void
      */
-    public function setProductTextAction($productTextAction)
+    public function setProductTextAction(ProductTextActionInterface $productTextAction)
     {
         $this->productTextAction = $productTextAction;
     }
@@ -490,7 +478,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      *
      * @return void
      */
-    public function setProductIntAction($productIntAction)
+    public function setProductIntAction(ProductIntActionInterface $productIntAction)
     {
         $this->productIntAction = $productIntAction;
     }
@@ -512,7 +500,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      *
      * @return void
      */
-    public function setProductDecimalAction($productDecimalAction)
+    public function setProductDecimalAction(ProductDecimalActionInterface $productDecimalAction)
     {
         $this->productDecimalAction = $productDecimalAction;
     }
@@ -534,7 +522,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      *
      * @return void
      */
-    public function setProductDatetimeAction($productDatetimeAction)
+    public function setProductDatetimeAction(ProductDatetimeActionInterface $productDatetimeAction)
     {
         $this->productDatetimeAction = $productDatetimeAction;
     }
@@ -556,7 +544,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      *
      * @return void
      */
-    public function setProductWebsiteAction($productWebsiteAction)
+    public function setProductWebsiteAction(ProductWebsiteActionInterface $productWebsiteAction)
     {
         $this->productWebsiteAction = $productWebsiteAction;
     }
@@ -578,7 +566,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      *
      * @return void
      */
-    public function setCategoryProductAction($categoryProductAction)
+    public function setCategoryProductAction(CategoryProductActionInterface $categoryProductAction)
     {
         $this->categoryProductAction = $categoryProductAction;
     }
@@ -600,7 +588,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      *
      * @return void
      */
-    public function setStockItemAction($stockItemAction)
+    public function setStockItemAction(StockItemActionInterface $stockItemAction)
     {
         $this->stockItemAction = $stockItemAction;
     }
@@ -618,11 +606,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the URL rewrite CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\UrlRewriteAction $urlRewriteAction The action with the URL rewrite CRUD methods
+     * @param \TechDivision\Import\Actions\UrlRewriteActionInterface $urlRewriteAction The action with the URL rewrite CRUD methods
      *
      * @return void
      */
-    public function setUrlRewriteAction($urlRewriteAction)
+    public function setUrlRewriteAction(UrlRewriteActionInterface $urlRewriteAction)
     {
         $this->urlRewriteAction = $urlRewriteAction;
     }
@@ -630,7 +618,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the URL rewrite CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\UrlRewriteAction The action instance
+     * @return \TechDivision\Import\Actions\UrlRewriteActionInterface The action instance
      */
     public function getUrlRewriteAction()
     {
@@ -640,11 +628,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to load the products with.
      *
-     * @param \TechDivision\Import\Product\Repositories\ProductRepository $productRepository The repository instance
+     * @param \TechDivision\Import\Product\Repositories\ProductRepositoryInterface $productRepository The repository instance
      *
      * @return void
      */
-    public function setProductRepository($productRepository)
+    public function setProductRepository(ProductRepositoryInterface $productRepository)
     {
         $this->productRepository = $productRepository;
     }
@@ -652,7 +640,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the repository to load the products with.
      *
-     * @return \TechDivision\Import\Product\Repositories\ProductRepository The repository instance
+     * @return \TechDivision\Import\Product\Repositories\ProductRepositoryInterface The repository instance
      */
     public function getProductRepository()
     {
@@ -662,11 +650,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to load the product website relations with.
      *
-     * @param \TechDivision\Import\Product\Repositories\ProductWebsiteRepository $productWebsiteRepository The repository instance
+     * @param \TechDivision\Import\Product\Repositories\ProductWebsiteRepositoryInterface $productWebsiteRepository The repository instance
      *
      * @return void
      */
-    public function setProductWebsiteRepository($productWebsiteRepository)
+    public function setProductWebsiteRepository(ProductWebsiteRepositoryInterface $productWebsiteRepository)
     {
         $this->productWebsiteRepository = $productWebsiteRepository;
     }
@@ -674,7 +662,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the repository to load the product website relations with.
      *
-     * @return \TechDivision\Import\Product\Repositories\ProductWebsiteRepository The repository instance
+     * @return \TechDivision\Import\Product\Repositories\ProductWebsiteRepositoryInterface The repository instance
      */
     public function getProductWebsiteRepository()
     {
@@ -684,11 +672,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to load the product datetime attribute with.
      *
-     * @param \TechDivision\Import\Product\Repositories\ProductDatetimeRepository $productDatetimeRepository The repository instance
+     * @param \TechDivision\Import\Product\Repositories\ProductDatetimeRepositoryInterface $productDatetimeRepository The repository instance
      *
      * @return void
      */
-    public function setProductDatetimeRepository($productDatetimeRepository)
+    public function setProductDatetimeRepository(ProductDatetimeRepositoryInterface $productDatetimeRepository)
     {
         $this->productDatetimeRepository = $productDatetimeRepository;
     }
@@ -696,7 +684,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the repository to load the product datetime attribute with.
      *
-     * @return \TechDivision\Import\Product\Repositories\ProductDatetimeRepository The repository instance
+     * @return \TechDivision\Import\Product\Repositories\ProductDatetimeRepositoryInterface The repository instance
      */
     public function getProductDatetimeRepository()
     {
@@ -706,11 +694,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to load the product decimal attribute with.
      *
-     * @param \TechDivision\Import\Product\Repositories\ProductDecimalRepository $productDecimalRepository The repository instance
+     * @param \TechDivision\Import\Product\Repositories\ProductDecimalRepositoryInterface $productDecimalRepository The repository instance
      *
      * @return void
      */
-    public function setProductDecimalRepository($productDecimalRepository)
+    public function setProductDecimalRepository(ProductDecimalRepositoryInterface $productDecimalRepository)
     {
         $this->productDecimalRepository = $productDecimalRepository;
     }
@@ -718,7 +706,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the repository to load the product decimal attribute with.
      *
-     * @return \TechDivision\Import\Product\Repositories\ProductDecimalRepository The repository instance
+     * @return \TechDivision\Import\Product\Repositories\ProductDecimalRepositoryInterface The repository instance
      */
     public function getProductDecimalRepository()
     {
@@ -728,11 +716,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to load the product integer attribute with.
      *
-     * @param \TechDivision\Import\Product\Repositories\ProductIntRepository $productIntRepository The repository instance
+     * @param \TechDivision\Import\Product\Repositories\ProductIntRepositoryInterface $productIntRepository The repository instance
      *
      * @return void
      */
-    public function setProductIntRepository($productIntRepository)
+    public function setProductIntRepository(ProductIntRepositoryInterface $productIntRepository)
     {
         $this->productIntRepository = $productIntRepository;
     }
@@ -740,7 +728,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the repository to load the product integer attribute with.
      *
-     * @return \TechDivision\Import\Product\Repositories\ProductIntRepository The repository instance
+     * @return \TechDivision\Import\Product\Repositories\ProductIntRepositoryInterface The repository instance
      */
     public function getProductIntRepository()
     {
@@ -750,11 +738,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to load the product text attribute with.
      *
-     * @param \TechDivision\Import\Product\Repositories\ProductTextRepository $productTextRepository The repository instance
+     * @param \TechDivision\Import\Product\Repositories\ProductTextRepositoryInterface $productTextRepository The repository instance
      *
      * @return void
      */
-    public function setProductTextRepository($productTextRepository)
+    public function setProductTextRepository(ProductTextRepositoryInterface $productTextRepository)
     {
         $this->productTextRepository = $productTextRepository;
     }
@@ -762,7 +750,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the repository to load the product text attribute with.
      *
-     * @return \TechDivision\Import\Product\Repositories\ProductTextRepository The repository instance
+     * @return \TechDivision\Import\Product\Repositories\ProductTextRepositoryInterface The repository instance
      */
     public function getProductTextRepository()
     {
@@ -772,11 +760,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to load the product varchar attribute with.
      *
-     * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepository $productVarcharRepository The repository instance
+     * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface $productVarcharRepository The repository instance
      *
      * @return void
      */
-    public function setProductVarcharRepository($productVarcharRepository)
+    public function setProductVarcharRepository(ProductVarcharRepositoryInterface $productVarcharRepository)
     {
         $this->productVarcharRepository = $productVarcharRepository;
     }
@@ -784,7 +772,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the repository to load the product varchar attribute with.
      *
-     * @return \TechDivision\Import\Product\Repositories\ProductVarcharRepository The repository instance
+     * @return \TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface The repository instance
      */
     public function getProductVarcharRepository()
     {
@@ -794,11 +782,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to load the category product relations with.
      *
-     * @param \TechDivision\Import\Product\Repositories\CategoryProductRepository $categoryProductRepository The repository instance
+     * @param \TechDivision\Import\Product\Repositories\CategoryProductRepositoryInterface $categoryProductRepository The repository instance
      *
      * @return void
      */
-    public function setCategoryProductRepository($categoryProductRepository)
+    public function setCategoryProductRepository(CategoryProductRepositoryInterface $categoryProductRepository)
     {
         $this->categoryProductRepository = $categoryProductRepository;
     }
@@ -806,7 +794,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the repository to load the category product relations with.
      *
-     * @return \TechDivision\Import\Product\Repositories\CategoryProductRepository The repository instance
+     * @return \TechDivision\Import\Product\Repositories\CategoryProductRepositoryInterface The repository instance
      */
     public function getCategoryProductRepository()
     {
@@ -816,11 +804,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the repository to load the stock items with.
      *
-     * @param \TechDivision\Import\Product\Repositories\StockItemRepository $stockItemRepository The repository instance
+     * @param \TechDivision\Import\Product\Repositories\StockItemRepositoryInterface $stockItemRepository The repository instance
      *
      * @return void
      */
-    public function setStockItemRepository($stockItemRepository)
+    public function setStockItemRepository(StockItemRepositoryInterface $stockItemRepository)
     {
         $this->stockItemRepository = $stockItemRepository;
     }
@@ -828,7 +816,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the repository to load the stock items with.
      *
-     * @return \TechDivision\Import\Product\Repositories\StockItemRepository The repository instance
+     * @return \TechDivision\Import\Product\Repositories\StockItemRepositoryInterface The repository instance
      */
     public function getStockItemRepository()
     {
@@ -855,6 +843,18 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function getProductAttributeAssembler()
     {
         return $this->productAttributeAssembler;
+    }
+
+    /**
+     * Return's an array with the available EAV attributes for the passed is user defined flag.
+     *
+     * @param integer $isUserDefined The flag itself
+     *
+     * @return array The array with the EAV attributes matching the passed flag
+     */
+    public function getEavAttributeByIsUserDefined($isUserDefined = 1)
+    {
+        return $this->getEavAttributeRepository()->findAllByIsUserDefined($isUserDefined);
     }
 
     /**

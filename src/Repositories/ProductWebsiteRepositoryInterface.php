@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Repositories\ProductTextRepositoryInterface
+ * TechDivision\Import\Product\Repositories\ProductWebsiteRepositoryInterface
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Repositories;
 use TechDivision\Import\Repositories\RepositoryInterface;
 
 /**
- * Interface for repositories providing functionality to load product text attribute data.
+ * Interface for repository implementations to load product website data.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,16 +31,16 @@ use TechDivision\Import\Repositories\RepositoryInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-interface ProductTextRepositoryInterface extends RepositoryInterface
+interface ProductWebsiteRepositoryInterface extends RepositoryInterface
 {
 
     /**
-     * Load's and return's the text attributes with the passed primary key/store ID.
+     * Load's and return's the product website relation with the passed product and website ID.
      *
-     * @param integer $pk      The primary key of the attributes
-     * @param integer $storeId The store ID of the attributes
+     * @param string $productId The product ID of the relation
+     * @param string $websiteId The website ID of the relation
      *
-     * @return array The text attributes
+     * @return array The product website
      */
-    public function findAllByPrimaryKeyAndStoreId($pk, $storeId);
+    public function findOneByProductIdAndWebsite($productId, $websiteId);
 }
