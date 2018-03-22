@@ -1,3 +1,14 @@
+# Version 1.0.0-beta53
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add missing interfaces for actions and repositories
+* Replace class type hints for ProductBunchProcessor with interfaces
+
 # Version 1.0.0-beta52
 
 ## Bugfixes

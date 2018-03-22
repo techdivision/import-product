@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Repositories\ProductTextRepositoryInterface
+ * TechDivision\Import\Product\Repositories\StockItemRepositoryInterface
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Repositories;
 use TechDivision\Import\Repositories\RepositoryInterface;
 
 /**
- * Interface for repositories providing functionality to load product text attribute data.
+ * Interface for repository implementations to load stock item data.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,16 +31,17 @@ use TechDivision\Import\Repositories\RepositoryInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-interface ProductTextRepositoryInterface extends RepositoryInterface
+interface StockItemRepositoryInterface extends RepositoryInterface
 {
 
     /**
-     * Load's and return's the text attributes with the passed primary key/store ID.
+     * Load's and return's the stock item with the passed product/website/stock ID.
      *
-     * @param integer $pk      The primary key of the attributes
-     * @param integer $storeId The store ID of the attributes
+     * @param integer $productId The product ID of the stock item to load
+     * @param integer $websiteId The website ID of the stock item to load
+     * @param integer $stockId   The stock ID of the stock item to load
      *
-     * @return array The text attributes
+     * @return array The stock item
      */
-    public function findAllByPrimaryKeyAndStoreId($pk, $storeId);
+    public function findOneByProductIdAndWebsiteIdAndStockId($productId, $websiteId, $stockId);
 }

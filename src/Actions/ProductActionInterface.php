@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Repositories\ProductTextRepositoryInterface
+ * TechDivision\Import\Product\Actions\ProductActionInterface
  *
  * NOTICE OF LICENSE
  *
@@ -18,12 +18,12 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Repositories;
+namespace TechDivision\Import\Product\Actions;
 
-use TechDivision\Import\Repositories\RepositoryInterface;
+use TechDivision\Import\Actions\ActionInterface;
 
 /**
- * Interface for repositories providing functionality to load product text attribute data.
+ * Interface for action implementations that provides CRUD functionality for products.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,16 +31,6 @@ use TechDivision\Import\Repositories\RepositoryInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-interface ProductTextRepositoryInterface extends RepositoryInterface
+interface ProductActionInterface extends ActionInterface
 {
-
-    /**
-     * Load's and return's the text attributes with the passed primary key/store ID.
-     *
-     * @param integer $pk      The primary key of the attributes
-     * @param integer $storeId The store ID of the attributes
-     *
-     * @return array The text attributes
-     */
-    public function findAllByPrimaryKeyAndStoreId($pk, $storeId);
 }

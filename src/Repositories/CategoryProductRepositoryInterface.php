@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Repositories\ProductTextRepositoryInterface
+ * TechDivision\Import\Product\Repositories\CategoryProductRepositoryInterface
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Repositories;
 use TechDivision\Import\Repositories\RepositoryInterface;
 
 /**
- * Interface for repositories providing functionality to load product text attribute data.
+ * Interface for repository implementations to load product data.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,16 +31,25 @@ use TechDivision\Import\Repositories\RepositoryInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-interface ProductTextRepositoryInterface extends RepositoryInterface
+interface CategoryProductRepositoryInterface extends RepositoryInterface
 {
 
     /**
-     * Load's and return's the text attributes with the passed primary key/store ID.
+     * Return's the category product relation with the passed category/product ID.
      *
-     * @param integer $pk      The primary key of the attributes
-     * @param integer $storeId The store ID of the attributes
+     * @param integer $categoryId The category ID of the category product relation to return
+     * @param integer $productId  The product ID of the category product relation to return
      *
-     * @return array The text attributes
+     * @return array The category product relation
      */
-    public function findAllByPrimaryKeyAndStoreId($pk, $storeId);
+    public function findOneByCategoryIdAndProductId($categoryId, $productId);
+
+    /**
+     * Return's the category product relations for the product with the passed SKU.
+     *
+     * @param string $sku The product SKU to load the category relations for
+     *
+     * @return array The category product relations for the product with the passed SKU
+     */
+    public function findAllBySku($sku);
 }
