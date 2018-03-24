@@ -1,3 +1,13 @@
+# Version 1.0.1
+
+## Bugfixes
+
+* Switch to phpdocumentor v2.9.* to avoid Travis-CI build errors
+
+## Features
+
+* None
+
 # Version 1.0.0
 
 ## Bugfixes
