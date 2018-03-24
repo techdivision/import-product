@@ -1,14 +1,10 @@
 {
     "name": "techdivision/import-product",
     "description": "M2IF library providing basic Magento 2 product import functionality",
-    "minimum-stability": "alpha",
     "license": "OSL-3.0",
     "require": {
         "php": ">=5.6.0",
-        "goodby/csv": "~1.0",
-        "league/flysystem": "~1.0",
-        "techdivision/import": "~1.0",
-        "zendframework/zend-filter": "~2.0"
+        "techdivision/import": "~1.0"
     },
     "require-dev": {
         "phpmd/phpmd": "2.5.*",
@@ -33,8 +29,8 @@
         "psr-4": {
             "TechDivision\\Import\\Product\\": [
                 "src/",
-                "tests/",
-                "symfony/"
+                "symfony/",
+                "tests/unit"
             ]
         }
     }
