@@ -1,3 +1,13 @@
+# Version 1.0.2
+
+## Bugfixes
+
+* Inject NULL instead of dummy delete action when creating ProductWebsiteAction instance
+
+## Features
+
+* None
+
 # Version 1.0.1
 
 ## Bugfixes
