@@ -164,7 +164,7 @@
         </service>
         <service id="import_product.action.product.website" class="TechDivision\Import\Product\Actions\ProductWebsiteAction">
             <argument type="service" id="import_product.action.processor.product.website.create"/>
-            <argument type="service" id="import_product.action.processor.product.website.delete"/>
+            <argument type="service" id="import_product.action.processor.product.website.update" on-invalid="null"/>
             <argument type="service" id="import_product.action.processor.product.website.delete"/>
         </service>
         <service id="import_product.action.product.datetime" class="TechDivision\Import\Product\Actions\ProductDatetimeAction">
