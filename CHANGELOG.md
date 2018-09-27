@@ -1,3 +1,13 @@
+# Version 1.0.3
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Also allow techdivision/import ~2.0 versions as dependency
+
 # Version 1.0.2
 
 ## Bugfixes
