@@ -118,6 +118,13 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const STOCK_ITEM = 'stock_item';
 
     /**
+     * The SQL statement to load an existing product relation with the passed parent/child ID.
+     *
+     * @var string
+     */
+    const PRODUCT_RELATION = 'product_relation';
+
+    /**
      * The SQL statement to create new products.
      *
      * @var string
@@ -179,6 +186,13 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
      * @var string
      */
     const CREATE_PRODUCT_DECIMAL = 'create.product_decimal';
+
+    /**
+     * The SQL statement to create a new product relation.
+     *
+     * @var string
+     */
+    const CREATE_PRODUCT_RELATION = 'create.product_relation';
 
     /**
      * The SQL statement to update an existing product decimal value.

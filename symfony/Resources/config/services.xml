@@ -42,6 +42,10 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
+        <service id="import_product.repository.product.relation" class="TechDivision\Import\Product\Repositories\ProductRelationRepository">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.repository.sql.statement"/>
+        </service>
 
         <service id="import_product.repository.cache.warmer.product" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductCacheWarmer">
             <argument type="service" id="import_product.repository.product"/>
@@ -151,6 +155,10 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
+        <service id="import_product.action.processor.product.relation.create" class="TechDivision\Import\Product\Actions\Processors\ProductRelationCreateProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.repository.sql.statement"/>
+        </service>
 
         <service id="import_product.action.category.product" class="TechDivision\Import\Product\Actions\CategoryProductAction">
             <argument type="service" id="import_product.action.processor.category.product.create"/>
@@ -196,6 +204,9 @@
             <argument type="service" id="import_product.action.processor.stock.item.create"/>
             <argument type="service" id="import_product.action.processor.stock.item.update"/>
             <argument type="service" id="import_product.action.processor.stock.item.delete"/>
+        </service>
+        <service id="import_product.action.product.relation" class="TechDivision\Import\Product\Actions\ProductRelationAction">
+            <argument type="service" id="import_product.action.processor.product.relation.create"/>
         </service>
 
         <service id="import_product.assembler.product.attribute" class="TechDivision\Import\Product\Assemblers\ProductAttributeAssembler">

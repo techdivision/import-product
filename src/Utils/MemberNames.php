@@ -269,4 +269,11 @@ class MemberNames extends \TechDivision\Import\Utils\MemberNames
      * @var string
      */
     const PARENT_ID = 'parent_id';
+
+    /**
+     * Name for the member 'child_id'.
+     *
+     * @var string
+     */
+    const CHILD_ID = 'child_id';
 }

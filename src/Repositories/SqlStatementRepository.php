@@ -90,6 +90,11 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                 AND t1.product_id = t2.entity_id',
         SqlStatementKeys::STOCK_ITEM =>
             'SELECT * FROM cataloginventory_stock_item WHERE product_id = :product_id AND website_id = :website_id AND stock_id = :stock_id',
+        SqlStatementKeys::PRODUCT_RELATION =>
+            'SELECT *
+                   FROM catalog_product_relation
+                  WHERE parent_id = :parent_id
+                    AND child_id = :child_id',
         SqlStatementKeys::CREATE_PRODUCT =>
             'INSERT
                INTO catalog_product_entity
@@ -245,6 +250,13 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
+        SqlStatementKeys::CREATE_PRODUCT_RELATION =>
+            'INSERT
+                   INTO catalog_product_relation
+                        (parent_id,
+                         child_id)
+                 VALUES (:parent_id,
+                         :child_id)',
         SqlStatementKeys::DELETE_PRODUCT_TEXT =>
             'DELETE
                FROM catalog_product_entity_text
