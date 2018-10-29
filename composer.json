@@ -10,7 +10,7 @@
         "phpmd/phpmd": "2.5.*",
         "phploc/phploc": "2.0.*",
         "pdepend/pdepend": "2.0.*",
-        "doctrine/dbal": "~2.0",
+        "doctrine/dbal": "2.5.*",
         "symfony/config": "~2.8|~3.0",
         "symfony/http-kernel": "~2.8|~3.0",
         "phpunit/phpunit": "4.4.*",
