@@ -103,7 +103,6 @@ abstract class AbstractProductRelationObserver extends AbstractProductImportObse
             if ($productRelation = $this->initializeProductRelation($this->prepareProductRelationAttributes())) {
                 $this->persistProductRelation($productRelation);
             }
-
         } catch (\Exception $e) {
             // prepare a more detailed error message
             $message = $this->appendExceptionSuffix(

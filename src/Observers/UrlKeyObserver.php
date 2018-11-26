@@ -199,7 +199,6 @@ class UrlKeyObserver extends AbstractProductImportObserver
                 // prepare the next URL key to query for
                 $value = sprintf('%s-%d', $urlKey, ++$counter);
             }
-
         } while ($productVarcharAttribute);
 
         // sort the array ascending according to the counter

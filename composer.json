@@ -4,20 +4,18 @@
     "license": "OSL-3.0",
     "require": {
         "php": ">=5.6.0",
-        "techdivision/import": "~3.0"
+        "techdivision/import": "4.x-dev as 4.0.0"
     },
     "require-dev": {
-        "phpmd/phpmd": "2.5.*",
-        "phploc/phploc": "2.0.*",
-        "pdepend/pdepend": "2.0.*",
         "doctrine/dbal": "2.5.*",
-        "symfony/config": "~2.8|~3.0",
-        "symfony/http-kernel": "~2.8|~3.0",
-        "phpunit/phpunit": "4.4.*",
-        "sebastian/phpcpd": "2.0.*",
-        "squizlabs/php_codesniffer": "2.2.*",
-        "phpdocumentor/phpdocumentor": "2.9.*",
-        "consolidation/robo": "~1.0"
+        "pdepend/pdepend": "2.5.2",
+        "phpmd/phpmd": "@stable",
+        "phpunit/phpunit": "~5.0",
+        "sebastian/phpcpd": "~3.0.0",
+        "squizlabs/php_codesniffer": "3.3.1",
+        "consolidation/robo": "~1.0",
+        "mikey179/vfsStream": "~1.0",
+        "symfony/http-kernel": "~3.4"
     },
     "authors": [
         {

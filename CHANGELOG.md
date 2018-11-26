@@ -1,3 +1,13 @@
+# Version 3.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Compatibility for Magento 2.3.x
+
 # Version 2.0.0
 
 ## Bugfixes

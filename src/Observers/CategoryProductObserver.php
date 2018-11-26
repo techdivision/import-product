@@ -170,7 +170,6 @@ class CategoryProductObserver extends AbstractProductImportObserver
                     MemberNames::POSITION    => 0
                 )
             );
-
         } catch (\Exception $e) {
             // query whether or not debug mode has been enabled
             if ($subject->isDebugMode()) {

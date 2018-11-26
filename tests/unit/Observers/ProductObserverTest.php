@@ -23,6 +23,10 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Serializers\SerializerInterface;
+use TechDivision\Import\Adapter\ImportAdapterInterface;
+use TechDivision\Import\Adapter\SerializerAwareAdapterInterface;
+use TechDivision\Import\Subjects\I18n\DateConverterInterface;
 
 /**
  * Test class for the product update observer implementation.
@@ -122,6 +126,13 @@ class ProductObserverTest extends \PHPUnit_Framework_TestCase
             EntityStatus::MEMBER_NAME => EntityStatus::STATUS_UPDATE
         );
 
+        // mock the date converter
+        $mockDateConverter = $this->getMockBuilder(DateConverterInterface::class)->getMock();
+        $mockDateConverter->expects($this->exactly(2))
+            ->method('convert')
+            ->withConsecutive(array('10/23/16, 5:10 PM'), array('10/23/16, 5:10 PM'))
+            ->willReturnOnConsecutiveCalls('2016-10-23 17:10:00', '2016-10-23 17:10:00');
+
         // create a mock subject
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
                             ->setMethods(
@@ -131,8 +142,8 @@ class ProductObserverTest extends \PHPUnit_Framework_TestCase
                                     'getHeaders',
                                     'hasBeenProcessed',
                                     'getAttributeSet',
-                                    'getSourceDateFormat',
-                                    'getRow'
+                                    'getRow',
+                                    'getDateConverter'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -159,9 +170,6 @@ class ProductObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->once())
                     ->method('hasBeenProcessed')
                     ->willReturn(false);
-        $mockSubject->expects($this->any(2))
-                    ->method('getSourceDateFormat')
-                    ->willReturn('n/d/y, g:i A');
         $mockSubject->expects($this->once())
                     ->method('getAttributeSet')
                     ->willReturn(
@@ -170,6 +178,9 @@ class ProductObserverTest extends \PHPUnit_Framework_TestCase
                             MemberNames::ATTRIBUTE_SET_NAME => $attributeSetCode
                         )
                     );
+        $mockSubject->expects($this->exactly(2))
+            ->method('getDateConverter')
+            ->willReturn($mockDateConverter);
 
         // mock the processor methods
         $this->mockProductBunchProcessor->expects($this->once())

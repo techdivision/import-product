@@ -122,7 +122,6 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
                 // create the product website relation
                 $productWebsite = $this->initializeProductWebsite($attr);
                 $this->persistProductWebsite($productWebsite);
-
             } catch (\RuntimeException $re) {
                 $this->getSystemLogger()->debug($re->getMessage());
             }
