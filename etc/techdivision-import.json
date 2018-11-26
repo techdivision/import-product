@@ -1,6 +1,6 @@
 {
   "magento-edition": "CE",
-  "magento-version": "2.1.2",
+  "magento-version": "2.3.0",
   "operation-name" : "add-update",
   "source-date-format": "n/d/y, g:i A",
   "archive-artefacts" : true,
@@ -44,13 +44,17 @@
             {
               "id": "import.subject.move.files",
               "identifier": "move-files",
-              "prefix": "product-import",
+              "file-resolver": {
+                "prefix": "product-import"
+              },
               "ok-file-needed": true
             },
             {
               "id": "import_product.subject.bunch",
               "identifier": "files",
-              "prefix": "product-import",
+              "file-resolver": {
+                "prefix": "product-import"
+              },
               "observers": [
                 {
                   "import": [
@@ -82,13 +86,17 @@
             {
               "id": "import.subject.move.files",
               "identifier": "move-files",
-              "prefix": "product-import",
+              "file-resolver": {
+                "prefix": "product-import"
+              },
               "ok-file-needed": true
             },
             {
               "id": "import_product.subject.bunch",
               "identifier": "files",
-              "prefix": "product-import",
+              "file-resolver": {
+                "prefix": "product-import"
+              },
               "params" : [
                 {
                   "copy-images" : false
@@ -130,7 +138,9 @@
             },
             {
               "id": "import_product_variant.subject.variant",
-              "prefix": "variants",
+              "file-resolver": {
+                "prefix": "variants"
+              },
               "observers": [
                 {
                   "pre-import": [
@@ -148,7 +158,9 @@
             },
             {
               "id": "import_product_bundle.subject.bundle",
-              "prefix": "bundles",
+              "file-resolver": {
+                "prefix": "bundles"
+              },
               "observers": [
                 {
                   "import": [
@@ -163,7 +175,9 @@
             },
             {
               "id": "import_product_media.subject.media",
-              "prefix": "media",
+              "file-resolver": {
+                "prefix": "media"
+              },
               "observers": [
                 {
                   "pre-import" : [
@@ -178,7 +192,9 @@
             },
             {
               "id": "import_product_link.subject.link",
-              "prefix": "links",
+              "file-resolver": {
+                "prefix": "links"
+              },
               "observers": [
                 {
                   "import": [
@@ -190,7 +206,9 @@
             },
             {
               "id": "import_product_url_rewrite.subject.url.rewrite",
-              "prefix": "url-rewrite",
+              "file-resolver": {
+                "prefix": "url-rewrite"
+              },
               "observers": [
                 {
                   "import": [
@@ -221,13 +239,17 @@
             {
               "id": "import.subject.move.files",
               "identifier": "move-files",
-              "prefix": "product-import",
+              "file-resolver": {
+                "prefix": "product-import"
+              },
               "ok-file-needed": true
             },
             {
               "id": "import_product.subject.bunch",
               "identifier": "files",
-              "prefix": "product-import",
+              "file-resolver": {
+                "prefix": "product-import"
+              },
               "params" : [
                 {
                   "copy-images" : false,
@@ -268,7 +290,9 @@
             },
             {
               "id": "import_product_variant.subject.variant",
-              "prefix": "variants",
+              "file-resolver": {
+                "prefix": "variants"
+              },
               "observers": [
                 {
                   "pre-import": [
@@ -286,7 +310,9 @@
             },
             {
               "id": "import_product_bundle.subject.bundle",
-              "prefix": "bundles",
+              "file-resolver": {
+                "prefix": "bundles"
+              },
               "observers": [
                 {
                   "import": [
@@ -301,7 +327,9 @@
             },
             {
               "id": "import_product_media.subject.media",
-              "prefix": "media",
+              "file-resolver": {
+                "prefix": "media"
+              },
               "observers": [
                 {
                   "pre-import" : [
@@ -316,7 +344,9 @@
             },
             {
               "id": "import_product_link.subject.link",
-              "prefix": "links",
+              "file-resolver": {
+                "prefix": "links"
+              },
               "observers": [
                 {
                   "import": [
