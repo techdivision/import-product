@@ -1,3 +1,13 @@
+# Version 5.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to latest techdivision/import 6.0.* version as dependency
+
 # Version 4.0.0
 
 ## Bugfixes

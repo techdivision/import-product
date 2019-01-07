@@ -230,6 +230,7 @@
             <argument type="service" id="import_product.repository.stock.item"/>
             <argument type="service" id="import.repository.eav.attribute.option.value"/>
             <argument type="service" id="import.repository.eav.attribute"/>
+            <argument type="service" id="import.repository.eav.entity.type"/>
             <argument type="service" id="import_product.action.category.product"/>
             <argument type="service" id="import_product.action.product.datetime"/>
             <argument type="service" id="import_product.action.product.decimal"/>
@@ -249,9 +250,11 @@
         <service id="import_product.callback.tax.class" class="TechDivision\Import\Product\Callbacks\TaxClassCallback"/>
         <service id="import_product.callback.visibility" class="TechDivision\Import\Product\Callbacks\VisibilityCallback"/>
         <service id="import_product.callback.multiselect" class="TechDivision\Import\Product\Callbacks\MultiselectCallback">
+            <argument type="service" id="configuration"/>
             <argument type="service" id="import_product.processor.product.bunch"/>
         </service>
         <service id="import_product.callback.select" class="TechDivision\Import\Product\Callbacks\SelectCallback">
+            <argument type="service" id="configuration"/>
             <argument type="service" id="import_product.processor.product.bunch"/>
         </service>
 

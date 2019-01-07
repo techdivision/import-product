@@ -104,6 +104,27 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     public function getUrlRewriteAction();
 
     /**
+     * Return's the repository to access EAV attribute option values.
+     *
+     * @return \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface The repository instance
+     */
+    public function getEavAttributeOptionValueRepository();
+
+    /**
+     * Return's the repository to access EAV attributes.
+     *
+     * @return \TechDivision\Import\Repositories\EavAttributeRepositoryInterface The repository instance
+     */
+    public function getEavAttributeRepository();
+
+    /**
+     * Return's the repository to access EAV entity types.
+     *
+     * @return \TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface The repository instance
+     */
+    public function getEavEntityTypeRepository();
+
+    /**
      * Return's the repository to load the products with.
      *
      * @return \TechDivision\Import\Product\Repositories\ProductRepository The repository instance
