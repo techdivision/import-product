@@ -149,7 +149,7 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      */
     protected function addProcessedRelation($key, $value, $type = RelationTypes::PRODUCT_RELATION)
     {
-        $this->getSubject()->addProcessedRelation($key, $value, self::class);
+        $this->getSubject()->addProcessedRelation($key, $value, $type);
     }
 
     /**
@@ -164,6 +164,6 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
      */
     protected function hasBeenProcessedRelation($key, $value, $type = RelationTypes::PRODUCT_RELATION)
     {
-        $this->getSubject()->hasBeenProcessedRelation($key, $value, self::class);
+        return $this->getSubject()->hasBeenProcessedRelation($key, $value, $type);
     }
 }
