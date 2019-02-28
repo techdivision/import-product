@@ -1,3 +1,13 @@
+# Version 6.0.1
+
+## Bugfixes
+
+* Fixed issue in AbstractProductImportObserver::hasBeenProcessedRelation() + AbstractProductImportObserver::addProcessedRelation() methods
+
+## Features
+
+* None
+
 # Version 6.0.0
 
 ## Bugfixes
