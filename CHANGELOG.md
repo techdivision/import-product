@@ -1,3 +1,13 @@
+# Version 6.0.0
+
+## Bugfixes
+
+* Fixed techdivision/import-product-variant#21
+
+## Features
+
+* None
+
 # Version 5.0.0
 
 ## Bugfixes

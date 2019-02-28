@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\RelationTypes;
 use TechDivision\Import\Subjects\SubjectInterface;
 use TechDivision\Import\Observers\AbstractObserver;
 
@@ -135,5 +136,34 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     protected function isLastSku($sku)
     {
         return $this->getSubject()->getLastSku() === $sku;
+    }
+
+    /**
+     * Marks the relation combination processed.
+     *
+     * @param string $key   The key of the relation
+     * @param string $value One of the relation values
+     * @param string $type  The relation type to add
+     *
+     * @return void
+     */
+    protected function addProcessedRelation($key, $value, $type = RelationTypes::PRODUCT_RELATION)
+    {
+        $this->getSubject()->addProcessedRelation($key, $value, self::class);
+    }
+
+    /**
+     * Query's whether or not the relation with the passed key
+     * value combination and the given type has been processed.
+     *
+     * @param string $key   The key of the relation
+     * @param string $value One of the relation values
+     * @param string $type  The relation type to add
+     *
+     * @return boolean TRUE if the combination has been processed, else FALSE
+     */
+    protected function hasBeenProcessedRelation($key, $value, $type = RelationTypes::PRODUCT_RELATION)
+    {
+        $this->getSubject()->hasBeenProcessedRelation($key, $value, self::class);
     }
 }

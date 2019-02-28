@@ -24,6 +24,7 @@ use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\FrontendInputTypes;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\RelationTypes;
 use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Subjects\EntitySubjectInterface;
@@ -161,6 +162,13 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         FrontendInputTypes::MULTISELECT => array('import_product.callback.multiselect'),
         FrontendInputTypes::BOOLEAN     => array('import_product.callback.boolean')
     );
+
+    /**
+     * Array that contains the relations that has already been processed.
+     *
+     * @var array
+     */
+    protected $processedRelations = array();
 
     /**
      * Return's the default callback frontend input mappings for the user defined attributes.
@@ -581,5 +589,47 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // return the array with the column names that has to be cleaned-up
         return $cleanUpColumns;
+    }
+
+    /**
+     * Marks the relation combination processed.
+     *
+     * @param string $key   The key of the relation
+     * @param string $value One of the relation values
+     * @param string $type  The relation type to add
+     *
+     * @return void
+     */
+    public function addProcessedRelation($key, $value, $type = RelationTypes::PRODUCT_RELATION)
+    {
+
+        // query whether or not the child SKU has already been processed
+        if (isset($this->processedRelations[$type][$key])) {
+            $this->processedRelations[$type][$key][] = $value;
+        } else {
+            $this->processedRelations[$type][$key] = array($value);
+        }
+    }
+
+    /**
+     * Query's whether or not the relation with the passed key
+     * value combination and the given type has been processed.
+     *
+     * @param string $key   The key of the relation
+     * @param string $value One of the relation values
+     * @param string $type  The relation type to add
+     *
+     * @return boolean TRUE if the combination has been processed, else FALSE
+     */
+    public function hasBeenProcessedRelation($key, $value, $type = RelationTypes::PRODUCT_RELATION)
+    {
+
+        // query whether or not the parent SKU has already been registered
+        if (isset($this->processedRelations[$type][$key])) {
+            return in_array($value, $this->processedRelations[$type][$key]);
+        }
+
+        // return FALSE if NOT
+        return false;
     }
 }

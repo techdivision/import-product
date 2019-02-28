@@ -84,16 +84,25 @@ abstract class AbstractProductRelationObserver extends AbstractProductImportObse
     protected function process()
     {
 
+        // load the parent/child SKUs
+        $parentSku = $parentSku = $this->getValue($parentSkuColumnName = $this->getParentSkuColumnName());
+        $childSku = $childSku = $this->getValue($childSkuColumnName = $this->getChildSkuColumnName());
+
+        // query whether or not the product relation has already been processed
+        if ($this->hasBeenProcessedRelation($parentSku, $childSku)) {
+            return;
+        }
+
         try {
             // try to load and map the parent ID
-            $this->parentId = $this->mapSku($parentSku = $this->getValue($parentSkuColumnName = $this->getParentSkuColumnName()));
+            $this->parentId = $this->mapSku($parentSku);
         } catch (\Exception $e) {
             throw $this->wrapException(array($parentSkuColumnName), $e);
         }
 
         try {
             // try to load and map the child ID
-            $this->childId = $this->mapChildSku($childSku = $this->getValue($childSkuColumnName = $this->getChildSkuColumnName()));
+            $this->childId = $this->mapChildSku($childSku);
         } catch (\Exception $e) {
             throw $this->wrapException(array($childSkuColumnName), $e);
         }
@@ -103,6 +112,9 @@ abstract class AbstractProductRelationObserver extends AbstractProductImportObse
             if ($productRelation = $this->initializeProductRelation($this->prepareProductRelationAttributes())) {
                 $this->persistProductRelation($productRelation);
             }
+
+            // mark the product relation as processed
+            $this->addProcessedRelation($parentSku, $childSku);
         } catch (\Exception $e) {
             // prepare a more detailed error message
             $message = $this->appendExceptionSuffix(
