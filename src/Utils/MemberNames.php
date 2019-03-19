@@ -276,4 +276,18 @@ class MemberNames extends \TechDivision\Import\Utils\MemberNames
      * @var string
      */
     const CHILD_ID = 'child_id';
+
+    /**
+     * Name for the member 'link_type_id'.
+     *
+     * @var string
+     */
+    const LINK_TYPE_ID = 'link_type_id';
+
+    /**
+     * Name for the member 'product_link_attribute_code'.
+     *
+     * @var string
+     */
+    const PRODUCT_LINK_ATTRIBUTE_CODE = 'product_link_attribute_code';
 }

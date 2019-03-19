@@ -28,6 +28,7 @@ use TechDivision\Import\Product\Utils\RelationTypes;
 use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Subjects\EntitySubjectInterface;
+use TechDivision\Import\Product\Exceptions\MapLinkTypeCodeToIdException;
 
 /**
  * The abstract product subject implementation that provides basic product
@@ -83,6 +84,13 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
      * @var array
      */
     protected $linkTypes = array();
+
+    /**
+     * The available link attributes.
+     *
+     * @var array
+     */
+    protected $linkAttributes = array();
 
     /**
      * The ID of the product that has been created recently.
@@ -169,6 +177,30 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
      * @var array
      */
     protected $processedRelations = array();
+
+    /**
+     * The array that contains the prepared link type mappings.
+     *
+     * @var array
+     */
+    protected $linkTypeMappings = array();
+
+    /**
+     * The array that contains the link type => column name prefix mapping.
+     *
+     * @var array
+     */
+    protected $linkTypeCodeToColumnNameMapping = array('super' => 'associated');
+
+    /**
+     * The array that contains the link type attribute column => callback mapping.
+     *
+     * @var array
+     */
+    protected $linkTypeAttributeColumnToCallbackMapping = array(
+        'associated_skus' => array('associated_skus', 'explodeKey'),
+        'associated_qty'  => array('associated_skus', 'explodeValue')
+    );
 
     /**
      * Return's the default callback frontend input mappings for the user defined attributes.
@@ -303,6 +335,10 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
         $this->imageTypes =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::IMAGE_TYPES];
         $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
+        $this->linkAttributes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::LINK_ATTRIBUTES];
+
+        // prepare the link type mappings
+        $this->linkTypeMappings = $this->prepareLinkTypeMappings();
 
         // invoke the parent method
         parent::setUp($serial);
@@ -343,6 +379,16 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     public function getImageTypes()
     {
         return $this->imageTypes;
+    }
+
+    /**
+     * Return's the link type code => colums mapping.
+     *
+     * @return array The mapping with the link type codes => colums
+     */
+    public function getLinkTypeMappings()
+    {
+        return $this->linkTypeMappings;
     }
 
     /**
@@ -631,5 +677,243 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // return FALSE if NOT
         return false;
+    }
+
+    /**
+     * Return's the link type ID for the passed link type code.
+     *
+     * @param string $linkTypeCode The link type code to return the link type ID for
+     *
+     * @return integer The mapped link type ID
+     * @throws \TechDivision\Import\Product\Exceptions\MapLinkTypeCodeToIdException Is thrown if the link type code is not mapped yet
+     */
+    public function mapLinkTypeCodeToLinkTypeId($linkTypeCode)
+    {
+
+        // query weather or not the link type code has been mapped
+        if (isset($this->linkTypes[$linkTypeCode])) {
+            return $this->linkTypes[$linkTypeCode][MemberNames::LINK_TYPE_ID];
+        }
+
+        // throw an exception if the link type code has not been mapped yet
+        throw new MapLinkTypeCodeToIdException(
+            $this->appendExceptionSuffix(
+                sprintf('Found not mapped link type code %s', $linkTypeCode)
+            )
+        );
+    }
+
+    /**
+     * Return's the link attribute for the passed link type ID and attribute code.
+     *
+     * @param integer $linkTypeId    The link type
+     * @param string  $attributeCode The attribute code
+     *
+     * @return array The link attribute
+     */
+    public function getProductLinkAttribute($linkTypeId, $attributeCode)
+    {
+
+        // try to load the link attribute with the passed link type ID and attribute code
+        foreach ($this->linkAttributes as $linkAttribute) {
+            if ($linkAttribute[MemberNames::LINK_TYPE_ID] === $linkTypeId &&
+                $linkAttribute[MemberNames::PRODUCT_LINK_ATTRIBUTE_CODE] === $attributeCode
+            ) {
+                // return the matching link attribute
+                return $linkAttribute;
+            }
+        }
+    }
+
+    /**
+     * Return's the link attribute for the passed link type and attribute code.
+     *
+     * @param string $linkTypeCode  The link type code
+     * @param string $attributeCode The attribute code
+     *
+     * @return array The link attribute
+     */
+    public function getProductLinkAttributeByLinkTypeCodeAndAttributeCode($linkTypeCode, $attributeCode)
+    {
+
+        // map the link type code => ID
+        $linkTypeId = $this->mapLinkTypeCodeToLinkTypeId($linkTypeCode);
+
+        // try to load the link attribute with the passed link type ID and attribute code
+        foreach ($this->linkAttributes as $linkAttribute) {
+            if ($linkAttribute[MemberNames::LINK_TYPE_ID] === $linkTypeId &&
+                $linkAttribute[MemberNames::PRODUCT_LINK_ATTRIBUTE_CODE] === $attributeCode
+            ) {
+                // return the matching link attribute
+                return $linkAttribute;
+            }
+        }
+    }
+
+    /**
+     * Returns the product link attributes for the passed link type code.
+     *
+     * @param string $linkTypeCode The link type code
+     *
+     * @return array The product link types
+     */
+    public function getProductLinkAttributes($linkTypeCode)
+    {
+
+        // map the link type code => ID
+        $linkTypeId = $this->mapLinkTypeCodeToLinkTypeId($linkTypeCode);
+
+        // initialize the array for the link attributes
+        $linkAttributes = array();
+
+        // try to load the link attribute with the passed link type ID and attribute code
+        foreach ($this->linkAttributes as $linkAttribute) {
+            if ($linkAttribute[MemberNames::LINK_TYPE_ID] === $linkTypeId) {
+                // return the matching link attribute
+                $linkAttributes[] = $linkAttribute;
+            }
+        }
+
+        // return the link attributes
+        return $linkAttributes;
+    }
+
+    /**
+     * Maps the link type code to the apropriate column name.
+     *
+     * @param string $linkTypeCode The link type code to map
+     *
+     * @return string The mapped column name
+     */
+    public function mapLinkTypeCodeToColumnName($linkTypeCode)
+    {
+
+        // query whether or not the link type code has a mapping
+        if (isset($this->linkTypeCodeToColumnNameMapping[$linkTypeCode])) {
+            return $this->linkTypeCodeToColumnNameMapping[$linkTypeCode];
+        }
+
+        // return the passed link type code
+        return $linkTypeCode;
+    }
+
+    /**
+     * Return's the link type code => colums mapping.
+     *
+     * @return array The mapping with the link type codes => colums
+     */
+    public function prepareLinkTypeMappings()
+    {
+
+        // initialize the array with link type mappings
+        $linkTypeMappings = array();
+
+        // prepare the link type mappings
+        foreach ($this->getLinkTypes() as $linkType) {
+            // map the link type code to the column name, if necessary
+            $columnName = $this->mapLinkTypeCodeToColumnName($linkType[MemberNames::CODE]);
+
+            // create the header for the link type mapping
+            $linkTypeMappings[$linkType[MemberNames::CODE]][] = array (
+                $fullColumnName = sprintf('%s_skus', $columnName),
+                $this->getLinkTypeColumnCallback($fullColumnName)
+            );
+
+            // add the mappings for the columns that contains the values for the configured link type attributes
+            foreach ($this->getProductLinkAttributes($linkType[MemberNames::CODE]) as $linkAttribute) {
+                // initialize the full column name that uses the column name as prefix and the attribute code as suffix
+                $fullColumnName = sprintf('%s_%s', $columnName, $linkAttribute[MemberNames::PRODUCT_LINK_ATTRIBUTE_CODE]);
+                // load the callback that extracts the values from the columns
+                $callback = $this->getLinkTypeColumnCallback($fullColumnName);
+
+                // map the column name to the real column name
+                if (isset($this->linkTypeAttributeColumnToCallbackMapping[$fullColumnName])) {
+                    list ($fullColumnName, ) = $this->linkTypeAttributeColumnToCallbackMapping[$fullColumnName];
+                }
+
+                // add the link type mapping for the column with the link type value
+                $linkTypeMappings[$linkType[MemberNames::CODE]][] = array(
+                    $fullColumnName,
+                    $callback,
+                    $linkAttribute[MemberNames::PRODUCT_LINK_ATTRIBUTE_CODE]
+                );
+            }
+        }
+
+        // return the link type mappings
+        return $linkTypeMappings;
+    }
+
+    /**
+     * Returns the callback method used to extract the value of the passed
+     * column to create the link type attribute value with.
+     *
+     * @param string $columnName The column name to create the callback for
+     *
+     * @return callable The callback
+     */
+    public function getLinkTypeColumnCallback($columnName)
+    {
+
+        // query whether or not a callback mapping is available
+        if (isset($this->linkTypeAttributeColumnToCallbackMapping[$columnName])) {
+            // load it from the array with the mappings
+            list (, $callbackName) = $this->linkTypeAttributeColumnToCallbackMapping[$columnName];
+            // prepare and return the callback
+            return array($this, $callbackName);
+        }
+
+        // return the default callback
+        return array($this, 'explode');
+    }
+
+    /**
+     * Extracts the keys of the passed value by exploding them
+     * with the also passed delimiter/value delmiter.
+     *
+     * @param string $value          The value to extract
+     * @param string $delimiter      The delimiter used to extract the elements
+     * @param string $valueDelimiter The delimiter used to extract the key from the value
+     *
+     * @return array The exploded keys
+     */
+    public function explodeKey($value, $delimiter = ',', $valueDelimiter = '=')
+    {
+
+        // initialize the array for the keys
+        $keys = array();
+
+        // extract the keys from the value
+        foreach ($this->explode($value, $delimiter) as $keyValue) {
+            list($keys[], ) = $this->explode($keyValue, $valueDelimiter);
+        }
+
+        // return the array with the keys
+        return $keys;
+    }
+
+    /**
+     * Extracts the values of the passed value by exploding them
+     * with the also passed delimiter/value delimiter.
+     *
+     * @param string $value          The value to extract
+     * @param string $delimiter      The delimiter used to extract the elements
+     * @param string $valueDelimiter The delimiter used to extract the key from the value
+     *
+     * @return array The exploded values
+     */
+    public function explodeValue($value, $delimiter = ',', $valueDelimiter = '=')
+    {
+
+        // initialize the array for the values
+        $values = array();
+
+        // extract the values from the value
+        foreach ($this->explode($value, $delimiter) as $keyValue) {
+            list(, $values[]) = $this->explode($keyValue, $valueDelimiter);
+        }
+
+        // return the array with the values
+        return $values;
     }
 }
