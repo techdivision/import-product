@@ -1,3 +1,13 @@
+# Version 7.0.2
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Update default configuration for grouped product import
+
 # Version 7.0.1
 
 ## Bugfixes
