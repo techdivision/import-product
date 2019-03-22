@@ -350,7 +350,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_product_link.observer.link.update",
+                    "import_product_link.observer.link",
                     "import_product_link.observer.link.attribute.position.update"
                   ]
                 }
