@@ -1,3 +1,15 @@
+# Version 8.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add composite observers to minimize configuration complexity
+* Switch to latest techdivision/import 7.0.* version as dependency
+* Make Actions and ActionInterfaces deprecated, replace DI configuration with GenericAction + GenericIdentifierAction
+
 # Version 7.0.2
 
 ## Bugfixes

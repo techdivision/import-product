@@ -20,20 +20,11 @@
 
 namespace TechDivision\Import\Product\Services;
 
+use TechDivision\Import\Actions\ActionInterface;
 use TechDivision\Import\Connection\ConnectionInterface;
-use TechDivision\Import\Actions\UrlRewriteActionInterface;
 use TechDivision\Import\Repositories\EavAttributeRepositoryInterface;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Actions\ProductActionInterface;
-use TechDivision\Import\Product\Actions\StockItemActionInterface;
-use TechDivision\Import\Product\Actions\ProductIntActionInterface;
-use TechDivision\Import\Product\Actions\ProductTextActionInterface;
-use TechDivision\Import\Product\Actions\ProductVarcharActionInterface;
-use TechDivision\Import\Product\Actions\ProductWebsiteActionInterface;
-use TechDivision\Import\Product\Actions\ProductDecimalActionInterface;
-use TechDivision\Import\Product\Actions\CategoryProductActionInterface;
-use TechDivision\Import\Product\Actions\ProductDatetimeActionInterface;
 use TechDivision\Import\Product\Repositories\ProductRepositoryInterface;
 use TechDivision\Import\Product\Repositories\StockItemRepositoryInterface;
 use TechDivision\Import\Product\Repositories\ProductIntRepositoryInterface;
@@ -82,70 +73,70 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * The action for product CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $productAction;
 
     /**
      * The action for product varchar attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductVarcharActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $productVarcharAction;
 
     /**
      * The action for product text attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductTextActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $productTextAction;
 
     /**
      * The action for product int attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductIntActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $productIntAction;
 
     /**
      * The action for product decimal attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductDecimalActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $productDecimalAction;
 
     /**
      * The action for product datetime attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductDatetimeActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $productDatetimeAction;
 
     /**
      * The action for product website CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\ProductWebsiteActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $productWebsiteAction;
 
     /**
      * The action for category product relation CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\CategoryProductActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $categoryProductAction;
 
     /**
      * The action for stock item CRUD methods.
      *
-     * @var \TechDivision\Import\Product\Actions\StockItemActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $stockItemAction;
 
     /**
      * The action for URL rewrite CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\UrlRewriteActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $urlRewriteAction;
 
@@ -235,16 +226,16 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface $eavAttributeOptionValueRepository The EAV attribute option value repository to use
      * @param \TechDivision\Import\Repositories\EavAttributeRepositoryInterface            $eavAttributeRepository            The EAV attribute repository to use
      * @param \TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface           $eavEntityTypeRepository           The EAV entity type repository to use
-     * @param \TechDivision\Import\Product\Actions\CategoryProductActionInterface          $categoryProductAction             The category product action to use
-     * @param \TechDivision\Import\Product\Actions\ProductDatetimeActionInterface          $productDatetimeAction             The product datetime action to use
-     * @param \TechDivision\Import\Product\Actions\ProductDecimalActionInterface           $productDecimalAction              The product decimal action to use
-     * @param \TechDivision\Import\Product\Actions\ProductIntActionInterface               $productIntAction                  The product integer action to use
-     * @param \TechDivision\Import\Product\Actions\ProductActionInterface                  $productAction                     The product action to use
-     * @param \TechDivision\Import\Product\Actions\ProductTextActionInterface              $productTextAction                 The product text action to use
-     * @param \TechDivision\Import\Product\Actions\ProductVarcharActionInterface           $productVarcharAction              The product varchar action to use
-     * @param \TechDivision\Import\Product\Actions\ProductWebsiteActionInterface           $productWebsiteAction              The product website action to use
-     * @param \TechDivision\Import\Product\Actions\StockItemActionInterface                $stockItemAction                   The stock item action to use
-     * @param \TechDivision\Import\Actions\UrlRewriteActionInterface                       $urlRewriteAction                  The URL rewrite action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                 $categoryProductAction             The category product action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                 $productDatetimeAction             The product datetime action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                 $productDecimalAction              The product decimal action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                 $productIntAction                  The product integer action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                 $productAction                     The product action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                 $productTextAction                 The product text action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                 $productVarcharAction              The product varchar action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                 $productWebsiteAction              The product website action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                 $stockItemAction                   The stock item action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                 $urlRewriteAction                  The URL rewrite action to use
      * @param \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface   $productAttributeAssembler         The assembler to load the product attributes with
      */
     public function __construct(
@@ -261,16 +252,16 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         EavAttributeOptionValueRepositoryInterface $eavAttributeOptionValueRepository,
         EavAttributeRepositoryInterface $eavAttributeRepository,
         EavEntityTypeRepositoryInterface $eavEntityTypeRepository,
-        CategoryProductActionInterface $categoryProductAction,
-        ProductDatetimeActionInterface $productDatetimeAction,
-        ProductDecimalActionInterface $productDecimalAction,
-        ProductIntActionInterface $productIntAction,
-        ProductActionInterface $productAction,
-        ProductTextActionInterface $productTextAction,
-        ProductVarcharActionInterface $productVarcharAction,
-        ProductWebsiteActionInterface $productWebsiteAction,
-        StockItemActionInterface $stockItemAction,
-        UrlRewriteActionInterface $urlRewriteAction,
+        ActionInterface $categoryProductAction,
+        ActionInterface $productDatetimeAction,
+        ActionInterface $productDecimalAction,
+        ActionInterface $productIntAction,
+        ActionInterface $productAction,
+        ActionInterface $productTextAction,
+        ActionInterface $productVarcharAction,
+        ActionInterface $productWebsiteAction,
+        ActionInterface $stockItemAction,
+        ActionInterface $urlRewriteAction,
         ProductAttributeAssemblerInterface $productAttributeAssembler
     ) {
         $this->setConnection($connection);
@@ -434,11 +425,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductActionInterface $productAction The action with the product CRUD methods
+     * @param ActionInterface $productAction The action with the product CRUD methods
      *
      * @return void
      */
-    public function setProductAction(ProductActionInterface $productAction)
+    public function setProductAction(ActionInterface $productAction)
     {
         $this->productAction = $productAction;
     }
@@ -446,7 +437,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductActionInterface The action instance
+     * @return ActionInterface The action instance
      */
     public function getProductAction()
     {
@@ -456,11 +447,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product varchar attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductVarcharActionInterface $productVarcharAction The action with the product varchar attriute CRUD methods
+     * @param ActionInterface $productVarcharAction The action with the product varchar attriute CRUD methods
      *
      * @return void
      */
-    public function setProductVarcharAction(ProductVarcharActionInterface $productVarcharAction)
+    public function setProductVarcharAction(ActionInterface $productVarcharAction)
     {
         $this->productVarcharAction = $productVarcharAction;
     }
@@ -468,7 +459,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product varchar attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductVarcharActionInterface The action instance
+     * @return ActionInterface The action instance
      */
     public function getProductVarcharAction()
     {
@@ -478,11 +469,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product text attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductTextActionInterface $productTextAction The action with the product text attriute CRUD methods
+     * @param ActionInterface $productTextAction The action with the product text attriute CRUD methods
      *
      * @return void
      */
-    public function setProductTextAction(ProductTextActionInterface $productTextAction)
+    public function setProductTextAction(ActionInterface $productTextAction)
     {
         $this->productTextAction = $productTextAction;
     }
@@ -490,7 +481,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product text attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductTextActionInterface The action instance
+     * @return ActionInterface The action instance
      */
     public function getProductTextAction()
     {
@@ -500,11 +491,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product int attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductIntActionInterface $productIntAction The action with the product int attriute CRUD methods
+     * @param ActionInterface $productIntAction The action with the product int attriute CRUD methods
      *
      * @return void
      */
-    public function setProductIntAction(ProductIntActionInterface $productIntAction)
+    public function setProductIntAction(ActionInterface $productIntAction)
     {
         $this->productIntAction = $productIntAction;
     }
@@ -512,7 +503,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product int attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductIntActionInterface The action instance
+     * @return ActionInterface The action instance
      */
     public function getProductIntAction()
     {
@@ -522,11 +513,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product decimal attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductDecimalActionInterface $productDecimalAction The action with the product decimal attriute CRUD methods
+     * @param ActionInterface $productDecimalAction The action with the product decimal attriute CRUD methods
      *
      * @return void
      */
-    public function setProductDecimalAction(ProductDecimalActionInterface $productDecimalAction)
+    public function setProductDecimalAction(ActionInterface $productDecimalAction)
     {
         $this->productDecimalAction = $productDecimalAction;
     }
@@ -534,7 +525,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product decimal attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductDecimalActionInterface The action instance
+     * @return ActionInterface The action instance
      */
     public function getProductDecimalAction()
     {
@@ -544,11 +535,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product datetime attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductDatetimeActionInterface $productDatetimeAction The action with the product datetime attriute CRUD methods
+     * @param ActionInterface $productDatetimeAction The action with the product datetime attriute CRUD methods
      *
      * @return void
      */
-    public function setProductDatetimeAction(ProductDatetimeActionInterface $productDatetimeAction)
+    public function setProductDatetimeAction(ActionInterface $productDatetimeAction)
     {
         $this->productDatetimeAction = $productDatetimeAction;
     }
@@ -556,7 +547,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product datetime attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductDatetimeActionInterface The action instance
+     * @return ActionInterface The action instance
      */
     public function getProductDatetimeAction()
     {
@@ -566,11 +557,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the product website CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\ProductWebsiteActionInterface $productWebsiteAction The action with the product website CRUD methods
+     * @param ActionInterface $productWebsiteAction The action with the product website CRUD methods
      *
      * @return void
      */
-    public function setProductWebsiteAction(ProductWebsiteActionInterface $productWebsiteAction)
+    public function setProductWebsiteAction(ActionInterface $productWebsiteAction)
     {
         $this->productWebsiteAction = $productWebsiteAction;
     }
@@ -578,7 +569,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the product website CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductWebsiteActionInterface The action instance
+     * @return ActionInterface The action instance
      */
     public function getProductWebsiteAction()
     {
@@ -588,11 +579,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the category product relation CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\CategoryProductActionInterface $categoryProductAction The action with the category product relation CRUD methods
+     * @param ActionInterface $categoryProductAction The action with the category product relation CRUD methods
      *
      * @return void
      */
-    public function setCategoryProductAction(CategoryProductActionInterface $categoryProductAction)
+    public function setCategoryProductAction(ActionInterface $categoryProductAction)
     {
         $this->categoryProductAction = $categoryProductAction;
     }
@@ -600,7 +591,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the category product relation CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\CategoryProductActionInterface The action instance
+     * @return ActionInterface The action instance
      */
     public function getCategoryProductAction()
     {
@@ -610,11 +601,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the stock item CRUD methods.
      *
-     * @param \TechDivision\Import\Product\Actions\StockItemActionInterface $stockItemAction The action with the stock item CRUD methods
+     * @param ActionInterface $stockItemAction The action with the stock item CRUD methods
      *
      * @return void
      */
-    public function setStockItemAction(StockItemActionInterface $stockItemAction)
+    public function setStockItemAction(ActionInterface $stockItemAction)
     {
         $this->stockItemAction = $stockItemAction;
     }
@@ -622,7 +613,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the stock item CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\StockItemActionInterface The action instance
+     * @return ActionInterface The action instance
      */
     public function getStockItemAction()
     {
@@ -632,11 +623,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the URL rewrite CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\UrlRewriteActionInterface $urlRewriteAction The action with the URL rewrite CRUD methods
+     * @param \TechDivision\Import\Actions\ActionInterface $urlRewriteAction The action with the URL rewrite CRUD methods
      *
      * @return void
      */
-    public function setUrlRewriteAction(UrlRewriteActionInterface $urlRewriteAction)
+    public function setUrlRewriteAction(ActionInterface $urlRewriteAction)
     {
         $this->urlRewriteAction = $urlRewriteAction;
     }
@@ -644,7 +635,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the URL rewrite CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\UrlRewriteActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getUrlRewriteAction()
     {

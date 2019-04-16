@@ -160,52 +160,52 @@
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
 
-        <service id="import_product.action.category.product" class="TechDivision\Import\Product\Actions\CategoryProductAction">
+        <service id="import_product.action.category.product" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.category.product.create"/>
             <argument type="service" id="import_product.action.processor.category.product.update"/>
             <argument type="service" id="import_product.action.processor.category.product.delete"/>
         </service>
-        <service id="import_product.action.product" class="TechDivision\Import\Product\Actions\ProductAction">
+        <service id="import_product.action.product" class="TechDivision\Import\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.create"/>
             <argument type="service" id="import_product.action.processor.product.update"/>
             <argument type="service" id="import_product.action.processor.product.delete"/>
         </service>
-        <service id="import_product.action.product.website" class="TechDivision\Import\Product\Actions\ProductWebsiteAction">
+        <service id="import_product.action.product.website" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.product.website.create"/>
             <argument type="service" id="import_product.action.processor.product.website.update" on-invalid="null"/>
             <argument type="service" id="import_product.action.processor.product.website.delete"/>
         </service>
-        <service id="import_product.action.product.datetime" class="TechDivision\Import\Product\Actions\ProductDatetimeAction">
+        <service id="import_product.action.product.datetime" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.product.datetime.create"/>
             <argument type="service" id="import_product.action.processor.product.datetime.update"/>
             <argument type="service" id="import_product.action.processor.product.datetime.delete"/>
         </service>
-        <service id="import_product.action.product.decimal" class="TechDivision\Import\Product\Actions\ProductDecimalAction">
+        <service id="import_product.action.product.decimal" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.product.decimal.create"/>
             <argument type="service" id="import_product.action.processor.product.decimal.update"/>
             <argument type="service" id="import_product.action.processor.product.decimal.delete"/>
         </service>
-        <service id="import_product.action.product.int" class="TechDivision\Import\Product\Actions\ProductIntAction">
+        <service id="import_product.action.product.int" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.product.int.create"/>
             <argument type="service" id="import_product.action.processor.product.int.update"/>
             <argument type="service" id="import_product.action.processor.product.int.delete"/>
         </service>
-        <service id="import_product.action.product.text" class="TechDivision\Import\Product\Actions\ProductTextAction">
+        <service id="import_product.action.product.text" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.product.text.create"/>
             <argument type="service" id="import_product.action.processor.product.text.update"/>
             <argument type="service" id="import_product.action.processor.product.text.delete"/>
         </service>
-        <service id="import_product.action.product.varchar" class="TechDivision\Import\Product\Actions\ProductVarcharAction">
+        <service id="import_product.action.product.varchar" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.product.varchar.create"/>
             <argument type="service" id="import_product.action.processor.product.varchar.update"/>
             <argument type="service" id="import_product.action.processor.product.varchar.delete"/>
         </service>
-        <service id="import_product.action.stock.item" class="TechDivision\Import\Product\Actions\StockItemAction">
+        <service id="import_product.action.stock.item" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.stock.item.create"/>
             <argument type="service" id="import_product.action.processor.stock.item.update"/>
             <argument type="service" id="import_product.action.processor.stock.item.delete"/>
         </service>
-        <service id="import_product.action.product.relation" class="TechDivision\Import\Product\Actions\ProductRelationAction">
+        <service id="import_product.action.product.relation" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.product.relation.create"/>
         </service>
 
@@ -304,6 +304,284 @@
         </service>
         <service id="import_product.observer.last.entity.id" class="TechDivision\Import\Product\Observers\LastEntityIdObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+
+        <!--
+         | The DI configuration for the composite observers of the inventory add-update operation.
+         |-->
+        <service id="import_product.observer.composite.inventory.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import.observer.attribute.set" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.last.entity.id" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.quality.and.stock.status" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.inventory.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.clean.up" type="service"/>
+            </call>
+        </service>
+
+        <!--
+         | The DI configuration for the composite observers of the price add-update operation.
+         |-->
+        <service id="import_product.observer.composite.price.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import.observer.attribute.set" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.last.entity.id" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.attribute.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.clean.up" type="service"/>
+            </call>
+        </service>
+
+        <!--
+         | The DI configuration for the composite observers of the delete operation.
+         |-->
+
+        <service id="import_product.observer.composite.base.delete" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product_url_rewrite.observer.clear.url.rewrite" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.clear.product" type="service"/>
+            </call>
+        </service>
+
+        <!--
+         | The DI configuration for the composite observers of the replace operation.
+         |-->
+        <service id="import_product.observer.composite.base.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product.observer.pre.load.entity.id" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_url_rewrite.observer.clear.url.rewrite" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.clear.product" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import.observer.attribute.set" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import.observer.additional.attribute" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.url.key" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.file.upload" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.quality.and.stock.status" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.website" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.category.product" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.inventory" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.attribute" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_url_rewrite.observer.product.url.rewrite" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_variant.observer.product.variant" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_bundle.observer.product.bundle" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_media.observer.product.media" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_link.observer.product.link" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_grouped.observer.product.grouped" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.clean.up" type="service"/>
+            </call>
+        </service>
+        <service id="import_product.observer.composite.variant.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import.observer.attribute.set" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_variant.observer.variant.super.link" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_variant.observer.variant.super.attribute" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_variant.observer.variant.product.relation" type="service"/>
+            </call>
+        </service>
+        <service id="import_product.observer.composite.bundle.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product_bundle_ee.observer.bundle.option" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_bundle_ee.observer.bundle.option.value" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_bundle_ee.observer.bundle.selection" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_bundle.observer.bundle.selection.price" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_bundle_ee.observer.bundle.product.relation" type="service"/>
+            </call>
+        </service>
+        <service id="import_product.observer.composite.media.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import.observer.attribute.set" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_media.observer.media.gallery" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_media.observer.media.gallery.value" type="service"/>
+            </call>
+        </service>
+        <service id="import_product.observer.composite.link.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product_link.observer.link" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_link.observer.link.attribute.position" type="service"/>
+            </call>
+        </service>
+
+        <!--
+         | The DI configuration for the composite observers of the add-update operation.
+         |-->
+        <service id="import_product.observer.composite.base.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import.observer.attribute.set" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import.observer.additional.attribute" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.url.key" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.file.upload" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.quality.and.stock.status" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.website.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.category.product.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.inventory.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.attribute.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_url_rewrite.observer.product.url.rewrite" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_variant.observer.product.variant" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_bundle.observer.product.bundle" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_media.observer.product.media" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_media.observer.clear.media.gallery" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_link.observer.product.link" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_grouped.observer.product.grouped" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.clean.up" type="service"/>
+            </call>
+        </service>
+        <service id="import_product.observer.composite.variant.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import.observer.attribute.set" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_variant.observer.variant.super.link.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_variant.observer.variant.super.attribute.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_variant.observer.variant.product.relation.update" type="service"/>
+            </call>
+        </service>
+        <service id="import_product.observer.composite.bundle.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product_bundle.observer.bundle.option.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_bundle.observer.bundle.option.value.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_bundle.observer.bundle.selection.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_bundle.observer.bundle.selection.price.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_bundle.observer.bundle.product.relation.update" type="service"/>
+            </call>
+        </service>
+        <service id="import_product.observer.composite.media.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import.observer.attribute.set" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_media.observer.media.gallery.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_media.observer.media.gallery.value.update" type="service"/>
+            </call>
+        </service>
+        <service id="import_product.observer.composite.link.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product_link.observer.link" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_link.observer.link.attribute.position.update" type="service"/>
+            </call>
         </service>
 
         <service id="import_product.subject.bunch" class="TechDivision\Import\Product\Subjects\BunchSubject" shared="false">

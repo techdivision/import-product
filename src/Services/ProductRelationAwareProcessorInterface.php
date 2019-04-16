@@ -42,7 +42,7 @@ interface ProductRelationAwareProcessorInterface
     /**
      * Return's the action with the product relation CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductRelationActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getProductRelationAction();
 
