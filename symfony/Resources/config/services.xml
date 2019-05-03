@@ -348,7 +348,6 @@
         <!--
          | The DI configuration for the composite observers of the delete operation.
          |-->
-
         <service id="import_product.observer.composite.base.delete" class="TechDivision\Import\Observers\GenericCompositeObserver">
             <call method="addObserver">
                 <argument id="import_product_url_rewrite.observer.clear.url.rewrite" type="service"/>
