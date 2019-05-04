@@ -438,19 +438,19 @@
         </service>
         <service id="import_product.observer.composite.bundle.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
             <call method="addObserver">
-                <argument id="import_product_bundle_ee.observer.bundle.option" type="service"/>
+                <argument id="import_product_bundle.observer.bundle.option" type="service"/>
             </call>
             <call method="addObserver">
-                <argument id="import_product_bundle_ee.observer.bundle.option.value" type="service"/>
+                <argument id="import_product_bundle.observer.bundle.option.value" type="service"/>
             </call>
             <call method="addObserver">
-                <argument id="import_product_bundle_ee.observer.bundle.selection" type="service"/>
+                <argument id="import_product_bundle.observer.bundle.selection" type="service"/>
             </call>
             <call method="addObserver">
                 <argument id="import_product_bundle.observer.bundle.selection.price" type="service"/>
             </call>
             <call method="addObserver">
-                <argument id="import_product_bundle_ee.observer.bundle.product.relation" type="service"/>
+                <argument id="import_product_bundle.observer.bundle.product.relation" type="service"/>
             </call>
         </service>
         <service id="import_product.observer.composite.media.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">

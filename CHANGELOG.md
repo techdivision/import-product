@@ -1,3 +1,13 @@
+# Version 9.0.1
+
+## Bugfixes
+
+* Fixed invalid product bundle composite observer DI configuration
+
+## Features
+
+* None
+
 # Version 9.0.0
 
 ## Bugfixes
