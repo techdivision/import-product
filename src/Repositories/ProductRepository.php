@@ -20,9 +20,12 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
+use TechDivision\Import\Cache\CacheAdapterInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
-use TechDivision\Import\Repositories\AbstractCachedRepository;
+use TechDivision\Import\Repositories\AbstractRepository;
+use TechDivision\Import\Connection\ConnectionInterface;
+use TechDivision\Import\Repositories\SqlStatementRepositoryInterface;
 
 /**
  * Repository implementation to load product data.
@@ -33,8 +36,15 @@ use TechDivision\Import\Repositories\AbstractCachedRepository;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductRepository extends AbstractCachedRepository implements ProductRepositoryInterface
+class ProductRepository extends AbstractRepository implements ProductRepositoryInterface
 {
+
+    /**
+     * The cache adapter instance.
+     *
+     * @var \TechDivision\Import\Cache\CacheAdapterInterface
+     */
+    protected $cacheAdapter;
 
     /**
      * The prepared statement to load a product with the passed SKU.
@@ -49,6 +59,26 @@ class ProductRepository extends AbstractCachedRepository implements ProductRepos
      * @var \PDOStatement
      */
     protected $productsStmt;
+
+    /**
+     * Initialize the repository with the passed connection and utility class name.
+     * .
+     * @param \TechDivision\Import\Connection\ConnectionInterface               $connection             The connection instance
+     * @param \TechDivision\Import\Repositories\SqlStatementRepositoryInterface $sqlStatementRepository The SQL repository instance
+     * @param \TechDivision\Import\Cache\CacheAdapterInterface                  $cacheAdapter           The cache adapter instance
+     */
+    public function __construct(
+        ConnectionInterface $connection,
+        SqlStatementRepositoryInterface $sqlStatementRepository,
+        CacheAdapterInterface $cacheAdapter
+    ) {
+
+        // pass the connection the SQL statement repository to the parent class
+        parent::__construct($connection, $sqlStatementRepository);
+
+        // set the cache adapter instance
+        $this->cacheAdapter = $cacheAdapter;
+    }
 
     /**
      * Return's the primary key name of the entity.
@@ -76,12 +106,23 @@ class ProductRepository extends AbstractCachedRepository implements ProductRepos
     }
 
     /**
+     * Returns the cache adapter instance used to warm the repository.
+     *
+     * @return \TechDivision\Import\Cache\CacheAdapterInterface The repository's cache adapter instance
+     */
+    public function getCacheAdapter()
+    {
+        return $this->cacheAdapter;
+    }
+
+    /**
      * Return's the available products.
      *
      * @return array The available products
      */
     public function findAll()
     {
+
         // load and return the available products
         $this->productsStmt->execute();
         return $this->productsStmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -98,8 +139,8 @@ class ProductRepository extends AbstractCachedRepository implements ProductRepos
     {
 
         // return the cached result if available
-        if ($this->isCached($sku)) {
-            return $this->fromCache($sku);
+        if ($this->cacheAdapter->isCached($sku)) {
+            return $this->cacheAdapter->fromCache($sku);
         }
 
         // if not, try to load the product with the passed SKU
@@ -107,12 +148,13 @@ class ProductRepository extends AbstractCachedRepository implements ProductRepos
 
         // query whether or not the product is available in the database
         if ($product = $this->productStmt->fetch(\PDO::FETCH_ASSOC)) {
-            // add the product to the cache, register the SKU reference as well
-            $this->toCache(
-                $product[$this->getPrimaryKeyName()],
-                $product,
-                array($sku => $product[$this->getPrimaryKeyName()])
+            // prepare the unique cache key for the product
+            $cacheKey = $this->cacheAdapter->cacheKey(
+                ProductRepositoryInterface::class,
+                array($product[$this->getPrimaryKeyName()])
             );
+            // add the EAV attribute option value to the cache, register the cache key reference as well
+            $this->cacheAdapter->toCache($cacheKey, $product, array($sku => $cacheKey));
             // finally, return it
             return $product;
         }

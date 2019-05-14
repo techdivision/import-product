@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
@@ -28,7 +28,7 @@ use TechDivision\Import\Repositories\CacheWarmer\CacheWarmerInterface;
  * Cache warmer implementation that pre-load the available products.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
@@ -61,14 +61,19 @@ class ProductCacheWarmer implements CacheWarmerInterface
     public function warm()
     {
 
+        // load the cache adapter
+        /** @var \TechDivision\Import\Cache\CacheAdapterInterface $cacheAdapter */
+        $cacheAdapter = $this->repository->getCacheAdapter();
+
         // prepare the caches for the statements
         foreach ($this->repository->findAll() as $product) {
-            // add the product to the cache, register the SKU reference as well
-            $this->repository->toCache(
-                $product[$this->repository->getPrimaryKeyName()],
-                $product,
-                array($product[MemberNames::SKU] => $product[$this->repository->getPrimaryKeyName()])
+            // prepare the unique cache key for the product
+            $uniqueKey = $cacheAdapter->cacheKey(
+                ProductRepositoryInterface::class,
+                array($product[$this->repository->getPrimaryKeyName()])
             );
+            // add the EAV attribute option value to the cache, register the cache key reference as well
+            $cacheAdapter->toCache($uniqueKey, $product, array($product[MemberNames::SKU] => $uniqueKey));
         }
     }
 }

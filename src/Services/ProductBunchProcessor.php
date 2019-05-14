@@ -36,6 +36,7 @@ use TechDivision\Import\Product\Repositories\ProductDatetimeRepositoryInterface;
 use TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface;
 use TechDivision\Import\Product\Repositories\CategoryProductRepositoryInterface;
 use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
+use TechDivision\Import\Product\Repositories\Cached\ProductCachedRepositoryInterface;
 
 /**
  * The product bunch processor implementation.
@@ -1024,7 +1025,17 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         $id = $this->getProductAction()->persist($product, $name);
 
         // add the product to the cache, register the SKU reference as well
-        $this->getProductRepository()->toCache($product[MemberNames::SKU], $product, array($product[MemberNames::SKU] => $id));
+        if ($this->getProductRepository() instanceof ProductCachedRepositoryInterface) {
+            // load the cache adapter from the product repository
+            $cacheAdapter = $this->getProductRepository()->getCacheAdapter();
+            // load new cache item from the cache
+            $uniqueKey = $cacheAdapter->cacheKey(
+                ProductRepositoryInterface::class,
+                array($product[$this->getProductRepository()->getPrimaryKeyName()])
+            );
+            // add the EAV attribute option value to the cache, register the cache key reference as well
+            $cacheAdapter->toCache($uniqueKey, $product, array($product[MemberNames::SKU] => $uniqueKey), true);
+        }
 
         // return the ID of the persisted product
         return $id;
@@ -1271,6 +1282,9 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function cleanUp()
     {
-        $this->getProductRepository()->flushCache();
+        // flush the cached if we've a cached product repository
+        /* if ($this->getProductRepository() instanceof ProductCachedRepositoryInterface) {
+            $this->getProductRepository()->getCacheAdapter()->flushCache();
+        } */
     }
 }

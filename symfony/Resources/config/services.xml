@@ -5,12 +5,25 @@
 
     <services>
 
+        <!--
+         | The DI cache configuration
+         |-->
+
+        <service id="import_product.repository.cache.warmer.product" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductCacheWarmer">
+            <argument type="service" id="import_product.repository.product"/>
+        </service>
+
+        <!--
+         | The repository configuration
+         |-->
+
         <service id="import_product.repository.sql.statement" class="TechDivision\Import\Product\Repositories\SqlStatementRepository"/>
-        <service id="import_product.repository.category.product" class="TechDivision\Import\Product\Repositories\CategoryProductRepository">
+        <service id="import_product.repository.product" class="TechDivision\Import\Product\Repositories\ProductRepository">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.cache.adapter.configurable"/>
         </service>
-        <service id="import_product.repository.product" class="TechDivision\Import\Product\Repositories\ProductRepository">
+        <service id="import_product.repository.category.product" class="TechDivision\Import\Product\Repositories\CategoryProductRepository">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
@@ -45,10 +58,6 @@
         <service id="import_product.repository.product.relation" class="TechDivision\Import\Product\Repositories\ProductRelationRepository">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
-
-        <service id="import_product.repository.cache.warmer.product" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductCacheWarmer">
-            <argument type="service" id="import_product.repository.product"/>
         </service>
 
         <service id="import_product.action.processor.category.product.create" class="TechDivision\Import\Product\Actions\Processors\CategoryProductCreateProcessor">

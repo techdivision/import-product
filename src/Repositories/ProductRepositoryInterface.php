@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Repositories;
 
 use TechDivision\Import\Repositories\RepositoryInterface;
+use TechDivision\Import\Repositories\CacheWarmer\CacheWarmerAwareRepositoryInterface;
 
 /**
  * Interface for all product repository implementations.
@@ -31,8 +32,15 @@ use TechDivision\Import\Repositories\RepositoryInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-interface ProductRepositoryInterface extends RepositoryInterface
+interface ProductRepositoryInterface extends CacheWarmerAwareRepositoryInterface, RepositoryInterface
 {
+
+    /**
+     * Return's the primary key name of the entity.
+     *
+     * @return string The name of the entity's primary key
+     */
+    public function getPrimaryKeyName();
 
     /**
      * Return's the available products.
