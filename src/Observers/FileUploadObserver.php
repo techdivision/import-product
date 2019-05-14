@@ -70,32 +70,30 @@ class FileUploadObserver extends AbstractProductImportObserver
                     try {
                         // upload the file and set the new image path
                         $imagePath = $this->getSubject()->uploadFile($imageName);
+                         // override the image path with the new one
+                         $this->setValue($imageColumnName, $imagePath);
+                         // add the image to the list with processed images
+                         $actualImageNames[$imageName] = $imagePath;
+
+                         // log a message that the image has been copied
+                         $this->getSubject()
+                              ->getSystemLogger()
+                              ->debug(
+                                  sprintf(
+                                      'Successfully copied image type %s with name %s => %s',
+                                      $imageColumnName,
+                                      $imageName,
+                                      $imagePath
+                                  )
+                              );
                     } catch (\Exception $e) {
                         // query whether or not debug mode has been enabled
                         if ($subject->isDebugMode()) {
                             $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($e->getMessage()));
                         } else {
-                            throw new $subject->wrapException(array($imageColumnName), $e);
+                            throw $subject->wrapException(array($imageColumnName), $e);
                         }
                     }
-
-                    // log a message that the image has been copied
-                    $this->getSubject()
-                         ->getSystemLogger()
-                         ->debug(
-                             sprintf(
-                                 'Successfully copied image type %s with name %s => %s',
-                                 $imageColumnName,
-                                 $imageName,
-                                 $imagePath
-                             )
-                         );
-
-                    // override the image path with the new one
-                    $this->setValue($imageColumnName, $imagePath);
-
-                        // add the image to the list with processed images
-                    $actualImageNames[$imageName] = $imagePath;
                 }
 
                 // query whether or not, we've additional images
@@ -114,31 +112,29 @@ class FileUploadObserver extends AbstractProductImportObserver
                         try {
                             // upload the file and set the new image path
                             $imagePath = $this->getSubject()->uploadFile($additionalImageName);
+                            // override the image path
+                            $additionalImages[$key] = $imagePath;
+                            // add the image to the list with processed images
+                            $actualImageNames[$additionalImageName] = $imagePath;
+
+                            // log a message that the image has been copied
+                            $this->getSubject()
+                                ->getSystemLogger()
+                                 ->debug(
+                                     sprintf(
+                                         'Successfully copied additional image wth name %s => %s',
+                                         $additionalImageName,
+                                         $imagePath
+                                     )
+                                 );
                         } catch (\Exception $e) {
                             // query whether or not debug mode has been enabled
                             if ($subject->isDebugMode()) {
                                 $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($e->getMessage()));
                             } else {
-                                throw new $subject->wrapException(array(ColumnKeys::ADDITIONAL_IMAGES), $e);
+                                throw $subject->wrapException(array(ColumnKeys::ADDITIONAL_IMAGES), $e);
                             }
                         }
-
-                        // log a message that the image has been copied
-                        $this->getSubject()
-                             ->getSystemLogger()
-                             ->debug(
-                                 sprintf(
-                                     'Successfully copied additional image wth name %s => %s',
-                                     $additionalImageName,
-                                     $imagePath
-                                 )
-                             );
-
-                        // override the image path
-                        $additionalImages[$key] = $imagePath;
-
-                        // add the image to the list with processed images
-                        $actualImageNames[$additionalImageName] = $imagePath;
                     }
 
                     // override the image paths with the new one
