@@ -48,6 +48,9 @@ class FileUploadObserver extends AbstractProductImportObserver
         if ($this->getSubject()->getConfiguration()->hasParam(ConfigurationKeys::COPY_IMAGES)) {
             // query whether or not we've to upload the image files
             if ($this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::COPY_IMAGES)) {
+                // load the subject
+                $subject = $this->getSubject();
+
                 // initialize the array for the actual images
                 $actualImageNames = array();
 
@@ -64,8 +67,17 @@ class FileUploadObserver extends AbstractProductImportObserver
                         continue;
                     }
 
-                    // upload the file and set the new image path
-                    $imagePath = $this->getSubject()->uploadFile($imageName);
+                    try {
+                        // upload the file and set the new image path
+                        $imagePath = $this->getSubject()->uploadFile($imageName);
+                    } catch (\Exception $e) {
+                        // query whether or not debug mode has been enabled
+                        if ($subject->isDebugMode()) {
+                            $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($e->getMessage()));
+                        } else {
+                            throw new $subject->wrapException(array($imageColumnName), $e);
+                        }
+                    }
 
                     // log a message that the image has been copied
                     $this->getSubject()
@@ -99,8 +111,17 @@ class FileUploadObserver extends AbstractProductImportObserver
                             continue;
                         }
 
-                        // upload the file and set the new image path
-                        $imagePath = $this->getSubject()->uploadFile($additionalImageName);
+                        try {
+                            // upload the file and set the new image path
+                            $imagePath = $this->getSubject()->uploadFile($additionalImageName);
+                        } catch (\Exception $e) {
+                            // query whether or not debug mode has been enabled
+                            if ($subject->isDebugMode()) {
+                                $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($e->getMessage()));
+                            } else {
+                                throw new $subject->wrapException(array(ColumnKeys::ADDITIONAL_IMAGES), $e);
+                            }
+                        }
 
                         // log a message that the image has been copied
                         $this->getSubject()
