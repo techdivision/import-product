@@ -63,7 +63,7 @@ class ProductVarcharRepository extends AbstractRepository implements ProductVarc
         $this->productVarcharsStmt =
             $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_VARCHARS));
         $this->productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt =
-                $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE));
     }
 
     /**
@@ -85,7 +85,11 @@ class ProductVarcharRepository extends AbstractRepository implements ProductVarc
 
         // load and return the product varchar attributes with the passed primary key/store ID
         $this->productVarcharsStmt->execute($params);
-        return $this->productVarcharsStmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        // fetch the values and return them
+        while ($record = $this->productVarcharsStmt->fetch(\PDO::FETCH_ASSOC)) {
+            yield $record;
+        }
     }
 
     /**

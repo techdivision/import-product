@@ -100,18 +100,12 @@ class CategoryProductRepository extends AbstractRepository implements CategoryPr
         // prepare the params
         $params = array(MemberNames::SKU => $sku);
 
-        // initialize the array for the category product relations
-        $categoryProducts = array();
-
         // load and return the product category relation for the passed product SKU
         $this->categoryProductsBySkuStmt->execute($params);
 
         // prepare the result by using the category ID as key
-        foreach ($this->categoryProductsBySkuStmt->fetchAll(\PDO::FETCH_ASSOC) as $categoryProduct) {
-            $categoryProducts[$categoryProduct[MemberNames::CATEGORY_ID]] = $categoryProduct;
+        while ($record = $this->categoryProductsBySkuStmt->fetch(\PDO::FETCH_ASSOC)) {
+            yield $record[MemberNames::CATEGORY_ID] => $record;
         }
-
-        // return the category product relations
-        return $categoryProducts;
     }
 }

@@ -125,7 +125,11 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
 
         // load and return the available products
         $this->productsStmt->execute();
-        return $this->productsStmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        // fetch the values and return them
+        while ($record = $this->productsStmt->fetch(\PDO::FETCH_ASSOC)) {
+            yield $record;
+        }
     }
 
     /**

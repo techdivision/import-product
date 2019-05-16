@@ -75,6 +75,10 @@ class ProductIntRepository extends AbstractRepository implements ProductIntRepos
 
         // load and return the product integer attributes with the passed primary key/store ID
         $this->productIntsStmt->execute($params);
-        return $this->productIntsStmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        // fetch the values and return them
+        while ($record = $this->productIntsStmt->fetch(\PDO::FETCH_ASSOC)) {
+            yield $record;
+        }
     }
 }

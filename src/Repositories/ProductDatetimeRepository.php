@@ -75,6 +75,10 @@ class ProductDatetimeRepository extends AbstractRepository implements ProductDat
 
         // load and return the product datetime attributes with the passed primary key/store ID
         $this->productDatetimesStmt->execute($params);
-        return $this->productDatetimesStmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        // fetch the values and return them
+        while ($record = $this->productDatetimesStmt->fetch(\PDO::FETCH_ASSOC)) {
+            yield $record;
+        }
     }
 }

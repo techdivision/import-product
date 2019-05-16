@@ -75,6 +75,10 @@ class ProductDecimalRepository extends AbstractRepository implements ProductDeci
 
         // load and return the product decimal attributes with the passed primary key/store ID
         $this->productDecimalsStmt->execute($params);
-        return $this->productDecimalsStmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        // fetch the values and return them
+        while ($record = $this->productDecimalsStmt->fetch(\PDO::FETCH_ASSOC)) {
+            yield $record;
+        }
     }
 }

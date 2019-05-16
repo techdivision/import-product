@@ -75,6 +75,10 @@ class ProductTextRepository extends AbstractRepository implements ProductTextRep
 
         // load and return the product text attributes with the passed primary key/store ID
         $this->productTextsStmt->execute($params);
-        return $this->productTextsStmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        // fetch the values and return them
+        while ($record = $this->productTextsStmt->fetch(\PDO::FETCH_ASSOC)) {
+            yield $record;
+        }
     }
 }
