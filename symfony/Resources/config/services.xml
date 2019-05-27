@@ -5,12 +5,28 @@
 
     <services>
 
+        <service id="import_product.utils.sku.to.pk.mapping" class="TechDivision\Import\Product\Utils\SkuToPkMappingUtil">
+            <argument type="service" id="configuration"/>
+        </service>
+
         <!--
          | The DI cache configuration
          |-->
 
         <service id="import_product.repository.cache.warmer.product" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductCacheWarmer">
             <argument type="service" id="import_product.repository.product"/>
+        </service>
+
+        <!--
+         | The DI listener configuration
+         |-->
+        <service id="import_product.listener.pre.load.sku.to.pk.mapping" class="TechDivision\Import\Product\Listeners\PreLoadSkuToPkMappingListener">
+            <argument type="service" id="import.processor.registry"/>
+            <argument type="service" id="import_product.utils.sku.to.pk.mapping"/>
+        </service>
+        <service id="import_product.listener.register.sku.to.pk.mapping" class="TechDivision\Import\Product\Listeners\RegisterSkuToPkMappingListener">
+            <argument type="service" id="import.processor.registry"/>
+            <argument type="service" id="import_product.utils.sku.to.pk.mapping"/>
         </service>
 
         <!--

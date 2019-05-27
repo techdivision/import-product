@@ -6,6 +6,8 @@
 
 ## Features
 
+* Add SkuToPkMappingUtil implementation
+* Add Listeners to add SKU => PK mapping to registry
 * Refactor Cache Integration for PSR-6 compliance
 
 # Version 9.0.1

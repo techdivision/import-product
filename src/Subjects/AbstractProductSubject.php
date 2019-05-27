@@ -40,8 +40,15 @@ use TechDivision\Import\Product\Exceptions\MapLinkTypeCodeToIdException;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-abstract class AbstractProductSubject extends AbstractEavSubject implements EntitySubjectInterface
+abstract class AbstractProductSubject extends AbstractEavSubject implements EntitySubjectInterface, SkuToPkMappingAwareSubjectInterface
 {
+
+    /**
+     * The trait with the SKU => PK mapping functionality.
+     *
+     * @var \TechDivision\Import\Product\Subjects\SkuToPkMappingTrait
+     */
+    use SkuToPkMappingTrait;
 
     /**
      * The available stores.
