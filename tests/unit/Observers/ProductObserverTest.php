@@ -20,12 +20,9 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Utils\EntityStatus;
-use TechDivision\Import\Serializers\SerializerInterface;
-use TechDivision\Import\Adapter\ImportAdapterInterface;
-use TechDivision\Import\Adapter\SerializerAwareAdapterInterface;
 use TechDivision\Import\Subjects\I18n\DateConverterInterface;
 
 /**
