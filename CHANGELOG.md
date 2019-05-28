@@ -1,3 +1,13 @@
+# Version 10.0.1
+
+## Bugfixes
+
+* Fixed invalid persistProduct() method for replace operation
+
+## Features
+
+* None
+
 # Version 10.0.0
 
 ## Bugfixes

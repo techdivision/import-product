@@ -1020,24 +1020,17 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function persistProduct($product, $name = null)
     {
 
-        // persist the new entity and return the ID
-        $id = $this->getProductAction()->persist($product, $name);
+        // persist the new entity and set the PK value in the entity
+        $product[$pkName = $this->getProductRepository()->getPrimaryKeyName()] = $this->getProductAction()->persist($product, $name);
+        // load the cache adapter from the product repository
+        $cacheAdapter = $this->getProductRepository()->getCacheAdapter();
+        // load new cache item from the cache
+        $uniqueKey = $cacheAdapter->cacheKey(ProductRepositoryInterface::class, array($product[$pkName]));
+        // add the entity value to the cache, register the cache key reference as well
+        $cacheAdapter->toCache($uniqueKey, $product, array($product[MemberNames::SKU] => $uniqueKey), true);
 
-        // add the product to the cache, register the SKU reference as well
-        if ($this->getProductRepository() instanceof ProductRepositoryInterface) {
-            // load the cache adapter from the product repository
-            $cacheAdapter = $this->getProductRepository()->getCacheAdapter();
-            // load new cache item from the cache
-            $uniqueKey = $cacheAdapter->cacheKey(
-                ProductRepositoryInterface::class,
-                array($product[$this->getProductRepository()->getPrimaryKeyName()])
-            );
-            // add the EAV attribute option value to the cache, register the cache key reference as well
-            $cacheAdapter->toCache($uniqueKey, $product, array($product[MemberNames::SKU] => $uniqueKey), true);
-        }
-
-        // return the ID of the persisted product
-        return $id;
+        // return the ID of the persisted entity
+        return $product[$pkName];
     }
 
     /**
@@ -1281,9 +1274,5 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      */
     public function cleanUp()
     {
-        // flush the cached if we've a cached product repository
-        /* if ($this->getProductRepository() instanceof ProductCachedRepositoryInterface) {
-            $this->getProductRepository()->getCacheAdapter()->flushCache();
-        } */
     }
 }

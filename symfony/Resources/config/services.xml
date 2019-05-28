@@ -387,9 +387,6 @@
          |-->
         <service id="import_product.observer.composite.base.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
             <call method="addObserver">
-                <argument id="import_product.observer.pre.load.entity.id" type="service"/>
-            </call>
-            <call method="addObserver">
                 <argument id="import_product_url_rewrite.observer.clear.url.rewrite" type="service"/>
             </call>
             <call method="addObserver">
