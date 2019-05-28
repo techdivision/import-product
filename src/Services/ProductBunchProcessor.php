@@ -36,7 +36,6 @@ use TechDivision\Import\Product\Repositories\ProductDatetimeRepositoryInterface;
 use TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface;
 use TechDivision\Import\Product\Repositories\CategoryProductRepositoryInterface;
 use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
-use TechDivision\Import\Product\Repositories\Cached\ProductCachedRepositoryInterface;
 
 /**
  * The product bunch processor implementation.
@@ -1025,7 +1024,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         $id = $this->getProductAction()->persist($product, $name);
 
         // add the product to the cache, register the SKU reference as well
-        if ($this->getProductRepository() instanceof ProductCachedRepositoryInterface) {
+        if ($this->getProductRepository() instanceof ProductRepositoryInterface) {
             // load the cache adapter from the product repository
             $cacheAdapter = $this->getProductRepository()->getCacheAdapter();
             // load new cache item from the cache
