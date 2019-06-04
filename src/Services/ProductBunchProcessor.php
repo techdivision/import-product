@@ -1027,7 +1027,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         // load new cache item from the cache
         $uniqueKey = $cacheAdapter->cacheKey(ProductRepositoryInterface::class, array($product[$pkName]));
         // add the entity value to the cache, register the cache key reference as well
-        $cacheAdapter->toCache($uniqueKey, $product, array($product[MemberNames::SKU] => $uniqueKey), true);
+        $cacheAdapter->toCache($uniqueKey, $product, array($product[MemberNames::SKU] => $uniqueKey), array(), true);
 
         // return the ID of the persisted entity
         return $product[$pkName];
