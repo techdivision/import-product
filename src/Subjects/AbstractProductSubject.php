@@ -334,7 +334,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     {
 
         // load the status of the actual import
-        $status = $this->getRegistryProcessor()->getAttribute($serial);
+        $status = $this->getRegistryProcessor()->getAttribute(RegistryKeys::STATUS);
 
         // load the global data we've prepared initially
         $this->linkTypes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::LINK_TYPES];
@@ -367,7 +367,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // update the status
         $registryProcessor->mergeAttributesRecursive(
-            $serial,
+            RegistryKeys::STATUS,
             array(
                 RegistryKeys::SKU_ENTITY_ID_MAPPING => $this->skuEntityIdMapping,
                 RegistryKeys::SKU_STORE_VIEW_CODE_MAPPING => $this->skuStoreViewCodeMapping

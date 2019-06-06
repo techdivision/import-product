@@ -26,6 +26,7 @@ use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractRepository;
 use TechDivision\Import\Connection\ConnectionInterface;
 use TechDivision\Import\Repositories\SqlStatementRepositoryInterface;
+use TechDivision\Import\Product\Utils\CacheKeys;
 
 /**
  * Repository implementation to load product data.
@@ -153,12 +154,9 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
         // query whether or not the product is available in the database
         if ($product = $this->productStmt->fetch(\PDO::FETCH_ASSOC)) {
             // prepare the unique cache key for the product
-            $cacheKey = $this->cacheAdapter->cacheKey(
-                ProductRepositoryInterface::class,
-                array($product[$this->getPrimaryKeyName()])
-            );
+            $uniqueKey = array(CacheKeys::PRODUCT => $product[$this->getPrimaryKeyName()]);
             // add the EAV attribute option value to the cache, register the cache key reference as well
-            $this->cacheAdapter->toCache($cacheKey, $product, array($sku => $cacheKey));
+            $this->cacheAdapter->toCache($uniqueKey, $product, array($sku => $uniqueKey));
             // finally, return it
             return $product;
         }

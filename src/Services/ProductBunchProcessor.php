@@ -36,6 +36,7 @@ use TechDivision\Import\Product\Repositories\ProductDatetimeRepositoryInterface;
 use TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface;
 use TechDivision\Import\Product\Repositories\CategoryProductRepositoryInterface;
 use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
+use TechDivision\Import\Product\Utils\CacheKeys;
 
 /**
  * The product bunch processor implementation.
@@ -1022,12 +1023,10 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
 
         // persist the new entity and set the PK value in the entity
         $product[$pkName = $this->getProductRepository()->getPrimaryKeyName()] = $this->getProductAction()->persist($product, $name);
-        // load the cache adapter from the product repository
-        $cacheAdapter = $this->getProductRepository()->getCacheAdapter();
         // load new cache item from the cache
-        $uniqueKey = $cacheAdapter->cacheKey(ProductRepositoryInterface::class, array($product[$pkName]));
+        $uniqueKey = array(CacheKeys::PRODUCT => $product[$pkName]);
         // add the entity value to the cache, register the cache key reference as well
-        $cacheAdapter->toCache($uniqueKey, $product, array($product[MemberNames::SKU] => $uniqueKey), array(), true);
+        $this->getProductRepository()->getCacheAdapter()->toCache($uniqueKey, $product, array($product[MemberNames::SKU] => $uniqueKey), true);
 
         // return the ID of the persisted entity
         return $product[$pkName];

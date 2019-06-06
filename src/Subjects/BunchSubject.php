@@ -150,7 +150,7 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     {
 
         // load the status of the actual import
-        $status = $this->getRegistryProcessor()->getAttribute($serial);
+        $status = $this->getRegistryProcessor()->getAttribute(RegistryKeys::STATUS);
 
         // load the global data we've prepared initially
         $this->entityTypes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ENTITY_TYPES];
@@ -200,7 +200,7 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
 
         // update the status
         $registryProcessor->mergeAttributesRecursive(
-            $serial,
+            RegistryKeys::STATUS,
             array(
                 RegistryKeys::PRE_LOADED_ENTITY_IDS => $this->preLoadedEntityIds,
             )

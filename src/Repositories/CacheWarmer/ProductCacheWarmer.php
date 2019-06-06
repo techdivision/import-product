@@ -23,6 +23,7 @@ namespace TechDivision\Import\Product\Repositories\CacheWarmer;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Repositories\ProductRepositoryInterface;
 use TechDivision\Import\Repositories\CacheWarmer\CacheWarmerInterface;
+use TechDivision\Import\Product\Utils\CacheKeys;
 
 /**
  * Cache warmer implementation that pre-load the available products.
@@ -68,10 +69,7 @@ class ProductCacheWarmer implements CacheWarmerInterface
         // prepare the caches for the statements
         foreach ($this->repository->findAll() as $product) {
             // prepare the unique cache key for the product
-            $uniqueKey = $cacheAdapter->cacheKey(
-                ProductRepositoryInterface::class,
-                array($product[$this->repository->getPrimaryKeyName()])
-            );
+            $uniqueKey = array(CacheKeys::PRODUCT => $product[$this->repository->getPrimaryKeyName()]);
             // add the EAV attribute option value to the cache, register the cache key reference as well
             $cacheAdapter->toCache($uniqueKey, $product, array($product[MemberNames::SKU] => $uniqueKey));
         }

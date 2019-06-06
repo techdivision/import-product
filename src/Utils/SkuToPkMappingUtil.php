@@ -96,7 +96,7 @@ class SkuToPkMappingUtil implements SkuToPkMappingUtilInterface
     {
 
         // load the status for the import of the passed subject
-        $status = $registryProcessor->getAttribute($serial);
+        $status = $registryProcessor->getAttribute(RegistryKeys::STATUS);
 
         // query whether or not the SKU => PK mapping is available
         if (isset($status[$this->getSkuToPkMappingKey()])) {
@@ -118,7 +118,7 @@ class SkuToPkMappingUtil implements SkuToPkMappingUtilInterface
      */
     public function setSkuToPkMapping(RegistryProcessorInterface $registryProcessor, $serial, array $skuToPkMapping)
     {
-        $registryProcessor->mergeAttributesRecursive($serial, array($this->getSkuToPkMappingKey() => $skuToPkMapping));
+        $registryProcessor->mergeAttributesRecursive(RegistryKeys::STATUS, array($this->getSkuToPkMappingKey() => $skuToPkMapping));
     }
 
     /**
