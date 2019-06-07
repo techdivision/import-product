@@ -37,7 +37,7 @@
         <service id="import_product.repository.product" class="TechDivision\Import\Product\Repositories\ProductRepository">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
-            <argument type="service" id="import.cache.adapter.configurable"/>
+            <argument type="service" id="cache.configurable"/>
         </service>
         <service id="import_product.repository.category.product" class="TechDivision\Import\Product\Repositories\CategoryProductRepository">
             <argument type="service" id="connection"/>
