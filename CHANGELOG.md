@@ -1,3 +1,13 @@
+# Version 11.0.1
+
+## Bugfixes
+
+* Fixed issue in DI configuration leading to invalid cache configuration
+
+## Features
+
+* None
+
 # Version 11.0.0
 
 ## Bugfixes
