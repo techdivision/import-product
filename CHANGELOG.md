@@ -1,3 +1,13 @@
+# Version 12.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Refactoring Cache Integration
+
 # Version 11.0.1
 
 ## Bugfixes

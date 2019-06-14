@@ -22,8 +22,9 @@ namespace TechDivision\Import\Product\Subjects;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use TechDivision\Import\Utils\EntityTypeCodes;
-use TechDivision\Import\Product\Utils\RegistryKeys;
+use TechDivision\Import\Product\Utils\CacheKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\RegistryKeys;
 
 /**
  * Test class for the product action implementation.
@@ -89,7 +90,7 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
                                       ->getMock();
         $mockRegistryProcessor->expects($this->any())
                               ->method('getAttribute')
-                              ->with($serial = uniqid())
+                              ->with(CacheKeys::STATUS)
                               ->willReturn($this->globalData);
 
         // create a generator
@@ -142,7 +143,7 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
         $this->subject->setConfiguration($mockSubjectConfiguration);
 
         // set-up the the subject
-        $this->subject->setUp($serial);
+        $this->subject->setUp(uniqid());
     }
 
     /**
