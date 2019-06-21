@@ -7,6 +7,7 @@
 ## Features
 
 * Refactoring Cache Integration
+* Switch to latest techdivision/import 11.* version as dependency
 
 # Version 11.0.1
 
