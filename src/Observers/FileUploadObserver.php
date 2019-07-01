@@ -70,22 +70,22 @@ class FileUploadObserver extends AbstractProductImportObserver
                     try {
                         // upload the file and set the new image path
                         $imagePath = $this->getSubject()->uploadFile($imageName);
-                         // override the image path with the new one
-                         $this->setValue($imageColumnName, $imagePath);
-                         // add the image to the list with processed images
-                         $actualImageNames[$imageName] = $imagePath;
+                        // override the image path with the new one
+                        $this->setValue($imageColumnName, $imagePath);
+                        // add the image to the list with processed images
+                        $actualImageNames[$imageName] = $imagePath;
 
-                         // log a message that the image has been copied
-                         $this->getSubject()
-                              ->getSystemLogger()
-                              ->debug(
-                                  sprintf(
-                                      'Successfully copied image type %s with name %s => %s',
-                                      $imageColumnName,
-                                      $imageName,
-                                      $imagePath
-                                  )
-                              );
+                        // log a message that the image has been copied
+                        $this->getSubject()
+                             ->getSystemLogger()
+                             ->debug(
+                                 sprintf(
+                                     'Successfully copied image type %s with name %s => %s',
+                                     $imageColumnName,
+                                     $imageName,
+                                     $imagePath
+                                 )
+                             );
                     } catch (\Exception $e) {
                         // query whether or not debug mode has been enabled
                         if ($subject->isDebugMode()) {
