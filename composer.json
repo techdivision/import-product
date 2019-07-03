@@ -4,7 +4,7 @@
     "license": "OSL-3.0",
     "require": {
         "php": ">=5.6.0",
-        "techdivision/import": "12.x-dev as 11.1.0"
+        "techdivision/import": "12.*"
     },
     "require-dev": {
         "doctrine/dbal": "2.5.*",
