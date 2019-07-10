@@ -336,9 +336,6 @@
          |-->
         <service id="import_product.observer.composite.inventory.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
             <call method="addObserver">
-                <argument id="import.observer.attribute.set" type="service"/>
-            </call>
-            <call method="addObserver">
                 <argument id="import_product.observer.last.entity.id" type="service"/>
             </call>
             <call method="addObserver">
@@ -356,9 +353,6 @@
          | The DI configuration for the composite observers of the price add-update operation.
          |-->
         <service id="import_product.observer.composite.price.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import.observer.attribute.set" type="service"/>
-            </call>
             <call method="addObserver">
                 <argument id="import_product.observer.last.entity.id" type="service"/>
             </call>
