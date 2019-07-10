@@ -1,3 +1,13 @@
+# Version 13.0.1
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Remove unnecessary attribute set observer from price and inventory import Symfony DI configuration
+
 # Version 13.0.0
 
 ## Bugfixes
