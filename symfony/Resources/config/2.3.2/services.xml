@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <!--
+         | The DI configuration for the composite observers of the delete operation.
+         |-->
+        <service id="import_product.observer.composite.base.delete" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product.observer.last.entity.id" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_msi.observer.product.source.item.default" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_url_rewrite.observer.clear.url.rewrite" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.clear.product" type="service"/>
+            </call>
+        </service>
+
+        <!--
+         | The DI configuration for the composite observers of the replace operation.
+         |-->
+        <service id="import_product.observer.composite.base.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product_url_rewrite.observer.clear.url.rewrite" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.clear.product" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import.observer.attribute.set" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import.observer.additional.attribute" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.url.key" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.file.upload" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.quality.and.stock.status" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.website" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.category.product" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.inventory" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.attribute" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_url_rewrite.observer.product.url.rewrite" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_variant.observer.product.variant" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_bundle.observer.product.bundle" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_media.observer.product.media" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_link.observer.product.link" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_grouped.observer.product.grouped" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_msi.observer.product.source.item.default" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.clean.up" type="service"/>
+            </call>
+        </service>
+
+        <!--
+         | The DI configuration for the composite observers of the add-update operation.
+         |-->
+        <service id="import_product.observer.composite.base.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import.observer.attribute.set" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import.observer.additional.attribute" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.url.key" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.file.upload" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.quality.and.stock.status" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.website.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.category.product.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.inventory.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.attribute.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_url_rewrite.observer.product.url.rewrite" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_variant.observer.product.variant" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_bundle.observer.product.bundle" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_media.observer.product.media" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_media.observer.clear.media.gallery" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_link.observer.product.link" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_grouped.observer.product.grouped" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_msi.observer.product.source.item.default" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.clean.up" type="service"/>
+            </call>
+        </service>
+
+    </services>
+
+</container>

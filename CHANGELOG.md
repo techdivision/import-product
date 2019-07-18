@@ -1,3 +1,13 @@
+# Version 13.0.2
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add new version specific configuration and Syfmony DI configuration files for Magento 2.3.2
+
 # Version 13.0.1
 
 ## Bugfixes

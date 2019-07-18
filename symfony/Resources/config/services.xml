@@ -375,6 +375,11 @@
                 <argument id="import_product.observer.clear.product" type="service"/>
             </call>
         </service>
+        <service id="import_product.observer.composite.msi.delete" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product_msi.observer.clear.inventory.source.item" type="service"/>
+            </call>
+        </service>
 
         <!--
          | The DI configuration for the composite observers of the replace operation.
@@ -488,6 +493,14 @@
                 <argument id="import_product_link.observer.link.attribute.position" type="service"/>
             </call>
         </service>
+        <service id="import_product.observer.composite.msi.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product_msi.observer.clear.inventory.source.item" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_msi.observer.inventory.source.item" type="service"/>
+            </call>
+        </service>
 
         <!--
          | The DI configuration for the composite observers of the add-update operation.
@@ -596,6 +609,11 @@
             </call>
             <call method="addObserver">
                 <argument id="import_product_link.observer.link.attribute.position.update" type="service"/>
+            </call>
+        </service>
+        <service id="import_product.observer.composite.msi.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product_msi.observer.inventory.source.item.update" type="service"/>
             </call>
         </service>
 
