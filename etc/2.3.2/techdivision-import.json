@@ -1,6 +1,6 @@
 {
   "magento-edition": "CE",
-  "magento-version": "2.2.0",
+  "magento-version": "2.3.2",
   "operation-name" : "add-update",
   "archive-artefacts" : true,
   "debug-mode" : false,
@@ -76,6 +76,20 @@
                 {
                   "import": [
                     "import_product.observer.composite.base.delete"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_product_msi.subject.bunch",
+              "identifier": "files",
+              "file-resolver": {
+                "prefix": "inventory-msi"
+              },
+              "observers": [
+                {
+                  "import": [
+                    "import_product.observer.composite.msi.delete"
                   ]
                 }
               ]
@@ -208,6 +222,20 @@
                   ]
                 }
               ]
+            },
+            {
+              "id": "import_product_msi.subject.bunch",
+              "identifier": "files",
+              "file-resolver": {
+                "prefix": "inventory-msi"
+              },
+              "observers": [
+                {
+                  "import": [
+                    "import_product.observer.composite.msi.replace"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -335,6 +363,20 @@
                 {
                   "import": [
                     "import_product_url_rewrite.observer.url.rewrite.update"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_product_msi.subject.bunch",
+              "identifier": "files",
+              "file-resolver": {
+                "prefix": "inventory-msi"
+              },
+              "observers": [
+                {
+                  "import": [
+                    "import_product.observer.composite.msi.add_update"
                   ]
                 }
               ]
