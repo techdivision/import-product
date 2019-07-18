@@ -1,3 +1,13 @@
+# Version 13.0.3
+
+## Bugfixes
+
+* Remove unnecessary pre-import observer from default configuration files
+
+## Features
+
+* None
+
 # Version 13.0.2
 
 ## Bugfixes

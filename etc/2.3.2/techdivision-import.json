@@ -147,11 +147,6 @@
               },
               "observers": [
                 {
-                  "pre-import": [
-                    "import.observer.attribute.set"
-                  ]
-                },
-                {
                   "import": [
                     "import_product.observer.composite.variant.replace"
                   ]
@@ -290,11 +285,6 @@
                 "prefix": "variants"
               },
               "observers": [
-                {
-                  "pre-import": [
-                    "import.observer.attribute.set"
-                  ]
-                },
                 {
                   "import": [
                     "import_product.observer.composite.variant.add_update"
