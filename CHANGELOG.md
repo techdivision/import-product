@@ -1,3 +1,13 @@
+# Version 13.0.4
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Extend clean-up-empty-columns configuration by price specifc columns
+
 # Version 13.0.3
 
 ## Bugfixes
