@@ -1,3 +1,13 @@
+# Version 14.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Extend addSkuEntityIdMapping with a new optional entityId param
+
 # Version 13.0.4
 
 ## Bugfixes

@@ -104,13 +104,14 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     /**
      * Add the passed SKU => entity ID mapping.
      *
-     * @param string $sku The SKU
+     * @param string       $sku      The SKU
+     * @param integer|null $entityId The optional entity ID, the last processed entity ID is used, if not set
      *
      * @return void
      */
-    protected function addSkuEntityIdMapping($sku)
+    protected function addSkuEntityIdMapping($sku, $entityId = null)
     {
-        $this->getSubject()->addSkuEntityIdMapping($sku);
+        $this->getSubject()->addSkuEntityIdMapping($sku, $entityId);
     }
 
     /**

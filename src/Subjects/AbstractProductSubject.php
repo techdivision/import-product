@@ -301,13 +301,14 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     /**
      * Add the passed SKU => entity ID mapping.
      *
-     * @param string $sku The SKU
+     * @param string       $sku      The SKU
+     * @param integer|null $entityId The optional entity ID, the last processed entity ID is used, if not set
      *
      * @return void
      */
-    public function addSkuEntityIdMapping($sku)
+    public function addSkuEntityIdMapping($sku, $entityId = null)
     {
-        $this->skuEntityIdMapping[$sku] = $this->getLastEntityId();
+        $this->skuEntityIdMapping[$sku] = $entityId == null ? $this->getLastEntityId() : $entityId;
     }
 
     /**

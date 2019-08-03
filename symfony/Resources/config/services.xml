@@ -485,14 +485,6 @@
                 <argument id="import_product_media.observer.media.gallery.value" type="service"/>
             </call>
         </service>
-        <service id="import_product.observer.composite.link.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import_product_link.observer.link" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_link.observer.link.attribute.position" type="service"/>
-            </call>
-        </service>
         <service id="import_product.observer.composite.msi.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
             <call method="addObserver">
                 <argument id="import_product_msi.observer.clear.inventory.source.item" type="service"/>
@@ -601,14 +593,6 @@
             </call>
             <call method="addObserver">
                 <argument id="import_product_media.observer.media.gallery.value.update" type="service"/>
-            </call>
-        </service>
-        <service id="import_product.observer.composite.link.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import_product_link.observer.link" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_link.observer.link.attribute.position.update" type="service"/>
             </call>
         </service>
         <service id="import_product.observer.composite.msi.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
