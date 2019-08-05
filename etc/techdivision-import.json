@@ -79,6 +79,20 @@
                   ]
                 }
               ]
+            },
+            {
+              "id": "import_product_msi.subject.bunch",
+              "identifier": "files",
+              "file-resolver": {
+                "prefix": "inventory-msi"
+              },
+              "observers": [
+                {
+                  "import": [
+                    "import_product_msi.observer.composite.delete"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -134,7 +148,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_product.observer.composite.variant.replace"
+                    "import_product_variant.observer.composite.replace"
                   ]
                 }
               ]
@@ -147,7 +161,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_product.observer.composite.bundle.replace"
+                    "import_product_bundle_.observer.composite.replace"
                   ]
                 }
               ]
@@ -173,7 +187,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_product.observer.composite.media.replace"
+                    "import_product_media.observer.composite.replace"
                   ]
                 }
               ]
@@ -186,7 +200,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_product.observer.composite.link.replace"
+                    "import_product_link.observer.composite.replace"
                   ]
                 }
               ]
@@ -200,6 +214,20 @@
                 {
                   "import": [
                     "import_product_url_rewrite.observer.url.rewrite"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_product_msi.subject.bunch",
+              "identifier": "files",
+              "file-resolver": {
+                "prefix": "inventory-msi"
+              },
+              "observers": [
+                {
+                  "import": [
+                    "import_product_msi.observer.composite.replace"
                   ]
                 }
               ]
@@ -267,7 +295,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_product.observer.composite.variant.add_update"
+                    "import_product_variant.observer.composite.add_update"
                   ]
                 }
               ]
@@ -280,7 +308,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_product.observer.composite.bundle.add_update"
+                    "import_product_bundle.observer.composite.add_update"
                   ]
                 }
               ]
@@ -306,7 +334,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_product.observer.composite.media.add_update"
+                    "import_product_media.observer.composite.add_update"
                   ]
                 }
               ]
@@ -319,7 +347,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_product.observer.composite.link.add_update"
+                    "import_product_link.observer.composite.add_update"
                   ]
                 }
               ]
@@ -333,6 +361,20 @@
                 {
                   "import": [
                     "import_product_url_rewrite.observer.url.rewrite.update"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_product_msi.subject.bunch",
+              "identifier": "files",
+              "file-resolver": {
+                "prefix": "inventory-msi"
+              },
+              "observers": [
+                {
+                  "import": [
+                    "import_product_msi.observer.composite.add_update"
                   ]
                 }
               ]

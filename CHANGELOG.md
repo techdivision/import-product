@@ -1,3 +1,15 @@
+# Version 15.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Update default configuration for usage of new library specific DI identifiers
+* Move library specific DI identifiers to the corresponding library, add aliases therefore
+* Refactor AbstractProductSubject, add getStoreByStoreCode() + mapSkuToEntityId() methods to improve generics
+
 # Version 14.0.0
 
 ## Bugfixes

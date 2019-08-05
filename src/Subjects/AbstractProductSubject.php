@@ -28,6 +28,7 @@ use TechDivision\Import\Product\Utils\RelationTypes;
 use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Subjects\EntitySubjectInterface;
+use TechDivision\Import\Product\Exceptions\MapSkuToEntityIdException;
 use TechDivision\Import\Product\Exceptions\MapLinkTypeCodeToIdException;
 
 /**
@@ -49,20 +50,6 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
      * @var \TechDivision\Import\Product\Subjects\SkuToPkMappingTrait
      */
     use SkuToPkMappingTrait;
-
-    /**
-     * The available stores.
-     *
-     * @var array
-     */
-    protected $stores = array();
-
-    /**
-     * The available store websites.
-     *
-     * @var array
-     */
-    protected $storeWebsites = array();
 
     /**
      * The available EAV attributes, grouped by their attribute set and the attribute set name as keys.
@@ -429,6 +416,30 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         throw new \Exception(
             $this->appendExceptionSuffix(
                 sprintf('Found invalid store view code %s', $storeViewCode)
+            )
+        );
+    }
+
+    /**
+     * Return's the store for the passed store code.
+     *
+     * @param string $storeCode The store code to return the store for
+     *
+     * @return array The requested store
+     * @throws \Exception Is thrown, if the requested store is not available
+     */
+    public function getStoreByStoreCode($storeCode)
+    {
+
+        // query whether or not the store with the passed store code exists
+        if (isset($this->stores[$storeCode])) {
+            return $this->stores[$storeCode];
+        }
+
+        // throw an exception, if not
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Found invalid store code %s', $storeCode)
             )
         );
     }
@@ -803,6 +814,30 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // return the passed link type code
         return $linkTypeCode;
+    }
+
+    /**
+     * Return the entity ID for the passed SKU.
+     *
+     * @param string $sku The SKU to return the entity ID for
+     *
+     * @return integer The mapped entity ID
+     * @throws \TechDivision\Import\Product\Exceptions\MapSkuToEntityIdException Is thrown if the SKU is not mapped yet
+     */
+    public function mapSkuToEntityId($sku)
+    {
+
+        // query weather or not the SKU has been mapped
+        if (isset($this->skuEntityIdMapping[$sku])) {
+            return $this->skuEntityIdMapping[$sku];
+        }
+
+        // throw an exception if the SKU has not been mapped yet
+        throw new MapSkuToEntityIdException(
+            $this->appendExceptionSuffix(
+                sprintf('Found not mapped entity ID for SKU %s', $sku)
+            )
+        );
     }
 
     /**

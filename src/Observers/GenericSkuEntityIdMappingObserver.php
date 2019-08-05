@@ -123,6 +123,8 @@ class GenericSkuEntityIdMappingObserver extends AbstractProductImportObserver
      * Map the PK for the product with the passed SKU.
      *
      * @param array $product The product to add the SKU => entity ID mapping for
+     *
+     * @return void
      */
     protected function addSkuPkMapping(array $product)
     {

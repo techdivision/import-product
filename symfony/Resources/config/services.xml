@@ -443,55 +443,21 @@
                 <argument id="import_product.observer.clean.up" type="service"/>
             </call>
         </service>
-        <service id="import_product.observer.composite.variant.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import.observer.attribute.set" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_variant.observer.variant.super.link" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_variant.observer.variant.super.attribute" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_variant.observer.variant.product.relation" type="service"/>
-            </call>
+
+        <!--
+         | The DI configuration with the aliases of the replace operations for the service configurations that has been moved to their own libraries.
+         |-->
+        <service id="import_product.observer.composite.variant.replace" alias="import_product_variant.observer.composite.replace">
+            <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
-        <service id="import_product.observer.composite.bundle.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import_product_bundle.observer.bundle.option" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_bundle.observer.bundle.option.value" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_bundle.observer.bundle.selection" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_bundle.observer.bundle.selection.price" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_bundle.observer.bundle.product.relation" type="service"/>
-            </call>
+        <service id="import_product.observer.composite.bundle.replace" alias="import_product_bundle.observer.composite.replace">
+            <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
-        <service id="import_product.observer.composite.media.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import.observer.attribute.set" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_media.observer.media.gallery" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_media.observer.media.gallery.value" type="service"/>
-            </call>
+        <service id="import_product.observer.composite.media.replace" alias="import_product_media.observer.composite.replace">
+            <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
-        <service id="import_product.observer.composite.msi.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import_product_msi.observer.clear.inventory.source.item" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_msi.observer.inventory.source.item" type="service"/>
-            </call>
+        <service id="import_product.observer.composite.msi.replace" alias="import_product_msi.observer.composite.replace">
+            <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
 
         <!--
@@ -553,52 +519,21 @@
                 <argument id="import_product.observer.clean.up" type="service"/>
             </call>
         </service>
-        <service id="import_product.observer.composite.variant.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import.observer.attribute.set" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_variant.observer.variant.super.link.update" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_variant.observer.variant.super.attribute.update" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_variant.observer.variant.product.relation.update" type="service"/>
-            </call>
+
+        <!--
+         | The DI configuration with the aliases of the add-update operations for the service configurations that has been moved to their own libraries.
+         |-->
+        <service id="import_product.observer.composite.variant.add_update" alias="import_product_variant.observer.composite.add_update">
+            <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
-        <service id="import_product.observer.composite.bundle.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import_product_bundle.observer.bundle.option.update" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_bundle.observer.bundle.option.value.update" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_bundle.observer.bundle.selection.update" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_bundle.observer.bundle.selection.price.update" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_bundle.observer.bundle.product.relation.update" type="service"/>
-            </call>
+        <service id="import_product.observer.composite.bundle.add_update" alias="import_product_bundle.observer.composite.add_update">
+            <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
-        <service id="import_product.observer.composite.media.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import.observer.attribute.set" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_media.observer.media.gallery.update" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_product_media.observer.media.gallery.value.update" type="service"/>
-            </call>
+        <service id="import_product.observer.composite.media.add_update" alias="import_product_media.observer.composite.add_update">
+            <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
-        <service id="import_product.observer.composite.msi.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import_product_msi.observer.inventory.source.item.update" type="service"/>
-            </call>
+        <service id="import_product.observer.composite.msi.add_update" alias="import_product_msi.observer.composite.add_update">
+            <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
 
         <service id="import_product.subject.bunch" class="TechDivision\Import\Product\Subjects\BunchSubject" shared="false">
