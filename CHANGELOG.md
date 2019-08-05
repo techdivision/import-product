@@ -1,3 +1,13 @@
+# Version 16.0.1
+
+## Bugfixes
+
+* Fixed invalid PHPUnit test for ProductInventoryObserver
+
+## Features
+
+* None
+
 # Version 16.0.0
 
 ## Bugfixes

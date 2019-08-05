@@ -23,6 +23,7 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Observers\DynamicAttributeLoader;
+use TechDivision\Import\Subjects\I18n\NumberConverterInterface;
 
 /**
  * Test class for the product inventory observer implementation.
@@ -128,12 +129,23 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
             21 => ''
         );
 
+        // initialize the number converter
+        $mockNumberConverter = $this->getMockBuilder(NumberConverterInterface::class)
+            ->setMethods(get_class_methods(NumberConverterInterface::class))
+            ->getMock();
+        $mockNumberConverter
+            ->expects($this->any())
+            ->method('parse')
+            ->with(100)
+            ->willReturn(100.00);
+
         // create a mock subject
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
                             ->setMethods(
                                 array(
                                     'hasBeenProcessed',
                                     'getLastEntityId',
+                                    'getNumberConverter',
                                     'getRow'
                                 )
                             )
@@ -149,6 +161,9 @@ class ProductInventoryObserverTest extends \PHPUnit_Framework_TestCase
         $mockSubject->expects($this->once())
                     ->method('getLastEntityId')
                     ->willReturn($lastEntityId = 12345);
+        $mockSubject->expects($this->any())
+                    ->method('getNumberConverter')
+                    ->willReturn($mockNumberConverter);
 
         // mock the processor methods
         $this->mockProductBunchProcessor->expects($this->once())
