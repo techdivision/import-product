@@ -375,10 +375,12 @@
                 <argument id="import_product.observer.clear.product" type="service"/>
             </call>
         </service>
-        <service id="import_product.observer.composite.msi.delete" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import_product_msi.observer.clear.inventory.source.item" type="service"/>
-            </call>
+
+        <!--
+         | The DI configuration with the aliases of the delete operations for the service configurations that has been moved to their own libraries.
+         |-->
+        <service id="import_product.observer.composite.msi.delete" alias="import_product_msi.observer.composite.delete">
+            <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
 
         <!--

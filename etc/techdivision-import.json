@@ -161,7 +161,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_product_bundle_.observer.composite.replace"
+                    "import_product_bundle.observer.composite.replace"
                   ]
                 }
               ]
