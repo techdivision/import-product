@@ -1,3 +1,13 @@
+# Version 15.0.1
+
+## Bugfixes
+
+* Add missing alias for composite link observer
+
+## Features
+
+* None
+
 # Version 15.0.0
 
 ## Bugfixes

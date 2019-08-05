@@ -456,6 +456,9 @@
         <service id="import_product.observer.composite.media.replace" alias="import_product_media.observer.composite.replace">
             <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
+        <service id="import_product.observer.composite.link.replace" class="import_product_link.observer.composite.replace">
+            <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
+        </service>
         <service id="import_product.observer.composite.msi.replace" alias="import_product_msi.observer.composite.replace">
             <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
@@ -530,6 +533,9 @@
             <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
         <service id="import_product.observer.composite.media.add_update" alias="import_product_media.observer.composite.add_update">
+            <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
+        </service>
+        <service id="import_product.observer.composite.link.add_update" class="import_product_link.observer.composite.add_update">
             <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
         <service id="import_product.observer.composite.msi.add_update" alias="import_product_msi.observer.composite.add_update">
