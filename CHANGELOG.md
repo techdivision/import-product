@@ -1,3 +1,13 @@
+# Version 17.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to latest techdivision/import 14.* version as dependency
+
 # Version 16.0.1
 
 ## Bugfixes
