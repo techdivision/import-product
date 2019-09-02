@@ -90,6 +90,14 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
 
     /**
      * The SQL statement to load a product varchar attribute by the passed attribute code,
+     * entity typy and store ID.
+     *
+     * @var string
+     */
+    const PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID = 'product_varchar.by.attribute_code.and.entity_type_id.and.store_id';
+
+    /**
+     * The SQL statement to load a product varchar attribute by the passed attribute code,
      * entity typy and store ID as well as the passed value.
      *
      * @var string

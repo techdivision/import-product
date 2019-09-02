@@ -16,6 +16,10 @@
         <service id="import_product.repository.cache.warmer.product" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductCacheWarmer">
             <argument type="service" id="import_product.repository.product"/>
         </service>
+        <service id="import_product.repository.cache.warmer.product.varchar" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductVarcharCacheWarmer">
+            <argument type="service" id="import_product.repository.product.varchar"/>
+            <argument type="service" id="import.repository.store"/>
+        </service>
 
         <!--
          | The DI listener configuration
@@ -66,6 +70,7 @@
         <service id="import_product.repository.product.varchar" class="TechDivision\Import\Product\Repositories\ProductVarcharRepository">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="cache.configurable"/>
         </service>
         <service id="import_product.repository.stock.item" class="TechDivision\Import\Product\Repositories\StockItemRepository">
             <argument type="service" id="connection"/>
@@ -220,7 +225,7 @@
             <argument type="service" id="import_product.action.processor.product.text.update"/>
             <argument type="service" id="import_product.action.processor.product.text.delete"/>
         </service>
-        <service id="import_product.action.product.varchar" class="TechDivision\Import\Actions\GenericAction">
+        <service id="import_product.action.product.varchar" class="TechDivision\Import\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.varchar.create"/>
             <argument type="service" id="import_product.action.processor.product.varchar.update"/>
             <argument type="service" id="import_product.action.processor.product.varchar.delete"/>

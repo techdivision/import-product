@@ -22,6 +22,7 @@ namespace TechDivision\Import\Product\Actions\Processors;
 
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
+use TechDivision\Import\Product\Utils\MemberNames;
 
 /**
  * The product varchar attribute update processor implementation.
@@ -48,5 +49,19 @@ class ProductVarcharUpdateProcessor extends AbstractUpdateProcessor
         return array(
             SqlStatementKeys::UPDATE_PRODUCT_VARCHAR => $this->loadStatement(SqlStatementKeys::UPDATE_PRODUCT_VARCHAR)
         );
+    }
+
+    /**
+     * Update's the passed row.
+     *
+     * @param array       $row  The row to update
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return string The ID of the updated product
+     */
+    public function execute($row, $name = null)
+    {
+        parent::execute($row, $name);
+        return $row[MemberNames::VALUE_ID];
     }
 }

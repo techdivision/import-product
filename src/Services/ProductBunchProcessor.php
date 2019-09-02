@@ -23,8 +23,9 @@ namespace TechDivision\Import\Product\Services;
 use TechDivision\Import\Actions\ActionInterface;
 use TechDivision\Import\Connection\ConnectionInterface;
 use TechDivision\Import\Repositories\EavAttributeRepositoryInterface;
+use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface;
-use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\CacheKeys;
 use TechDivision\Import\Product\Repositories\ProductRepositoryInterface;
 use TechDivision\Import\Product\Repositories\StockItemRepositoryInterface;
 use TechDivision\Import\Product\Repositories\ProductIntRepositoryInterface;
@@ -35,8 +36,6 @@ use TechDivision\Import\Product\Repositories\ProductWebsiteRepositoryInterface;
 use TechDivision\Import\Product\Repositories\ProductDatetimeRepositoryInterface;
 use TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface;
 use TechDivision\Import\Product\Repositories\CategoryProductRepositoryInterface;
-use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
-use TechDivision\Import\Product\Utils\CacheKeys;
 
 /**
  * The product bunch processor implementation.
@@ -1023,10 +1022,15 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
 
         // persist the new entity and set the PK value in the entity
         $product[$pkName = $this->getProductRepository()->getPrimaryKeyName()] = $this->getProductAction()->persist($product, $name);
-        // load new cache item from the cache
-        $uniqueKey = array(CacheKeys::PRODUCT => $product[$pkName]);
-        // add the entity value to the cache, register the cache key reference as well
-        $this->getProductRepository()->getCacheAdapter()->toCache($uniqueKey, $product, array($product[MemberNames::SKU] => $uniqueKey), array(), true);
+
+        // load the cache adapter instance
+        $cacheAdapter = $this->getProductRepository()->getCacheAdapter();
+
+        // we only want to replace existing values, NOT adding new ones as this is the responsibility of the repository
+        if ($cacheAdapter->isCached($uniqueKey = array(CacheKeys::PRODUCT => $product[$pkName]))) {
+            // add the entity value to the cache, register the cache key reference as well
+            $cacheAdapter->toCache($uniqueKey, $product, array(), array(), true);
+        }
 
         // return the ID of the persisted entity
         return $product[$pkName];
@@ -1038,11 +1042,25 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @param array       $attribute The attribute to persist
      * @param string|null $name      The name of the prepared statement that has to be executed
      *
-     * @return void
+     * @return string The ID of the persisted attribute
      */
     public function persistProductVarcharAttribute($attribute, $name = null)
     {
-        $this->getProductVarcharAction()->persist($attribute, $name);
+
+        // persist the new entity and set the PK value in the entity
+        $attribute[$pkName = $this->getProductVarcharRepository()->getPrimaryKeyName()] = $this->getProductVarcharAction()->persist($attribute, $name);
+
+        // load the cache adapter instance
+        $cacheAdapter = $this->getProductVarcharRepository()->getCacheAdapter();
+
+        // we only want to replace existing values, NOT adding new ones as this is the responsibility of the repository
+        if ($cacheAdapter->isCached($uniqueKey = array(CacheKeys::PRODUCT_VARCHAR => $attribute[$pkName]))) {
+            // add the attribute value to the cache, register the cache key reference as well
+            $cacheAdapter->toCache($uniqueKey, $attribute, array(), array(), true);
+        }
+
+        // return the ID of the persisted attribute
+        return $attribute[$pkName];
     }
 
     /**

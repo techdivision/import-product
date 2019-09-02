@@ -255,7 +255,7 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
      * @param array       $attribute The attribute to persist
      * @param string|null $name      The name of the prepared statement that has to be executed
      *
-     * @return void
+     * @return string The ID of the persisted attribute
      */
     public function persistProductVarcharAttribute($attribute, $name = null);
 

@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Actions;
 
+use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Actions\AbstractAction;
 
 /**
@@ -34,4 +35,48 @@ use TechDivision\Import\Actions\AbstractAction;
  */
 class ProductVarcharAction extends AbstractAction implements ProductVarcharActionInterface
 {
+
+    /**
+     * Helper method that create/update the passed entity, depending on
+     * the entity's status.
+     *
+     * @param array $row The entity data to create/update
+     *
+     * @return string The last inserted ID
+     */
+    public function persist(array $row)
+    {
+
+        // load the method name
+        $methodName = $row[EntityStatus::MEMBER_NAME];
+
+        // invoke the method
+        return $this->$methodName($row);
+    }
+
+    /**
+     * Creates's the entity with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to create
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return string The last inserted ID
+     */
+    public function create($row, $name = null)
+    {
+        return $this->getCreateProcessor()->execute($row, $name);
+    }
+
+    /**
+     * Update's the entity with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to update
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return string The ID of the updated product
+     */
+    public function update($row, $name = null)
+    {
+        return $this->getUpdateProcessor()->execute($row, $name);
+    }
 }

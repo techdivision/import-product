@@ -38,4 +38,11 @@ class CacheKeys extends \TechDivision\Import\Utils\CacheKeys
      * @var string
      */
     const PRODUCT = 'product';
+
+    /**
+     * The cache key for product varchars.
+     *
+     * @var string
+     */
+    const PRODUCT_VARCHAR = 'product_varchar';
 }

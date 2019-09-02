@@ -1,3 +1,13 @@
+# Version 18.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add cache warmer for product varchar values to improve performance on CSV files with missing url_key value
+
 # Version 17.0.0
 
 ## Bugfixes
