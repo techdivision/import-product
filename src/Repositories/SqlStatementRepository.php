@@ -87,7 +87,7 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                 AND t2.entity_type_id = :entity_type_id
                 AND t1.attribute_id = t2.attribute_id
                 AND t1.store_id = :store_id
-                AND t1.value = :value',
+                AND t1.value = BINARY :value',
         SqlStatementKeys::CATEGORY_PRODUCT =>
             'SELECT * FROM catalog_category_product WHERE category_id = :category_id AND product_id = :product_id',
         SqlStatementKeys::CATEGORY_PRODUCT_BY_SKU =>

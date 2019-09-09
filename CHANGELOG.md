@@ -1,3 +1,13 @@
+# Version 18.0.1
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Make SQL to load product entity varchar values case sensitive
+
 # Version 18.0.0
 
 ## Bugfixes
