@@ -6,6 +6,7 @@
 
 ## Features
 
+* Add techdivision/import-product#146
 * Add techdivision/import-cli-simple#216
 * Switch to latest techdivision/import 15.* version as dependency
 
