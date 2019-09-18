@@ -23,6 +23,7 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
 
 /**
  * Observer that creates/updates the product's website relations.
@@ -101,17 +102,45 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
     {
 
         // query whether or not, we've found a new SKU => means we've found a new product
-        if ($this->hasBeenProcessed($this->getValue(ColumnKeys::SKU))) {
+        if ($this->hasBeenProcessed($sku = $this->getValue(ColumnKeys::SKU))) {
             return;
         }
 
-        // query whether or not, product => website relations has been specified
-        if (!$this->hasValue(ColumnKeys::PRODUCT_WEBSITES)) {
-            return;
+        // load the product => website relations
+        $codes = $this->getValue(ColumnKeys::PRODUCT_WEBSITES, array(), array($this, 'explode'));
+
+        // query whether or not we've to clean up existing website product relations
+        if ($this->getSubject()->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_WEBSITE_PRODUCT_RELATIONS) &&
+            $this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_WEBSITE_PRODUCT_RELATIONS)
+        ) {
+
+            // initialize the array for the website IDs
+            $websiteIds = array();
+
+            // prepare the website IDs
+            foreach ($codes as $code) {
+                $websiteIds[$code] = $this->getStoreWebsiteIdByCode($code);
+            }
+
+            // load the available product websites
+            if ($productWebsites = $this->loadProductWebsitesBySku($sku)) {
+                // iterate over the products websites
+                foreach ($productWebsites as $productWebsite) {
+                    // if the product websit relation is in the CSV file, do nothing
+                    if (in_array($productWebsite[MemberNames::WEBSITE_ID], $websiteIds)) {
+                        continue;
+                    }
+
+                    // delete it, because we don't need it any longer
+                    $this->deleteProductWebsite(
+                        $productWebsite[MemberNames::PRODUCT_ID],
+                        $productWebsite[MemberNames::WEBSITE_ID]
+                    );
+                }
+            }
         }
 
         // append the product => website relations found
-        $codes = $this->getValue(ColumnKeys::PRODUCT_WEBSITES, array(), array($this, 'explode'));
         foreach ($codes as $code) {
             // set the code of the website that has to be processed
             $this->setCode($code);
@@ -165,15 +194,39 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Persist's the passed product website data and return's the ID.
+     * Load's and return's the product website relations for the product with the passed SKU.
+     *
+     * @param string $sku The SKU to of the product to load the product website relations for
+     *
+     * @return array The product website relations
+     */
+    protected function loadProductWebsitesBySku($sku)
+    {
+        return $this->getProductBunchProcessor()->loadProductWebsitesBySku($sku);
+    }
+
+    /**
+     * Persist's the passed product website data.
      *
      * @param array $productWebsite The product website data to persist
      *
      * @return void
      */
-    protected function persistProductWebsite($productWebsite)
+    protected function persistProductWebsite(array $productWebsite)
     {
         $this->getProductBunchProcessor()->persistProductWebsite($productWebsite);
+    }
+
+    /**
+     * Delete's the passed product website data.
+     *
+     * @param array $productWebsite The product website data to delete
+     *
+     * @return void
+     */
+    protected function deleteProductWebsite(array $productWebsite)
+    {
+        $this->getProductBunchProcessor()->deleteProductWebsite($productWebsite);
     }
 
     /**

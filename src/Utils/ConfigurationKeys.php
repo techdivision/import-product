@@ -61,6 +61,13 @@ class ConfigurationKeys extends \TechDivision\Import\Utils\ConfigurationKeys
     const CLEAN_UP_CATEGORY_PRODUCT_RELATIONS = 'clean-up-category-product-relations';
 
     /**
+     * Name for the configuration key 'clean-up-website-product-relations'.
+     *
+     * @var string
+     */
+    const CLEAN_UP_WEBSITE_PRODUCT_RELATIONS = 'clean-up-website-product-relations';
+
+    /**
      * Name for the configuration key 'clean-up-empty-image-columns'.
      *
      * @var string

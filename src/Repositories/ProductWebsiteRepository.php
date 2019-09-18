@@ -44,6 +44,13 @@ class ProductWebsiteRepository extends AbstractRepository implements ProductWebs
     protected $productWebsiteStmt;
 
     /**
+     * The prepared statement to load the existing product website relations for the given SKU.
+     *
+     * @var \PDOStatement
+     */
+    protected $productWebsitesBySkuStmt;
+
+    /**
      * Initializes the repository's prepared statements.
      *
      * @return void
@@ -54,6 +61,26 @@ class ProductWebsiteRepository extends AbstractRepository implements ProductWebs
         // initialize the prepared statements
         $this->productWebsiteStmt =
             $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_WEBSITE));
+        $this->productWebsitesBySkuStmt =
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_WEBSITES_BY_SKU));
+    }
+
+    /**
+     * Load's and return's the product website relations for the product with the passed SKU.
+     *
+     * @param string $sku The SKU to of the product to load the product website relations for
+     *
+     * @return array The product website relations
+     */
+    public function findAllBySku($sku)
+    {
+
+        // prepare the params
+        $params = array(MemberNames::SKU => $sku);
+
+        // load and return the product with the passed product/website ID
+        $this->productWebsitesBySkuStmt->execute($params);
+        return $this->productWebsitesBySkuStmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**

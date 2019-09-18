@@ -956,6 +956,18 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
+     * Load's and return's the product website relations for the product with the passed SKU.
+     *
+     * @param string $sku The SKU to of the product to load the product website relations for
+     *
+     * @return array The product website relations
+     */
+    public function loadProductWebsitesBySku($sku)
+    {
+        return $this->getProductWebsiteRepository()->findAllBySku($sku);
+    }
+
+    /**
      * Return's the category product relation with the passed category/product ID.
      *
      * @param integer $categoryId The category ID of the category product relation to return

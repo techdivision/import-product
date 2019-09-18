@@ -36,8 +36,9 @@
         <!--
          | The repository configuration
          |-->
-
-        <service id="import_product.repository.sql.statement" class="TechDivision\Import\Product\Repositories\SqlStatementRepository"/>
+        <service id="import_product.repository.sql.statement" class="TechDivision\Import\Product\Repositories\SqlStatementRepository">
+            <argument type="service" id="import.util.sql.compilers"/>
+        </service>
         <service id="import_product.repository.product" class="TechDivision\Import\Product\Repositories\ProductRepository">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>

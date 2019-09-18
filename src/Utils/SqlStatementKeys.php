@@ -54,6 +54,13 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const PRODUCT_WEBSITE = 'product_website';
 
     /**
+     * The SQL statement to load the product website relations for the product with the passed SKU.
+     *
+     * @var string
+     */
+    const PRODUCT_WEBSITES_BY_SKU = 'product_website.by.sku';
+
+    /**
      * The SQL statement to load the product datetime attributes with the passed entity/store ID.
      *
      * @var string
@@ -306,6 +313,13 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
      * @var string
      */
     const DELETE_STOCK_ITEM_BY_SKU = 'delete.stock_item.by.sku';
+
+    /**
+     * The SQL statement to remove the product website relation for the product/website with the IDs passed as parameter.
+     *
+     * @var string
+     */
+    const DELETE_PRODUCT_WEBSITE = 'delete.product_website';
 
     /**
      * The SQL statement to remove all product website relations for the product with the SKU passed as parameter.

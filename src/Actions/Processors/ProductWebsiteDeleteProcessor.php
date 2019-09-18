@@ -46,6 +46,7 @@ class ProductWebsiteDeleteProcessor extends AbstractDeleteProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
+            SqlStatementKeys::DELETE_PRODUCT_WEBSITE        => $this->loadStatement(SqlStatementKeys::DELETE_PRODUCT_WEBSITE),
             SqlStatementKeys::DELETE_PRODUCT_WEBSITE_BY_SKU => $this->loadStatement(SqlStatementKeys::DELETE_PRODUCT_WEBSITE_BY_SKU)
         );
     }
