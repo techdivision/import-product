@@ -260,14 +260,11 @@
               "params" : [
                 {
                   "copy-images" : false,
-                  "clean-up-media-gallery" : false,
-                  "clean-up-website-product-relations" : false,
-                  "clean-up-category-product-relations" : false,
+                  "clean-up-media-gallery" : true,
+                  "clean-up-empty-image-columns" : true,
+                  "clean-up-website-product-relations" : true,
+                  "clean-up-category-product-relations" : true,
                   "clean-up-empty-columns" : [
-                    "base_image", 
-                    "small_image", 
-                    "swatch_image", 
-                    "thumbnail_image",
                     "special_price", 
                     "special_price_from_date", 
                     "special_price_to_date"
@@ -352,6 +349,11 @@
               "file-resolver": {
                 "prefix": "url-rewrite"
               },
+              "params" : [
+                {
+                  "clean-up-url-rewrites" : false
+                }
+              ],
               "observers": [
                 {
                   "import": [
