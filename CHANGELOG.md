@@ -8,6 +8,7 @@
 
 * Add techdivision/import-product#146
 * Add techdivision/import-cli-simple#216
+* Remove unnecessary identifiers from configuration
 * Switch to latest techdivision/import 15.* version as dependency
 
 # Version 18.0.1

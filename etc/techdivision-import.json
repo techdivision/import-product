@@ -60,7 +60,6 @@
           "subjects" : [
             {
               "id": "import.subject.move.files",
-              "identifier": "move-files",
               "file-resolver": {
                 "prefix": "product-import"
               },
@@ -68,7 +67,6 @@
             },
             {
               "id": "import_product.subject.bunch",
-              "identifier": "files",
               "file-resolver": {
                 "prefix": "product-import"
               },
@@ -82,7 +80,6 @@
             },
             {
               "id": "import_product_msi.subject.bunch",
-              "identifier": "files",
               "file-resolver": {
                 "prefix": "inventory-msi"
               },
@@ -115,7 +112,6 @@
           "subjects": [
             {
               "id": "import.subject.move.files",
-              "identifier": "move-files",
               "file-resolver": {
                 "prefix": "product-import"
               },
@@ -123,7 +119,6 @@
             },
             {
               "id": "import_product.subject.bunch",
-              "identifier": "files",
               "file-resolver": {
                 "prefix": "product-import"
               },
@@ -220,7 +215,6 @@
             },
             {
               "id": "import_product_msi.subject.bunch",
-              "identifier": "files",
               "file-resolver": {
                 "prefix": "inventory-msi"
               },
@@ -253,7 +247,6 @@
           "subjects": [
             {
               "id": "import.subject.move.files",
-              "identifier": "move-files",
               "file-resolver": {
                 "prefix": "product-import"
               },
@@ -261,7 +254,6 @@
             },
             {
               "id": "import_product.subject.bunch",
-              "identifier": "files",
               "file-resolver": {
                 "prefix": "product-import"
               },
@@ -370,7 +362,6 @@
             },
             {
               "id": "import_product_msi.subject.bunch",
-              "identifier": "files",
               "file-resolver": {
                 "prefix": "inventory-msi"
               },

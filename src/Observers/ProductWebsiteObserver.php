@@ -133,8 +133,10 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
 
                     // delete it, because we don't need it any longer
                     $this->deleteProductWebsite(
-                        $productWebsite[MemberNames::PRODUCT_ID],
-                        $productWebsite[MemberNames::WEBSITE_ID]
+                        array(
+                            MemberNames::PRODUCT_ID => $productWebsite[MemberNames::PRODUCT_ID],
+                            MemberNames::WEBSITE_ID => $productWebsite[MemberNames::WEBSITE_ID]
+                        )
                     );
                 }
             }
