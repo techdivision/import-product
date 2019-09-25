@@ -1,7 +1,6 @@
 {
   "magento-edition": "CE",
   "magento-version": "2.2.0",
-  "operation-name" : "add-update",
   "archive-artefacts" : true,
   "debug-mode" : false,
   "entity-type-code" : "catalog_product_inventory",
@@ -50,6 +49,23 @@
   ],
   "operations" : [
     {
+      "name" : "move-files",
+      "plugins" : [
+        {
+          "id": "import.plugin.subject",
+          "subjects" : [
+            {
+              "id": "import.subject.move.files",
+              "file-resolver": {
+                "id": "import.subject.file.resolver.move.files"
+              },
+              "ok-file-needed": true
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name" : "add-update",
       "plugins" : [
         {
@@ -58,13 +74,6 @@
         {
           "id": "import.plugin.subject",
           "subjects": [
-            {
-              "id": "import.subject.move.files",
-              "file-resolver": {
-                "prefix": "product-import-inventory"
-              },
-              "ok-file-needed": true
-            },
             {
               "id": "import_product.subject.bunch",
               "file-resolver": {
