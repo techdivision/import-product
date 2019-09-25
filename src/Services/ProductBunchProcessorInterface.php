@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Services;
 
 use TechDivision\Import\Services\EavAwareProcessorInterface;
+use TechDivision\Import\Services\UrlKeyAwareProcessorInterface;
 
 /**
  * Interface for a product bunch processor.
@@ -31,7 +32,7 @@ use TechDivision\Import\Services\EavAwareProcessorInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavAwareProcessorInterface
+interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavAwareProcessorInterface, UrlKeyAwareProcessorInterface
 {
 
     /**

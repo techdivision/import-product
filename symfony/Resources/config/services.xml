@@ -294,6 +294,7 @@
         <service id="import_product.observer.url.key" class="TechDivision\Import\Product\Observers\UrlKeyObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
             <argument type="service" id="import_product.filter.convert.literal.url"/>
+            <argument type="service" id="import_category.util.url.key"/>
         </service>
         <service id="import_product.observer.clean.up" class="TechDivision\Import\Product\Observers\CleanUpObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
@@ -525,6 +526,9 @@
             </call>
             <call method="addObserver">
                 <argument id="import_product_grouped.observer.product.grouped" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.product" type="service"/>
             </call>
             <call method="addObserver">
                 <argument id="import_product.observer.clean.up" type="service"/>

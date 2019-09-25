@@ -29,6 +29,7 @@ use TechDivision\Import\Subjects\ExportableTrait;
 use TechDivision\Import\Subjects\FileUploadTrait;
 use TechDivision\Import\Subjects\ExportableSubjectInterface;
 use TechDivision\Import\Subjects\FileUploadSubjectInterface;
+use TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -39,7 +40,7 @@ use TechDivision\Import\Subjects\FileUploadSubjectInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class BunchSubject extends AbstractProductSubject implements ExportableSubjectInterface, FileUploadSubjectInterface
+class BunchSubject extends AbstractProductSubject implements ExportableSubjectInterface, FileUploadSubjectInterface, UrlKeyAwareSubjectInterface
 {
 
     /**
@@ -124,13 +125,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
         'bundle_price_view'    => array('import_product_bundle.callback.bundle.price.view'),
         'bundle_shipment_type' => array('import_product_bundle.callback.bundle.shipment.type')
     );
-
-    /**
-     * The used URL keys.
-     *
-     * @var array
-     */
-    protected $usedUrlKeys = array();
 
     /**
      * The available entity types.

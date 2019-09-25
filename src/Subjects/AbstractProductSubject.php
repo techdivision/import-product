@@ -521,6 +521,18 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     }
 
     /**
+     * Query's whether or not the category with the passed path is available or not.
+     *
+     * @param string $path The path of the category to query
+     *
+     * @return boolean TRUE if the category is available, else FALSE
+     */
+    public function hasCategoryByPath($path)
+    {
+        return isset($this->categories[$path]);
+    }
+
+    /**
      * Retrieve categories by given store view code.
      *
      * @param string $storeViewCode The store view code to retrieve the categories for
