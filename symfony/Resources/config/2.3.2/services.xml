@@ -6,6 +6,27 @@
     <services>
 
         <!--
+         | The DI configuration for the composite observers of the inventory add-update operation.
+         |-->
+        <service id="import_product.observer.composite.inventory.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product.observer.last.entity.id" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.quality.and.stock.status" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.product.inventory.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_msi.observer.product.source.item.default" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product.observer.clean.up" type="service"/>
+            </call>
+        </service>
+
+        <!--
          | The DI configuration for the composite observers of the delete operation.
          |-->
         <service id="import_product.observer.composite.base.delete" class="TechDivision\Import\Observers\GenericCompositeObserver">

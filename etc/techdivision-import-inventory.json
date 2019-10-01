@@ -86,6 +86,19 @@
                   ]
                 }
               ]
+            },
+            {
+              "id": "import_product_msi.subject.bunch",
+              "file-resolver": {
+                "prefix": "inventory-msi"
+              },
+              "observers": [
+                {
+                  "import": [
+                    "import_product_msi.observer.composite.add_update"
+                  ]
+                }
+              ]
             }
           ]
         },

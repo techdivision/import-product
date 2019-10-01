@@ -10,6 +10,7 @@
 * Remove deprecated classes and methods
 * Add techdivision/import-product#146
 * Add techdivision/import-cli-simple#216
+* Add techdivision/import-configuration-jms#25
 * Remove unnecessary identifiers from configuration
 * Switch to latest techdivision/import 15.* version as dependency
 
