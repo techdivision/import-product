@@ -1,0 +1,53 @@
+{
+  "shortcuts": {
+    "ce": {
+      "catalog_product_price": {
+        "add-update": [
+          "general/general/move-files",
+          "general/general/cache-warmer",
+          "general/general/global-data",
+          "ce/catalog_product_price/add-update",
+          "general/general/archive-artefacts"
+        ]
+      }
+    }
+  },
+  "operations": {
+    "ce": {
+      "catalog_product_price": [
+        {
+          "name": "add-update",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "product-import-price"
+                  },
+                  "params": [
+                    {
+                      "clean-up-empty-columns": [
+                        "special_price",
+                        "special_price_from_date",
+                        "special_price_to_date"
+                      ]
+                    }
+                  ],
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product.observer.composite.price.add_update"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

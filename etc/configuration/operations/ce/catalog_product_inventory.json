@@ -1,0 +1,44 @@
+{
+  "shortcuts": {
+    "ce": {
+      "catalog_product_inventory": {
+        "add-update": [
+          "general/general/move-files",
+          "general/general/cache-warmer",
+          "general/general/global-data",
+          "ce/catalog_product_inventory/add-update",
+          "general/general/archive-artefacts"
+        ]
+      }
+    }
+  },
+  "operations": {
+    "ce": {
+      "catalog_product_inventory": [
+        {
+          "name": "add-update",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "product-import-inventory"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product.observer.composite.inventory.add_update"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
