@@ -3,28 +3,34 @@
     "ce": {
       "catalog_product": {
         "delete": [
+          "general/general/initialize",
           "general/general/global-data",
           "general/general/move-files",
           "ce/catalog_product/delete",
-          "general/general/archive-artefacts"
+          "general/general/archive-artefacts",
+          "general/general/clean-up"
         ],
         "replace": [
+          "general/general/initialize",
           "general/general/global-data",
           "general/general/cache-warmer",
           "general/general/move-files",
           "ce/catalog_category/convert",
           "ce/catalog_category/add-update",
           "ce/catalog_product/replace",
-          "general/general/archive-artefacts"
+          "general/general/archive-artefacts",
+          "general/general/clean-up"
         ],
         "add-update": [
+          "general/general/initialize",
           "general/general/global-data",
           "general/general/cache-warmer",
           "general/general/move-files",
           "ce/catalog_category/convert",
           "ce/catalog_category/add-update",
           "ce/catalog_product/add-update",
-          "general/general/archive-artefacts"
+          "general/general/archive-artefacts",
+          "general/general/clean-up"
         ]
       }
     }
@@ -79,11 +85,9 @@
                   "file-resolver": {
                     "prefix": "product-import"
                   },
-                  "params": [
-                    {
-                      "copy-images": false
-                    }
-                  ],
+                  "params": {
+                    "copy-images": false
+                  },
                   "observers": [
                     {
                       "import": [
@@ -198,20 +202,18 @@
                   "file-resolver": {
                     "prefix": "product-import"
                   },
-                  "params": [
-                    {
-                      "copy-images": false,
-                      "clean-up-media-gallery": true,
-                      "clean-up-empty-image-columns": true,
-                      "clean-up-website-product-relations": true,
-                      "clean-up-category-product-relations": true,
-                      "clean-up-empty-columns": [
-                        "special_price",
-                        "special_price_from_date",
-                        "special_price_to_date"
-                      ]
-                    }
-                  ],
+                  "params": {
+                    "copy-images": false,
+                    "clean-up-media-gallery": true,
+                    "clean-up-empty-image-columns": true,
+                    "clean-up-website-product-relations": true,
+                    "clean-up-category-product-relations": true,
+                    "clean-up-empty-columns": [
+                      "special_price",
+                      "special_price_from_date",
+                      "special_price_to_date"
+                    ]
+                  },
                   "observers": [
                     {
                       "import": [
@@ -290,11 +292,9 @@
                   "file-resolver": {
                     "prefix": "url-rewrite"
                   },
-                  "params": [
-                    {
-                      "clean-up-url-rewrites": false
-                    }
-                  ],
+                  "params": {
+                    "clean-up-url-rewrites": false
+                  },
                   "observers": [
                     {
                       "import": [
