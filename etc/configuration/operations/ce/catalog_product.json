@@ -7,6 +7,7 @@
           "general/general/global-data",
           "general/general/move-files",
           "ce/catalog_product/delete",
+          "general/catalog_product/delete.msi",
           "general/general/archive-artefacts",
           "general/general/clean-up"
         ],
@@ -18,6 +19,13 @@
           "ce/catalog_category/convert",
           "ce/catalog_category/add-update",
           "ce/catalog_product/replace",
+          "ce/catalog_product/replace.variants",
+          "ce/catalog_product/replace.bundles",
+          "ce/catalog_product/replace.links",
+          "ce/catalog_product/replace.grouped",
+          "ce/catalog_product/replace.media",
+          "general/catalog_product/replace.msi",
+          "general/catalog_product/replace.url-rewrites",
           "general/general/archive-artefacts",
           "general/general/clean-up"
         ],
@@ -29,6 +37,13 @@
           "ce/catalog_category/convert",
           "ce/catalog_category/add-update",
           "ce/catalog_product/add-update",
+          "ce/catalog_product/add-update.variants",
+          "ce/catalog_product/add-update.bundles",
+          "ce/catalog_product/add-update.links",
+          "ce/catalog_product/add-update.grouped",
+          "ce/catalog_product/add-update.media",
+          "general/catalog_product/add-update.msi",
+          "general/catalog_product/add-update.url-rewrites",
           "general/general/archive-artefacts",
           "general/general/clean-up"
         ]
@@ -36,6 +51,128 @@
     }
   },
   "operations": {
+    "general": {
+      "catalog_product": [
+        {
+          "name": "add-update.msi",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product_msi.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "inventory-msi"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_msi.observer.composite.add_update"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "add-update.url-rewrites",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product_url_rewrite.subject.url.rewrite",
+                  "file-resolver": {
+                    "prefix": "url-rewrite"
+                  },
+                  "params": {
+                    "clean-up-url-rewrites": false
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_url_rewrite.observer.url.rewrite.update"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace.msi",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product_msi.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "inventory-msi"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_msi.observer.composite.replace"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace.url-rewrites",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product_url_rewrite.subject.url.rewrite",
+                  "file-resolver": {
+                    "prefix": "url-rewrite"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_url_rewrite.observer.url.rewrite"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "delete.msi",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product_msi.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "inventory-msi"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_msi.observer.composite.delete"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
     "ce": {
       "catalog_product": [
         {
@@ -53,19 +190,6 @@
                     {
                       "import": [
                         "import_product.observer.composite.base.delete"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "id": "import_product_msi.subject.bunch",
-                  "file-resolver": {
-                    "prefix": "inventory-msi"
-                  },
-                  "observers": [
-                    {
-                      "import": [
-                        "import_product_msi.observer.composite.delete"
                       ]
                     }
                   ]
@@ -95,7 +219,17 @@
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace.variants",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
                   "id": "import_product_variant.subject.variant",
                   "file-resolver": {
@@ -108,7 +242,17 @@
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace.bundles",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
                   "id": "import_product_bundle.subject.bundle",
                   "file-resolver": {
@@ -121,33 +265,17 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "id": "import_product_grouped.subject.grouped",
-                  "file-resolver": {
-                    "prefix": "grouped"
-                  },
-                  "observers": [
-                    {
-                      "import": [
-                        "import_product_grouped.observer.grouped.product.relation"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "id": "import_product_media.subject.media",
-                  "file-resolver": {
-                    "prefix": "media"
-                  },
-                  "observers": [
-                    {
-                      "import": [
-                        "import_product_media.observer.composite.replace"
-                      ]
-                    }
-                  ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace.links",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
                   "id": "import_product_link.subject.link",
                   "file-resolver": {
@@ -160,29 +288,49 @@
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace.grouped",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
-                  "id": "import_product_url_rewrite.subject.url.rewrite",
+                  "id": "import_product_grouped.subject.grouped",
                   "file-resolver": {
-                    "prefix": "url-rewrite"
+                    "prefix": "grouped"
                   },
                   "observers": [
                     {
                       "import": [
-                        "import_product_url_rewrite.observer.url.rewrite"
+                        "import_product_grouped.observer.grouped.product.relation"
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace.media",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
-                  "id": "import_product_msi.subject.bunch",
+                  "id": "import_product_media.subject.media",
                   "file-resolver": {
-                    "prefix": "inventory-msi"
+                    "prefix": "media"
                   },
                   "observers": [
                     {
                       "import": [
-                        "import_product_msi.observer.composite.replace"
+                        "import_product_media.observer.composite.replace"
                       ]
                     }
                   ]
@@ -221,7 +369,17 @@
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "add-update.variants",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
                   "id": "import_product_variant.subject.variant",
                   "file-resolver": {
@@ -234,7 +392,17 @@
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "add-update.bundles",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
                   "id": "import_product_bundle.subject.bundle",
                   "file-resolver": {
@@ -247,33 +415,17 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "id": "import_product_grouped.subject.grouped",
-                  "file-resolver": {
-                    "prefix": "grouped"
-                  },
-                  "observers": [
-                    {
-                      "import": [
-                        "import_product_grouped.observer.grouped.product.relation.update"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "id": "import_product_media.subject.media",
-                  "file-resolver": {
-                    "prefix": "media"
-                  },
-                  "observers": [
-                    {
-                      "import": [
-                        "import_product_media.observer.composite.add_update"
-                      ]
-                    }
-                  ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "add-update.links",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
                   "id": "import_product_link.subject.link",
                   "file-resolver": {
@@ -286,32 +438,49 @@
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "add-update.grouped",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
-                  "id": "import_product_url_rewrite.subject.url.rewrite",
+                  "id": "import_product_grouped.subject.grouped",
                   "file-resolver": {
-                    "prefix": "url-rewrite"
-                  },
-                  "params": {
-                    "clean-up-url-rewrites": false
+                    "prefix": "grouped"
                   },
                   "observers": [
                     {
                       "import": [
-                        "import_product_url_rewrite.observer.url.rewrite.update"
+                        "import_product_grouped.observer.grouped.product.relation.update"
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "add-update.media",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
-                  "id": "import_product_msi.subject.bunch",
+                  "id": "import_product_media.subject.media",
                   "file-resolver": {
-                    "prefix": "inventory-msi"
+                    "prefix": "media"
                   },
                   "observers": [
                     {
                       "import": [
-                        "import_product_msi.observer.composite.add_update"
+                        "import_product_media.observer.composite.add_update"
                       ]
                     }
                   ]

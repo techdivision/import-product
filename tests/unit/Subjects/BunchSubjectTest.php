@@ -20,11 +20,10 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use TechDivision\Import\Utils\EntityTypeCodes;
-use TechDivision\Import\Product\Utils\CacheKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\RegistryKeys;
+use TechDivision\Import\Subjects\AbstractTest;
 
 /**
  * Test class for the product action implementation.
@@ -35,7 +34,7 @@ use TechDivision\Import\Product\Utils\RegistryKeys;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class BunchSubjectTest extends \PHPUnit_Framework_TestCase
+class BunchSubjectTest extends AbstractTest
 {
 
     /**
@@ -46,33 +45,66 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
     protected $subject;
 
     /**
-     * The global data.
+     * Mock the global data.
      *
-     * @var array
+     * @return array The array with the global data
      */
-    protected $globalData = array(
-        RegistryKeys::GLOBAL_DATA => array(
-            RegistryKeys::ENTITY_TYPES => array(
-                EntityTypeCodes::CATALOG_PRODUCT => array(
-                    MemberNames::ENTITY_TYPE_ID => 4,
-                    MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT
+    protected function getMockGlobalData(array $globalData = array())
+    {
+        return parent::getMockGlobalData(
+            array(
+                RegistryKeys::GLOBAL_DATA => array(
+                    RegistryKeys::ENTITY_TYPES => array(
+                        EntityTypeCodes::CATALOG_PRODUCT => array(
+                            MemberNames::ENTITY_TYPE_ID => 4,
+                            MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT
+                        )
+                    ),
+                    RegistryKeys::LINK_TYPES => array(),
+                    RegistryKeys::LINK_ATTRIBUTES => array(),
+                    RegistryKeys::CATEGORIES => array(),
+                    RegistryKeys::IMAGE_TYPES => array(),
+                    RegistryKeys::TAX_CLASSES => array(),
+                    RegistryKeys::STORE_WEBSITES => array(),
+                    RegistryKeys::EAV_ATTRIBUTES => array(),
+                    RegistryKeys::ATTRIBUTE_SETS => array(),
+                    RegistryKeys::STORES => array(),
+                    RegistryKeys::DEFAULT_STORE => array(),
+                    RegistryKeys::ROOT_CATEGORIES => array(),
+                    RegistryKeys::CORE_CONFIG_DATA => array(),
+                    RegistryKeys::EAV_USER_DEFINED_ATTRIBUTES => array()
                 )
-            ),
-            RegistryKeys::LINK_TYPES => array(),
-            RegistryKeys::LINK_ATTRIBUTES => array(),
-            RegistryKeys::CATEGORIES => array(),
-            RegistryKeys::IMAGE_TYPES => array(),
-            RegistryKeys::TAX_CLASSES => array(),
-            RegistryKeys::STORE_WEBSITES => array(),
-            RegistryKeys::EAV_ATTRIBUTES => array(),
-            RegistryKeys::ATTRIBUTE_SETS => array(),
-            RegistryKeys::STORES => array(),
-            RegistryKeys::DEFAULT_STORE => array(),
-            RegistryKeys::ROOT_CATEGORIES => array(),
-            RegistryKeys::CORE_CONFIG_DATA => array(),
-            RegistryKeys::EAV_USER_DEFINED_ATTRIBUTES => array()
-        )
-    );
+            )
+        );
+    }
+
+    /**
+     * The class name of the subject we want to test.
+     *
+     * @return string The class name of the subject
+     */
+    protected function getSubjectClassName()
+    {
+        return 'TechDivision\Import\Product\Subjects\BunchSubject';
+    }
+
+    /**
+     * Return the subject's methods we want to mock.
+     *
+     * @return array The methods
+     */
+    protected function getSubjectMethodsToMock()
+    {
+        return array(
+            'touch',
+            'write',
+            'rename',
+            'isFile',
+            'getHeaderMappings',
+            'getExecutionContext',
+            'getDefaultCallbackMappings'
+        );
+    }
 
     /**
      * Sets up the fixture, for example, open a network connection.
@@ -84,66 +116,9 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
 
-        // create a mock registry processor
-        $mockRegistryProcessor = $this->getMockBuilder('TechDivision\Import\Services\RegistryProcessorInterface')
-                                      ->setMethods(get_class_methods('TechDivision\Import\Services\RegistryProcessorInterface'))
-                                      ->getMock();
-        $mockRegistryProcessor->expects($this->any())
-                              ->method('getAttribute')
-                              ->with(CacheKeys::STATUS)
-                              ->willReturn($this->globalData);
-
-        // create a generator
-        $mockGenerator = $this->getMockBuilder('TechDivision\Import\Utils\Generators\GeneratorInterface')
-                              ->setMethods(get_class_methods('TechDivision\Import\Utils\Generators\GeneratorInterface'))
-                              ->getMock();
-
-        // create a mock configuration
-        $mockConfiguration = $this->getMockBuilder($configurationInterface = 'TechDivision\Import\ConfigurationInterface')
-                                  ->setMethods(get_class_methods($configurationInterface))
-                                  ->getMock();
-        $mockConfiguration->expects($this->any())
-                          ->method('getEntityTypeCode')
-                          ->willReturn(EntityTypeCodes::CATALOG_PRODUCT);
-
-        // create a mock subject configuration
-        $mockSubjectConfiguration = $this->getMockBuilder($subjectConfigurationInterface = 'TechDivision\Import\Configuration\SubjectConfigurationInterface')
-                                         ->setMethods(get_class_methods($subjectConfigurationInterface))
-                                         ->getMock();
-        $mockSubjectConfiguration->expects($this->any())
-                                 ->method('getConfiguration')
-                                 ->willReturn($mockConfiguration);
-        $mockSubjectConfiguration->expects($this->any())
-                                 ->method('getCallbacks')
-                                 ->willReturn(array());
-        $mockSubjectConfiguration->expects($this->any())
-                                 ->method('getHeaderMappings')
-                                 ->willReturn(array());
-        $mockSubjectConfiguration->expects($this->any())
-                                 ->method('getImageTypes')
-                                 ->willReturn(array());
-        $mockSubjectConfiguration->expects($this->any())
-                                 ->method('getFrontendInputCallbacks')
-                                 ->willReturn(array());
-
-        // mock the event emitter
-        $mockEmitter = $this->getMockBuilder('League\Event\EmitterInterface')
-                            ->setMethods(\get_class_methods('League\Event\EmitterInterface'))
-                            ->getMock();
-
-        // create the subject to be tested
-        $this->subject = new BunchSubject(
-            $mockRegistryProcessor,
-            $mockGenerator,
-            new ArrayCollection(),
-            $mockEmitter
-        );
-
-        // inject the mock configuration
-        $this->subject->setConfiguration($mockSubjectConfiguration);
-
-        // set-up the the subject
-        $this->subject->setUp(uniqid());
+        // create the subject instance we want to test and invoke the setup method
+        $this->subject = $this->getSubjectInstance();
+        $this->subject->setUp($this->serial = uniqid());
     }
 
     /**
