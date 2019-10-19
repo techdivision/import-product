@@ -3,16 +3,12 @@
     "ce": {
       "catalog_product": {
         "delete": [
-          "general/general/initialize",
           "general/general/global-data",
           "general/general/move-files",
           "ce/catalog_product/delete",
-          "general/catalog_product/delete.msi",
-          "general/general/archive-artefacts",
-          "general/general/clean-up"
+          "general/catalog_product/delete.msi"
         ],
         "replace": [
-          "general/general/initialize",
           "general/general/global-data",
           "general/general/cache-warmer",
           "general/general/move-files",
@@ -28,12 +24,9 @@
           "ce/catalog_product/replace.grouped",
           "ce/catalog_product/replace.media",
           "general/catalog_product/replace.msi",
-          "general/catalog_product/replace.url-rewrites",
-          "general/general/archive-artefacts",
-          "general/general/clean-up"
+          "general/catalog_product/replace.url-rewrites"
         ],
         "add-update": [
-          "general/general/initialize",
           "general/general/global-data",
           "general/general/cache-warmer",
           "general/general/move-files",
@@ -49,9 +42,7 @@
           "ce/catalog_product/add-update.grouped",
           "ce/catalog_product/add-update.media",
           "general/catalog_product/add-update.msi",
-          "general/catalog_product/add-update.url-rewrites",
-          "general/general/archive-artefacts",
-          "general/general/clean-up"
+          "general/catalog_product/add-update.url-rewrites"
         ]
       }
     }

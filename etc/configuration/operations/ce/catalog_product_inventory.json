@@ -3,13 +3,10 @@
     "ce": {
       "catalog_product_inventory": {
         "add-update": [
-          "general/general/initialize",
           "general/general/move-files",
           "general/general/cache-warmer",
           "general/general/global-data",
-          "ce/catalog_product_inventory/add-update",
-          "general/general/archive-artefacts",
-          "general/general/clean-up"
+          "ce/catalog_product_inventory/add-update"
         ]
       }
     }
