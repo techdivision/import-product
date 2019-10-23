@@ -12,6 +12,7 @@
           "general/general/global-data",
           "general/general/cache-warmer",
           "general/general/move-files",
+          "general/catalog_product/validate",
           "general/catalog_category/convert",
           "ce/catalog_category/add-update",
           "ce/catalog_category/add-update.path",
@@ -30,6 +31,7 @@
           "general/general/global-data",
           "general/general/cache-warmer",
           "general/general/move-files",
+          "general/catalog_product/validate",
           "general/catalog_category/convert",
           "ce/catalog_category/add-update",
           "ce/catalog_category/add-update.path",
@@ -50,6 +52,55 @@
   "operations": {
     "general": {
       "catalog_product": [
+        {
+          "name": "validate",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "listeners": [
+                {
+                  "plugin.process.success": [
+                    "import.listener.stop.validation"
+                  ]
+                }
+              ],
+              "subjects": [
+                {
+                  "id": "import.subject.validator",
+                  "create-imported-file": false,
+                  "file-resolver": {
+                    "prefix": "product-import"
+                  },
+                  "params" : {
+                    "custom-validations" : {
+                      "sku" :  [ "/.+/" ],
+                      "product_type": [ "simple", "virtual", "configurable", "bundle", "grouped", "giftcard" ],
+                      "visibility": [ "Not Visible Individually", "Catalog", "Search", "Catalog, Search" ]
+                    }
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import.observer.validator.generic"
+                      ]
+                    }
+                  ],
+                  "callbacks": [
+                    {
+                      "sku": [ "import.callback.custom.regex.validator" ],
+                      "store_view_code": [ "import.callback.store.view.code.validator" ],
+                      "attribute_set_code": [ "import.callback.attribute.set.validator" ],
+                      "product_type": [ "import.callback.custom.array.validator" ],
+                      "tax_class": [ "import_product.callback.validator.tax.class" ],
+                      "product_websites": [ "import.callback.store.website.validator" ],
+                      "visibility": [ "import.callback.visibility.validator" ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
         {
           "name": "add-update.msi",
           "plugins": [

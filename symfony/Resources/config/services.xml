@@ -12,13 +12,19 @@
         <!--
          | The DI cache configuration
          |-->
-
         <service id="import_product.repository.cache.warmer.product" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductCacheWarmer">
             <argument type="service" id="import_product.repository.product"/>
         </service>
         <service id="import_product.repository.cache.warmer.product.varchar" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductVarcharCacheWarmer">
             <argument type="service" id="import_product.repository.product.varchar"/>
             <argument type="service" id="import.repository.store"/>
+        </service>
+
+        <!--
+         | The DI loader configuration
+         |-->
+        <service id="import_product.loader.tax.class" class="TechDivision\Import\Product\Loaders\TaxClassLoader">
+            <argument type="service" id="import.processor.import"/>
         </service>
 
         <!--
@@ -287,6 +293,9 @@
         <service id="import_product.callback.select" class="TechDivision\Import\Product\Callbacks\SelectCallback">
             <argument type="service" id="configuration"/>
             <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
+        <service id="import_product.callback.validator.tax.class" class="TechDivision\Import\Product\Callbacks\TaxClassValidatorCallback">
+            <argument type="service" id="import_product.loader.tax.class"/>
         </service>
 
         <service id="import_product.observer.file.upload" class="TechDivision\Import\Product\Observers\FileUploadObserver"/>
