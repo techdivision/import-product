@@ -3,6 +3,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <!-- parameters>
+        <parameter key="array_validator.nullable.true">true</parameter>
+    </parameters -->
+
     <services>
 
         <service id="import_product.utils.sku.to.pk.mapping" class="TechDivision\Import\Product\Utils\SkuToPkMappingUtil">
@@ -23,6 +27,14 @@
         <!--
          | The DI loader configuration
          |-->
+        <service id="import.loader.registry" class="TechDivision\Import\Loaders\RegistryLoader">
+            <argument type="service" id="import.processor.registry"/>
+            <argument type="constant">TechDivision\Import\Utils\RegistryKeys::COLLECTED_COLUMNS</argument>
+        </service>
+        <service id="import_product.loader.sku" class="TechDivision\Import\Product\Loaders\ProductValueLoader">
+            <argument type="service" id="import.loader.registry"/>
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
         <service id="import_product.loader.tax.class" class="TechDivision\Import\Product\Loaders\TaxClassLoader">
             <argument type="service" id="import.processor.import"/>
         </service>
@@ -297,6 +309,10 @@
         <service id="import_product.callback.validator.tax.class" class="TechDivision\Import\Product\Callbacks\TaxClassValidatorCallback">
             <argument type="service" id="import_product.loader.tax.class"/>
         </service>
+        <service id="import_product.callback.validator.link" class="TechDivision\Import\Product\Callbacks\LinkValidatorCallback">
+            <argument type="service" id="import_product.loader.sku"/>
+            <argument>%array_validator.nullable.true%</argument>
+        </service>
 
         <service id="import_product.observer.file.upload" class="TechDivision\Import\Product\Observers\FileUploadObserver"/>
         <service id="import_product.observer.quality.and.stock.status" class="TechDivision\Import\Product\Observers\QuantityAndStockStatusObserver"/>
@@ -377,6 +393,18 @@
             </call>
             <call method="addObserver">
                 <argument id="import_product.observer.clean.up" type="service"/>
+            </call>
+        </service>
+
+        <!--
+         | The DI configuration for the composite observers of the validation operation.
+         |-->
+        <service id="import_product.observer.composite.base.validate" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import.observer.additional.attribute" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import.observer.generic.validator" type="service"/>
             </call>
         </service>
 

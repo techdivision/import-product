@@ -189,6 +189,13 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     public function getProductAttributesByPrimaryKeyAndStoreId($pk, $storeId);
 
     /**
+     * Load's and return's the available products.
+     *
+     * @return array The available products
+     */
+    public function loadProducts();
+
+    /**
      * Load's and return's the product with the passed SKU.
      *
      * @param string $sku The SKU of the product to load

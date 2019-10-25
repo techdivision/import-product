@@ -915,6 +915,16 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
+     * Load's and return's the available products.
+     *
+     * @return array The available products
+     */
+    public function loadProducts()
+    {
+        return $this->getProductRepository()->findAll();
+    }
+
+    /**
      * Load's and return's the product with the passed SKU.
      *
      * @param string $sku The SKU of the product to load

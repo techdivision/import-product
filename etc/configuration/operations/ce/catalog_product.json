@@ -2,6 +2,12 @@
   "shortcuts": {
     "ce": {
       "catalog_product": {
+        "validate": [
+          "general/general/global-data",
+          "general/general/move-files",
+          "general/catalog_product/collect-data",
+          "general/catalog_product/validate"
+        ],
         "delete": [
           "general/general/global-data",
           "general/general/move-files",
@@ -12,6 +18,7 @@
           "general/general/global-data",
           "general/general/cache-warmer",
           "general/general/move-files",
+          "general/catalog_product/collect-data",
           "general/catalog_product/validate",
           "general/catalog_category/convert",
           "ce/catalog_category/add-update",
@@ -31,6 +38,7 @@
           "general/general/global-data",
           "general/general/cache-warmer",
           "general/general/move-files",
+          "general/catalog_product/collect-data",
           "general/catalog_product/validate",
           "general/catalog_category/convert",
           "ce/catalog_category/add-update",
@@ -52,6 +60,35 @@
   "operations": {
     "general": {
       "catalog_product": [
+        {
+          "name": "collect-data",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import.subject.validator",
+                  "create-imported-file": false,
+                  "file-resolver": {
+                    "prefix": "product-import"
+                  },
+                  "params" : {
+                    "collect-columns": [
+                      "sku"
+                    ]
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import.observer.generic.column.collector"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
         {
           "name": "validate",
           "plugins": [
@@ -81,7 +118,7 @@
                   "observers": [
                     {
                       "import": [
-                        "import.observer.validator.generic"
+                        "import_product.observer.composite.base.validate"
                       ]
                     }
                   ],
@@ -93,7 +130,10 @@
                       "product_type": [ "import.callback.custom.array.validator" ],
                       "tax_class": [ "import_product.callback.validator.tax.class" ],
                       "product_websites": [ "import.callback.store.website.validator" ],
-                      "visibility": [ "import.callback.visibility.validator" ]
+                      "visibility": [ "import.callback.visibility.validator" ],
+                      "related_skus": [ "import_product.callback.validator.link" ],
+                      "upsell_skus": [ "import_product.callback.validator.link" ],
+                      "crosssell_skus": [ "import_product.callback.validator.link" ]
                     }
                   ]
                 }

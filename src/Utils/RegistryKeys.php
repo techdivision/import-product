@@ -38,4 +38,11 @@ class RegistryKeys extends \TechDivision\Import\Utils\RegistryKeys
      * @var string
      */
     const PRE_LOADED_ENTITY_IDS = 'preLoadedEntityIds';
+
+    /**
+     * The key for the registry entry containing the processed SKUs.
+     *
+     * @var string
+     */
+    const PROCESSED_SKUS = 'processed_skus';
 }
