@@ -133,26 +133,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
      *
      * @var array
      */
-    protected $headerMappings = array(
-        'product_online'       => 'status',
-        'tax_class_name'       => 'tax_class_id',
-        'bundle_price_type'    => 'price_type',
-        'bundle_sku_type'      => 'sku_type',
-        'bundle_price_view'    => 'price_view',
-        'bundle_weight_type'   => 'weight_type',
-        'bundle_shipment_type' => 'shipment_type',
-        'related_skus'         => 'relation_skus',
-        'related_position'     => 'relation_position',
-        'crosssell_skus'       => 'cross_sell_skus',
-        'crosssell_position'   => 'cross_sell_position',
-        'upsell_skus'          => 'up_sell_skus',
-        'upsell_position'      => 'up_sell_position',
-        'msrp_price'           => 'msrp',
-        'base_image'           => 'image',
-        'base_image_label'     => 'image_label',
-        'thumbnail_image'      => 'thumbnail',
-        'thumbnail_image_label'=> 'thumbnail_label'
-    );
+    protected $headerMappings = array();
 
     /**
      * The default mappings for the user defined attributes, based on the attributes frontend input type.

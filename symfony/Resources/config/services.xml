@@ -27,12 +27,12 @@
         <!--
          | The DI loader configuration
          |-->
-        <service id="import.loader.registry" class="TechDivision\Import\Loaders\RegistryLoader">
+        <service id="import.loader.registry.custom.columns" class="TechDivision\Import\Loaders\RegistryLoader">
             <argument type="service" id="import.processor.registry"/>
             <argument type="constant">TechDivision\Import\Utils\RegistryKeys::COLLECTED_COLUMNS</argument>
         </service>
         <service id="import_product.loader.sku" class="TechDivision\Import\Product\Loaders\ProductValueLoader">
-            <argument type="service" id="import.loader.registry"/>
+            <argument type="service" id="import.loader.registry.custom.columns"/>
             <argument type="service" id="import_product.processor.product.bunch"/>
         </service>
         <service id="import_product.loader.tax.class" class="TechDivision\Import\Product\Loaders\TaxClassLoader">
