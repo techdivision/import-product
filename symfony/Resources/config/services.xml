@@ -3,12 +3,18 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!-- parameters>
-        <parameter key="array_validator.nullable.true">true</parameter>
-    </parameters -->
+    <parameters>
+        <parameter key="import_product.repository.finder.mappings" type="collection">
+            <parameter key=""></parameter>
+        </parameter>
+    </parameters>
 
     <services>
 
+        <!--
+         | The DI configuration for the utilities
+         |-->
+        <service id="import_product.filter.convert.literal.url" class="TechDivision\Import\Utils\Filter\ConvertLiteralUrl"/>
         <service id="import_product.utils.sku.to.pk.mapping" class="TechDivision\Import\Product\Utils\SkuToPkMappingUtil">
             <argument type="service" id="configuration"/>
         </service>
@@ -21,7 +27,9 @@
         </service>
         <service id="import_product.repository.cache.warmer.product.varchar" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductVarcharCacheWarmer">
             <argument type="service" id="import_product.repository.product.varchar"/>
-            <argument type="service" id="import.repository.store"/>
+            <argument type="service" id="import_product.repository.product"/>
+            <argument type="service" id="import.repository.eav.attribute"/>
+            <argument type="service" id="cache.configurable"/>
         </service>
 
         <!--
@@ -52,15 +60,46 @@
         </service>
 
         <!--
-         | The repository configuration
+         | The DI configuration for the finder based repositories
          |-->
-        <service id="import_product.repository.sql.statement" class="TechDivision\Import\Product\Repositories\SqlStatementRepository">
-            <argument type="service" id="import.util.sql.compilers"/>
-        </service>
         <service id="import_product.repository.product" class="TechDivision\Import\Product\Repositories\ProductRepository">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.repository.finder.factory.configurable"/>
+            <argument type="service" id="import.util.primary.key"/>
+        </service>
+        <service id="import_product.repository.product.datetime" class="TechDivision\Import\Product\Repositories\ProductDatetimeRepository">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.repository.finder.factory.configurable"/>
+        </service>
+        <service id="import_product.repository.product.decimal" class="TechDivision\Import\Product\Repositories\ProductDecimalRepository">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.repository.finder.factory.configurable"/>
+        </service>
+        <service id="import_product.repository.product.int" class="TechDivision\Import\Product\Repositories\ProductIntRepository">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.repository.finder.factory.configurable"/>
+        </service>
+        <service id="import_product.repository.product.text" class="TechDivision\Import\Product\Repositories\ProductTextRepository">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.repository.finder.factory.configurable"/>
+        </service>
+        <service id="import_product.repository.product.varchar" class="TechDivision\Import\Product\Repositories\ProductVarcharRepository">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.repository.finder.factory.configurable"/>
             <argument type="service" id="cache.configurable"/>
+        </service>
+
+        <!--
+         | The DI configuration for the legacy repositories
+         |-->
+        <service id="import_product.repository.sql.statement" class="TechDivision\Import\Product\Repositories\SqlStatementRepository">
+            <argument type="service" id="import.util.sql.compilers"/>
         </service>
         <service id="import_product.repository.category.product" class="TechDivision\Import\Product\Repositories\CategoryProductRepository">
             <argument type="service" id="connection"/>
@@ -69,27 +108,6 @@
         <service id="import_product.repository.product.website" class="TechDivision\Import\Product\Repositories\ProductWebsiteRepository">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
-        <service id="import_product.repository.product.datetime" class="TechDivision\Import\Product\Repositories\ProductDatetimeRepository">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
-        <service id="import_product.repository.product.decimal" class="TechDivision\Import\Product\Repositories\ProductDecimalRepository">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
-        <service id="import_product.repository.product.int" class="TechDivision\Import\Product\Repositories\ProductIntRepository">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
-        <service id="import_product.repository.product.text" class="TechDivision\Import\Product\Repositories\ProductTextRepository">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
-        <service id="import_product.repository.product.varchar" class="TechDivision\Import\Product\Repositories\ProductVarcharRepository">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.repository.sql.statement"/>
-            <argument type="service" id="cache.configurable"/>
         </service>
         <service id="import_product.repository.stock.item" class="TechDivision\Import\Product\Repositories\StockItemRepository">
             <argument type="service" id="connection"/>
@@ -100,6 +118,9 @@
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
 
+        <!--
+         | The DI configuration for the processor actions
+         |-->
         <service id="import_product.action.processor.category.product.create" class="TechDivision\Import\Product\Actions\Processors\CategoryProductCreateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
@@ -209,6 +230,9 @@
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
 
+        <!--
+         | The DI configuration for the actions
+         |-->
         <service id="import_product.action.category.product" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.category.product.create"/>
             <argument type="service" id="import_product.action.processor.category.product.update"/>
@@ -218,36 +242,42 @@
             <argument type="service" id="import_product.action.processor.product.create"/>
             <argument type="service" id="import_product.action.processor.product.update"/>
             <argument type="service" id="import_product.action.processor.product.delete"/>
+            <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::ENTITY_ID</argument>
         </service>
         <service id="import_product.action.product.website" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.product.website.create"/>
             <argument type="service" id="import_product.action.processor.product.website.update" on-invalid="null"/>
             <argument type="service" id="import_product.action.processor.product.website.delete"/>
         </service>
-        <service id="import_product.action.product.datetime" class="TechDivision\Import\Actions\GenericAction">
+        <service id="import_product.action.product.datetime" class="TechDivision\Import\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.datetime.create"/>
             <argument type="service" id="import_product.action.processor.product.datetime.update"/>
             <argument type="service" id="import_product.action.processor.product.datetime.delete"/>
+            <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::VALUE_ID</argument>
         </service>
-        <service id="import_product.action.product.decimal" class="TechDivision\Import\Actions\GenericAction">
+        <service id="import_product.action.product.decimal" class="TechDivision\Import\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.decimal.create"/>
             <argument type="service" id="import_product.action.processor.product.decimal.update"/>
             <argument type="service" id="import_product.action.processor.product.decimal.delete"/>
+            <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::VALUE_ID</argument>
         </service>
-        <service id="import_product.action.product.int" class="TechDivision\Import\Actions\GenericAction">
+        <service id="import_product.action.product.int" class="TechDivision\Import\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.int.create"/>
             <argument type="service" id="import_product.action.processor.product.int.update"/>
             <argument type="service" id="import_product.action.processor.product.int.delete"/>
+            <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::VALUE_ID</argument>
         </service>
-        <service id="import_product.action.product.text" class="TechDivision\Import\Actions\GenericAction">
+        <service id="import_product.action.product.text" class="TechDivision\Import\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.text.create"/>
             <argument type="service" id="import_product.action.processor.product.text.update"/>
             <argument type="service" id="import_product.action.processor.product.text.delete"/>
+            <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::VALUE_ID</argument>
         </service>
         <service id="import_product.action.product.varchar" class="TechDivision\Import\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.varchar.create"/>
             <argument type="service" id="import_product.action.processor.product.varchar.update"/>
             <argument type="service" id="import_product.action.processor.product.varchar.delete"/>
+            <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::VALUE_ID</argument>
         </service>
         <service id="import_product.action.stock.item" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.stock.item.create"/>
@@ -258,6 +288,9 @@
             <argument type="service" id="import_product.action.processor.product.relation.create"/>
         </service>
 
+        <!--
+         | The DI configuration for the assemblers
+         |-->
         <service id="import_product.assembler.product.attribute" class="TechDivision\Import\Product\Assemblers\ProductAttributeAssembler">
             <argument type="service" id="import_product.repository.product.datetime"/>
             <argument type="service" id="import_product.repository.product.decimal"/>
@@ -266,6 +299,9 @@
             <argument type="service" id="import_product.repository.product.varchar"/>
         </service>
 
+        <!--
+         | The DI configuration for the product bunch processor
+         |-->
         <service id="import_product.processor.product.bunch" class="TechDivision\Import\Product\Services\ProductBunchProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.product"/>
@@ -293,8 +329,9 @@
             <argument type="service" id="import_product.assembler.product.attribute"/>
         </service>
 
-        <service id="import_product.filter.convert.literal.url" class="TechDivision\Import\Utils\Filter\ConvertLiteralUrl"/>
-
+        <!--
+         | The DI callback configuration
+         |-->
         <service id="import_product.callback.boolean" class="TechDivision\Import\Product\Callbacks\BooleanCallback"/>
         <service id="import_product.callback.tax.class" class="TechDivision\Import\Product\Callbacks\TaxClassCallback"/>
         <service id="import_product.callback.visibility" class="TechDivision\Import\Product\Callbacks\VisibilityCallback"/>
@@ -314,6 +351,9 @@
             <argument>%array_validator.nullable.true%</argument>
         </service>
 
+        <!--
+         | The DI observer configuration
+         |-->
         <service id="import_product.observer.file.upload" class="TechDivision\Import\Product\Observers\FileUploadObserver"/>
         <service id="import_product.observer.quality.and.stock.status" class="TechDivision\Import\Product\Observers\QuantityAndStockStatusObserver"/>
         <service id="import_product.observer.url.key" class="TechDivision\Import\Product\Observers\UrlKeyObserver">
@@ -588,6 +628,9 @@
             <deprecated>The alias "%alias_id%" for the "%service_id%" service is deprecated since techdivision/import-product 15.0.0 and will be removed in 16.0.0.</deprecated>
         </service>
 
+        <!--
+         | The DI subject configuration
+         |-->
         <service id="import_product.subject.bunch" class="TechDivision\Import\Product\Subjects\BunchSubject" shared="false">
             <argument type="service" id="import.processor.registry"/>
             <argument type="service" id="import.generator.core.config.data.uid"/>

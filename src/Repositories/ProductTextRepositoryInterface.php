@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Repositories\RepositoryInterface;
+use TechDivision\Import\Repositories\FinderAwareRepositoryInterface;
 
 /**
  * Interface for repositories providing functionality to load product text attribute data.
@@ -31,8 +31,15 @@ use TechDivision\Import\Repositories\RepositoryInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-interface ProductTextRepositoryInterface extends RepositoryInterface
+interface ProductTextRepositoryInterface extends FinderAwareRepositoryInterface
 {
+
+    /**
+     * Load's and return's the available text attributes.
+     *
+     * @return array The text attributes
+     */
+    public function findAll();
 
     /**
      * Load's and return's the text attributes with the passed primary key/store ID.

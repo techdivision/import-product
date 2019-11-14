@@ -20,10 +20,15 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Subjects\SubjectInterface;
+use TechDivision\Import\Observers\StateDetectorInterface;
+use TechDivision\Import\Observers\ObserverFactoryInterface;
+use TechDivision\Import\Observers\AbstractAttributeObserver;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Observers\AbstractAttributeObserver;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Observers\StateDetectorAwareObserverInterface;
+use TechDivision\Import\Utils\BackendTypeKeys;
 
 /**
  * Observer that creates/updates the product's attributes.
@@ -34,7 +39,7 @@ use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductAttributeObserver extends AbstractAttributeObserver
+class ProductAttributeObserver extends AbstractAttributeObserver implements StateDetectorAwareObserverInterface, ObserverFactoryInterface
 {
 
     /**
@@ -45,13 +50,73 @@ class ProductAttributeObserver extends AbstractAttributeObserver
     protected $productBunchProcessor;
 
     /**
+     * The array with the column mappings that has to be computed.
+     *
+     * @var array
+     */
+    protected $columns = array();
+
+    /**
+     * The backend type => data type mappings.
+     *
+     * @var array
+     */
+    protected $backendTypeKeyMappings = array(
+        BackendTypeKeys::BACKEND_TYPE_DATETIME => 'string',
+        BackendTypeKeys::BACKEND_TYPE_DECIMAL => 'float',
+        BackendTypeKeys::BACKEND_TYPE_FLOAT => 'float',
+        BackendTypeKeys::BACKEND_TYPE_INT => 'integer',
+        BackendTypeKeys::BACKEND_TYPE_STATIC => 'string',
+        BackendTypeKeys::BACKEND_TYPE_TEXT => 'string',
+        BackendTypeKeys::BACKEND_TYPE_VARCHAR => 'string'
+    );
+
+    /**
      * Initialize the observer with the passed product bunch processor instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null           $stateDetector         The state detector instance to use
      */
-    public function __construct(ProductBunchProcessorInterface $productBunchProcessor)
+    public function __construct(ProductBunchProcessorInterface $productBunchProcessor, StateDetectorInterface $stateDetector = null)
     {
+
+        // initialize the bunch processor instance
         $this->productBunchProcessor = $productBunchProcessor;
+
+        // pass the state detector to the parent method
+        parent::__construct($stateDetector);
+    }
+
+    /**
+     * Will be invoked by the observer visitor when a factory has been defined to create the observer instance.
+     *
+     * @param \TechDivision\Import\Subjects\SubjectInterface $subject The subject instance
+     *
+     * @return \TechDivision\Import\Observers\ObserverInterface The observer instance
+     */
+    public function createObserver(SubjectInterface $subject)
+    {
+
+        // load the attributes
+        $attributes = $subject->getAttributes();
+
+        // create the attribute name => type mapping
+        foreach ($attributes as $attribute) {
+            $this->columns[$attribute[MemberNames::ATTRIBUTE_ID]] = isset($this->backendTypeKeyMappings[$attribute[MemberNames::BACKEND_TYPE]]) ? $this->backendTypeKeyMappings[$attribute[MemberNames::BACKEND_TYPE]] : 'string';
+        }
+
+        // return the instance
+        return $this;
+    }
+
+    /**
+     * Returns an array of the columns with their types to detect state.
+     *
+     * @return array The array with the column names as key and their type as value
+     */
+    public function getColumns(array $attribute = array())
+    {
+        return array(MemberNames::VALUE => $this->columns[$attribute[MemberNames::ATTRIBUTE_ID]]);
     }
 
     /**

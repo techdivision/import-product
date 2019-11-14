@@ -61,39 +61,74 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const PRODUCT_WEBSITES_BY_SKU = 'product_website.by.sku';
 
     /**
-     * The SQL statement to load the product datetime attributes with the passed entity/store ID.
+     * The SQL statement to load the available product datetime attributes.
      *
      * @var string
      */
     const PRODUCT_DATETIMES = 'product_datetimes';
 
     /**
-     * The SQL statement to load the product decimal attributes with the passed entity/store ID.
+     * The SQL statement to load the product datetime attributes with the passed entity/row and store ID.
+     *
+     * @var string
+     */
+    const PRODUCT_DATETIMES_BY_PK_AND_STORE_ID = 'product_datetimes.by.pk.and.store_id';
+
+    /**
+     * The SQL statement to load the available product decimal attributes.
      *
      * @var string
      */
     const PRODUCT_DECIMALS = 'product_decimals';
 
     /**
-     * The SQL statement to load the product integer attributes with the passed entity/store ID.
+     * The SQL statement to load the product decimal attributes with the passed entity/row and store ID.
+     *
+     * @var string
+     */
+    const PRODUCT_DECIMALS_BY_PK_AND_STORE_ID = 'product_decimals.by.pk.and.store_id';
+
+    /**
+     * The SQL statement to load the available product integer attributes.
      *
      * @var string
      */
     const PRODUCT_INTS = 'product_ints';
 
     /**
-     * The SQL statement to load the product text attributes with the passed entity/store ID.
+     * The SQL statement to load the product integer attributes with the passed entity/row and store ID.
+     *
+     * @var string
+     */
+    const PRODUCT_INTS_BY_PK_AND_STORE_ID = 'product_ints.by.pk.and.store_id';
+
+    /**
+     * The SQL statement to load the available product text attributes.
      *
      * @var string
      */
     const PRODUCT_TEXTS = 'product_texts';
 
     /**
-     * The SQL statement to load the product varchar attributes with the passed entity/store ID.
+     * The SQL statement to load the product text attributes with the passed entity/row and store ID.
+     *
+     * @var string
+     */
+    const PRODUCT_TEXTS_BY_PK_AND_STORE_ID = 'product_texts.by.pk.and.store_id';
+
+    /**
+     * The SQL statement to load the available product varchar attributes.
      *
      * @var string
      */
     const PRODUCT_VARCHARS = 'product_varchars';
+
+    /**
+     * The SQL statement to load the product varchar attributes with the passed entity/row and store ID.
+     *
+     * @var string
+     */
+    const PRODUCT_VARCHARS_BY_PK_AND_STORE_ID = 'product_varchars.by.pk.and.store_id';
 
     /**
      * The SQL statement to load a product varchar attribute by the passed attribute code,

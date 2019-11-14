@@ -20,13 +20,14 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Cache\CacheAdapterInterface;
+use TechDivision\Import\Product\Utils\CacheKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
-use TechDivision\Import\Repositories\AbstractRepository;
+use TechDivision\Import\Repositories\AbstractFinderRepository;
 use TechDivision\Import\Connection\ConnectionInterface;
 use TechDivision\Import\Repositories\SqlStatementRepositoryInterface;
-use TechDivision\Import\Product\Utils\CacheKeys;
+use TechDivision\Import\Repositories\Finders\FinderFactoryInterface;
+use TechDivision\Import\Utils\PrimaryKeyUtilInterface;
 
 /**
  * Repository implementation to load product data.
@@ -37,58 +38,36 @@ use TechDivision\Import\Product\Utils\CacheKeys;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductRepository extends AbstractRepository implements ProductRepositoryInterface
+class ProductRepository extends AbstractFinderRepository implements ProductRepositoryInterface
 {
 
     /**
-     * The cache adapter instance.
+     * The primary key utility instance.
      *
-     * @var \TechDivision\Import\Cache\CacheAdapterInterface
+     * @var \TechDivision\Import\Utils\PrimaryKeyUtilInterface
      */
-    protected $cacheAdapter;
-
-    /**
-     * The prepared statement to load a product with the passed SKU.
-     *
-     * @var \PDOStatement
-     */
-    protected $productStmt;
-
-    /**
-     * The prepared statement to load the existing products.
-     *
-     * @var \PDOStatement
-     */
-    protected $productsStmt;
+    protected $primaryKeyUtil;
 
     /**
      * Initialize the repository with the passed connection and utility class name.
      * .
      * @param \TechDivision\Import\Connection\ConnectionInterface               $connection             The connection instance
      * @param \TechDivision\Import\Repositories\SqlStatementRepositoryInterface $sqlStatementRepository The SQL repository instance
-     * @param \TechDivision\Import\Cache\CacheAdapterInterface                  $cacheAdapter           The cache adapter instance
+     * @param \TechDivision\Import\Repositories\Finders\FinderFactoryInterface  $finderFactory          The finder factory instance
+     * @param \TechDivision\Import\Utils\PrimaryKeyUtilInterface                $primaryKeyUtil         The primary key utility instance
      */
     public function __construct(
         ConnectionInterface $connection,
         SqlStatementRepositoryInterface $sqlStatementRepository,
-        CacheAdapterInterface $cacheAdapter
+        FinderFactoryInterface $finderFactory,
+        PrimaryKeyUtilInterface $primaryKeyUtil
     ) {
 
-        // pass the connection the SQL statement repository to the parent class
-        parent::__construct($connection, $sqlStatementRepository);
+        // set the primary key utility instance
+        $this->primaryKeyUtil = $primaryKeyUtil;
 
-        // set the cache adapter instance
-        $this->cacheAdapter = $cacheAdapter;
-    }
-
-    /**
-     * Return's the primary key name of the entity.
-     *
-     * @return string The name of the entity's primary key
-     */
-    public function getPrimaryKeyName()
-    {
-        return MemberNames::ENTITY_ID;
+        // pass the connection, SQL statement repository and the primary key utility to the parent class
+        parent::__construct($connection, $sqlStatementRepository, $finderFactory);
     }
 
     /**
@@ -100,20 +79,38 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
     {
 
         // initialize the prepared statements
-        $this->productStmt =
-            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT));
-        $this->productsStmt =
-            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCTS));
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT));
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCTS));
     }
 
     /**
-     * Returns the cache adapter instance used to warm the repository.
+     * Return's the finder's entity name.
      *
-     * @return \TechDivision\Import\Cache\CacheAdapterInterface The repository's cache adapter instance
+     * @return string The finder's entity name
      */
-    public function getCacheAdapter()
+    public function getEntityName()
     {
-        return $this->cacheAdapter;
+        return CacheKeys::PRODUCT;
+    }
+
+    /**
+     * Return's the primary key name of the entity.
+     *
+     * @return string The name of the entity's primary key
+     */
+    public function getPrimaryKeyName()
+    {
+        return $this->primaryKeyUtil->getPrimaryKeyMemberName();
+    }
+
+    /**
+     * Return's the entity unique key name.
+     *
+     * @return string The name of the entity's unique key
+     */
+    public function getUniqueKeyName()
+    {
+        return MemberNames::SKU;
     }
 
     /**
@@ -123,13 +120,8 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
      */
     public function findAll()
     {
-
-        // load and return the available products
-        $this->productsStmt->execute();
-
-        // fetch the values and return them
-        while ($record = $this->productsStmt->fetch(\PDO::FETCH_ASSOC)) {
-            yield $record;
+        foreach ($this->getFinder(SqlStatementKeys::PRODUCTS)->find() as $result) {
+            yield $result;
         }
     }
 
@@ -142,23 +134,6 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
      */
     public function findOneBySku($sku)
     {
-
-        // return the cached result if available
-        if ($this->cacheAdapter->isCached($sku)) {
-            return $this->cacheAdapter->fromCache($sku);
-        }
-
-        // if not, try to load the product with the passed SKU
-        $this->productStmt->execute(array(MemberNames::SKU => $sku));
-
-        // query whether or not the product is available in the database
-        if ($product = $this->productStmt->fetch(\PDO::FETCH_ASSOC)) {
-            // prepare the unique cache key for the product
-            $uniqueKey = array(CacheKeys::PRODUCT => $product[$this->getPrimaryKeyName()]);
-            // add the EAV attribute option value to the cache, register the cache key reference as well
-            $this->cacheAdapter->toCache($uniqueKey, $product, array($sku => $uniqueKey));
-            // finally, return it
-            return $product;
-        }
+        return $this->getFinder(SqlStatementKeys::PRODUCT)->find(array($this->getUniqueKeyName() => $sku));
     }
 }

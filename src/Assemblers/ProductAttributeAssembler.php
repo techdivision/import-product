@@ -111,28 +111,33 @@ class ProductAttributeAssembler implements ProductAttributeAssemblerInterface
         // initialize the array for the attributes
         $attributes = array();
 
-        // load the datetime attributes
-        foreach ($this->productDatetimeRepository->findAllByPrimaryKeyAndStoreId($pk, $storeId) as $attribute) {
+        // load and prepare the datetime attributes
+        $productDatetimes = $this->productDatetimeRepository->findAllByPrimaryKeyAndStoreId($pk, $storeId);
+        foreach ($productDatetimes as $attribute) {
             $attributes[$attribute[MemberNames::ATTRIBUTE_ID]] = $attribute;
         }
 
-        // load the decimal attributes
-        foreach ($this->productDecimalRepository->findAllByPrimaryKeyAndStoreId($pk, $storeId) as $attribute) {
+        // load and prepare the decimal attributes
+        $productDecimals = $this->productDecimalRepository->findAllByPrimaryKeyAndStoreId($pk, $storeId);
+        foreach ($productDecimals as $attribute) {
             $attributes[$attribute[MemberNames::ATTRIBUTE_ID]] = $attribute;
         }
 
-        // load the integer attributes
-        foreach ($this->productIntRepository->findAllByPrimaryKeyAndStoreId($pk, $storeId) as $attribute) {
+        // load and prepare the integer attributes
+        $productIntegers = $this->productIntRepository->findAllByPrimaryKeyAndStoreId($pk, $storeId);
+        foreach ($productIntegers as $attribute) {
             $attributes[$attribute[MemberNames::ATTRIBUTE_ID]] = $attribute;
         }
 
-        // load the text attributes
-        foreach ($this->productTextRepository->findAllByPrimaryKeyAndStoreId($pk, $storeId) as $attribute) {
+        // load and prepare the text attributes
+        $productTexts = $this->productTextRepository->findAllByPrimaryKeyAndStoreId($pk, $storeId);
+        foreach ($productTexts as $attribute) {
             $attributes[$attribute[MemberNames::ATTRIBUTE_ID]] = $attribute;
         }
 
-        // load the varchar attributes
-        foreach ($this->productVarcharRepository->findAllByPrimaryKeyAndStoreId($pk, $storeId) as $attribute) {
+        // load and prepare the varchar attributes
+        $productVarchars = $this->productVarcharRepository->findAllByPrimaryKeyAndStoreId($pk, $storeId);
+        foreach ($productVarchars as $attribute) {
             $attributes[$attribute[MemberNames::ATTRIBUTE_ID]] = $attribute;
         }
 

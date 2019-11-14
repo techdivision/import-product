@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Repositories\RepositoryInterface;
+use TechDivision\Import\Repositories\FinderAwareRepositoryInterface;
 
 /**
  * Interface for repositories providing functionality to load product decimal attribute data.
@@ -31,8 +31,15 @@ use TechDivision\Import\Repositories\RepositoryInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-interface ProductDecimalRepositoryInterface extends RepositoryInterface
+interface ProductDecimalRepositoryInterface extends FinderAwareRepositoryInterface
 {
+
+    /**
+     * Load's and return's the available decimals attributes.
+     *
+     * @return array The decimal attributes
+     */
+    public function findAll();
 
     /**
      * Load's and return's the decimal attributes for the passed primary key/store ID.

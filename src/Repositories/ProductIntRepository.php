@@ -20,9 +20,10 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Product\Utils\ParamNames;
+use TechDivision\Import\Product\Utils\CacheKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
-use TechDivision\Import\Repositories\AbstractRepository;
+use TechDivision\Import\Repositories\AbstractFinderRepository;
 
 /**
  * Repository implementation to load product integer attribute data.
@@ -33,15 +34,8 @@ use TechDivision\Import\Repositories\AbstractRepository;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductIntRepository extends AbstractRepository implements ProductIntRepositoryInterface
+class ProductIntRepository extends AbstractFinderRepository implements ProductIntRepositoryInterface
 {
-
-    /**
-     * The prepared statement to load the existing product integer attributes with the passed entity/store ID.
-     *
-     * @var \PDOStatement
-     */
-    protected $productIntsStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -52,33 +46,59 @@ class ProductIntRepository extends AbstractRepository implements ProductIntRepos
     {
 
         // initialize the prepared statements
-        $this->productIntsStmt =
-            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_INTS));
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_INTS));
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_INTS_BY_PK_AND_STORE_ID));
     }
 
     /**
-     * Load's and return's the integer attributes with the passed primary key/store ID.
+     * Return's the primary key name of the entity.
+     *
+     * @return string The name of the entity's primary key
+     */
+    public function getPrimaryKeyName()
+    {
+        return MemberNames::VALUE_ID;
+    }
+
+    /**
+     * Return's the finder's entity name.
+     *
+     * @return string The finder's entity name
+     */
+    public function getEntityName()
+    {
+        return CacheKeys::PRODUCT_INT;
+    }
+
+    /**
+     * Load's and return's the available integer attributes.
+     *
+     * @return array The integer attributes
+     */
+    public function findAll()
+    {
+        foreach ($this->getFinder(SqlStatementKeys::PRODUCT_INTS)->find() as $result) {
+            yield $result;
+        }
+    }
+
+    /**
+     * Load's and return's the text attributes with the passed primary key/store ID.
      *
      * @param integer $pk      The primary key of the attributes
      * @param integer $storeId The store ID of the attributes
      *
-     * @return array The integer attributes
+     * @return array The text attributes
      */
     public function findAllByPrimaryKeyAndStoreId($pk, $storeId)
     {
 
         // prepare the params
-        $params = array(
-            ParamNames::PK        => $pk,
-            ParamNames::STORE_ID  => $storeId
-        );
+        $params = array(MemberNames::PK => $pk, MemberNames::STORE_ID => $storeId);
 
-        // load and return the product integer attributes with the passed primary key/store ID
-        $this->productIntsStmt->execute($params);
-
-        // fetch the values and return them
-        while ($record = $this->productIntsStmt->fetch(\PDO::FETCH_ASSOC)) {
-            yield $record;
+        // load the entities and return them
+        foreach ($this->getFinder(SqlStatementKeys::PRODUCT_INTS_BY_PK_AND_STORE_ID)->find($params) as $result) {
+            yield $result;
         }
     }
 }

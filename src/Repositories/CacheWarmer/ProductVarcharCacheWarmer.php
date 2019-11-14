@@ -21,12 +21,13 @@
 namespace TechDivision\Import\Product\Repositories\CacheWarmer;
 
 use TechDivision\Import\Product\Utils\CacheKeys;
-use TechDivision\Import\Product\Utils\ParamNames;
-use TechDivision\Import\Product\Utils\SqlStatementKeys;
-use TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface;
-use TechDivision\Import\Repositories\CacheWarmer\CacheWarmerInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Repositories\StoreRepositoryInterface;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
+use TechDivision\Import\Product\Repositories\ProductRepositoryInterface;
+use TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface;
+use TechDivision\Import\Cache\CacheAdapterInterface;
+use TechDivision\Import\Repositories\EavAttributeRepositoryInterface;
+use TechDivision\Import\Repositories\CacheWarmer\CacheWarmerInterface;
 
 /**
  * Cache warmer implementation that pre-load the available products.
@@ -41,6 +42,13 @@ class ProductVarcharCacheWarmer implements CacheWarmerInterface
 {
 
     /**
+     * The cache adapter instance.
+     *
+     * @var \TechDivision\Import\Cache\CacheAdapterInterface
+     */
+    protected $cacheAdapter;
+
+    /**
      * The repository with the cache that has to be warmed.
      *
      * @var \TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface
@@ -48,24 +56,37 @@ class ProductVarcharCacheWarmer implements CacheWarmerInterface
     protected $repository;
 
     /**
-     * The store repository.
+     * The product repository instance.
      *
-     * @var \TechDivision\Import\Repositories\StoreRepositoryInterface
+     * @var \TechDivision\Import\Product\Repositories\ProductRepositoryInterface
      */
-    protected $storeRepository;
+    protected $productRepository;
+
+    /**
+     * The EAV attribute repository instance.
+     *
+     * @var \TechDivision\Import\Repositories\EavAttributeRepositoryInterface
+     */
+    protected $eavAttributeRepository;
 
     /**
      * Initialize the cache warmer with the repository that has to be warmed.
      *
-     * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface $repository      The repository to warm
-     * @param \TechDivision\Import\Repositories\StoreRepositoryInterface                  $storeRepository The store repository
+     * @param \TechDivision\Import\Product\Repositories\ProductVarcharRepositoryInterface $repository             The repository to warm
+     * @param \TechDivision\Import\Product\Repositories\ProductRepositoryInterface        $productRepository      The product repository
+     * @param \TechDivision\Import\Repositories\EavAttributeRepositoryInterface           $eavAttributeRepository The EAV attribute repository
+     * @param \TechDivision\Import\Cache\CacheAdapterInterface                            $cacheAdapter           The cache adapter instance
      */
     public function __construct(
         ProductVarcharRepositoryInterface $repository,
-        StoreRepositoryInterface $storeRepository
+        ProductRepositoryInterface $productRepository,
+        EavAttributeRepositoryInterface $eavAttributeRepository,
+        CacheAdapterInterface $cacheAdapter
     ) {
         $this->repository = $repository;
-        $this->storeRepository = $storeRepository;
+        $this->cacheAdapter = $cacheAdapter;
+        $this->productRepository = $productRepository;
+        $this->eavAttributeRepository = $eavAttributeRepository;
     }
 
     /**
@@ -76,46 +97,47 @@ class ProductVarcharCacheWarmer implements CacheWarmerInterface
     public function warm()
     {
 
-        // load the cache adapter
-        /** @var \TechDivision\Import\Cache\CacheAdapterInterface $cacheAdapter */
-        $cacheAdapter = $this->repository->getCacheAdapter();
+        // initialize the array for the unique keys
+        $uniqueKeys = array();
 
-        // load the available stores
-        $stores = $this->storeRepository->findAll();
+        // load all available attributes
+        foreach ($this->repository->findAll() as $attr) {
+            // (re-)sinitialize the array for the cache keys
+            $cacheKeys = array();
+            // prepare the unique cache key for the attribue
+            $uniqueKey = array(CacheKeys::PRODUCT_VARCHAR => $attr[$this->repository->getPrimaryKeyName()]);
+            // load the EAV attribute
+            $eavAttribute = $this->eavAttributeRepository->load($attr[MemberNames::ATTRIBUTE_ID]);
 
-        // iterate over the stores to prepare the cache
-        foreach ($stores as $store) {
-            // load the product varchar values we want to cache
-            $productVarchars = $this->repository->findAllByAttributeCodeAndEntityTypeIdAndStoreId(
-                $attributeCode = MemberNames::URL_KEY,
-                $entityTypeId = 4,
-                $store[MemberNames::STORE_ID]
+            // prepare the cache key and add the URL key value to the cache
+            $cacheKeys[$this->cacheAdapter->cacheKey(
+                array(
+                    SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE =>
+                    array(
+                        MemberNames::ATTRIBUTE_CODE => $eavAttribute[MemberNames::ATTRIBUTE_CODE],
+                        MemberNames::ENTITY_TYPE_ID => 4,
+                        MemberNames::STORE_ID       => $attr[MemberNames::STORE_ID],
+                        MemberNames::VALUE          => $attr[MemberNames::VALUE]
+                    )
+                )
+            )] = $uniqueKey;
+
+            // add the EAV attribute option value to the cache
+            $this->cacheAdapter->toCache($uniqueKey, $attr, $cacheKeys);
+
+            // prepare the params
+            $params = array(
+                MemberNames::PK       => $attr[$this->productRepository->getPrimaryKeyName()],
+                MemberNames::STORE_ID => $attr[MemberNames::STORE_ID]
             );
 
-            // prepare the caches for the statements
-            foreach ($productVarchars as $productVarchar) {
-                // (re-)sinitialize the array for the cache keys
-                $cacheKeys = array();
+            // append the unique key to the array
+            $uniqueKeys[$this->cacheAdapter->cacheKey(array(SqlStatementKeys::PRODUCT_VARCHARS_BY_PK_AND_STORE_ID => $params))][] = $uniqueKey;
+        }
 
-                // prepare the unique cache key for the product
-                $uniqueKey = array(CacheKeys::PRODUCT_VARCHAR => $productVarchar[$this->repository->getPrimaryKeyName()]);
-
-                // prepare the cache key and add the URL key value to the cache
-                $cacheKeys[$cacheAdapter->cacheKey(
-                    array(
-                        SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE =>
-                        array(
-                            ParamNames::ATTRIBUTE_CODE => $attributeCode,
-                            ParamNames::ENTITY_TYPE_ID => $entityTypeId,
-                            ParamNames::STORE_ID       => $productVarchar[MemberNames::STORE_ID],
-                            ParamNames::VALUE          => $productVarchar[MemberNames::VALUE]
-                        )
-                    )
-                )] = $uniqueKey;
-
-                // add the EAV attribute option value to the cache
-                $cacheAdapter->toCache($uniqueKey, $productVarchar, $cacheKeys);
-            }
+        // add the unique keys => UIDs mapping to the cache
+        foreach ($uniqueKeys as $cacheKey => $uids) {
+            $this->cacheAdapter->toCache($cacheKey, $uids);
         }
     }
 }

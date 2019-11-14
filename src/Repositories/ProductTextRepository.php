@@ -20,9 +20,10 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Product\Utils\ParamNames;
+use TechDivision\Import\Product\Utils\CacheKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
-use TechDivision\Import\Repositories\AbstractRepository;
+use TechDivision\Import\Repositories\AbstractFinderRepository;
 
 /**
  * Repository implementation to load product text attribute data.
@@ -33,15 +34,8 @@ use TechDivision\Import\Repositories\AbstractRepository;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductTextRepository extends AbstractRepository implements ProductTextRepositoryInterface
+class ProductTextRepository extends AbstractFinderRepository implements ProductTextRepositoryInterface
 {
-
-    /**
-     * The prepared statement to load the existing product text attributes with the passed entity/store ID.
-     *
-     * @var \PDOStatement
-     */
-    protected $productTextsStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -52,8 +46,40 @@ class ProductTextRepository extends AbstractRepository implements ProductTextRep
     {
 
         // initialize the prepared statements
-        $this->productTextsStmt =
-            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_TEXTS));
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_TEXTS));
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_TEXTS_BY_PK_AND_STORE_ID));
+    }
+
+    /**
+     * Return's the primary key name of the entity.
+     *
+     * @return string The name of the entity's primary key
+     */
+    public function getPrimaryKeyName()
+    {
+        return MemberNames::VALUE_ID;
+    }
+
+    /**
+     * Return's the finder's entity name.
+     *
+     * @return string The finder's entity name
+     */
+    public function getEntityName()
+    {
+        return CacheKeys::PRODUCT_TEXT;
+    }
+
+    /**
+     * Load's and return's the available text attributes.
+     *
+     * @return array The text attributes
+     */
+    public function findAll()
+    {
+        foreach ($this->getFinder(SqlStatementKeys::PRODUCT_TEXTS)->find() as $result) {
+            yield $result;
+        }
     }
 
     /**
@@ -68,17 +94,11 @@ class ProductTextRepository extends AbstractRepository implements ProductTextRep
     {
 
         // prepare the params
-        $params = array(
-            ParamNames::PK        => $pk,
-            ParamNames::STORE_ID  => $storeId
-        );
+        $params = array(MemberNames::PK => $pk, MemberNames::STORE_ID => $storeId);
 
-        // load and return the product text attributes with the passed primary key/store ID
-        $this->productTextsStmt->execute($params);
-
-        // fetch the values and return them
-        while ($record = $this->productTextsStmt->fetch(\PDO::FETCH_ASSOC)) {
-            yield $record;
+        // load the entities and return them
+        foreach ($this->getFinder(SqlStatementKeys::PRODUCT_TEXTS_BY_PK_AND_STORE_ID)->find($params) as $result) {
+            yield $result;
         }
     }
 }

@@ -24,6 +24,7 @@ use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 use TechDivision\Import\Product\Utils\ConfigurationKeys;
+use TechDivision\Import\Observers\StateDetectorInterface;
 
 /**
  * Observer that creates/updates the category product relations.
@@ -55,10 +56,16 @@ class CategoryProductObserver extends AbstractProductImportObserver
      * Initialize the observer with the passed product bunch processor instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null           $stateDetector         The state detector instance to use
      */
-    public function __construct(ProductBunchProcessorInterface $productBunchProcessor)
+    public function __construct(ProductBunchProcessorInterface $productBunchProcessor, StateDetectorInterface $stateDetector = null)
     {
+
+        // initialize the bunch processor instance
         $this->productBunchProcessor = $productBunchProcessor;
+
+        // pass the state detector to the parent method
+        parent::__construct($stateDetector);
     }
 
     /**
@@ -96,11 +103,12 @@ class CategoryProductObserver extends AbstractProductImportObserver
             if ($attr = $this->prepareAttributes()) {
                 // initialize and persist the category product relation relation and add the
                 // category ID to the list => necessary to create the URL rewrites later!
-                $this->persistCategoryProduct($categoryProduct = $this->initializeCategoryProduct($attr));
-                $this->addProductCategoryId($categoryId = $categoryProduct[MemberNames::CATEGORY_ID]);
+                if ($this->hasChanges($categoryProduct = $this->initializeCategoryProduct($attr))) {
+                    $this->persistCategoryProduct($categoryProduct);
+                }
 
                 // tempoary persist the category ID
-                $categoryProducts[] = $categoryId;
+                $categoryProducts[] = $categoryProduct[MemberNames::CATEGORY_ID];
             }
         }
 
@@ -190,29 +198,6 @@ class CategoryProductObserver extends AbstractProductImportObserver
     protected function initializeCategoryProduct(array $attr)
     {
         return $attr;
-    }
-
-
-    /**
-     * Return's the list with category IDs the product is related with.
-     *
-     * @return array The product's category IDs
-     */
-    protected function getProductCategoryIds()
-    {
-        return $this->getSubject()->getProductCategoryIds();
-    }
-
-    /**
-     * Add the passed category ID to the product's category list.
-     *
-     * @param integer $categoryId The category ID to add
-     *
-     * @return void
-     */
-    protected function addProductCategoryId($categoryId)
-    {
-        $this->getSubject()->addProductCategoryId($categoryId);
     }
 
     /**

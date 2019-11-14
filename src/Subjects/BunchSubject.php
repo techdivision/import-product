@@ -105,13 +105,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     );
 
     /**
-     * The category IDs the product is related with.
-     *
-     * @var array
-     */
-    protected $productCategoryIds = array();
-
-    /**
      * The default callback mappings for the Magento standard product attributes.
      *
      * @var array
@@ -247,18 +240,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     }
 
     /**
-     * Add the passed category ID to the product's category list.
-     *
-     * @param integer $categoryId The category ID to add
-     *
-     * @return void
-     */
-    public function addProductCategoryId($categoryId)
-    {
-        $this->productCategoryIds[$this->getLastEntityId()][$categoryId] = $this->getLastEntityId();
-    }
-
-    /**
      * Pre-load the entity ID for the passed product.
      *
      * @param array $product The product to be pre-loaded
@@ -268,26 +249,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     public function preLoadEntityId(array $product)
     {
         $this->preLoadedEntityIds[$product[MemberNames::SKU]] = $product[MemberNames::ENTITY_ID];
-    }
-
-    /**
-     * Return's the list with category IDs the product is related with.
-     *
-     * @return array The product's category IDs
-     */
-    public function getProductCategoryIds()
-    {
-
-        // initialize the array with the product's category IDs
-        $categoryIds = array();
-
-        // query whether or not category IDs are available for the actual product entity
-        if (isset($this->productCategoryIds[$lastEntityId = $this->getLastEntityId()])) {
-            $categoryIds = $this->productCategoryIds[$lastEntityId];
-        }
-
-        // return the array with the product's category IDs
-        return $categoryIds;
     }
 
     /**

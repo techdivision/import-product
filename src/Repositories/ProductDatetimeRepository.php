@@ -20,9 +20,10 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Product\Utils\ParamNames;
+use TechDivision\Import\Product\Utils\CacheKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
-use TechDivision\Import\Repositories\AbstractRepository;
+use TechDivision\Import\Repositories\AbstractFinderRepository;
 
 /**
  * Repository implementation to load product datetime attribute data.
@@ -33,15 +34,8 @@ use TechDivision\Import\Repositories\AbstractRepository;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductDatetimeRepository extends AbstractRepository implements ProductDatetimeRepositoryInterface
+class ProductDatetimeRepository extends AbstractFinderRepository implements ProductDatetimeRepositoryInterface
 {
-
-    /**
-     * The prepared statement to load the existing product datetime attributes with the passed entity/store ID.
-     *
-     * @var \PDOStatement
-     */
-    protected $productDatetimesStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -52,8 +46,40 @@ class ProductDatetimeRepository extends AbstractRepository implements ProductDat
     {
 
         // initialize the prepared statements
-        $this->productDatetimesStmt =
-            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_DATETIMES));
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_DATETIMES));
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_DATETIMES_BY_PK_AND_STORE_ID));
+    }
+
+    /**
+     * Return's the primary key name of the entity.
+     *
+     * @return string The name of the entity's primary key
+     */
+    public function getPrimaryKeyName()
+    {
+        return MemberNames::VALUE_ID;
+    }
+
+    /**
+     * Return's the finder's entity name.
+     *
+     * @return string The finder's entity name
+     */
+    public function getEntityName()
+    {
+        return CacheKeys::PRODUCT_DATETIME;
+    }
+
+    /**
+     * Load's and return's the available datetime attributes.
+     *
+     * @return array The integer attributes
+     */
+    public function findAll()
+    {
+        foreach ($this->getFinder(SqlStatementKeys::PRODUCT_DATETIMES)->find() as $result) {
+            yield $result;
+        }
     }
 
     /**
@@ -68,17 +94,11 @@ class ProductDatetimeRepository extends AbstractRepository implements ProductDat
     {
 
         // prepare the params
-        $params = array(
-            ParamNames::PK        => $pk,
-            ParamNames::STORE_ID  => $storeId
-        );
+        $params = array(MemberNames::PK => $pk, MemberNames::STORE_ID => $storeId);
 
-        // load and return the product datetime attributes with the passed primary key/store ID
-        $this->productDatetimesStmt->execute($params);
-
-        // fetch the values and return them
-        while ($record = $this->productDatetimesStmt->fetch(\PDO::FETCH_ASSOC)) {
-            yield $record;
+        // load the entities and return them
+        foreach ($this->getFinder(SqlStatementKeys::PRODUCT_DATETIMES_BY_PK_AND_STORE_ID)->find($params) as $result) {
+            yield $result;
         }
     }
 }

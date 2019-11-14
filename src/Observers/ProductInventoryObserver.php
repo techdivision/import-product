@@ -20,11 +20,15 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Product\Utils\ColumnKeys;
-use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Observers\StateDetectorInterface;
 use TechDivision\Import\Observers\AttributeLoaderInterface;
 use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
+use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Subjects\SubjectInterface;
+use TechDivision\Import\Observers\ObserverFactoryInterface;
+use TechDivision\Import\Observers\StateDetectorAwareObserverInterface;
 
 /**
  * Observer that creates/updates the product's inventory.
@@ -35,7 +39,7 @@ use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductInventoryObserver extends AbstractProductImportObserver implements DynamicAttributeObserverInterface
+class ProductInventoryObserver extends AbstractProductImportObserver implements DynamicAttributeObserverInterface, StateDetectorAwareObserverInterface, ObserverFactoryInterface
 {
 
     /**
@@ -53,17 +57,65 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
     protected $attributeLoader;
 
     /**
+     * The array with the column mappings that has to be computed.
+     *
+     * @var array
+     */
+    protected $columns = array();
+
+    /**
      * Initialize the observer with the passed product bunch processor instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
-     * @param \TechDivision\Import\Observers\AttributeLoaderInterface              $attributeLoader       The attribute loader instance
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null           $stateDetector         The state detector instance to use
      */
     public function __construct(
         ProductBunchProcessorInterface $productBunchProcessor,
-        AttributeLoaderInterface $attributeLoader
+        AttributeLoaderInterface $attributeLoader,
+        StateDetectorInterface $stateDetector = null
     ) {
+
+        // initialize the bunch processor and the attribute loader instance
         $this->productBunchProcessor = $productBunchProcessor;
         $this->attributeLoader = $attributeLoader;
+
+        // pass the state detector to the parent method
+        parent::__construct($stateDetector);
+    }
+
+    /**
+     * Will be invoked by the observer visitor when a factory has been defined to create the observer instance.
+     *
+     * @param \TechDivision\Import\Subjects\SubjectInterface $subject The subject instance
+     *
+     * @return \TechDivision\Import\Observers\ObserverInterface The observer instance
+     */
+    public function createObserver(SubjectInterface $subject)
+    {
+
+        // load the header stock mappings from the subject
+        $headerStockMappings = $subject->getHeaderStockMappings();
+
+        // prepare the array with column name => type mapping
+        foreach ($headerStockMappings as $columnName => $mappings) {
+            // explode the mapping details
+            list (, $type) = $mappings;
+            // add the column name => type mapping
+            $this->columns[$columnName] = $type;
+        }
+
+        // return the instance itself
+        return $this;
+    }
+
+    /**
+     * Returns an array of the columns with their types to detect state.
+     *
+     * @return array The array with the column names as key and their type as value
+     */
+    public function getColumns()
+    {
+        return array_intersect_key($this->columns, $this->getHeaders());
     }
 
     /**
@@ -90,7 +142,9 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
         }
 
         // prepare, initialize and persist the stock status/item
-        $this->persistStockItem($this->initializeStockItem($this->prepareStockItemAttributes()));
+        if ($this->hasChanges($entity = $this->initializeStockItem($this->prepareStockItemAttributes()))) {
+            $this->persistStockItem($entity);
+        }
     }
 
     /**

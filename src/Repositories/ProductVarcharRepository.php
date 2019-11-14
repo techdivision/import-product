@@ -20,14 +20,10 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Product\Utils\ParamNames;
-use TechDivision\Import\Product\Utils\SqlStatementKeys;
-use TechDivision\Import\Cache\CacheAdapterInterface;
-use TechDivision\Import\Repositories\AbstractRepository;
-use TechDivision\Import\Connection\ConnectionInterface;
-use TechDivision\Import\Repositories\SqlStatementRepositoryInterface;
-use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\CacheKeys;
+use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\SqlStatementKeys;
+use TechDivision\Import\Repositories\AbstractFinderRepository;
 
 /**
  * Repository implementation to load product varchar attribute data.
@@ -38,67 +34,22 @@ use TechDivision\Import\Product\Utils\CacheKeys;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ProductVarcharRepository extends AbstractRepository implements ProductVarcharRepositoryInterface
+class ProductVarcharRepository extends AbstractFinderRepository implements ProductVarcharRepositoryInterface
 {
 
     /**
-     * The cache adapter instance.
+     * Initializes the repository's prepared statements.
      *
-     * @var \TechDivision\Import\Cache\CacheAdapterInterface
+     * @return void
      */
-    protected $cacheAdapter;
-
-    /**
-     * The prepared statement to load the existing product varchar attributes with the passed entity/store ID.
-     *
-     * @var \PDOStatement
-     */
-    protected $productVarcharsStmt;
-
-    /**
-     * The prepared statement to load the existing product varchar attribute with the passed attribute code
-     * entity type/store ID.
-     *
-     * @var \PDOStatement
-     */
-    protected $productVarcharsByAttributeCodeAndEntityTypeIdAndStoreIdStmt;
-
-    /**
-     * The prepared statement to load the existing product varchar attribute with the passed attribute code
-     * entity type/store ID as well as the passed value.
-     *
-     * @var \PDOStatement
-     */
-    protected $productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt;
-
-    /**
-     * Initialize the repository with the passed connection and utility class name.
-     * .
-     * @param \TechDivision\Import\Connection\ConnectionInterface               $connection             The connection instance
-     * @param \TechDivision\Import\Repositories\SqlStatementRepositoryInterface $sqlStatementRepository The SQL repository instance
-     * @param \TechDivision\Import\Cache\CacheAdapterInterface                  $cacheAdapter           The cache adapter instance
-     */
-    public function __construct(
-        ConnectionInterface $connection,
-        SqlStatementRepositoryInterface $sqlStatementRepository,
-        CacheAdapterInterface $cacheAdapter
-    ) {
-
-        // pass the connection the SQL statement repository to the parent class
-        parent::__construct($connection, $sqlStatementRepository);
-
-        // set the cache adapter instance
-        $this->cacheAdapter = $cacheAdapter;
-    }
-
-    /**
-     * Returns the cache adapter instance used to warm the repository.
-     *
-     * @return \TechDivision\Import\Cache\CacheAdapterInterface The repository's cache adapter instance
-     */
-    public function getCacheAdapter()
+    public function init()
     {
-        return $this->cacheAdapter;
+
+        // initialize the prepared statements
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_VARCHARS));
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_VARCHARS_BY_PK_AND_STORE_ID));
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID));
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE));
     }
 
     /**
@@ -112,20 +63,27 @@ class ProductVarcharRepository extends AbstractRepository implements ProductVarc
     }
 
     /**
-     * Initializes the repository's prepared statements.
+     * Return's the finder's entity name.
      *
-     * @return void
+     * @return string The finder's entity name
      */
-    public function init()
+    public function getEntityName()
+    {
+        return CacheKeys::PRODUCT_VARCHAR;
+    }
+
+    /**
+     * Load's and return's the available varchar attributes.
+     *
+     * @return array The varchar attributes
+     */
+    public function findAll()
     {
 
-        // initialize the prepared statements
-        $this->productVarcharsStmt =
-            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_VARCHARS));
-        $this->productVarcharsByAttributeCodeAndEntityTypeIdAndStoreIdStmt =
-            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID));
-        $this->productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt =
-            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE));
+        // load the entities and return them
+        foreach ($this->getFinder(SqlStatementKeys::PRODUCT_VARCHARS)->find() as $result) {
+            yield $result;
+        }
     }
 
     /**
@@ -140,17 +98,11 @@ class ProductVarcharRepository extends AbstractRepository implements ProductVarc
     {
 
         // prepare the params
-        $params = array(
-            ParamNames::PK        => $pk,
-            ParamNames::STORE_ID  => $storeId
-        );
+        $params = array(MemberNames::PK => $pk, MemberNames::STORE_ID => $storeId);
 
-        // load and return the product varchar attributes with the passed primary key/store ID
-        $this->productVarcharsStmt->execute($params);
-
-        // fetch the values and return them
-        while ($record = $this->productVarcharsStmt->fetch(\PDO::FETCH_ASSOC)) {
-            yield $record;
+        // load the entities and return them
+        foreach ($this->getFinder(SqlStatementKeys::PRODUCT_VARCHARS_BY_PK_AND_STORE_ID)->find($params) as $result) {
+            yield $result;
         }
     }
 
@@ -168,17 +120,14 @@ class ProductVarcharRepository extends AbstractRepository implements ProductVarc
 
         // prepare the params
         $params = array(
-            ParamNames::ATTRIBUTE_CODE => $attributeCode,
-            ParamNames::ENTITY_TYPE_ID => $entityTypeId,
-            ParamNames::STORE_ID       => $storeId,
+            MemberNames::ATTRIBUTE_CODE => $attributeCode,
+            MemberNames::ENTITY_TYPE_ID => $entityTypeId,
+            MemberNames::STORE_ID       => $storeId,
         );
 
-        // load and return the product varchar attributes with the passed primary key/store ID
-        $this->productVarcharsByAttributeCodeAndEntityTypeIdAndStoreIdStmt->execute($params);
-
-        // fetch the values and return them
-        while ($record = $this->productVarcharsByAttributeCodeAndEntityTypeIdAndStoreIdStmt->fetch(\PDO::FETCH_ASSOC)) {
-            yield $record;
+        // load the entities and return them
+        foreach ($this->getFinder(SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID)->find($params) as $result) {
+            yield $result;
         }
     }
 
@@ -197,32 +146,13 @@ class ProductVarcharRepository extends AbstractRepository implements ProductVarc
 
         // prepare the params
         $params = array(
-            ParamNames::ATTRIBUTE_CODE => $attributeCode,
-            ParamNames::ENTITY_TYPE_ID => $entityTypeId,
-            ParamNames::STORE_ID       => $storeId,
-            ParamNames::VALUE          => $value
+            MemberNames::ATTRIBUTE_CODE => $attributeCode,
+            MemberNames::ENTITY_TYPE_ID => $entityTypeId,
+            MemberNames::STORE_ID       => $storeId,
+            MemberNames::VALUE          => $value
         );
 
-        // prepare the cache key
-        $cacheKey = $this->cacheAdapter->cacheKey(array(SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE => $params));
-
-        // query whether or not the item has already been cached
-        if ($this->cacheAdapter->isCached($cacheKey)) {
-            return $this->cacheAdapter->fromCache($cacheKey);
-        }
-
-        // load and return the product varchar attribute with the passed parameters
-        $this->productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt->execute($params);
-
-        // query whether or not the product varchar value is available in the database
-        if ($productVarchar = $this->productVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndValueStmt->fetch(\PDO::FETCH_ASSOC)) {
-            // prepare the unique cache key for the EAV attribute option value
-            $uniqueKey = array(CacheKeys::PRODUCT_VARCHAR => $productVarchar[$this->getPrimaryKeyName()]);
-            // add the EAV attribute option value to the cache, register the cache key reference as well
-            $this->cacheAdapter->toCache($uniqueKey, $productVarchar, array($cacheKey => $uniqueKey));
-        }
-
-        // finally, return it
-        return $productVarchar;
+        // load and return the entity
+        return $this->getFinder(SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE)->find($params);
     }
 }

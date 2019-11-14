@@ -55,9 +55,17 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
         SqlStatementKeys::PRODUCT_DATETIMES =>
             'SELECT *
                FROM ${table:catalog_product_entity_datetime}
+           ORDER BY entity_id, store_id',
+        SqlStatementKeys::PRODUCT_DATETIMES_BY_PK_AND_STORE_ID =>
+            'SELECT *
+               FROM ${table:catalog_product_entity_datetime}
               WHERE entity_id = :pk
                 AND store_id = :store_id',
         SqlStatementKeys::PRODUCT_DECIMALS =>
+         'SELECT *
+               FROM ${table:catalog_product_entity_decimal}
+           ORDER BY entity_id, store_id',
+        SqlStatementKeys::PRODUCT_DECIMALS_BY_PK_AND_STORE_ID =>
             'SELECT *
                FROM ${table:catalog_product_entity_decimal}
               WHERE entity_id = :pk
@@ -65,14 +73,26 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
         SqlStatementKeys::PRODUCT_INTS =>
             'SELECT *
                FROM ${table:catalog_product_entity_int}
+           ORDER BY entity_id, store_id',
+        SqlStatementKeys::PRODUCT_INTS_BY_PK_AND_STORE_ID =>
+            'SELECT *
+               FROM ${table:catalog_product_entity_int}
               WHERE entity_id = :pk
                 AND store_id = :store_id',
         SqlStatementKeys::PRODUCT_TEXTS =>
             'SELECT *
                FROM ${table:catalog_product_entity_text}
+           ORDER BY entity_id, store_id',
+        SqlStatementKeys::PRODUCT_TEXTS_BY_PK_AND_STORE_ID =>
+            'SELECT *
+               FROM ${table:catalog_product_entity_text}
               WHERE entity_id = :pk
                 AND store_id = :store_id',
         SqlStatementKeys::PRODUCT_VARCHARS =>
+            'SELECT *
+               FROM ${table:catalog_product_entity_varchar}
+           ORDER BY entity_id, store_id',
+        SqlStatementKeys::PRODUCT_VARCHARS_BY_PK_AND_STORE_ID =>
             'SELECT *
                FROM ${table:catalog_product_entity_varchar}
               WHERE entity_id = :pk

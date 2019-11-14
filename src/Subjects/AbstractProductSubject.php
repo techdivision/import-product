@@ -641,7 +641,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
             // and append them to the column names from the configuration
             foreach ($imageTypes as $imageAttribute) {
-                $cleanUpColumns[] = $imageAttribute;
+                $cleanUpColumns[] = $this->mapAttributeCodeByHeaderMapping($imageAttribute);
             }
         }
 

@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Repositories\RepositoryInterface;
+use TechDivision\Import\Repositories\FinderAwareRepositoryInterface;
 
 /**
  * Interface for repositories providing functionality to load product datetime attribute data.
@@ -31,8 +31,15 @@ use TechDivision\Import\Repositories\RepositoryInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-interface ProductDatetimeRepositoryInterface extends RepositoryInterface
+interface ProductDatetimeRepositoryInterface extends FinderAwareRepositoryInterface
 {
+
+    /**
+     * Load's and return's the available datetime attributes.
+     *
+     * @return array The integer attributes
+     */
+    public function findAll();
 
     /**
      * Load's and return's the datetime attributes for the passed primary key/store ID.

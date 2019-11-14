@@ -49,4 +49,19 @@ class ProductIntUpdateProcessor extends AbstractUpdateProcessor
             SqlStatementKeys::UPDATE_PRODUCT_INT => $this->loadStatement(SqlStatementKeys::UPDATE_PRODUCT_INT)
         );
     }
+
+    /**
+     * Update's the passed row.
+     *
+     * @param array       $row                  The row to persist
+     * @param string|null $name                 The name of the prepared statement that has to be executed
+     * @param string|null $primaryKeyMemberName The primary key member name of the entity to use
+     *
+     * @return string The ID of the updated entity
+     */
+    public function execute($row, $name = null, $primaryKeyMemberName = null)
+    {
+        parent::execute($row, $name);
+        return $row[$primaryKeyMemberName];
+    }
 }
