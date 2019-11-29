@@ -164,7 +164,20 @@
                       "visibility": [ "import.callback.visibility.validator" ],
                       "related_skus": [ "import_product.callback.validator.link" ],
                       "upsell_skus": [ "import_product.callback.validator.link" ],
-                      "crosssell_skus": [ "import_product.callback.validator.link" ]
+                      "crosssell_skus": [ "import_product.callback.validator.link" ],
+                      "created_at" : [ "import.callback.validator.datetime" ],
+                      "updated_at" : [ "import.callback.validator.datetime" ],
+                      "special_price_to_date" : [ "import.callback.validator.datetime" ],
+                      "special_price_from_date" : [ "import.callback.validator.datetime" ],
+                      "custom_design_to" : [ "import.callback.validator.datetime" ],
+                      "custom_design_from" : [ "import.callback.validator.datetime" ],
+                      "new_to_date" : [ "import.callback.validator.datetime" ],
+                      "new_from_date" : [ "import.callback.validator.datetime" ],
+                      "price" : [ "import.callback.validator.number" ],
+                      "special_price" : [ "import.callback.validator.number" ],
+                      "map_price" : [ "import.callback.validator.number" ],
+                      "msrp_price" : [ "import.callback.validator.number" ],
+                      "qty" : [ "import.callback.validator.number" ]
                     }
                   ]
                 }
