@@ -157,7 +157,7 @@
                     {
                       "sku": [ "import.callback.custom.regex.validator" ],
                       "store_view_code": [ "import.callback.store.view.code.validator" ],
-                      "attribute_set_code": [ "import.callback.attribute.set.validator" ],
+                      "attribute_set_code": [ "import.callback.attribute.set.name.validator" ],
                       "product_type": [ "import.callback.custom.array.validator" ],
                       "tax_class": [ "import_product.callback.validator.tax.class" ],
                       "product_websites": [ "import.callback.store.website.validator" ],

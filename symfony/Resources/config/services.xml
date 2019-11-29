@@ -346,7 +346,7 @@
         <service id="import_product.callback.validator.tax.class" class="TechDivision\Import\Product\Callbacks\TaxClassValidatorCallback">
             <argument type="service" id="import_product.loader.tax.class"/>
         </service>
-        <service id="import_product.callback.validator.link" class="TechDivision\Import\Product\Callbacks\LinkValidatorCallback">
+        <service id="import_product.callback.validator.link" class="TechDivision\Import\Callbacks\MultipleValuesValidatorCallback">
             <argument type="service" id="import_product.loader.sku"/>
             <argument>%array_validator.nullable.true%</argument>
         </service>
