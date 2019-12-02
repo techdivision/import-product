@@ -113,7 +113,6 @@ class ProductWebsiteObserver extends AbstractProductImportObserver
         if ($this->getSubject()->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_WEBSITE_PRODUCT_RELATIONS) &&
             $this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_WEBSITE_PRODUCT_RELATIONS)
         ) {
-
             // initialize the array for the website IDs
             $websiteIds = array();
 

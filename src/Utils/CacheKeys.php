@@ -77,7 +77,8 @@ class CacheKeys extends \TechDivision\Import\Utils\CacheKeys
     /**
      * Initializes the instance with the passed cache key.
      *
-     * @param string $cacheKey The cache key use
+     * @param string $cacheKey  The cache key use
+     * @param array  $cacheKeys Additional cache keys
      */
     public function __construct($cacheKey, array $cacheKeys = array())
     {

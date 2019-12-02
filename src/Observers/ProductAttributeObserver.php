@@ -112,6 +112,8 @@ class ProductAttributeObserver extends AbstractAttributeObserver implements Stat
     /**
      * Returns an array of the columns with their types to detect state.
      *
+     * @param array $attribute The attribute entity to return the columns for
+     *
      * @return array The array with the column names as key and their type as value
      */
     public function getColumns(array $attribute = array())

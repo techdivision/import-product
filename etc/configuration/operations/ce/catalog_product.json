@@ -21,6 +21,12 @@
       "thumbnail_image_label": "thumbnail_label"
     }
   },
+  "default-values": {
+    "catalog_product": {
+      "product_online": 1,
+      "attribute_set_name": "Default"
+    }
+  },
   "shortcuts": {
     "ce": {
       "catalog_product": {
