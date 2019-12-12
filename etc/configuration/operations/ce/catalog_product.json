@@ -134,6 +134,9 @@
               "id": "import.plugin.subject",
               "listeners": [
                 {
+                  "plugin.process.start": [
+                    "import.listener.reset.loader.eav.attribute.option.value"
+                  ],
                   "plugin.process.success": [
                     "import.listener.stop.validation"
                   ]
