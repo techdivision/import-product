@@ -1,107 +1,95 @@
 {
-  "header-mappings": {
-    "catalog_product": {
-      "product_online": "status",
-      "tax_class_name": "tax_class_id",
-      "bundle_price_type": "price_type",
-      "bundle_sku_type": "sku_type",
-      "bundle_price_view": "price_view",
-      "bundle_weight_type": "weight_type",
-      "bundle_shipment_type": "shipment_type",
-      "related_skus": "relation_skus",
-      "related_position": "relation_position",
-      "crosssell_skus": "cross_sell_skus",
-      "crosssell_position": "cross_sell_position",
-      "upsell_skus": "up_sell_skus",
-      "upsell_position": "up_sell_position",
-      "msrp_price": "msrp",
-      "base_image": "image",
-      "base_image_label": "image_label",
-      "thumbnail_image": "thumbnail",
-      "thumbnail_image_label": "thumbnail_label"
-    }
-  },
-  "default-values": {
-    "catalog_product": {
-      "product_online": 1,
-      "attribute_set_name": "Default"
-    }
-  },
-  "shortcuts": {
-    "ce": {
-      "catalog_product": {
-        "validate": [
-          "general/general/global-data",
-          "general/general/move-files",
-          "general/catalog_product/collect-data",
-          "general/catalog_product/validate"
-        ],
-        "delete": [
-          "general/general/global-data",
-          "general/general/move-files",
-          "ce/catalog_product/delete",
-          "general/catalog_product/delete.msi"
-        ],
-        "replace": [
-          "general/general/global-data",
-          "general/general/cache-warmer",
-          "general/general/move-files",
-          "general/catalog_product/collect-data",
-          "general/eav_attribute/convert",
-          "general/eav_attribute/add-update.options",
-          "general/eav_attribute/add-update.option-values",
-          "general/eav_attribute/add-update.swatch-values",
-          "general/catalog_category/convert",
-          "ce/catalog_category/sort",
-          "ce/catalog_category/add-update",
-          "ce/catalog_category/add-update.path",
-          "ce/catalog_category/add-update.url-rewrite",
-          "general/catalog_category/children-count",
-          "general/catalog_product/validate",
-          "ce/catalog_product/replace",
-          "ce/catalog_product/replace.variants",
-          "ce/catalog_product/replace.bundles",
-          "ce/catalog_product/replace.links",
-          "ce/catalog_product/replace.grouped",
-          "ce/catalog_product/replace.media",
-          "general/catalog_product/replace.msi",
-          "general/catalog_product/replace.url-rewrites"
-        ],
-        "add-update": [
-          "general/general/global-data",
-          "general/general/cache-warmer",
-          "general/general/move-files",
-          "general/catalog_product/collect-data",
-          "general/eav_attribute/convert",
-          "general/eav_attribute/add-update.options",
-          "general/eav_attribute/add-update.option-values",
-          "general/eav_attribute/add-update.swatch-values",
-          "general/catalog_category/convert",
-          "ce/catalog_category/sort",
-          "ce/catalog_category/add-update",
-          "ce/catalog_category/add-update.path",
-          "ce/catalog_category/add-update.url-rewrite",
-          "general/catalog_category/children-count",
-          "general/catalog_product/validate",
-          "ce/catalog_product/add-update",
-          "ce/catalog_product/add-update.variants",
-          "ce/catalog_product/add-update.bundles",
-          "ce/catalog_product/add-update.links",
-          "ce/catalog_product/add-update.grouped",
-          "ce/catalog_product/add-update.media",
-          "general/catalog_product/add-update.msi",
-          "general/catalog_product/add-update.url-rewrites"
-        ]
-      }
-    }
-  },
   "operations": {
     "general": {
-      "catalog_product": [
-        {
-          "name": "collect-data",
-          "plugins": [
-            {
+      "catalog_product_inventory": {
+        "validate": {
+          "plugins": {
+            "subject": {
+              "id": "import.plugin.subject",
+              "listeners": [
+                {
+                  "plugin.process.success": [
+                    "import.listener.stop.validation"
+                  ]
+                }
+              ],
+              "subjects": [
+                {
+                  "id": "import.subject.validator",
+                  "create-imported-file": false,
+                  "file-resolver": {
+                    "prefix": "product-import"
+                  },
+                  "params" : {
+                    "custom-validations" : {
+                      "sku" :  [ "/.+/" ]
+                    }
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import.observer.validator.generic"
+                      ]
+                    }
+                  ],
+                  "callbacks": [
+                    {
+                      "sku": [ "import.callback.custom.regex.validator" ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "catalog_product_price": {
+        "validate": {
+          "plugins": {
+           "subject":  {
+              "id": "import.plugin.subject",
+              "listeners": [
+                {
+                  "plugin.process.success": [
+                    "import.listener.stop.validation"
+                  ]
+                }
+              ],
+              "subjects": [
+                {
+                  "id": "import.subject.validator",
+                  "create-imported-file": false,
+                  "file-resolver": {
+                    "prefix": "product-import"
+                  },
+                  "params" : {
+                    "custom-validations" : {
+                      "sku" :  [ "/.+/" ]
+                    }
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import.observer.validator.generic"
+                      ]
+                    }
+                  ],
+                  "callbacks": [
+                    {
+                      "sku": [ "import.callback.custom.regex.validator" ],
+                      "store_view_code": [ "import.callback.store.view.code.validator" ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "catalog_product": {
+        "collect-data": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -125,12 +113,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "validate",
-          "plugins": [
-            {
+        "validate": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "listeners": [
                 {
@@ -200,12 +187,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "add-update.msi",
-          "plugins": [
-            {
+         "add-update.msi": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -223,12 +209,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "add-update.url-rewrites",
-          "plugins": [
-            {
+        "add-update.url-rewrites": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -249,12 +234,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "replace.msi",
-          "plugins": [
-            {
+        "replace.msi": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -272,12 +256,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "replace.url-rewrites",
-          "plugins": [
-            {
+        "replace.url-rewrites": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -295,12 +278,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "delete.msi",
-          "plugins": [
-            {
+        "delete.msi": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -318,16 +300,70 @@
                 }
               ]
             }
-          ]
+          }
         }
-      ]
+      }
     },
     "ce": {
-      "catalog_product": [
-        {
-          "name": "delete",
-          "plugins": [
-            {
+      "catalog_product_inventory": {
+        "add-update": {
+          "plugins": {
+            "subject": {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "product-import-inventory"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product.observer.composite.inventory.add_update"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "catalog_product_price": {
+        "add-update": {
+          "plugins": {
+            "subject": {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "product-import-price"
+                  },
+                  "params": {
+                    "clean-up-empty-columns": [
+                      "special_price",
+                      "special_price_from_date",
+                      "special_price_to_date"
+                    ]
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product.observer.composite.price.add_update"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "catalog_product": {
+        "delete": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -345,12 +381,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "replace",
-          "plugins": [
-            {
+        "replace": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -371,12 +406,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "replace.variants",
-          "plugins": [
-            {
+        "replace.variants": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -394,12 +428,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "replace.bundles",
-          "plugins": [
-            {
+        "replace.bundles": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -417,12 +450,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "replace.links",
-          "plugins": [
-            {
+        "replace.links": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -440,12 +472,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "replace.grouped",
-          "plugins": [
-            {
+        "replace.grouped": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -463,12 +494,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "replace.media",
-          "plugins": [
-            {
+        "replace.media": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -486,12 +516,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "add-update",
-          "plugins": [
-            {
+        "add-update": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -521,12 +550,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "add-update.variants",
-          "plugins": [
-            {
+        "add-update.variants": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -544,12 +572,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "add-update.bundles",
-          "plugins": [
-            {
+        "add-update.bundles": {
+          "plugins":{
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -567,12 +594,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "add-update.links",
-          "plugins": [
-            {
+        "add-update.links": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -590,12 +616,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "add-update.grouped",
-          "plugins": [
-            {
+        "add-update.grouped": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -613,12 +638,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "add-update.media",
-          "plugins": [
-            {
+        "add-update.media": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -636,9 +660,9 @@
                 }
               ]
             }
-          ]
+          }
         }
-      ]
+      }
     }
   }
 }

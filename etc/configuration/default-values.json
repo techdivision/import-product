@@ -1,0 +1,9 @@
+{
+  "default-values": {
+    "catalog_product": {
+      "product_online": 1,
+      "attribute_set_name": "Default",
+      "url_key": null
+    }
+  }
+}
