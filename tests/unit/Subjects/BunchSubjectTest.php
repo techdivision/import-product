@@ -54,12 +54,6 @@ class BunchSubjectTest extends AbstractTest
         return parent::getMockGlobalData(
             array(
                 RegistryKeys::GLOBAL_DATA => array(
-                    RegistryKeys::ENTITY_TYPES => array(
-                        EntityTypeCodes::CATALOG_PRODUCT => array(
-                            MemberNames::ENTITY_TYPE_ID => 4,
-                            MemberNames::ENTITY_TYPE_CODE => EntityTypeCodes::CATALOG_PRODUCT
-                        )
-                    ),
                     RegistryKeys::LINK_TYPES => array(),
                     RegistryKeys::LINK_ATTRIBUTES => array(),
                     RegistryKeys::CATEGORIES => array(),
@@ -147,6 +141,34 @@ class BunchSubjectTest extends AbstractTest
      */
     public function testMapAttributeCodeByHeaderMapping($columnName, $attributeCode)
     {
+
+        // mock the getHeaderMappings() method
+        $this->subject->expects($this->once())
+            ->method('getHeaderMappings')
+            ->willReturn(
+                array(
+                    'product_online'       => 'status',
+                    'tax_class_name'       => 'tax_class_id',
+                    'bundle_price_type'    => 'price_type',
+                    'bundle_sku_type'      => 'sku_type',
+                    'bundle_price_view'    => 'price_view',
+                    'bundle_weight_type'   => 'weight_type',
+                    'bundle_shipment_type' => 'shipment_type',
+                    'related_skus'         => 'relation_skus',
+                    'related_position'     => 'relation_position',
+                    'crosssell_skus'       => 'cross_sell_skus',
+                    'crosssell_position'   => 'cross_sell_position',
+                    'upsell_skus'          => 'up_sell_skus',
+                    'upsell_position'      => 'up_sell_position',
+                    'msrp_price'           => 'msrp',
+                    'base_image'           => 'image',
+                    'base_image_label'     => 'image_label',
+                    'thumbnail_image'      => 'thumbnail',
+                    'thumbnail_image_label'=> 'thumbnail_label'
+                )
+            );
+
+        // try to map the values
         $this->assertSame($attributeCode, $this->subject->mapAttributeCodeByHeaderMapping($columnName));
     }
 

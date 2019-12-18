@@ -21,6 +21,9 @@
 namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\ConfigurationInterface;
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
+use TechDivision\Import\Configuration\SubjectConfigurationInterface;
 
 /**
  * Test class for the product website observer implementation.
@@ -80,6 +83,15 @@ class ProductWebsiteObserverTest extends \PHPUnit_Framework_TestCase
             1 => null
         );
 
+        // mock the subject configuration
+        $mockConfiguration = $this->getMockBuilder(SubjectConfigurationInterface::class)
+            ->setMethods(get_class_methods(SubjectConfigurationInterface::class))
+            ->getMock();
+        $mockConfiguration->expects($this->once())
+            ->method('hasParam')
+            ->with(ConfigurationKeys::CLEAN_UP_WEBSITE_PRODUCT_RELATIONS)
+            ->willReturn(false);
+
         // create a mock subject
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
                             ->setMethods(
@@ -89,11 +101,15 @@ class ProductWebsiteObserverTest extends \PHPUnit_Framework_TestCase
                                     'getHeaders',
                                     'hasBeenProcessed',
                                     'getLastEntityId',
-                                    'getRow'
+                                    'getRow',
+                                    'getConfiguration'
                                 )
                             )
                             ->disableOriginalConstructor()
                             ->getMock();
+        $mockSubject->expects($this->once())
+                    ->method('getConfiguration')
+                    ->willReturn($mockConfiguration);
         $mockSubject->expects($this->any())
                     ->method('getHeaders')
                     ->willReturn($headers);

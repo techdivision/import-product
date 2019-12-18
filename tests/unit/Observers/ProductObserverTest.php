@@ -102,6 +102,7 @@ class ProductObserverTest extends \PHPUnit_Framework_TestCase
 
         // the old product data
         $oldProduct = array(
+            'entity_id'        => 1234,
             'sku'              => $sku,
             'created_at'       => '2016-10-23 12:00:00',
             'updated_at'       => '2016-10-23 12:00:00',
@@ -113,6 +114,7 @@ class ProductObserverTest extends \PHPUnit_Framework_TestCase
 
         // the new product data
         $newProduct = array(
+            'entity_id'               => 1234,
             'sku'                     => $sku,
             'created_at'              => '2016-10-23 17:10:00',
             'updated_at'              => '2016-10-23 17:10:00',
