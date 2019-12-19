@@ -18,6 +18,10 @@
         <service id="import_product.utils.sku.to.pk.mapping" class="TechDivision\Import\Product\Utils\SkuToPkMappingUtil">
             <argument type="service" id="configuration"/>
         </service>
+        <service id="import_product.util.url.key" class="TechDivision\Import\Utils\UrlKeyUtil">
+            <argument type="service" id="configuration"/>
+            <argument type="service" id="import_product.processor.product.bunch"/>
+        </service>
 
         <!--
          | The DI cache configuration
@@ -359,7 +363,7 @@
         <service id="import_product.observer.url.key" class="TechDivision\Import\Product\Observers\UrlKeyObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
             <argument type="service" id="import_product.filter.convert.literal.url"/>
-            <argument type="service" id="import_category.util.url.key"/>
+            <argument type="service" id="import_product.util.url.key"/>
         </service>
         <service id="import_product.observer.clean.up" class="TechDivision\Import\Product\Observers\CleanUpObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
