@@ -49,7 +49,7 @@ class TaxClassValidatorCallback extends AbstractValidatorCallback
         $validations = $this->getValidations();
 
         // if the passed value is in the array, return immediately
-        if (in_array($attributeValue, $validations)) {
+        if (in_array($attributeValue, $validations) || $this->isNullable($attributeValue)) {
             return;
         }
 
@@ -62,5 +62,17 @@ class TaxClassValidatorCallback extends AbstractValidatorCallback
                 implode(', ', $validations)
             )
         );
+    }
+
+    /**
+     * Query whether or not the passed value IS empty and empty values are allowed.
+     *
+     * @param string $attributeValue The attribute value to query for
+     *
+     * @return boolean TRUE if empty values are allowed and the passed value IS empty
+     */
+    protected function isNullable($attributeValue)
+    {
+        return $this->isMainRow() && ($attributeValue === '' || $attributeValue === null);
     }
 }
