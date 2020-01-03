@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use PHPUnit\Framework\TestCase;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 
 /**
@@ -31,7 +32,7 @@ use TechDivision\Import\Product\Utils\ColumnKeys;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
+class ClearProductObserverTest extends TestCase
 {
 
     /**
@@ -53,7 +54,7 @@ class ClearProductObserverTest extends \PHPUnit_Framework_TestCase
      * This method is called before a test is executed.
      *
      * @return void
-     * @see \PHPUnit_Framework_TestCase::setUp()
+     * @see \PHPUnit\Framework\TestCase::setUp()
      */
     protected function setUp()
     {
