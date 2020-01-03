@@ -3,8 +3,8 @@
     "description": "M2IF library providing basic Magento 2 product import functionality",
     "license": "OSL-3.0",
     "require": {
-        "php": ">=5.6.0",
-        "techdivision/import": "15.x-dev as 15.0.0"
+        "php": ">=7.1.0",
+        "techdivision/import": "15.*"
     },
     "require-dev": {
         "doctrine/dbal": "2.5.*",
