@@ -1,3 +1,13 @@
+# Version 19.0.1
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Activate URL rewrite clean-up functionality by default
+
 # Version 19.0.0
 
 ## Bugfixes

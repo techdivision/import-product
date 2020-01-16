@@ -222,7 +222,7 @@
                     "prefix": "url-rewrite"
                   },
                   "params": {
-                    "clean-up-url-rewrites": false
+                    "clean-up-url-rewrites": true
                   },
                   "observers": [
                     {
