@@ -921,11 +921,12 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // extract the keys from the value
         foreach ($this->explode($value, $delimiter) as $keyValue) {
+            // explode the key(s)
             $explodedKey = $this->explode($keyValue, $valueDelimiter);
-            if (!is_array($explodedKey)) {
-                continue;
+            // extract the values of the exploded keys
+            if (is_array($explodedKey)) {
+                list ($keys[],) = $explodedKey;
             }
-            list($keys[],) = $explodedKey;
         }
 
         // return the array with the keys
@@ -950,14 +951,15 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // extract the values from the value
         foreach ($this->explode($value, $delimiter) as $keyValue) {
+            // explode the value(s)
             $explodedValue = $this->explode($keyValue, $valueDelimiter);
-            if (!is_array($explodedValue)) {
-                continue;
-            }
-            if (count($explodedValue) < 2) {
-                $values[] = 0;
-            } else {
-                list(, $values[]) = $explodedValue;
+            // extract the values, whether or not two or less has been found
+            if (is_array($explodedValue)) {
+                if (count($explodedValue) < 2) {
+                    $values[] = 0;
+                } else {
+                    list (, $values[]) = $explodedValue;
+                }
             }
         }
 
