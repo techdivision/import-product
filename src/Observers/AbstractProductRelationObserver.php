@@ -94,20 +94,9 @@ abstract class AbstractProductRelationObserver extends AbstractProductImportObse
         }
 
         try {
-            // try to load and map the parent ID
+            // extract the parent + child ID from the row
             $this->parentId = $this->mapSku($parentSku);
-        } catch (\Exception $e) {
-            throw $this->wrapException(array($parentSkuColumnName), $e);
-        }
-
-        try {
-            // try to load and map the child ID
             $this->childId = $this->mapChildSku($childSku);
-        } catch (\Exception $e) {
-            throw $this->wrapException(array($childSkuColumnName), $e);
-        }
-
-        try {
             // prepare and persist the product relation
             if ($productRelation = $this->initializeProductRelation($this->prepareProductRelationAttributes())) {
                 $this->persistProductRelation($productRelation);
@@ -133,6 +122,8 @@ abstract class AbstractProductRelationObserver extends AbstractProductImportObse
 
             // query whether or not, debug mode is enabled
             if ($this->isDebugMode()) {
+                // stop processing the row
+                $this->skipRow();
                 // log a warning and return immediately
                 $this->getSystemLogger()->warning($wrappedException->getMessage());
                 return;

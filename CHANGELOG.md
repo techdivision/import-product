@@ -1,3 +1,13 @@
+# Version 18.0.2
+
+## Bugfixes
+
+* Fix associated_skus without qty
+
+## Features
+
+* Allow import of product relations in debug mode whether or not the related simple product exists
+
 # Version 18.0.1
 
 ## Bugfixes
