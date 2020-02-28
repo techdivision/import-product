@@ -63,6 +63,6 @@ class ProductUpdateProcessor extends AbstractUpdateProcessor
     public function execute($row, $name = null, $primaryKeyMemberName = null)
     {
         parent::execute($row, $name);
-        return $row[MemberNames::ENTITY_ID];
+        return $row[$primaryKeyMemberName ?: MemberNames::ENTITY_ID];
     }
 }
