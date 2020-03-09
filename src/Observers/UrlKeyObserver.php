@@ -111,13 +111,6 @@ class UrlKeyObserver extends AbstractProductImportObserver
 
         // query whether or not the URL key column has a value
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
-            $this->setValue(
-                ColumnKeys::URL_KEY,
-                $this->makeUnique(
-                    $this->getSubject(),
-                    $this->getValue(ColumnKeys::URL_KEY)
-                )
-            );
             return;
         }
 

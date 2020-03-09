@@ -1,3 +1,13 @@
+# Version 19.0.3
+
+## Bugfixes
+
+* Fix associated_skus without qty
+
+## Features
+
+* Remove functionality to make given URL keys unique (we assume, that given URL keys HAVE to be provided in a unique manner)
+
 # Version 19.0.2
 
 ## Bugfixes
