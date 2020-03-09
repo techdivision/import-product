@@ -1,3 +1,13 @@
+# Version 18.0.3
+
+## Bugfixes
+
+* Fixed issue with updated entities 
+
+## Features
+
+* Remove functionality to make given URL keys unique (we assume, that given URL keys HAVE to be provided in a unique manner)
+
 # Version 18.0.2
 
 ## Bugfixes

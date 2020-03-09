@@ -1026,10 +1026,9 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         // load the cache adapter instance
         $cacheAdapter = $this->getProductRepository()->getCacheAdapter();
 
-        // we only want to replace existing values, NOT adding new ones as this is the responsibility of the repository
+        // remove an existing product from the cache to allow reloading it
         if ($cacheAdapter->isCached($uniqueKey = array(CacheKeys::PRODUCT => $product[$pkName]))) {
-            // add the entity value to the cache, register the cache key reference as well
-            $cacheAdapter->toCache($uniqueKey, $product, array(), array(), true);
+            $cacheAdapter->removeCache($uniqueKey);
         }
 
         // return the ID of the persisted entity
@@ -1053,10 +1052,9 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         // load the cache adapter instance
         $cacheAdapter = $this->getProductVarcharRepository()->getCacheAdapter();
 
-        // we only want to replace existing values, NOT adding new ones as this is the responsibility of the repository
+        // remove an existing product varchar attribute from the cache to allow reloading it
         if ($cacheAdapter->isCached($uniqueKey = array(CacheKeys::PRODUCT_VARCHAR => $attribute[$pkName]))) {
-            // add the attribute value to the cache, register the cache key reference as well
-            $cacheAdapter->toCache($uniqueKey, $attribute, array(), array(), true);
+            $cacheAdapter->removeCache($uniqueKey);
         }
 
         // return the ID of the persisted attribute
