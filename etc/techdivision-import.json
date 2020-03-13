@@ -174,7 +174,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_product_grouped.observer.grouped.product.relation"
+                    "import_product_grouped.observer.composite.replace"
                   ]
                 }
               ]
@@ -321,7 +321,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_product_grouped.observer.grouped.product.relation.update"
+                    "import_product_grouped.observer.composite.add_update"
                   ]
                 }
               ]
