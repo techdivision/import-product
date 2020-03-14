@@ -28,7 +28,7 @@
                   "observers": [
                     {
                       "import": [
-                        "import.observer.validator.generic"
+                        "import.observer.generic.validator"
                       ]
                     }
                   ],
@@ -70,7 +70,7 @@
                   "observers": [
                     {
                       "import": [
-                        "import.observer.validator.generic"
+                        "import.observer.generic.validator"
                       ]
                     }
                   ],
@@ -108,80 +108,6 @@
                       "import": [
                         "import.observer.generic.column.collector"
                       ]
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        },
-        "validate": {
-          "plugins": {
-            "subject": {
-              "id": "import.plugin.subject",
-              "listeners": [
-                {
-                  "plugin.process.start": [
-                    "import.listener.reset.loader.eav.attribute.option.value"
-                  ],
-                  "plugin.process.success": [
-                    "import.listener.stop.validation"
-                  ]
-                }
-              ],
-              "subjects": [
-                {
-                  "id": "import.subject.validator",
-                  "create-imported-file": false,
-                  "file-resolver": {
-                    "prefix": "product-import"
-                  },
-                  "listeners": [
-                    {
-                      "subject.artefact.header.row.process.start": [
-                        "import.listener.validate.header.row"
-                      ]
-                    }
-                  ],
-                  "params" : {
-                    "custom-validations" : {
-                      "sku" :  [ "/.+/" ],
-                      "product_type": [ "simple", "virtual", "configurable", "bundle", "grouped", "giftcard" ],
-                      "visibility": [ "Not Visible Individually", "Catalog", "Search", "Catalog, Search" ]
-                    }
-                  },
-                  "observers": [
-                    {
-                      "import": [
-                        "import_product.observer.composite.base.validate"
-                      ]
-                    }
-                  ],
-                  "callbacks": [
-                    {
-                      "sku": [ "import.callback.custom.regex.validator" ],
-                      "store_view_code": [ "import.callback.store.view.code.validator" ],
-                      "attribute_set_code": [ "import.callback.attribute.set.name.validator" ],
-                      "product_type": [ "import.callback.custom.array.validator" ],
-                      "tax_class_id": [ "import_product.callback.validator.tax.class" ],
-                      "product_websites": [ "import.callback.store.website.validator" ],
-                      "visibility": [ "import.callback.visibility.validator" ],
-                      "related_skus": [ "import_product.callback.validator.link" ],
-                      "upsell_skus": [ "import_product.callback.validator.link" ],
-                      "crosssell_skus": [ "import_product.callback.validator.link" ],
-                      "created_at" : [ "import.callback.validator.datetime" ],
-                      "updated_at" : [ "import.callback.validator.datetime" ],
-                      "special_price_to_date" : [ "import.callback.validator.datetime" ],
-                      "special_price_from_date" : [ "import.callback.validator.datetime" ],
-                      "custom_design_to" : [ "import.callback.validator.datetime" ],
-                      "custom_design_from" : [ "import.callback.validator.datetime" ],
-                      "new_to_date" : [ "import.callback.validator.datetime" ],
-                      "new_from_date" : [ "import.callback.validator.datetime" ],
-                      "price" : [ "import.callback.validator.number" ],
-                      "special_price" : [ "import.callback.validator.number" ],
-                      "map_price" : [ "import.callback.validator.number" ],
-                      "msrp_price" : [ "import.callback.validator.number" ],
-                      "qty" : [ "import.callback.validator.number" ]
                     }
                   ]
                 }
@@ -361,6 +287,80 @@
         }
       },
       "catalog_product": {
+        "validate": {
+          "plugins": {
+            "subject": {
+              "id": "import.plugin.subject",
+              "listeners": [
+                {
+                  "plugin.process.start": [
+                    "import.listener.reset.loader.eav.attribute.option.value"
+                  ],
+                  "plugin.process.success": [
+                    "import.listener.stop.validation"
+                  ]
+                }
+              ],
+              "subjects": [
+                {
+                  "id": "import.subject.validator",
+                  "create-imported-file": false,
+                  "file-resolver": {
+                    "prefix": "product-import"
+                  },
+                  "listeners": [
+                    {
+                      "subject.artefact.header.row.process.start": [
+                        "import.listener.validate.header.row"
+                      ]
+                    }
+                  ],
+                  "params" : {
+                    "custom-validations" : {
+                      "sku" :  [ "/.+/" ],
+                      "product_type": [ "simple", "virtual", "configurable", "bundle", "grouped", "giftcard" ],
+                      "visibility": [ "Not Visible Individually", "Catalog", "Search", "Catalog, Search" ]
+                    }
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product.observer.composite.base.validate"
+                      ]
+                    }
+                  ],
+                  "callbacks": [
+                    {
+                      "sku": [ "import.callback.custom.regex.validator" ],
+                      "store_view_code": [ "import.callback.store.view.code.validator" ],
+                      "attribute_set_code": [ "import.callback.attribute.set.name.validator" ],
+                      "product_type": [ "import.callback.custom.array.validator" ],
+                      "tax_class_id": [ "import_product.callback.validator.tax.class" ],
+                      "product_websites": [ "import.callback.store.website.validator" ],
+                      "visibility": [ "import.callback.visibility.validator" ],
+                      "related_skus": [ "import_product.callback.validator.link" ],
+                      "upsell_skus": [ "import_product.callback.validator.link" ],
+                      "crosssell_skus": [ "import_product.callback.validator.link" ],
+                      "created_at" : [ "import.callback.validator.datetime" ],
+                      "updated_at" : [ "import.callback.validator.datetime" ],
+                      "special_price_to_date" : [ "import.callback.validator.datetime" ],
+                      "special_price_from_date" : [ "import.callback.validator.datetime" ],
+                      "custom_design_to" : [ "import.callback.validator.datetime" ],
+                      "custom_design_from" : [ "import.callback.validator.datetime" ],
+                      "new_to_date" : [ "import.callback.validator.datetime" ],
+                      "new_from_date" : [ "import.callback.validator.datetime" ],
+                      "price" : [ "import.callback.validator.number" ],
+                      "special_price" : [ "import.callback.validator.number" ],
+                      "map_price" : [ "import.callback.validator.number" ],
+                      "msrp_price" : [ "import.callback.validator.number" ],
+                      "qty" : [ "import.callback.validator.number" ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
         "delete": {
           "plugins": {
             "subject": {

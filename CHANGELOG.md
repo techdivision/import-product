@@ -1,3 +1,14 @@
+# Version 19.0.5
+
+## Bugfixes
+
+* Fixed import-product#149
+* Fixed invalid observer names for validate operations
+
+## Features
+
+* None
+
 # Version 19.0.4
 
 ## Bugfixes

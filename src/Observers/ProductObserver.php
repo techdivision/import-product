@@ -155,6 +155,9 @@ class ProductObserver extends AbstractProductImportObserver
 
         // load the product with the passed SKU and merge it with the attributes
         if ($entity = $this->loadProduct($attr[MemberNames::SKU])) {
+            // remove the created at date from the attributes, when we update the entity
+            unset($attr[MemberNames::CREATED_AT]);
+            // merge the entity with the passed attributes
             return $this->mergeEntity($entity, $attr);
         }
 

@@ -22,7 +22,7 @@
           "general/general/global-data",
           "general/general/move-files",
           "general/catalog_product/collect-data",
-          "general/catalog_product/validate"
+          "ce/catalog_product/validate"
         ],
         "delete": [
           "general/general/global-data",
@@ -44,7 +44,7 @@
           "ce/catalog_category/add-update.path",
           "ce/catalog_category/add-update.url-rewrite",
           "general/catalog_category/children-count",
-          "general/catalog_product/validate",
+          "ce/catalog_product/validate",
           "ce/catalog_product/replace",
           "ce/catalog_product/replace.variants",
           "ce/catalog_product/replace.bundles",
@@ -68,7 +68,7 @@
           "ce/catalog_category/add-update.path",
           "ce/catalog_category/add-update.url-rewrite",
           "general/catalog_category/children-count",
-          "general/catalog_product/validate",
+          "ce/catalog_product/validate",
           "ce/catalog_product/add-update",
           "ce/catalog_product/add-update.variants",
           "ce/catalog_product/add-update.bundles",

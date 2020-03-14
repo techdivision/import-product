@@ -3,6 +3,7 @@
     "catalog_product": {
       "product_online": 1,
       "attribute_set_name": "Default",
+      "visibility": "Catalog, Search",
       "url_key": null
     }
   }

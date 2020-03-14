@@ -117,7 +117,7 @@ class ProductObserverTest extends TestCase
         $newProduct = array(
             'entity_id'               => 1234,
             'sku'                     => $sku,
-            'created_at'              => '2016-10-23 17:10:00',
+            'created_at'              => '2016-10-23 12:00:00',
             'updated_at'              => '2016-10-23 17:10:00',
             'has_options'             => 0,
             'required_options'        => 0,
