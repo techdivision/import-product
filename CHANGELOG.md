@@ -1,3 +1,13 @@
+# Version 19.0.6
+
+## Bugfixes
+
+* Fixed invald invokation of operation general/catalog_categor/children-count
+
+## Features
+
+* None
+
 # Version 19.0.5
 
 ## Bugfixes
