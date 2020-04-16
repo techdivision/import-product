@@ -100,7 +100,7 @@
                 <argument id="import_product_grouped.observer.product.grouped" type="service"/>
             </call>
             <call method="addObserver">
-                <argument id="import_product_msi.observer.product.source.item.default" type="service"/>
+                <argument id="import_product_msi.observer.product.source.item" type="service"/>
             </call>
             <call method="addObserver">
                 <argument id="import_product.observer.clean.up" type="service"/>
@@ -163,7 +163,7 @@
                 <argument id="import_product_grouped.observer.product.grouped" type="service"/>
             </call>
             <call method="addObserver">
-                <argument id="import_product_msi.observer.product.source.item.default" type="service"/>
+                <argument id="import_product_msi.observer.product.source.item" type="service"/>
             </call>
             <call method="addObserver">
                 <argument id="import_product.observer.clean.up" type="service"/>

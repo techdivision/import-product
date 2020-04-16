@@ -1,3 +1,14 @@
+# Version 20.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to latest techdivision/import 16.* version as dependency
+* Replace old default observer configuration for MSI sources, if inventory_source_items column is missing
+
 # Version 19.0.6
 
 ## Bugfixes
