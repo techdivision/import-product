@@ -1,3 +1,13 @@
+# Version 18.0.5
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Replace old default observer configuration for MSI sources, if inventory_source_items column is missing
+
 # Version 18.0.4
 
 ## Bugfixes
