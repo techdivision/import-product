@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Utils;
 
-use TechDivision\Import\ConfigurationInterface;
+use TechDivision\Import\Configuration\ConfigurationInterface;
 use TechDivision\Import\Utils\EditionNamesInterface;
 use TechDivision\Import\Services\RegistryProcessorInterface;
 
@@ -39,7 +39,7 @@ class SkuToPkMappingUtil implements SkuToPkMappingUtilInterface
     /**
      * The configuration instance.
      *
-     * @var \TechDivision\Import\ConfigurationInterface
+     * @var \TechDivision\Import\Configuration\ConfigurationInterface
      */
     protected $configuration;
 
@@ -56,7 +56,7 @@ class SkuToPkMappingUtil implements SkuToPkMappingUtilInterface
     /**
      * Construct a new instance.
      *
-     * @param \TechDivision\Import\ConfigurationInterface $configuration The configuration instance
+     * @param \TechDivision\Import\Configuration\ConfigurationInterface $configuration The configuration instance
      */
     public function __construct(ConfigurationInterface $configuration)
     {
