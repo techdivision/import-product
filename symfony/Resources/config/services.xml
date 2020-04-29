@@ -24,19 +24,6 @@
         </service>
 
         <!--
-         | The DI cache configuration
-         |-->
-        <service id="import_product.repository.cache.warmer.product" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductCacheWarmer">
-            <argument type="service" id="import_product.repository.product"/>
-        </service>
-        <service id="import_product.repository.cache.warmer.product.varchar" class="TechDivision\Import\Product\Repositories\CacheWarmer\ProductVarcharCacheWarmer">
-            <argument type="service" id="import_product.repository.product.varchar"/>
-            <argument type="service" id="import_product.repository.product"/>
-            <argument type="service" id="import.repository.eav.attribute"/>
-            <argument type="service" id="cache.configurable"/>
-        </service>
-
-        <!--
          | The DI loader configuration
          |-->
         <service id="import.loader.registry.custom.columns" class="TechDivision\Import\Loaders\RegistryLoader">

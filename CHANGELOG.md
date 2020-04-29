@@ -2,6 +2,7 @@
 
 ## Bugfixes
 
+* Add #PAC-52
 * Add #PAC-85
 
 ## Features
