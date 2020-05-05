@@ -1,3 +1,13 @@
+# Version 21.0.0
+
+## Bugfixes
+
+* TBA
+
+## Features
+
+* Add possibility to define image sort order
+
 # Version 20.0.0
 
 ## Bugfixes

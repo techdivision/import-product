@@ -136,4 +136,25 @@ class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
      * @var string
      */
     const ADDITIONAL_IMAGES = 'additional_images';
+
+    /**
+     * Name for the column 'image_path'.
+     *
+     * @var string
+     */
+    const IMAGE_PATH = 'image_path';
+
+    /**
+     * Name for the column 'image_label'.
+     *
+     * @var string
+     */
+    const IMAGE_LABEL = 'image_label';
+
+    /**
+     * Name for the column 'image_position'.
+     *
+     * @var string
+     */
+    const IMAGE_POSITION = 'image_position';
 }
