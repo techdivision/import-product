@@ -6,7 +6,7 @@
 
 ## Features
 
-* Add possibility to define image sort order
+* Add #PAC-73
 
 # Version 20.0.0
 

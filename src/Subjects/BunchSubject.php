@@ -319,9 +319,9 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     }
 
     /**
-     * Returns the media roles.
+     * Loads and returns the media roles.
      *
-     * @return \ArrayAccess
+     * @return array The array with the media roles
      */
     public function getMediaRoles(): array
     {

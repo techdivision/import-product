@@ -47,12 +47,18 @@ class MediaRolesLoader implements LoaderInterface
      */
     public function __construct(ImportProcessorInterface $importProcessor)
     {
+
+        // initialize the import processor instance
         $this->importProcessor = $importProcessor;
+
+        // initialize the media roles
         $this->mediaRoles = $this->createMediaRoles();
     }
 
     /**
-     * @return \ArrayAccess|void|array
+     * Loads and returns the media roles.
+     *
+     * @return array The array with the media roles
      */
     public function load()
     {
@@ -83,6 +89,7 @@ class MediaRolesLoader implements LoaderInterface
             );
         }
 
+        // return the array with the media roles
         return $mediaRoles;
     }
 }
