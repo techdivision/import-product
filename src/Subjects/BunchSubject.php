@@ -20,7 +20,11 @@
 
 namespace TechDivision\Import\Product\Subjects;
 
-use TechDivision\Import\Product\Utils\ColumnKeys;
+use Doctrine\Common\Collections\Collection;
+use League\Event\EmitterInterface;
+use TechDivision\Import\Loaders\LoaderInterface;
+use TechDivision\Import\Services\RegistryProcessorInterface;
+use TechDivision\Import\Utils\Generators\GeneratorInterface;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\RegistryKeys;
@@ -128,11 +132,31 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     protected $entityTypes = array();
 
     /**
-     * The media roles array (default: ['base', 'small', 'thumbnail', 'swatch']).
+     * The media roles loader instance.
      *
-     * @var array
+     * @var \TechDivision\Import\Loaders\LoaderInterface
      */
-    protected $mediaRoles = array();
+    protected $mediaRolesLoader;
+
+    /**
+     * BunchSubject constructor
+     *
+     * @param RegistryProcessorInterface $registryProcessor          The registry processor instance
+     * @param GeneratorInterface         $coreConfigDataUidGenerator The generator instance
+     * @param Collection                 $systemLoggers              The system logger collection
+     * @param EmitterInterface           $emitter                    The emitter instance
+     * @param LoaderInterface            $loader                     The media type loader instance
+     */
+    public function __construct(
+        RegistryProcessorInterface $registryProcessor,
+        GeneratorInterface $coreConfigDataUidGenerator,
+        Collection $systemLoggers,
+        EmitterInterface $emitter,
+        LoaderInterface $loader
+    ) {
+        $this->mediaRolesLoader = $loader;
+        parent::__construct($registryProcessor, $coreConfigDataUidGenerator, $systemLoggers, $emitter);
+    }
 
     /**
      * Intializes the previously loaded global data for exactly one bunch.
@@ -175,9 +199,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
 
         // invoke the parent method
         parent::setUp($serial);
-
-        // create the media roles after parent setup
-        $this->mediaRoles = $this->createMediaRoles();
     }
 
     /**
@@ -296,40 +317,14 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
         return ((integer) $productVarcharAttribute[MemberNames::ENTITY_ID] === (integer) $this->getLastEntityId()) &&
                ((integer) $productVarcharAttribute[MemberNames::STORE_ID] === (integer) $this->getRowStoreId(StoreViewCodes::ADMIN));
     }
-    /**
-     * Creates media roles from available image types.
-     *
-     * @return array
-     */
-    public function createMediaRoles()
-    {
-
-        // initialize default values
-        $mediaRoles = $this->getMediaRoles();
-
-        // derive media roles form image types
-        foreach ($this->getImageTypes() as $imageColumnName => $imageLabelColumnName) {
-            // create the role based prefix for the image columns
-            $role = str_replace('_image', null, $imageColumnName);
-
-            // initialize the values for the corresponding media role
-            $mediaRoles[$role] = array(
-                ColumnKeys::IMAGE_PATH        => $imageColumnName,
-                ColumnKeys::IMAGE_LABEL       => $imageLabelColumnName,
-                ColumnKeys::IMAGE_POSITION    => sprintf('%s_image_position', $role)
-            );
-        }
-
-        return $mediaRoles;
-    }
 
     /**
      * Returns the media roles.
      *
-     * @return array
+     * @return \ArrayAccess
      */
     public function getMediaRoles(): array
     {
-        return $this->mediaRoles;
+        return $this->mediaRolesLoader->load();
     }
 }

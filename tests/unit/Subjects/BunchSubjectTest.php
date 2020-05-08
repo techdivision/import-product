@@ -24,6 +24,8 @@ use TechDivision\Import\Utils\EntityTypeCodes;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\RegistryKeys;
 use TechDivision\Import\Subjects\AbstractTest;
+use TechDivision\Import\Utils\Generators\CoreConfigDataUidGenerator;
+use TechDivision\Import\Loaders\LoaderInterface;
 
 /**
  * Test class for the product action implementation.
@@ -113,6 +115,41 @@ class BunchSubjectTest extends AbstractTest
         // create the subject instance we want to test and invoke the setup method
         $this->subject = $this->getSubjectInstance();
         $this->subject->setUp($this->serial = uniqid());
+    }
+
+
+    /**
+     * Mock the subject constructor args.
+     *
+     * @return array The subject constructor args
+     */
+    protected function getMockSubjectConstructorArgs()
+    {
+
+        // mock the registry processor
+        $mockRegistryProcessor = $this->getMockRegistryProcessor();
+
+        // mock the generator
+        $mockGenerator = new CoreConfigDataUidGenerator();
+
+        // mock the loggers
+        $mockLoggers = $this->getMockLoggers();
+
+        // mock the event emitter
+        $mockEmitter = $this->getMockBuilder('League\Event\EmitterInterface')
+            ->setMethods(\get_class_methods('League\Event\EmitterInterface'))
+            ->getMock();
+
+        $mockLoader = $this->getMockBuilder(LoaderInterface::class)->getMock();
+
+        // prepare the constructor arguments
+        return array(
+            $mockRegistryProcessor,
+            $mockGenerator,
+            $mockLoggers,
+            $mockEmitter,
+            $mockLoader
+        );
     }
 
     /**

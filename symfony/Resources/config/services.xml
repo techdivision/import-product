@@ -37,6 +37,9 @@
         <service id="import_product.loader.tax.class" class="TechDivision\Import\Product\Loaders\TaxClassLoader">
             <argument type="service" id="import.processor.import"/>
         </service>
+        <service id="import_product.loader.media.roles" class="TechDivision\Import\Product\Loaders\MediaRolesLoader">
+            <argument type="service" id="import.processor.import"/>
+        </service>
 
         <!--
          | The DI listener configuration
@@ -582,6 +585,7 @@
             <argument type="service" id="import.generator.core.config.data.uid"/>
             <argument type="service" id="loggers"/>
             <argument type="service" id="import.events.emitter"/>
+            <argument type="service" id="import_product.loader.media.roles"/>
         </service>
 
     </services>
