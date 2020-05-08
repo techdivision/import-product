@@ -140,6 +140,7 @@ class BunchSubjectTest extends AbstractTest
             ->setMethods(\get_class_methods('League\Event\EmitterInterface'))
             ->getMock();
 
+        // create a mock loader instance
         $mockLoader = $this->getMockBuilder(LoaderInterface::class)->getMock();
 
         // prepare the constructor arguments
