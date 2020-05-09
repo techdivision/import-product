@@ -1,8 +1,18 @@
+# Version 21.1.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add #PAC-48
+
 # Version 21.0.0
 
 ## Bugfixes
 
-* TBA
+* None
 
 ## Features
 

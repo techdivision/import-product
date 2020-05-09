@@ -22,9 +22,9 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
-use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Observers\StateDetectorInterface;
+use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 
 /**
  * Observer that creates/updates the category product relations.
@@ -44,6 +44,13 @@ class CategoryProductObserver extends AbstractProductImportObserver
      * @var string
      */
     protected $path;
+
+    /**
+     * The position of the actual category.
+     *
+     * @var int
+     */
+    protected $position = 0;
 
     /**
      * The product bunch processor instance.
@@ -94,10 +101,23 @@ class CategoryProductObserver extends AbstractProductImportObserver
         // initialize the arrays for the new category product relations
         $categoryProducts = array();
 
+        // explode the categories as well as their positions, if available
+        $categories = $this->getValue(ColumnKeys::CATEGORIES, array(), array($this, 'explode'));
+        $categoryPositions = $this->getValue(ColumnKeys::CATEGORIES_POSITION, array(), array($this, 'explode'));
+
         // load the category product relations found in the CSV file
-        foreach ($this->getValue(ColumnKeys::CATEGORIES, array(), array($this, 'explode')) as $path) {
+        foreach ($categories as $key => $path) {
             // load the category for the found path
             $this->path = trim($path);
+
+            // initialize the category position with the default value
+            $this->position = 0;
+
+            // query whether or not a position for the category has been specified
+            if (isset($categoryPositions[$key])) {
+                // set the position, if available
+                $this->position = (int) $categoryPositions[$key];
+            }
 
             // prepare the product category relation attributes
             if ($attr = $this->prepareAttributes()) {
@@ -175,7 +195,7 @@ class CategoryProductObserver extends AbstractProductImportObserver
                 array(
                     MemberNames::CATEGORY_ID => $category[MemberNames::ENTITY_ID],
                     MemberNames::PRODUCT_ID  => $lastEntityId,
-                    MemberNames::POSITION    => 0
+                    MemberNames::POSITION    => $this->position
                 )
             );
         } catch (\Exception $e) {

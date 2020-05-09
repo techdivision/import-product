@@ -47,6 +47,13 @@ class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
     const CATEGORIES = 'categories';
 
     /**
+     * Name for the column 'categories_position'.
+     *
+     * @var string
+     */
+    const CATEGORIES_POSITION = 'categories_position';
+
+    /**
      * Name for the column 'product_websites'.
      *
      * @var string
