@@ -154,7 +154,11 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
         EmitterInterface $emitter,
         LoaderInterface $loader
     ) {
+
+        // set the loader for the media roles
         $this->mediaRolesLoader = $loader;
+
+        // pass the other instances to the parent constructor
         parent::__construct($registryProcessor, $coreConfigDataUidGenerator, $systemLoggers, $emitter);
     }
 
@@ -181,20 +185,20 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
 
         // initialize media directory => can be absolute or relative
         if ($this->getConfiguration()->hasParam(ConfigurationKeys::MEDIA_DIRECTORY)) {
-            $this->setMediaDir(
-                $this->resolvePath(
-                    $this->getConfiguration()->getParam(ConfigurationKeys::MEDIA_DIRECTORY)
-                )
-            );
+            try {
+                $this->setMediaDir($this->resolvePath($this->getConfiguration()->getParam(ConfigurationKeys::MEDIA_DIRECTORY)));
+            } catch (\InvalidArgumentException $iae) {
+                $this->getSystemLogger()->warning($iae);
+            }
         }
 
         // initialize images directory => can be absolute or relative
         if ($this->getConfiguration()->hasParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)) {
-            $this->setImagesFileDir(
-                $this->resolvePath(
-                    $this->getConfiguration()->getParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)
-                )
-            );
+            try {
+                $this->setImagesFileDir($this->resolvePath($this->getConfiguration()->getParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)));
+            } catch (\InvalidArgumentException $iae) {
+                $this->getSystemLogger()->warning($iae);
+            }
         }
 
         // invoke the parent method

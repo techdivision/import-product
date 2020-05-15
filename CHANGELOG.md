@@ -1,3 +1,13 @@
+# Version 21.1.1
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add functionality write a log warning instead throwing an exception if the configured media + images file dirctory are not available
+
 # Version 21.1.0
 
 ## Bugfixes
