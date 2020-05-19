@@ -25,6 +25,8 @@ use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Subjects\I18n\DateConverterInterface;
+use TechDivision\Import\Configuration\SubjectConfigurationInterface;
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
 
 /**
  * Test class for the product update observer implementation.
@@ -133,6 +135,10 @@ class ProductObserverTest extends TestCase
             ->withConsecutive(array('10/23/16, 5:10 PM'), array('10/23/16, 5:10 PM'))
             ->willReturnOnConsecutiveCalls('2016-10-23 17:10:00', '2016-10-23 17:10:00');
 
+        $mockConfiguration = $this->getMockBuilder(SubjectConfigurationInterface::class)->getMock();
+
+        $mockConfiguration->expects($this->any())->method('hasParam')->with(ConfigurationKeys::CLEAN_UP_EMPTY_COLUMNS)->willReturn(false);
+
         // create a mock subject
         $mockSubject = $this->getMockBuilder('TechDivision\Import\Product\Subjects\BunchSubject')
                             ->setMethods(
@@ -143,11 +149,16 @@ class ProductObserverTest extends TestCase
                                     'hasBeenProcessed',
                                     'getAttributeSet',
                                     'getRow',
-                                    'getDateConverter'
+                                    'getDateConverter',
+                                    'getConfiguration'
                                 )
                             )
                             ->disableOriginalConstructor()
                             ->getMock();
+
+        $mockSubject->expects($this->any())
+                    ->method('getConfiguration')
+                    ->willReturn($mockConfiguration);
         $mockSubject->expects($this->any())
                     ->method('getHeaders')
                     ->willReturn($headers);
@@ -156,17 +167,10 @@ class ProductObserverTest extends TestCase
                     ->willReturn($row);
         $mockSubject->expects($this->any())
                     ->method('hasHeader')
-                    ->willReturn(true);
+                    ->will($this->returnCallback(function ($param) use ($headers) { return isset($headers[$param]); }));
         $mockSubject->expects($this->any())
                     ->method('getHeader')
-                    ->withConsecutive(
-                        array(ColumnKeys::SKU),
-                        array(ColumnKeys::CREATED_AT),
-                        array(ColumnKeys::UPDATED_AT),
-                        array(ColumnKeys::SKU),
-                        array(ColumnKeys::PRODUCT_TYPE)
-                     )
-                    ->willReturnOnConsecutiveCalls(0, 1, 2, 0, 5);
+                    ->will($this->returnCallback(function ($param) use ($headers) { return $headers[$param]; }));
         $mockSubject->expects($this->once())
                     ->method('hasBeenProcessed')
                     ->willReturn(false);
