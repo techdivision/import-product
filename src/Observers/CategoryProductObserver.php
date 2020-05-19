@@ -22,8 +22,11 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\EntityTypeCodes;
 use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Observers\StateDetectorInterface;
+use TechDivision\Import\Observers\AttributeLoaderInterface;
+use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 
 /**
@@ -35,7 +38,7 @@ use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class CategoryProductObserver extends AbstractProductImportObserver
+class CategoryProductObserver extends AbstractProductImportObserver implements DynamicAttributeObserverInterface
 {
 
     /**
@@ -53,6 +56,13 @@ class CategoryProductObserver extends AbstractProductImportObserver
     protected $position = 0;
 
     /**
+     * The attribute loader instance.
+     *
+     * @var \TechDivision\Import\Observers\AttributeLoaderInterface
+     */
+    protected $attributeLoader;
+
+    /**
      * The product bunch processor instance.
      *
      * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
@@ -60,15 +70,29 @@ class CategoryProductObserver extends AbstractProductImportObserver
     protected $productBunchProcessor;
 
     /**
+     * Array with virtual column name mappings (this is a temporary
+     * solution till techdivision/import#179 as been implemented).
+     *
+     * @var array
+     * @todo https://github.com/techdivision/import/issues/179
+     */
+    protected $virtualMapping = array(ColumnKeys::POSITION => ColumnKeys::CATEGORIES_POSITION);
+
+    /**
      * Initialize the observer with the passed product bunch processor instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
+     * @param \TechDivision\Import\Observers\AttributeLoaderInterface|null         $attributeLoader       The attribute loader instance
      * @param \TechDivision\Import\Observers\StateDetectorInterface|null           $stateDetector         The state detector instance to use
      */
-    public function __construct(ProductBunchProcessorInterface $productBunchProcessor, StateDetectorInterface $stateDetector = null)
-    {
+    public function __construct(
+        ProductBunchProcessorInterface $productBunchProcessor,
+        AttributeLoaderInterface $attributeLoader = null,
+        StateDetectorInterface $stateDetector = null
+    ) {
 
-        // initialize the bunch processor instance
+        // initialize the bunch processor and the attribute loader instance
+        $this->attributeLoader = $attributeLoader;
         $this->productBunchProcessor = $productBunchProcessor;
 
         // pass the state detector to the parent method
@@ -83,6 +107,19 @@ class CategoryProductObserver extends AbstractProductImportObserver
     protected function getProductBunchProcessor()
     {
         return $this->productBunchProcessor;
+    }
+
+    /**
+     * Query whether or not a value for the column with the passed name exists.
+     *
+     * @param string $name The column name to query for a valid value
+     *
+     * @return boolean TRUE if the value is set, else FALSE
+     * @todo https://github.com/techdivision/import/issues/179
+     */
+    public function hasValue($name)
+    {
+        return parent::hasValue(isset($this->virtualMapping[$name]) ? $this->virtualMapping[$name] : $name);
     }
 
     /**
@@ -120,7 +157,7 @@ class CategoryProductObserver extends AbstractProductImportObserver
             }
 
             // prepare the product category relation attributes
-            if ($attr = $this->prepareAttributes()) {
+            if ($attr = $this->prepareDynamicAttributes()) {
                 // initialize and persist the category product relation relation and add the
                 // category ID to the list => necessary to create the URL rewrites later!
                 if ($this->hasChanges($categoryProduct = $this->initializeCategoryProduct($attr))) {
@@ -173,6 +210,16 @@ class CategoryProductObserver extends AbstractProductImportObserver
     }
 
     /**
+     * Appends the dynamic attributes to the static ones and returns them.
+     *
+     * @return array The array with all available attributes
+     */
+    protected function prepareDynamicAttributes()
+    {
+        return array_merge($this->prepareAttributes(), $this->attributeLoader ? $this->attributeLoader->load($this, array()) : array());
+    }
+
+    /**
      * Prepare the attributes of the entity that has to be persisted.
      *
      * @return array The prepared attributes
@@ -189,13 +236,14 @@ class CategoryProductObserver extends AbstractProductImportObserver
         try {
             // load the category for the found path
             $category = $this->getCategoryByPath($this->path);
-
             // return the prepared category product relation
             return $this->initializeEntity(
-                array(
-                    MemberNames::CATEGORY_ID => $category[MemberNames::ENTITY_ID],
-                    MemberNames::PRODUCT_ID  => $lastEntityId,
-                    MemberNames::POSITION    => $this->position
+                $this->loadRawEntity(
+                    array(
+                        MemberNames::CATEGORY_ID => $category[MemberNames::ENTITY_ID],
+                        MemberNames::PRODUCT_ID  => $lastEntityId,
+                        MemberNames::POSITION    => $this->position
+                    )
                 )
             );
         } catch (\Exception $e) {
@@ -206,6 +254,18 @@ class CategoryProductObserver extends AbstractProductImportObserver
                 throw $e;
             }
         }
+    }
+
+    /**
+     * Load's and return's a raw customer entity without primary key but the mandatory members only and nulled values.
+     *
+     * @param array $data An array with data that will be used to initialize the raw entity with
+     *
+     * @return array The initialized entity
+     */
+    protected function loadRawEntity(array $data = array())
+    {
+        return $this->getProductBunchProcessor()->loadRawEntity(EntityTypeCodes::CATALOG_CATEGORY_PRODUCT, $data);
     }
 
     /**

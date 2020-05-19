@@ -164,20 +164,15 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
              VALUES (:product_id,
                      :website_id)',
         SqlStatementKeys::CREATE_CATEGORY_PRODUCT =>
-            'INSERT
-               INTO ${table:catalog_category_product}
-                    (category_id,
-                     product_id,
-                     position)
-             VALUES (:category_id,
-                     :product_id,
-                     :position)',
+            'INSERT ${table:catalog_category_product}
+                    (${column-names:catalog_category_product})
+             VALUES (${column-placeholders:catalog_category_product})',
         SqlStatementKeys::UPDATE_CATEGORY_PRODUCT =>
             'UPDATE ${table:catalog_category_product}
-                SET category_id = :category_id,
-                    product_id = :product_id,
-                    position = :position
-             WHERE  entity_id = :entity_id',
+                SET ${column-values:catalog_category_product}
+              WHERE entity_id = :entity_id
+                AND category_id = :category_id
+                AND product_id = :product_id',
         SqlStatementKeys::CREATE_PRODUCT_DATETIME =>
             'INSERT
                INTO ${table:catalog_product_entity_datetime}

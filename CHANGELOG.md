@@ -1,3 +1,13 @@
+# Version 22.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add #PAC-47
+
 # Version 21.1.2
 
 ## Bugfixes

@@ -12,6 +12,27 @@
     <services>
 
         <!--
+         | The DI utility configuration
+         |-->
+        <service id="import_product.util.sql.compilers" class="\ArrayObject">
+            <call method="append">
+                <argument id="import.util.primary.key" type="service"/>
+            </call>
+            <call method="append">
+                <argument id="import.util.table.prefix" type="service"/>
+            </call>
+            <call method="append">
+                <argument id="import.util.column.names" type="service"/>
+            </call>
+            <call method="append">
+                <argument id="import.util.column.placeholders" type="service"/>
+            </call>
+            <call method="append">
+                <argument id="import.util.column.values" type="service"/>
+            </call>
+        </service>
+
+        <!--
          | The DI configuration for the utilities
          |-->
         <service id="import_product.filter.convert.literal.url" class="TechDivision\Import\Utils\Filter\ConvertLiteralUrl"/>
@@ -93,7 +114,7 @@
          | The DI configuration for the legacy repositories
          |-->
         <service id="import_product.repository.sql.statement" class="TechDivision\Import\Product\Repositories\SqlStatementRepository">
-            <argument type="service" id="import.util.sql.compilers"/>
+            <argument type="service" id="import_product.util.sql.compilers"/>
         </service>
         <service id="import_product.repository.category.product" class="TechDivision\Import\Product\Repositories\CategoryProductRepository">
             <argument type="service" id="connection"/>
@@ -293,6 +314,12 @@
             <argument type="service" id="import_product.repository.product.varchar"/>
         </service>
 
+        <service id="import_product.loader.raw.entity" class="TechDivision\Import\Product\Loaders\RawEntityLoader">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import.loader.column.metadata"/>
+            <argument type="service" id="import.loader.raw.entity"/>
+        </service>
+
         <!--
          | The DI configuration for the product bunch processor
          |-->
@@ -321,6 +348,7 @@
             <argument type="service" id="import_product.action.stock.item"/>
             <argument type="service" id="import.action.url.rewrite"/>
             <argument type="service" id="import_product.assembler.product.attribute"/>
+            <argument type="service" id="import_product.loader.raw.entity"/>
         </service>
 
         <!--
@@ -360,9 +388,11 @@
         </service>
         <service id="import_product.observer.category.product" class="TechDivision\Import\Product\Observers\CategoryProductObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
+            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
         </service>
         <service id="import_product.observer.category.product.update" class="TechDivision\Import\Product\Observers\CategoryProductUpdateObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
+            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
         </service>
         <service id="import_product.observer.clear.product" class="TechDivision\Import\Product\Observers\ClearProductObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>

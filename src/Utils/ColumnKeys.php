@@ -164,4 +164,13 @@ class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
      * @var string
      */
     const IMAGE_POSITION = 'image_position';
+
+    /**
+     * Name for the "virtual" column 'position' (this is a temporary
+     * solution till techdivision/import#179 as been implemented).
+     *
+     * @var string
+     * @todo https://github.com/techdivision/import/issues/179
+     */
+    const POSITION = 'position';
 }
