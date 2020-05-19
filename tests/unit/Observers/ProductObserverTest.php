@@ -22,11 +22,10 @@ namespace TechDivision\Import\Product\Observers;
 
 use PHPUnit\Framework\TestCase;
 use TechDivision\Import\Utils\EntityStatus;
-use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Subjects\I18n\DateConverterInterface;
 use TechDivision\Import\Configuration\SubjectConfigurationInterface;
-use TechDivision\Import\Product\Utils\ConfigurationKeys;
 
 /**
  * Test class for the product update observer implementation.
@@ -135,8 +134,8 @@ class ProductObserverTest extends TestCase
             ->withConsecutive(array('10/23/16, 5:10 PM'), array('10/23/16, 5:10 PM'))
             ->willReturnOnConsecutiveCalls('2016-10-23 17:10:00', '2016-10-23 17:10:00');
 
+        // mock the subject configuration
         $mockConfiguration = $this->getMockBuilder(SubjectConfigurationInterface::class)->getMock();
-
         $mockConfiguration->expects($this->any())->method('hasParam')->with(ConfigurationKeys::CLEAN_UP_EMPTY_COLUMNS)->willReturn(false);
 
         // create a mock subject
