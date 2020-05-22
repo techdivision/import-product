@@ -184,6 +184,12 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
             $this->setCopyImages($this->getConfiguration()->getParam(ConfigurationKeys::COPY_IMAGES));
         }
 
+        // initialize the flag whether to override images or not
+        // TODO: Create new constant ConfigurationKeys::OVERRIDE_IMAGES for future release
+        if ($this->getConfiguration()->hasParam('override-images')) {
+            $this->setOverrideImages($this->getConfiguration()->getParam('override-images'));
+        }
+
         // initialize media directory => can be absolute or relative
         if ($this->getConfiguration()->hasParam(ConfigurationKeys::MEDIA_DIRECTORY)) {
             try {
