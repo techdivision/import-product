@@ -591,6 +591,9 @@
                   "file-resolver": {
                     "prefix": "bundles"
                   },
+                  "params": {
+                    "clean-up-empty-columns": []
+                  },
                   "observers": [
                     {
                       "import": [
@@ -656,6 +659,9 @@
                   "id": "import_product_media.subject.media",
                   "file-resolver": {
                     "prefix": "media"
+                  },
+                  "params": {
+                    "clean-up-empty-columns": []
                   },
                   "observers": [
                     {
