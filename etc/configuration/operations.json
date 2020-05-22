@@ -566,6 +566,9 @@
                   "file-resolver": {
                     "prefix": "variants"
                   },
+                  "params": {
+                    "clean-up-empty-columns": []
+                  },
                   "observers": [
                     {
                       "import": [

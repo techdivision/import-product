@@ -6,6 +6,7 @@
 
 ## Features
 
+* Add #PAC-46
 * Add #PAC-96
 
 # Version 22.0.0
