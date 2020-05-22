@@ -1,3 +1,13 @@
+# Version 22.1.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add #PAC-96
+
 # Version 22.0.0
 
 ## Bugfixes
