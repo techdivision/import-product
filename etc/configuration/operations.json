@@ -508,6 +508,10 @@
                   "file-resolver": {
                     "prefix": "media"
                   },
+                  "params": {
+                    "media-directory" : "pub/media/catalog/product",
+                    "images-file-directory" : "var/importexport/media/catalog/product"
+                  },
                   "observers": [
                     {
                       "import": [
@@ -661,6 +665,8 @@
                     "prefix": "media"
                   },
                   "params": {
+                    "media-directory" : "pub/media/catalog/product",
+                    "images-file-directory" : "var/importexport/media/catalog/product",
                     "clean-up-empty-columns": []
                   },
                   "observers": [
