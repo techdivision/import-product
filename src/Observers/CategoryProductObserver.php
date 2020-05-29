@@ -27,7 +27,9 @@ use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Observers\StateDetectorInterface;
 use TechDivision\Import\Observers\AttributeLoaderInterface;
 use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
+use TechDivision\Import\Observers\EntityMergers\EntityMergerInterface;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Utils\EntityStatus;
 
 /**
  * Observer that creates/updates the category product relations.
@@ -70,30 +72,31 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
     protected $productBunchProcessor;
 
     /**
-     * Array with virtual column name mappings (this is a temporary
-     * solution till techdivision/import#179 as been implemented).
+     * The entity merger instance.
      *
-     * @var array
-     * @todo https://github.com/techdivision/import/issues/179
+     * @var \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface
      */
-    protected $virtualMapping = array(ColumnKeys::POSITION => ColumnKeys::CATEGORIES_POSITION);
+    protected $entityMerger;
 
     /**
      * Initialize the observer with the passed product bunch processor instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
      * @param \TechDivision\Import\Observers\AttributeLoaderInterface|null         $attributeLoader       The attribute loader instance
+     * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface   $entityMerger          The entity merger instance
      * @param \TechDivision\Import\Observers\StateDetectorInterface|null           $stateDetector         The state detector instance to use
      */
     public function __construct(
         ProductBunchProcessorInterface $productBunchProcessor,
         AttributeLoaderInterface $attributeLoader = null,
+        EntityMergerInterface $entityMerger = null,
         StateDetectorInterface $stateDetector = null
     ) {
 
         // initialize the bunch processor and the attribute loader instance
-        $this->attributeLoader = $attributeLoader;
         $this->productBunchProcessor = $productBunchProcessor;
+        $this->attributeLoader = $attributeLoader;
+        $this->entityMerger = $entityMerger;
 
         // pass the state detector to the parent method
         parent::__construct($stateDetector);
@@ -107,19 +110,6 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
     protected function getProductBunchProcessor()
     {
         return $this->productBunchProcessor;
-    }
-
-    /**
-     * Query whether or not a value for the column with the passed name exists.
-     *
-     * @param string $name The column name to query for a valid value
-     *
-     * @return boolean TRUE if the value is set, else FALSE
-     * @todo https://github.com/techdivision/import/issues/179
-     */
-    public function hasValue($name)
-    {
-        return parent::hasValue(isset($this->virtualMapping[$name]) ? $this->virtualMapping[$name] : $name);
     }
 
     /**
@@ -207,6 +197,26 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
                      );
             }
         }
+    }
+
+    /**
+     * Merge's and return's the entity with the passed attributes and set's the
+     * passed status.
+     *
+     * @param array       $entity        The entity to merge the attributes into
+     * @param array       $attr          The attributes to be merged
+     * @param string|null $changeSetName The change set name to use
+     *
+     * @return array The merged entity
+     * @todo https://github.com/techdivision/import/issues/179
+     */
+    protected function mergeEntity(array $entity, array $attr, $changeSetName = null)
+    {
+        return array_merge(
+            $entity,
+            $this->entityMerger ? $this->entityMerger->merge($this, $entity, $attr) : $attr,
+            array(EntityStatus::MEMBER_NAME => $this->detectState($entity, $attr, $changeSetName))
+        );
     }
 
     /**

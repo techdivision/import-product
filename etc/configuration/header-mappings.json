@@ -19,6 +19,36 @@
       "base_image_label": "image_label",
       "thumbnail_image": "thumbnail",
       "thumbnail_image_label": "thumbnail_label"
+    },
+    "catalog_category_product" : {
+      "categories_position": "position"
+    },
+    "catalog_product_entity_media_gallery" : {
+      "image_disabled": "disabled",
+      "image_path_new": "value"
+    },
+    "catalog_product_entity_media_gallery_value" : {
+      "image_label": "label",
+      "image_position": "position",
+      "hide_from_product_page": "disabled"
+    },
+    "catalog_product_bundle_option" : {
+      "bundle_value_position": "position",
+      "bundle_value_type": "type",
+      "bundle_value_required": "required"
+    },
+    "catalog_product_bundle_selection" : {
+      "bundle_value_selection_position": "position",
+      "bundle_value_default": "is_default",
+      "bundle_value_price": "selection_price_value",
+      "bundle_value_can_change_qty": "selection_can_change_qty"
+    },
+    "catalog_product_super_attribute" : {
+      "variant_variation_position": "position"
+    },
+    "catalog_product_super_attribute_label" : {
+      "variant_variation_label": "value",
+      "variant_variation_use_default": "use_default"
     }
   }
 }

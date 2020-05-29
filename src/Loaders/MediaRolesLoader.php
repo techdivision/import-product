@@ -85,8 +85,7 @@ class MediaRolesLoader implements LoaderInterface
             $mediaRoles[$role] = array(
                 ColumnKeys::IMAGE_PATH     => $imageColumnName,
                 ColumnKeys::IMAGE_LABEL    => $imageLabelColumnName,
-                ColumnKeys::IMAGE_POSITION => sprintf('%s_image_position', $role),
-                ColumnKeys::IMAGE_DISABLED => sprintf('%s_image_disabled', $role)
+                ColumnKeys::IMAGE_POSITION => sprintf('%s_image_position', $role)
             );
         }
 

@@ -12,23 +12,18 @@
     <services>
 
         <!--
-         | The DI utility configuration
+         | The DI configuration for the entity mergers
          |-->
-        <service id="import_product.util.sql.compilers" class="\ArrayObject">
+        <service id="import_product.loader.header.mapping.category.product" class="TechDivision\Import\Loaders\EntityTypeHeaderMappingLoader">
+            <argument type="service" id="import.loader.header.mapping"/>
+            <argument type="constant">TechDivision\Import\Product\Utils\EntityTypeCodes::CATALOG_CATEGORY_PRODUCT</argument>
+        </service>
+        <service id="import_product.entity.merger.empty.columns.category.product" class="TechDivision\Import\Observers\EntityMergers\CleanUpColumnsEntityMerger">
+            <argument type="service" id="import_product.loader.header.mapping.category.product"/>
+        </service>
+        <service id="import_product.entity.merger.composite.media.gallery" class="TechDivision\Import\Observers\EntityMergers\GenericCompositeEntityMerger">
             <call method="append">
-                <argument id="import.util.primary.key" type="service"/>
-            </call>
-            <call method="append">
-                <argument id="import.util.table.prefix" type="service"/>
-            </call>
-            <call method="append">
-                <argument id="import.util.column.names" type="service"/>
-            </call>
-            <call method="append">
-                <argument id="import.util.column.placeholders" type="service"/>
-            </call>
-            <call method="append">
-                <argument id="import.util.column.values" type="service"/>
+                <argument type="service" id="import_product.entity.merger.empty.columns.category.product"/>
             </call>
         </service>
 
@@ -114,7 +109,7 @@
          | The DI configuration for the legacy repositories
          |-->
         <service id="import_product.repository.sql.statement" class="TechDivision\Import\Product\Repositories\SqlStatementRepository">
-            <argument type="service" id="import_product.util.sql.compilers"/>
+            <argument type="service" id="import.util.sql.compilers"/>
         </service>
         <service id="import_product.repository.category.product" class="TechDivision\Import\Product\Repositories\CategoryProductRepository">
             <argument type="service" id="connection"/>
@@ -139,12 +134,14 @@
         <service id="import_product.action.processor.category.product.create" class="TechDivision\Import\Product\Actions\Processors\CategoryProductCreateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
-        <service id="import_product.action.processor.category.product.delete" class="TechDivision\Import\Product\Actions\Processors\CategoryProductDeleteProcessor">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
         </service>
         <service id="import_product.action.processor.category.product.update" class="TechDivision\Import\Product\Actions\Processors\CategoryProductUpdateProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+        </service>
+        <service id="import_product.action.processor.category.product.delete" class="TechDivision\Import\Product\Actions\Processors\CategoryProductDeleteProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
@@ -152,11 +149,11 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.product.delete" class="TechDivision\Import\Product\Actions\Processors\ProductDeleteProcessor">
+        <service id="import_product.action.processor.product.update" class="TechDivision\Import\Product\Actions\Processors\ProductUpdateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.product.update" class="TechDivision\Import\Product\Actions\Processors\ProductUpdateProcessor">
+        <service id="import_product.action.processor.product.delete" class="TechDivision\Import\Product\Actions\Processors\ProductDeleteProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
@@ -164,11 +161,11 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.product.datetime.delete" class="TechDivision\Import\Product\Actions\Processors\ProductDatetimeDeleteProcessor">
+        <service id="import_product.action.processor.product.datetime.update" class="TechDivision\Import\Product\Actions\Processors\ProductDatetimeUpdateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.product.datetime.update" class="TechDivision\Import\Product\Actions\Processors\ProductDatetimeUpdateProcessor">
+        <service id="import_product.action.processor.product.datetime.delete" class="TechDivision\Import\Product\Actions\Processors\ProductDatetimeDeleteProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
@@ -176,11 +173,11 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.product.decimal.delete" class="TechDivision\Import\Product\Actions\Processors\ProductDecimalDeleteProcessor">
+        <service id="import_product.action.processor.product.decimal.update" class="TechDivision\Import\Product\Actions\Processors\ProductDecimalUpdateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.product.decimal.update" class="TechDivision\Import\Product\Actions\Processors\ProductDecimalUpdateProcessor">
+        <service id="import_product.action.processor.product.decimal.delete" class="TechDivision\Import\Product\Actions\Processors\ProductDecimalDeleteProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
@@ -188,11 +185,11 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.product.int.delete" class="TechDivision\Import\Product\Actions\Processors\ProductIntDeleteProcessor">
+        <service id="import_product.action.processor.product.int.update" class="TechDivision\Import\Product\Actions\Processors\ProductIntUpdateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.product.int.update" class="TechDivision\Import\Product\Actions\Processors\ProductIntUpdateProcessor">
+        <service id="import_product.action.processor.product.int.delete" class="TechDivision\Import\Product\Actions\Processors\ProductIntDeleteProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
@@ -200,11 +197,11 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.product.text.delete" class="TechDivision\Import\Product\Actions\Processors\ProductTextDeleteProcessor">
+        <service id="import_product.action.processor.product.text.update" class="TechDivision\Import\Product\Actions\Processors\ProductTextUpdateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.product.text.update" class="TechDivision\Import\Product\Actions\Processors\ProductTextUpdateProcessor">
+        <service id="import_product.action.processor.product.text.delete" class="TechDivision\Import\Product\Actions\Processors\ProductTextDeleteProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
@@ -212,11 +209,11 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.product.varchar.delete" class="TechDivision\Import\Product\Actions\Processors\ProductVarcharDeleteProcessor">
+        <service id="import_product.action.processor.product.varchar.update" class="TechDivision\Import\Product\Actions\Processors\ProductVarcharUpdateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.product.varchar.update" class="TechDivision\Import\Product\Actions\Processors\ProductVarcharUpdateProcessor">
+        <service id="import_product.action.processor.product.varchar.delete" class="TechDivision\Import\Product\Actions\Processors\ProductVarcharDeleteProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
@@ -232,11 +229,11 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.stock.item.delete" class="TechDivision\Import\Product\Actions\Processors\StockItemDeleteProcessor">
+        <service id="import_product.action.processor.stock.item.update" class="TechDivision\Import\Product\Actions\Processors\StockItemUpdateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.stock.item.update" class="TechDivision\Import\Product\Actions\Processors\StockItemUpdateProcessor">
+        <service id="import_product.action.processor.stock.item.delete" class="TechDivision\Import\Product\Actions\Processors\StockItemDeleteProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
@@ -389,10 +386,12 @@
         <service id="import_product.observer.category.product" class="TechDivision\Import\Product\Observers\CategoryProductObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
             <argument type="service" id="import.observer.dynamic.attribute.loader"/>
+            <argument type="service" id="import_product.entity.merger.composite.media.gallery"/>
         </service>
         <service id="import_product.observer.category.product.update" class="TechDivision\Import\Product\Observers\CategoryProductUpdateObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
             <argument type="service" id="import.observer.dynamic.attribute.loader"/>
+            <argument type="service" id="import_product.entity.merger.composite.media.gallery"/>
         </service>
         <service id="import_product.observer.clear.product" class="TechDivision\Import\Product\Observers\ClearProductObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
