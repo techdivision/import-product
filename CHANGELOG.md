@@ -1,3 +1,14 @@
+# Version 22.0.1
+
+## Bugfixes
+
+* Fixed techdivision/import#178
+* Fixed techdivision/import#182
+
+## Features
+
+* None
+
 # Version 22.0.0
 
 ## Bugfixes

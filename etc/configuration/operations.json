@@ -18,7 +18,7 @@
                   "id": "import.subject.validator",
                   "create-imported-file": false,
                   "file-resolver": {
-                    "prefix": "product-import"
+                    "prefix": "product-import-inventory"
                   },
                   "params" : {
                     "custom-validations" : {
@@ -60,7 +60,7 @@
                   "id": "import.subject.validator",
                   "create-imported-file": false,
                   "file-resolver": {
-                    "prefix": "product-import"
+                    "prefix": "product-import-price"
                   },
                   "params" : {
                     "custom-validations" : {

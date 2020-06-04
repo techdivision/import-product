@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\EntityTypeCodes;
@@ -29,7 +30,6 @@ use TechDivision\Import\Observers\AttributeLoaderInterface;
 use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
 use TechDivision\Import\Observers\EntityMergers\EntityMergerInterface;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
-use TechDivision\Import\Utils\EntityStatus;
 
 /**
  * Observer that creates/updates the category product relations.
@@ -134,8 +134,8 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
 
         // load the category product relations found in the CSV file
         foreach ($categories as $key => $path) {
-            // load the category for the found path
-            $this->path = trim($path);
+            // load the and downgrade the category for the found path
+            $this->path = implode('/', $this->explode(trim($path), '/'));
 
             // initialize the category position with the default value
             $this->position = 0;
