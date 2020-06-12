@@ -1,3 +1,13 @@
+# Version 23.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add #PAC-102: Dedicated CLI command to import videos (professional + enterpries edition)
+
 # Version 22.0.1
 
 ## Bugfixes

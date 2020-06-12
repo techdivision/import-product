@@ -26,6 +26,7 @@ use TechDivision\Import\Loaders\LoaderInterface;
 use TechDivision\Import\Services\RegistryProcessorInterface;
 use TechDivision\Import\Utils\Generators\GeneratorInterface;
 use TechDivision\Import\Utils\StoreViewCodes;
+use TechDivision\Import\Utils\Mappings\MapperInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\RegistryKeys;
 use TechDivision\Import\Product\Utils\VisibilityKeys;
@@ -140,24 +141,34 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     protected $mediaRolesLoader;
 
     /**
+     * The entity type code mapper instance.
+     *
+     * @var \TechDivision\Import\Utils\Mappings\MapperInterface
+     */
+    protected $entityTypeCodeMapper;
+
+    /**
      * BunchSubject constructor
      *
-     * @param RegistryProcessorInterface $registryProcessor          The registry processor instance
-     * @param GeneratorInterface         $coreConfigDataUidGenerator The generator instance
-     * @param Collection                 $systemLoggers              The system logger collection
-     * @param EmitterInterface           $emitter                    The emitter instance
-     * @param LoaderInterface            $loader                     The media type loader instance
+     * @param \TechDivision\Import\Services\RegistryProcessorInterface $registryProcessor          The registry processor instance
+     * @param \TechDivision\Import\Utils\Generators\GeneratorInterface $coreConfigDataUidGenerator The UID generator for the core config data
+     * @param \Doctrine\Common\Collections\Collection                  $systemLoggers              The array with the system loggers instances
+     * @param \League\Event\EmitterInterface                           $emitter                    The event emitter instance
+     * @param \TechDivision\Import\Loaders\LoaderInterface             $mediaRolesLoader           The media type loader instance
+     * @param \TechDivision\Import\Utils\Mappings\MapperInterface      $entityTypeCodeMapper       The entity type code mapper instance
      */
     public function __construct(
         RegistryProcessorInterface $registryProcessor,
         GeneratorInterface $coreConfigDataUidGenerator,
         Collection $systemLoggers,
         EmitterInterface $emitter,
-        LoaderInterface $loader
+        LoaderInterface $mediaRolesLoader,
+        MapperInterface $entityTypeCodeMapper
     ) {
 
-        // set the loader for the media roles
-        $this->mediaRolesLoader = $loader;
+        // set the loader for the media roles and the entity type code mapper
+        $this->mediaRolesLoader = $mediaRolesLoader;
+        $this->entityTypeCodeMapper = $entityTypeCodeMapper;
 
         // pass the other instances to the parent constructor
         parent::__construct($registryProcessor, $coreConfigDataUidGenerator, $systemLoggers, $emitter);
@@ -196,7 +207,7 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
             try {
                 $this->setMediaDir($this->resolvePath($this->getConfiguration()->getParam(ConfigurationKeys::MEDIA_DIRECTORY)));
             } catch (\InvalidArgumentException $iae) {
-                $this->getSystemLogger()->warning($iae);
+                $this->getSystemLogger()->warning($iae->getMessage());
             }
         }
 
@@ -205,7 +216,7 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
             try {
                 $this->setImagesFileDir($this->resolvePath($this->getConfiguration()->getParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)));
             } catch (\InvalidArgumentException $iae) {
-                $this->getSystemLogger()->warning($iae);
+                $this->getSystemLogger()->warning($iae->getMessage());
             }
         }
 
@@ -359,5 +370,15 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
 
         // return the array with the column names
         return $cleanUpColumns;
+    }
+
+    /**
+     * Return's the entity type code to be used.
+     *
+     * @return string The entity type code to be used
+     */
+    public function getEntityTypeCode()
+    {
+        return $this->entityTypeCodeMapper->map(parent::getEntityTypeCode());
     }
 }

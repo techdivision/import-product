@@ -3,12 +3,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="import_product.repository.finder.mappings" type="collection">
-            <parameter key=""></parameter>
-        </parameter>
-    </parameters>
-
     <services>
 
         <!--
@@ -31,6 +25,7 @@
          | The DI configuration for the utilities
          |-->
         <service id="import_product.filter.convert.literal.url" class="TechDivision\Import\Utils\Filter\ConvertLiteralUrl"/>
+        <service id="import_product.utils.entity.type.code.mapping" class="TechDivision\Import\Product\Utils\Mappings\EntityTypeCodeMapper"/>
         <service id="import_product.utils.sku.to.pk.mapping" class="TechDivision\Import\Product\Utils\SkuToPkMappingUtil">
             <argument type="service" id="configuration"/>
         </service>
@@ -615,6 +610,7 @@
             <argument type="service" id="loggers"/>
             <argument type="service" id="import.events.emitter"/>
             <argument type="service" id="import_product.loader.media.roles"/>
+            <argument type="service" id="import_product.utils.entity.type.code.mapping"/>
         </service>
 
     </services>

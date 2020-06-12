@@ -26,6 +26,7 @@ use TechDivision\Import\Product\Utils\RegistryKeys;
 use TechDivision\Import\Subjects\AbstractTest;
 use TechDivision\Import\Utils\Generators\CoreConfigDataUidGenerator;
 use TechDivision\Import\Loaders\LoaderInterface;
+use TechDivision\Import\Utils\Mappings\MapperInterface;
 
 /**
  * Test class for the product action implementation.
@@ -143,13 +144,18 @@ class BunchSubjectTest extends AbstractTest
         // create a mock loader instance
         $mockLoader = $this->getMockBuilder(LoaderInterface::class)->getMock();
 
+        // create a mock mapper instance
+        $mockMapper = $this->getMockBuilder(MapperInterface::class)->getMock();
+        $mockMapper->method('map')->willReturn(EntityTypeCodes::CATALOG_PRODUCT);
+
         // prepare the constructor arguments
         return array(
             $mockRegistryProcessor,
             $mockGenerator,
             $mockLoggers,
             $mockEmitter,
-            $mockLoader
+            $mockLoader,
+            $mockMapper
         );
     }
 
