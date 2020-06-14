@@ -154,7 +154,7 @@
                 <argument id="import_product_media.observer.product.media" type="service"/>
             </call>
             <call method="addObserver">
-                <argument id="import_product_media.observer.clear.media.gallery" type="service"/>
+                <argument id="import_product_media.observer.clean.up.media.gallery" type="service"/>
             </call>
             <call method="addObserver">
                 <argument id="import_product_link.observer.product.link" type="service"/>

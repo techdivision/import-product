@@ -1,3 +1,14 @@
+# Version 23.1.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add #PAC-72: Extend dedicated CLI command to delete existing videos (professional + enterprise edition)
+* Add #PAC-75: Extend dedicated CLI command to replace existing videos (professional + enterprise edition)
+
 # Version 23.0.0
 
 ## Bugfixes
@@ -6,7 +17,7 @@
 
 ## Features
 
-* Add #PAC-102: Dedicated CLI command to import videos (professional + enterpries edition)
+* Add #PAC-102: Dedicated CLI command to import videos (professional + enterprise edition)
 
 # Version 22.0.1
 
