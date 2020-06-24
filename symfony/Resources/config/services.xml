@@ -12,12 +12,24 @@
             <argument type="service" id="import.loader.header.mapping"/>
             <argument type="constant">TechDivision\Import\Product\Utils\EntityTypeCodes::CATALOG_CATEGORY_PRODUCT</argument>
         </service>
+        <service id="import_product.loader.header.mapping.product.inventory" class="TechDivision\Import\Loaders\EntityTypeHeaderMappingLoader">
+            <argument type="service" id="import.loader.header.mapping"/>
+            <argument type="constant">TechDivision\Import\Product\Utils\EntityTypeCodes::CATALOGINVENTORY_STOCK_ITEM</argument>
+        </service>
         <service id="import_product.entity.merger.empty.columns.category.product" class="TechDivision\Import\Observers\EntityMergers\CleanUpColumnsEntityMerger">
             <argument type="service" id="import_product.loader.header.mapping.category.product"/>
+        </service>
+        <service id="import_product.entity.merger.empty.columns.product.inventory" class="TechDivision\Import\Observers\EntityMergers\CleanUpColumnsEntityMerger">
+            <argument type="service" id="import_product.loader.header.mapping.product.inventory"/>
         </service>
         <service id="import_product.entity.merger.composite.media.gallery" class="TechDivision\Import\Observers\EntityMergers\GenericCompositeEntityMerger">
             <call method="append">
                 <argument type="service" id="import_product.entity.merger.empty.columns.category.product"/>
+            </call>
+        </service>
+        <service id="import_product.entity.merger.composite.product.inventory" class="TechDivision\Import\Observers\EntityMergers\GenericCompositeEntityMerger">
+            <call method="append">
+                <argument type="service" id="import_product.entity.merger.empty.columns.product.inventory"/>
             </call>
         </service>
 
@@ -403,10 +415,12 @@
         <service id="import_product.observer.product.inventory" class="TechDivision\Import\Product\Observers\ProductInventoryObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
             <argument type="service" id="import.observer.dynamic.attribute.loader"/>
+            <argument type="service" id="import_product.entity.merger.composite.product.inventory"/>
         </service>
         <service id="import_product.observer.product.inventory.update" class="TechDivision\Import\Product\Observers\ProductInventoryUpdateObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
             <argument type="service" id="import.observer.dynamic.attribute.loader"/>
+            <argument type="service" id="import_product.entity.merger.composite.product.inventory"/>
         </service>
         <service id="import_product.observer.product" class="TechDivision\Import\Product\Observers\ProductObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>

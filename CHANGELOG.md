@@ -1,3 +1,14 @@
+# Version 24.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add techdivision/import#184
+* Add techdivision/import-product#155
+
 # Version 23.1.0
 
 ## Bugfixes

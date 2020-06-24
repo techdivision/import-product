@@ -29,6 +29,9 @@ use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 use TechDivision\Import\Subjects\SubjectInterface;
 use TechDivision\Import\Observers\ObserverFactoryInterface;
 use TechDivision\Import\Observers\StateDetectorAwareObserverInterface;
+use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Observers\EntityMergers\EntityMergerInterface;
+use TechDivision\Import\Product\Utils\EntityTypeCodes;
 
 /**
  * Observer that creates/updates the product's inventory.
@@ -57,6 +60,13 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
     protected $attributeLoader;
 
     /**
+     * The entity merger instance.
+     *
+     * @var \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface
+     */
+    protected $entityMerger;
+
+    /**
      * The array with the column mappings that has to be computed.
      *
      * @var array
@@ -66,19 +76,22 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
     /**
      * Initialize the observer with the passed product bunch processor instance.
      *
-     * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
-     * @param \TechDivision\Import\Observers\AttributeLoaderInterface              $attributeLoader       The attribute loader instance
-     * @param \TechDivision\Import\Observers\StateDetectorInterface|null           $stateDetector         The state detector instance to use
+     * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface    $productBunchProcessor The product bunch processor instance
+     * @param \TechDivision\Import\Observers\AttributeLoaderInterface                 $attributeLoader       The attribute loader instance
+     * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface|null $entityMerger          The entity merger instance
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null              $stateDetector         The state detector instance to use
      */
     public function __construct(
         ProductBunchProcessorInterface $productBunchProcessor,
         AttributeLoaderInterface $attributeLoader,
+        EntityMergerInterface $entityMerger = null,
         StateDetectorInterface $stateDetector = null
     ) {
 
         // initialize the bunch processor and the attribute loader instance
         $this->productBunchProcessor = $productBunchProcessor;
         $this->attributeLoader = $attributeLoader;
+        $this->entityMerger = $entityMerger;
 
         // pass the state detector to the parent method
         parent::__construct($stateDetector);
@@ -164,11 +177,33 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
 
         // return the prepared stock status
         return $this->initializeEntity(
-            array(
-                MemberNames::PRODUCT_ID   => $lastEntityId,
-                MemberNames::WEBSITE_ID   => $websiteId,
-                MemberNames::STOCK_ID     => 1
+            $this->loadRawEntity(
+                array(
+                    MemberNames::PRODUCT_ID   => $lastEntityId,
+                    MemberNames::WEBSITE_ID   => $websiteId,
+                    MemberNames::STOCK_ID     => 1
+                )
             )
+        );
+    }
+
+    /**
+     * Merge's and return's the entity with the passed attributes and set's the
+     * passed status.
+     *
+     * @param array       $entity        The entity to merge the attributes into
+     * @param array       $attr          The attributes to be merged
+     * @param string|null $changeSetName The change set name to use
+     *
+     * @return array The merged entity
+     * @todo https://github.com/techdivision/import/issues/179
+     */
+    protected function mergeEntity(array $entity, array $attr, $changeSetName = null)
+    {
+        return array_merge(
+            $entity,
+            $this->entityMerger ? $this->entityMerger->merge($this, $entity, $attr) : $attr,
+            array(EntityStatus::MEMBER_NAME => $this->detectState($entity, $attr, $changeSetName))
         );
     }
 
@@ -180,6 +215,18 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
     protected function prepareStockItemAttributes()
     {
         return array_merge($this->prepareAttributes(), $this->attributeLoader->load($this, $this->getHeaderStockMappings()));
+    }
+
+    /**
+     * Load's and return's a raw customer entity without primary key but the mandatory members only and nulled values.
+     *
+     * @param array $data An array with data that will be used to initialize the raw entity with
+     *
+     * @return array The initialized entity
+     */
+    protected function loadRawEntity(array $data = array())
+    {
+        return $this->getProductBunchProcessor()->loadRawEntity(EntityTypeCodes::CATALOGINVENTORY_STOCK_ITEM, $data);
     }
 
     /**

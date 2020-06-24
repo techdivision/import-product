@@ -25,6 +25,7 @@ use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Observers\DynamicAttributeLoader;
 use TechDivision\Import\Subjects\I18n\NumberConverterInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test class for the product inventory observer implementation.
@@ -48,7 +49,7 @@ class ProductInventoryObserverTest extends TestCase
     /**
      * A mock processor instance.
      *
-     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $mockProductBunchProcessor;
 
@@ -66,6 +67,9 @@ class ProductInventoryObserverTest extends TestCase
         $this->mockProductBunchProcessor = $this->getMockBuilder('TechDivision\Import\Product\Services\ProductBunchProcessorInterface')
                                                 ->setMethods(get_class_methods('TechDivision\Import\Product\Services\ProductBunchProcessorInterface'))
                                                 ->getMock();
+
+        // mock the methods
+        $this->mockProductBunchProcessor->expects($this->any())->method('loadRawEntity')->willReturnArgument(1);
 
         // initialize the observer
         $this->observer = new ProductInventoryObserver($this->mockProductBunchProcessor, new DynamicAttributeLoader());
@@ -171,11 +175,11 @@ class ProductInventoryObserverTest extends TestCase
                                         ->method('persistStockItem')
                                         ->with(
                                             array(
-                                                'product_id'                  => $lastEntityId,
-                                                'website_id'                  => 1,
-                                                'stock_id'                    => 1,
-                                                'qty'                         => 100,
-                                                EntityStatus::MEMBER_NAME     => EntityStatus::STATUS_CREATE
+                                                'product_id'              => $lastEntityId,
+                                                'website_id'              => 1,
+                                                'stock_id'                => 1,
+                                                'qty'                     => 100,
+                                                EntityStatus::MEMBER_NAME => EntityStatus::STATUS_CREATE
                                             )
                                         );
 

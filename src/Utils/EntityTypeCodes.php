@@ -38,4 +38,11 @@ class EntityTypeCodes extends \TechDivision\Import\Utils\EntityTypeCodes
      * @var string
      */
     const CATALOG_CATEGORY_PRODUCT = 'catalog_category_product';
+
+    /**
+     * Key for the product entity 'cataloginventory_stock_item'.
+     *
+     * @var string
+     */
+    const CATALOGINVENTORY_STOCK_ITEM = 'cataloginventory_stock_item';
 }
