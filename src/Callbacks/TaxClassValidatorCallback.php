@@ -73,6 +73,11 @@ class TaxClassValidatorCallback extends AbstractValidatorCallback
      */
     protected function isNullable($attributeValue)
     {
-        return $this->isMainRow() && ($attributeValue === '' || $attributeValue === null);
+
+        // query whether or not the value is empty
+        $isNull = $attributeValue === '' || $attributeValue === null;
+
+        // query whether or not we're on the main row
+        return $this->isMainRow() && $isNull ? false : true;
     }
 }
