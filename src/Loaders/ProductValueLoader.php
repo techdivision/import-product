@@ -73,7 +73,7 @@ class ProductValueLoader implements LoaderInterface
 
         // initialize the array with the SKUs
         foreach ($productProcessor->loadProducts() as $product) {
-            $this->skus[] = $product[$this->columnName];
+            $this->values[] = $product[$this->columnName];
         }
     }
 

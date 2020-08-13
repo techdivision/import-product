@@ -1,3 +1,13 @@
+# Version 24.0.2
+
+## Bugfixes
+
+* Fixed invalid member name
+
+## Features
+
+* None
+
 # Version 24.0.1
 
 ## Bugfixes
