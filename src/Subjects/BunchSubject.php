@@ -198,8 +198,8 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
         // initialize the flag whether to override images or not
         // @todo https://github.com/techdivision/import/issues/181
         //       Create new constant ConfigurationKeys::OVERRIDE_IMAGES for future release
-        if ($this->getConfiguration()->hasParam('override-images')) {
-            $this->setOverrideImages($this->getConfiguration()->getParam('override-images'));
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::OVERRIDE_IMAGES)) {
+            $this->setOverrideImages($this->getConfiguration()->getParam(ConfigurationKeys::OVERRIDE_IMAGES));
         }
 
         // initialize media directory => can be absolute or relative
