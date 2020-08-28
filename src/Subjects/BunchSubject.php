@@ -205,7 +205,7 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
             try {
                 $this->setMediaDir($this->resolvePath($this->getConfiguration()->getParam(ConfigurationKeys::MEDIA_DIRECTORY)));
             } catch (\InvalidArgumentException $iae) {
-                $this->getSystemLogger()->warning($iae->getMessage());
+                $this->getSystemLogger()->debug($iae->getMessage());
             }
         }
 
@@ -214,7 +214,7 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
             try {
                 $this->setImagesFileDir($this->resolvePath($this->getConfiguration()->getParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)));
             } catch (\InvalidArgumentException $iae) {
-                $this->getSystemLogger()->warning($iae->getMessage());
+                $this->getSystemLogger()->debug($iae->getMessage());
             }
         }
 

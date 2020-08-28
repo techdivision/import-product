@@ -1,3 +1,13 @@
+# Version 25.0.0
+
+## Bugfixes
+
+* Fixed #PAC-206: Prevent finder mappings of different libraries to be overwritten
+
+## Features
+
+* Remove stack trace of exception for missing media directories > log a simple debug message instead
+
 # Version 24.0.2
 
 ## Bugfixes
