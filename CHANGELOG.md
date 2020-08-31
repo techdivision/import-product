@@ -6,6 +6,7 @@
 
 ## Features
 
+* Add default configuration for tier price import
 * Remove stack trace of exception for missing media directories > log a simple debug message instead
 
 # Version 24.0.2

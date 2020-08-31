@@ -52,7 +52,8 @@
           "ce/catalog_product/replace.grouped",
           "ce/catalog_product/replace.media",
           "general/catalog_product/replace.msi",
-          "general/catalog_product/replace.url-rewrites"
+          "general/catalog_product/replace.url-rewrites",
+          "general/catalog_product/replace.tier-prices"
         ],
         "add-update": [
           "general/general/global-data",
@@ -76,7 +77,8 @@
           "ce/catalog_product/add-update.grouped",
           "ce/catalog_product/add-update.media",
           "general/catalog_product/add-update.msi",
-          "general/catalog_product/add-update.url-rewrites"
+          "general/catalog_product/add-update.url-rewrites",
+          "general/catalog_product/add-update.tier-prices"
         ]
       }
     }
