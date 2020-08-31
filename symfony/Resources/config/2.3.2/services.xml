@@ -103,6 +103,9 @@
                 <argument id="import_product_msi.observer.product.source.item" type="service"/>
             </call>
             <call method="addObserver">
+                <argument id="import_product_tier_price.observer.product.tier_price" type="service"/>
+            </call>
+            <call method="addObserver">
                 <argument id="import_product.observer.clean.up" type="service"/>
             </call>
         </service>
