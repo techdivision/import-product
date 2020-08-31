@@ -1,3 +1,13 @@
+# Version 24.0.3
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add default configuration for tier price import
+
 # Version 24.0.2
 
 ## Bugfixes

@@ -162,6 +162,45 @@
             }
           }
         },
+        "add-update.tier-prices": {
+          "plugins": {
+            "subject": {
+              "id": "import.plugin.subject",
+              "listeners": [
+                {
+                  "plugin.process.success": [
+                    "import_product_tier_price.listener.delete.obsolete.tier_prices"
+                  ]
+                }
+              ],
+              "params": {
+                "clean-up-tier-prices": true
+              },
+              "subjects": [
+                {
+                  "id": "import_product_tier_price.subject.tier_price",
+                  "listeners": [
+                    {
+                      "subject.import.success": [
+                        "import_product.listener.register.sku.to.pk.mapping"
+                      ]
+                    }
+                  ],
+                  "file-resolver": {
+                    "prefix": "tier-price"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_tier_price.observer.tier_price.update"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
         "replace.msi": {
           "plugins": {
             "subject": {
@@ -198,6 +237,29 @@
                     {
                       "import": [
                         "import_product_url_rewrite.observer.url.rewrite"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "replace.tier-prices": {
+          "plugins": {
+            "subject": {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product_tier_price.subject.tier_price",
+                  "file-resolver": {
+                    "prefix": "tier-price"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_tier_price.observer.clear.tier_price",
+                        "import_product_tier_price.observer.tier_price"
                       ]
                     }
                   ]
