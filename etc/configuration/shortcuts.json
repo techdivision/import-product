@@ -6,7 +6,8 @@
           "general/general/move-files",
           "general/general/global-data",
           "general/catalog_product_inventory/validate",
-          "ce/catalog_product_inventory/add-update"
+          "ce/catalog_product_inventory/add-update",
+          "general/catalog_product/add-update.msi"
         ]
       },
       "catalog_product_price": {

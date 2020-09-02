@@ -1,3 +1,13 @@
+# Version 24.0.4
+
+## Bugfixes
+
+* Add missing operation `general/catalog_product/add-update.msi` to `ce/catalog_product_inventory/add-update` shortcut to also process the MSI artefact
+
+## Features
+
+* None
+
 # Version 24.0.3
 
 ## Bugfixes
