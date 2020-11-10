@@ -151,6 +151,9 @@
                 <argument id="import_product_variant.observer.product.variant" type="service"/>
             </call>
             <call method="addObserver">
+                <argument id="import_product_variant.observer.clean.up.product.variant" type="service"/>
+            </call>
+            <call method="addObserver">
                 <argument id="import_product_bundle.observer.product.bundle" type="service"/>
             </call>
             <call method="addObserver">
