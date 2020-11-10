@@ -6,6 +6,7 @@
 
 ## Features
 
+* Add techdivision/import-product-variant#22
 * Add default configuration for tier price import
 * Remove stack trace of exception for missing media directories > log a simple debug message instead
 * Add missing operation `general/catalog_product/add-update.msi` to `ce/catalog_product_inventory/add-update` shortcut to also process the MSI artefact
