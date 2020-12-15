@@ -23,6 +23,7 @@ namespace TechDivision\Import\Product\Services;
 use TechDivision\Import\Loaders\LoaderInterface;
 use TechDivision\Import\Actions\ActionInterface;
 use TechDivision\Import\Connection\ConnectionInterface;
+use TechDivision\Import\Repositories\UrlRewriteRepositoryInterface;
 use TechDivision\Import\Repositories\EavAttributeRepositoryInterface;
 use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface;
@@ -218,6 +219,13 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     protected $rawEntityLoader;
 
     /**
+     * The repository to load the stock item with.
+     *
+     * @var \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface
+     */
+    protected $urlRewriteRepository;
+
+    /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
      * @param \TechDivision\Import\Connection\ConnectionInterface                          $connection                        The connection to use
@@ -245,6 +253,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @param \TechDivision\Import\Actions\ActionInterface                                 $urlRewriteAction                  The URL rewrite action to use
      * @param \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface   $productAttributeAssembler         The assembler to load the product attributes with
      * @param \TechDivision\Import\Loaders\LoaderInterface                                 $rawEntityLoader                   The raw entity loader instance
+     * @param \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface              $urlRewriteRepository              The URL rewrite repository to use
      */
     public function __construct(
         ConnectionInterface $connection,
@@ -271,7 +280,8 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         ActionInterface $stockItemAction,
         ActionInterface $urlRewriteAction,
         ProductAttributeAssemblerInterface $productAttributeAssembler,
-        LoaderInterface $rawEntityLoader
+        LoaderInterface $rawEntityLoader,
+        UrlRewriteRepositoryInterface $urlRewriteRepository
     ) {
         $this->setConnection($connection);
         $this->setProductRepository($productRepository);
@@ -298,6 +308,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         $this->setUrlRewriteAction($urlRewriteAction);
         $this->setProductAttributeAssembler($productAttributeAssembler);
         $this->setRawEntityLoader($rawEntityLoader);
+        $this->setUrlRewriteRepository($urlRewriteRepository);
     }
 
     /**
@@ -895,6 +906,28 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
+     * Set's the repository to load the URL rewrites with.
+     *
+     * @param \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface $urlRewriteRepository The repository instance
+     *
+     * @return void
+     */
+    public function setUrlRewriteRepository(UrlRewriteRepositoryInterface $urlRewriteRepository)
+    {
+        $this->urlRewriteRepository = $urlRewriteRepository;
+    }
+
+    /**
+     * Return's the repository to load the URL rewrites with.
+     *
+     * @return \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface The repository instance
+     */
+    public function getUrlRewriteRepository()
+    {
+        return $this->urlRewriteRepository;
+    }
+
+    /**
      * Return's an array with the available EAV attributes for the passed is user defined flag.
      *
      * @param integer $isUserDefined The flag itself
@@ -1073,6 +1106,19 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function loadEavEntityTypeByEntityTypeCode($entityTypeCode)
     {
         return $this->getEavEntityTypeRepository()->findOneByEntityTypeCode($entityTypeCode);
+    }
+
+    /**
+     * Load's and return's the URL rewrite for the given request path and store ID
+     *
+     * @param string $requestPath The request path to load the URL rewrite for
+     * @param int    $storeId     The store ID to load the URL rewrite for
+     *
+     * @return array|null The URL rewrite found for the given request path and store ID
+     */
+    public function loadUrlRewriteByRequestPathAndStoreId(string $requestPath, int $storeId)
+    {
+        return $this->getUrlRewriteRepository()->findOneByUrlRewriteByRequestPathAndStoreId($requestPath, $storeId);
     }
 
     /**

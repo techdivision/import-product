@@ -42,7 +42,6 @@
             <argument type="service" id="configuration"/>
         </service>
         <service id="import_product.util.url.key" class="TechDivision\Import\Utils\UrlKeyUtil">
-            <argument type="service" id="configuration"/>
             <argument type="service" id="import_product.processor.product.bunch"/>
         </service>
 
@@ -353,6 +352,7 @@
             <argument type="service" id="import.action.url.rewrite"/>
             <argument type="service" id="import_product.assembler.product.attribute"/>
             <argument type="service" id="import_product.loader.raw.entity"/>
+            <argument type="service" id="import.repository.url.rewrite"/>
         </service>
 
         <!--

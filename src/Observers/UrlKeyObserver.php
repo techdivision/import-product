@@ -95,12 +95,21 @@ class UrlKeyObserver extends AbstractProductImportObserver
      *
      * @return void
      * @throws \Exception Is thrown, if either column "url_key" or "name" have a value set
+     * @todo See PAC-307
      */
     protected function process()
     {
 
         // prepare the store view code
         $this->getSubject()->prepareStoreViewCode();
+
+        // throw an exception, that the URL key can not be initialized and we're in admin store view
+        if ($this->getSubject()->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN
+            && $this->hasValue(ColumnKeys::URL_KEY) === false
+            && $this->hasValue(ColumnKeys::NAME) === false
+        ) {
+            throw new \Exception('Can\'t initialize the URL key because either columns "url_key" or "name" have a value set for default store view');
+        }
 
         // set the entity ID for the product with the passed SKU
         if ($product = $this->loadProduct($this->getValue(ColumnKeys::SKU))) {
@@ -109,27 +118,74 @@ class UrlKeyObserver extends AbstractProductImportObserver
             $this->setIds(array());
         }
 
-        // query whether or not the URL key column has a value
+        // query whether or not the column `url_key` has a value
+        if ($product && $this->hasValue(ColumnKeys::URL_KEY) === false) {
+            // @todo See PAC-307
+            // product already exists and NO new URL key
+            // has been specified in column `url_key`, so
+            // we stop processing here
+
+            return;
+        }
+
+        // query whether or not the URL key column has a
+        // value, if yes, use the value from the column
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
-            return;
+            $urlKey =  $this->getValue(ColumnKeys::URL_KEY);
+        } else {
+            // initialize the URL key with the converted name
+            $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
         }
 
-        // query whether or not a product name is available
-        if ($this->hasValue(ColumnKeys::NAME)) {
-            $this->setValue(
-                ColumnKeys::URL_KEY,
-                $this->makeUnique(
-                    $this->getSubject(),
-                    $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME))
-                )
-            );
-            return;
+        // load the URL paths of the categories
+        // found in the column `categories`
+        $urlPaths = $this->getUrlPaths();
+
+        // iterate over the found URL paths and try to find a unique URL key
+        for ($i = 0; $i < sizeof($urlPaths); $i++) {
+            // try to make the URL key unique for the given URL path
+            $proposedUrlKey = $this->makeUnique($this->getSubject(), $urlKey, $urlPaths[$i]);
+            // if the URL key is NOT the same as the passed one or with the parent URL path
+            // it can NOT be used, so we've to persist it temporarily and try it again for
+            // all the other URL paths until we found one that works with every URL path
+            if ($urlKey !== $proposedUrlKey) {
+                // temporarily persist the URL key
+                $urlKey = $proposedUrlKey;
+                // reset the counter and restart the
+                // iteration with the first URL path
+                $i = 0;
+            }
         }
 
-        // throw an exception, that the URL key can not be initialized and we're in admin store view
-        if ($this->getSubject()->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
-            throw new \Exception('Can\'t initialize the URL key because either columns "url_key" or "name" have a value set for default store view');
+        // set the unique URL key for further processing
+        $this->setValue(ColumnKeys::URL_KEY, $urlKey);
+    }
+
+    /**
+     * Extract's the category from the comma separeted list of categories from
+     * the column `categories` and return's an array with their URL paths.
+     *
+     * @return string[] Array with the URL paths of the categories found in column `categories`
+     * @todo The list has to be exended by the URL paths of the parent categories that has the anchor flag been acitvated
+     */
+    protected function getUrlPaths()
+    {
+
+        // initialize the array for the URL paths of the cateogries
+        $urlPaths = array();
+
+        // extract the categories from the column `categories`
+        $categories = $this->getValue(ColumnKeys::CATEGORIES, array(), array($this, 'explode'));
+
+        // iterate of the found categories, load
+        // their URL path and add it the array
+        foreach ($categories as $path) {
+            $category = $this->getCategoryByPath($path);
+            $urlPaths[] = $category[MemberNames::URL_PATH];
         }
+
+        // return the array with the categories URL paths
+        return $urlPaths;
     }
 
     /**
@@ -166,6 +222,18 @@ class UrlKeyObserver extends AbstractProductImportObserver
     protected function loadProduct($sku)
     {
         return $this->getProductBunchProcessor()->loadProduct($sku);
+    }
+
+    /**
+     * Return's the category with the passed path.
+     *
+     * @param string $path The path of the category to return
+     *
+     * @return array The category
+     */
+    protected function getCategoryByPath($path)
+    {
+        return $this->getSubject()->getCategoryByPath($path);
     }
 
     /**

@@ -327,16 +327,16 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     }
 
     /**
-     * Return's TRUE, if the passed URL key varchar value IS related with the actual PK.
+     * Return's TRUE, if the passed URL rewrite IS related with the actual entity.
      *
-     * @param array $productVarcharAttribute The varchar value to check
+     * @param array $urlRewrite The URL rewrite to check
      *
-     * @return boolean TRUE if the URL key is related, else FALSE
+     * @return boolean TRUE if the URL rewrite is related, else FALSE
      */
-    public function isUrlKeyOf(array $productVarcharAttribute)
+    public function isUrlKeyOf(array $urlRewrite)
     {
-        return ((integer) $productVarcharAttribute[MemberNames::ENTITY_ID] === (integer) $this->getLastEntityId()) &&
-               ((integer) $productVarcharAttribute[MemberNames::STORE_ID] === (integer) $this->getRowStoreId(StoreViewCodes::ADMIN));
+        return ((integer) $urlRewrite[MemberNames::ENTITY_ID] === (integer) $this->getLastEntityId()) &&
+               ((integer) $urlRewrite[MemberNames::STORE_ID]  === (integer) $this->getRowStoreId());
     }
 
     /**
