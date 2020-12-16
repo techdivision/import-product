@@ -335,8 +335,9 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
      */
     public function isUrlKeyOf(array $urlRewrite)
     {
-        return ((integer) $urlRewrite[MemberNames::ENTITY_ID] === (integer) $this->getLastEntityId()) &&
-               ((integer) $urlRewrite[MemberNames::STORE_ID]  === (integer) $this->getRowStoreId());
+        return ((integer) $urlRewrite[MemberNames::ENTITY_ID]      === (integer) $this->getLastEntityId()) &&
+               ((integer) $urlRewrite[MemberNames::STORE_ID]       === (integer) $this->getRowStoreId()) &&
+               ((integer) $urlRewrite[MemberNames::REDIRECT_TYPE]  === 0);
     }
 
     /**
