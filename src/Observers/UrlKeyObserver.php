@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use Zend\Filter\FilterInterface;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\MemberNames;
@@ -111,6 +112,16 @@ class UrlKeyObserver extends AbstractProductImportObserver
 
         // query whether or not the URL key column has a value
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
+            return;
+        }
+
+        // query whether or not the column `url_key` has a value
+        if ($product &&
+            !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)
+        ) {
+            // product already exists and NO new URL key
+            // has been specified in column `url_key`, so
+            // we stop processing here
             return;
         }
 
