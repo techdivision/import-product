@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use Zend\Filter\FilterInterface;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Utils\MemberNames;
@@ -95,7 +96,6 @@ class UrlKeyObserver extends AbstractProductImportObserver
      *
      * @return void
      * @throws \Exception Is thrown, if either column "url_key" or "name" have a value set
-     * @todo See PAC-307
      */
     protected function process()
     {
@@ -118,21 +118,22 @@ class UrlKeyObserver extends AbstractProductImportObserver
             $this->setIds(array());
         }
 
-        // query whether or not the column `url_key` has a value
-        if ($product && $this->hasValue(ColumnKeys::URL_KEY) === false) {
-            // @todo See PAC-307
-            // product already exists and NO new URL key
-            // has been specified in column `url_key`, so
-            // we stop processing here
-
-            return;
-        }
-
         // query whether or not the URL key column has a
         // value, if yes, use the value from the column
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
             $urlKey =  $this->getValue(ColumnKeys::URL_KEY);
         } else {
+            // query whether or not the column `url_key` has a value
+            if ($product &&
+                $this->getSubject()->getConfiguration()->hasParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME) &&
+                !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)
+            ) {
+                // product already exists and NO new URL key
+                // has been specified in column `url_key`, so
+                // we stop processing here
+                return;
+            }
+
             // initialize the URL key with the converted name
             $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
         }

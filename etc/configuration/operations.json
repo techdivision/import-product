@@ -600,6 +600,7 @@
                     "copy-images": false,
                     "media-directory" : "pub/media/catalog/product",
                     "images-file-directory" : "var/importexport/media/catalog/product",
+                    "update-url-key-from-name": true,
                     "clean-up-variants": false,
                     "clean-up-media-gallery": true,
                     "clean-up-empty-image-columns": true,
