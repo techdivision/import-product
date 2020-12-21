@@ -634,7 +634,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // query whether or not the image columns has to be cleaned-up also
         if ($this->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_EMPTY_IMAGE_COLUMNS) &&
-            $this->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_EMPTY_IMAGE_COLUMNS, false)
+            $this->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_EMPTY_IMAGE_COLUMNS, false)
         ) {
             // if yes load the image column names
             $imageTypes = array_keys($this->getImageTypes());
@@ -642,6 +642,22 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
             // and append them to the column names from the configuration
             foreach ($imageTypes as $imageAttribute) {
                 $cleanUpColumns[] = $this->mapAttributeCodeByHeaderMapping($imageAttribute);
+            }
+        }
+
+        // query whether or not the columns with the product links has to be cleaned-up also
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_LINKS) &&
+            $this->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_LINKS, false)
+        ) {
+            // load the link type mappings
+            $linkTypeMappings = $this->getLinkTypeMappings();
+
+            // prepare the links for the found link types and clean up
+            foreach ($linkTypeMappings as $columns) {
+                // shift the column with the header information from the stack
+                list ($columnNameChildSkus, ) = array_shift($columns);
+                // append the column name from the link type mapping
+                $cleanUpColumns[] = $columnNameChildSkus;
             }
         }
 

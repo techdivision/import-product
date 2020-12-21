@@ -75,6 +75,13 @@ class ConfigurationKeys extends \TechDivision\Import\Utils\ConfigurationKeys
     const CLEAN_UP_EMPTY_IMAGE_COLUMNS = 'clean-up-empty-image-columns';
 
     /**
+     * Name for the configuration key 'clean-up-variants'.
+     *
+     * @var string
+     */
+    const CLEAN_UP_LINKS = 'clean-up-links';
+
+    /**
      * Name for the column 'override-images'.
      *
      * @var string
