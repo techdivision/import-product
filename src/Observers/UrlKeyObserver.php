@@ -118,24 +118,22 @@ class UrlKeyObserver extends AbstractProductImportObserver
             $this->setIds(array());
         }
 
-        // query whether or not the URL key column has a
-        // value, if yes, use the value from the column
+        // query whether or not an existing product `url_key` should recalc from product name
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
             $urlKey =  $this->getValue(ColumnKeys::URL_KEY);
         } else {
-            // query whether or not the column `url_key` has a value
-            if ($product &&
-                $this->getSubject()->getConfiguration()->hasParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME) &&
-                !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)
-            ) {
-                // product already exists and NO new URL key
-                // has been specified in column `url_key`, so
-                // we stop processing here
-                return;
-            }
+            // product already exists and NO recalc from product key,
+            // so we search origin url_key from product
+            $urlKey = $this->loadUrlKey(
+                $this->getSubject(),
+                $this->getPrimaryKey()
+            );
 
-            // initialize the URL key with the converted name
-            $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
+            // query whether or not a product name is available
+            if (!$urlKey) {
+                // initialize the URL key with the converted name
+                $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
+            }
         }
 
         // load the URL paths of the categories
@@ -214,6 +212,16 @@ class UrlKeyObserver extends AbstractProductImportObserver
     }
 
     /**
+     * Return's the PK to of the product.
+     *
+     * @return integer The PK to create the relation with
+     */
+    protected function getPrimaryKey()
+    {
+        $this->getSubject()->getLastEntityId();
+    }
+
+    /**
      * Load's and return's the product with the passed SKU.
      *
      * @param string $sku The SKU of the product to load
@@ -223,6 +231,19 @@ class UrlKeyObserver extends AbstractProductImportObserver
     protected function loadProduct($sku)
     {
         return $this->getProductBunchProcessor()->loadProduct($sku);
+    }
+
+    /**
+     * Load's and return's the url_key with the passed primary ID.
+     *
+     * @param \TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface $subject      The subject to load the URL key
+     * @param int                                                       $primaryKeyId The ID from product
+     *
+     * @return string|null url_key or null
+     */
+    protected function loadUrlKey(UrlKeyAwareSubjectInterface $subject, $primaryKeyId)
+    {
+        return $this->getUrlKeyUtil()->loadUrlKey($subject, $primaryKeyId);
     }
 
     /**

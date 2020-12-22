@@ -1087,6 +1087,21 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @param integer $attributeCode The attribute code of the varchar attribute
      * @param integer $entityTypeId  The entity type ID of the varchar attribute
      * @param integer $storeId       The store ID of the varchar attribute
+     * @param string  $primaryKey    The primary key of the product
+     *
+     * @return array|null The varchar attribute
+     */
+    public function loadVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndPrimaryKey($attributeCode, $entityTypeId, $storeId, $primaryKey)
+    {
+        return $this->loadProductVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndPK($attributeCode, $entityTypeId, $storeId, $primaryKey);
+    }
+
+    /**
+     * Load's and return's the varchar attribute with the passed params.
+     *
+     * @param integer $attributeCode The attribute code of the varchar attribute
+     * @param integer $entityTypeId  The entity type ID of the varchar attribute
+     * @param integer $storeId       The store ID of the varchar attribute
      * @param string  $value         The value of the varchar attribute
      *
      * @return array|null The varchar attribute
@@ -1094,6 +1109,21 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function loadProductVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value)
     {
         return $this->getProductVarcharRepository()->findOneByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value);
+    }
+
+    /**
+     * Load's and return's the varchar attribute with the passed params.
+     *
+     * @param integer $attributeCode The attribute code of the varchar attribute
+     * @param integer $entityTypeId  The entity type ID of the varchar attribute
+     * @param integer $storeId       The store ID of the varchar attribute
+     * @param string  $pk            The primary key of the product
+     *
+     * @return array|null The varchar attribute
+     */
+    public function loadProductVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndPK($attributeCode, $entityTypeId, $storeId, $pk)
+    {
+        return $this->getProductVarcharRepository()->findOneByAttributeCodeAndEntityTypeIdAndStoreIdAndPk($attributeCode, $entityTypeId, $storeId, $pk);
     }
 
     /**
