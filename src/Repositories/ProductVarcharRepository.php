@@ -50,6 +50,7 @@ class ProductVarcharRepository extends AbstractFinderRepository implements Produ
         $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_VARCHARS_BY_PK_AND_STORE_ID));
         $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID));
         $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE));
+        $this->addFinder($this->finderFactory->createFinder($this, SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_PK));
     }
 
     /**
@@ -154,5 +155,30 @@ class ProductVarcharRepository extends AbstractFinderRepository implements Produ
 
         // load and return the entity
         return $this->getFinder(SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE)->find($params);
+    }
+
+    /**
+     * Load's and return's the varchar attribute with the passed params.
+     *
+     * @param integer $attributeCode The attribute code of the varchar attribute
+     * @param integer $entityTypeId  The entity type ID of the varchar attribute
+     * @param integer $storeId       The store ID of the varchar attribute
+     * @param string  $pk            The primary key of the product
+     *
+     * @return array|null The varchar attribute
+     */
+    public function findOneByAttributeCodeAndEntityTypeIdAndStoreIdAndPk($attributeCode, $entityTypeId, $storeId, $pk)
+    {
+
+        // prepare the params
+        $params = array(
+            MemberNames::ATTRIBUTE_CODE => $attributeCode,
+            MemberNames::ENTITY_TYPE_ID => $entityTypeId,
+            MemberNames::STORE_ID       => $storeId,
+            MemberNames::PK             => $pk
+        );
+
+        // load and return the entity
+        return $this->getFinder(SqlStatementKeys::PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_PK)->find($params);
     }
 }
