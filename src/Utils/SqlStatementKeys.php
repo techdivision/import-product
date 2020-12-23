@@ -147,6 +147,14 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE = 'product_varchar.by.attribute_code.and.entity_type_id.and.store_id.and.value';
 
     /**
+     * The SQL statement to load a product varchar attribute by the passed attribute code,
+     * entity typy and store ID as well as the passed entity_id/row_id from product.
+     *
+     * @var string
+     */
+    const PRODUCT_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_PK = 'product_varchar.by.attribute_code.and.entity_type_id.and.store_id.and.pk';
+
+    /**
      * The SQL statement to load the category product relations with the passed product/website ID.
      *
      * @var string
