@@ -104,7 +104,7 @@ class UrlKeyObserver extends AbstractProductImportObserver
         $this->getSubject()->prepareStoreViewCode();
 
         // set the entity ID for the product with the passed SKU
-        if ($product = $this->loadProduct($this->getValue(ColumnKeys::SKU))) {
+        if ($product = $this->loadProduct($sku = $this->getValue(ColumnKeys::SKU))) {
             $this->setIds($product);
         } else {
             $this->setIds(array());
@@ -115,43 +115,34 @@ class UrlKeyObserver extends AbstractProductImportObserver
             return;
         }
 
-        // query whether or not an existing product `url_key` should recalc from product name
-        if ($product &&
-            !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)
-        ) {
-            // product already exists and NO recalc from product key,
-            // so we search origin url_key from product
-            $urlKey = $this->loadUrlKey(
-                $this->getSubject(),
-                $this->getPrimaryKey()
-            );
+        // initialize the URL key and array for the categories
+        $urlKey = null;
 
-            // and let the `url_key` has a value
-            if ($urlKey) {
-                $this->setValue(
-                    ColumnKeys::URL_KEY,
-                    $urlKey
-                );
-                return;
+        // query whether or not the existing product `url_key` should be re-created from the product name
+        if ($product && !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)) {
+            // if the product already exists and NO re-creation from the product name has to
+            // be done, load the original `url_key`from the product and use that to proceed
+            $urlKey = $this->loadUrlKey($this->getSubject(), $this->getPrimaryKey());
+        }
+
+        // make sure the column`url_key` has a value, because
+        // we need it to process the the rewrites later on
+        if ($urlKey === '' || $urlKey === null && $this->hasValue(ColumnKeys::NAME)) {
+            $urlKey = $this->makeUnique($this->getSubject(), $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME)));
+        }
+
+        // if no URL key has benn available nor the column `name`
+        // contains a value, we've to throw an exception
+        if ($urlKey === '' || $urlKey === null) {
+            // throw an exception, that the URL key can not be initialized and we're in default store view
+            if ($this->getSubject()->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
+                throw new \Exception('Can\'t initialize the URL key for product "%s" because columns "url_key" or "name" have a value set for default store view', $sku);
             }
         }
 
-        // query whether or not a product name is available
-        if ($this->hasValue(ColumnKeys::NAME)) {
-            $this->setValue(
-                ColumnKeys::URL_KEY,
-                $this->makeUnique(
-                    $this->getSubject(),
-                    $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME))
-                )
-            );
-            return;
-        }
-
-        // throw an exception, that the URL key can not be initialized and we're in admin store view
-        if ($this->getSubject()->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
-            throw new \Exception('Can\'t initialize the URL key because either columns "url_key" or "name" have a value set for default store view');
-        }
+        // otherwise set the URL key as value for column`url_key`,
+        // because we need one to process the rewrites later
+        $this->setValue(ColumnKeys::URL_KEY, $urlKey);
     }
 
     /**
