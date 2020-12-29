@@ -178,6 +178,13 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     );
 
     /**
+     * The array with the columns that has to be cleaned-up.
+     *
+     * @var array
+     */
+    protected $cleanUpColumns = array();
+
+    /**
      * Return's the default callback frontend input mappings for the user defined attributes.
      *
      * @return array The default frontend input callback mappings
@@ -315,6 +322,9 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // prepare the link type mappings
         $this->linkTypeMappings = $this->prepareLinkTypeMappings();
+
+        // prepare the columns that has to be cleaned-up
+        $this->cleanUpColumns = $this->prepareCleanUpColumns();
 
         // invoke the parent method
         parent::setUp($serial);
@@ -628,25 +638,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
      */
     public function getCleanUpColumns()
     {
-
-        // load the colums that has to be cleaned-up
-        $cleanUpColumns = $this->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_EMPTY_COLUMNS);
-
-        // query whether or not the image columns has to be cleaned-up also
-        if ($this->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_EMPTY_IMAGE_COLUMNS) &&
-            $this->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_EMPTY_IMAGE_COLUMNS, false)
-        ) {
-            // if yes load the image column names
-            $imageTypes = array_keys($this->getImageTypes());
-
-            // and append them to the column names from the configuration
-            foreach ($imageTypes as $imageAttribute) {
-                $cleanUpColumns[] = $this->mapAttributeCodeByHeaderMapping($imageAttribute);
-            }
-        }
-
-        // return the array with the column names that has to be cleaned-up
-        return $cleanUpColumns;
+        return $this->cleanUpColumns;
     }
 
     /**
@@ -878,6 +870,58 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // return the link type mappings
         return $linkTypeMappings;
+    }
+
+    /**
+     * Return's the columns that has to be cleaned-up.
+     *
+     * @return array The mapping with the columns that has to be cleaned-up
+     */
+    public function prepareCleanUpColumns()
+    {
+
+        // initialize the array with the colums that has to be cleaned-up
+        $cleanUpColumns = array();
+
+        // try to load the colums that has to be cleaned-up
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_EMPTY_COLUMNS)) {
+            $cleanUpColumns = array_merge(
+                $cleanUpColumns,
+                $this->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_EMPTY_COLUMNS, array())
+            );
+        }
+
+        // query whether or not the image columns has to be cleaned-up also
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_EMPTY_IMAGE_COLUMNS) &&
+            $this->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_EMPTY_IMAGE_COLUMNS, false)
+        ) {
+            // if yes load the image column names
+            $imageTypes = array_keys($this->getImageTypes());
+
+            // and append them to the column names from the configuration
+            foreach ($imageTypes as $imageAttribute) {
+                $cleanUpColumns[] = $this->mapAttributeCodeByHeaderMapping($imageAttribute);
+            }
+        }
+
+        // query whether or not the columns with the product links has to be cleaned-up also
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_LINKS) &&
+            $this->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_LINKS, false)
+        ) {
+            // load the link type mappings
+            $linkTypeMappings = $this->getLinkTypeMappings();
+
+            // prepare the links for the found link types and clean up
+            foreach ($linkTypeMappings as $columns) {
+                // shift the column with the header information from the stack
+                list ($columnNameChildSkus, ) = array_shift($columns);
+                // append the column name from the link type mapping
+                $cleanUpColumns[] = $columnNameChildSkus;
+            }
+        }
+
+        // return the array with the column names that has to be cleaned-up
+        return $cleanUpColumns;
     }
 
     /**

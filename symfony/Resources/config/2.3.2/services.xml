@@ -166,6 +166,9 @@
                 <argument id="import_product_link.observer.product.link" type="service"/>
             </call>
             <call method="addObserver">
+                <argument id="import_product_link.observer.clean.up.product.link" type="service"/>
+            </call>
+            <call method="addObserver">
                 <argument id="import_product_grouped.observer.product.grouped" type="service"/>
             </call>
             <call method="addObserver">
