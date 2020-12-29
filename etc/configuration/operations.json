@@ -602,6 +602,7 @@
                     "images-file-directory" : "var/importexport/media/catalog/product",
                     "update-url-key-from-name": true,
                     "clean-up-variants": false,
+                    "clean-up-links": false,
                     "clean-up-media-gallery": true,
                     "clean-up-empty-image-columns": true,
                     "clean-up-website-product-relations": true,
