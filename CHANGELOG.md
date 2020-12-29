@@ -1,3 +1,13 @@
+# Version 24.0.7
+
+## Bugfixes
+
+* Fixed issue with missing `sprintf()` function when creating an exception in `UrlKeyObserver::process()` method 
+
+## Features
+
+* None
+
 # Version 24.0.6
 
 ## Bugfixes
