@@ -86,9 +86,19 @@ class UrlKeyObserver extends AbstractProductImportObserver
      *
      * @return \TechDivision\Import\Product\Services\ProductBunchProcessorInterface The product bunch processor instance
      */
-    protected function getProductBunchProcessor()
+    protected function getProductBunchProcessor() : ProductBunchProcessorInterface
     {
         return $this->productBunchProcessor;
+    }
+
+    /**
+     * Returns the URL key utility instance.
+     *
+     * @return \TechDivision\Import\Utils\UrlKeyUtilInterface The URL key utility instance
+     */
+    protected function getUrlKeyUtil() : UrlKeyUtilInterface
+    {
+        return $this->urlKeyUtil;
     }
 
     /**
@@ -136,7 +146,7 @@ class UrlKeyObserver extends AbstractProductImportObserver
         if ($urlKey === null || $urlKey === '') {
             // throw an exception, that the URL key can not be
             // initialized and we're in the default store view
-            if ($this->getSubject()->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
+            if ($this->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
                 throw new \Exception(sprintf('Can\'t initialize the URL key for product "%s" because columns "url_key" or "name" have a value set for default store view', $sku));
             }
             // stop processing, because we're in a store
@@ -144,39 +154,15 @@ class UrlKeyObserver extends AbstractProductImportObserver
             return;
         }
 
-        // try to load the URL paths of the categories found in the column
-        // `categories, if not available, simply make the URL key unique
-        if (sizeof($urlPaths = $this->getUrlPaths()) === 0) {
-            $urlKey = $this->makeUnique($this->getSubject(), $urlKey);
-        } else {
-            // otherwise iterate over the found URL
-            // paths and try to find a unique URL key
-            for ($i = 0; $i < sizeof($urlPaths); $i++) {
-                // try to make the URL key unique for the given URL path
-                $proposedUrlKey = $this->makeUnique($this->getSubject(), $urlKey, $urlPaths[$i]);
-                // if the URL key is NOT the same as the passed one or with the parent URL path
-                // it can NOT be used, so we've to persist it temporarily and try it again for
-                // all the other URL paths until we found one that works with every URL path
-                if ($urlKey !== $proposedUrlKey) {
-                    // temporarily persist the URL key
-                    $urlKey = $proposedUrlKey;
-                    // reset the counter and restart the
-                    // iteration with the first URL path
-                    $i = 0;
-                }
-            }
-        }
-
         // set the unique URL key for further processing
-        $this->setValue(ColumnKeys::URL_KEY, $urlKey);
+        $this->setValue(ColumnKeys::URL_KEY, $this->makeUnique($this->getSubject(), $urlKey, $this->getUrlPaths()));
     }
 
     /**
-     * Extract's the category from the comma separeted list of categories from
-     * the column `categories` and return's an array with their URL paths.
+     * Extract's the category from the comma separeted list of categories
+     * in column `categories` and return's an array with their URL paths.
      *
      * @return string[] Array with the URL paths of the categories found in column `categories`
-     * @todo The list has to be exended by the URL paths of the parent categories that has the anchor flag been acitvated
      */
     protected function getUrlPaths()
     {
@@ -187,15 +173,63 @@ class UrlKeyObserver extends AbstractProductImportObserver
         // extract the categories from the column `categories`
         $categories = $this->getValue(ColumnKeys::CATEGORIES, array(), array($this, 'explode'));
 
-        // iterate of the found categories, load
-        // their URL path and add it the array
+        // the URL paths are store view specific, so we need
+        // the store view code to load the appropriate ones
+        $storeViewCode = $this->getStoreViewCode(StoreViewCodes::ADMIN);
+
+        // iterate of the found categories, load their URL path as well as the URL path of
+        // parent categories, if they have the anchor flag activated and add it the array
         foreach ($categories as $path) {
-            $category = $this->getCategoryByPath($path);
-            $urlPaths[] = $category[MemberNames::URL_PATH];
+            // load the category based on the category path
+            $category = $this->getCategoryByPath($path, $storeViewCode);
+            // try to resolve the URL paths recursively
+            $this->resolveUrlPaths($urlPaths, $category, $storeViewCode);
         }
 
-        // return the array with the categories URL paths
+        // return the array with the recursively resolved URL paths
+        // of the categories that are related with the products
         return $urlPaths;
+    }
+
+    /**
+     * Recursively resolves an array with the store view specific
+     * URL paths of the passed category.
+     *
+     * @param array  $urlPaths       The array to append the URL paths to
+     * @param array  $category       The category to resolve the list with URL paths
+     * @param string $storeViewCode  The store view code to resolve the URL paths for
+     * @param bool   $directRelation the flag whether or not the passed category is a direct relation to the product and has to added to the list
+     *
+     * @return void
+     */
+    protected function resolveUrlPaths(array &$urlPaths, array $category, string $storeViewCode, bool $directRelation = true)
+    {
+
+        // load the root category
+        $rootCategory = $this->getRootCategory();
+
+        // try to resolve the parent category IDs, but only if either
+        // the actual category nor it's parent is a root category
+        if ($rootCategory[MemberNames::ENTITY_ID] !== $category[MemberNames::ENTITY_ID] &&
+            $rootCategory[MemberNames::ENTITY_ID] !== $category[MemberNames::PARENT_ID]
+        ) {
+            // load the parent category
+            $parent = $this->getCategory($category[MemberNames::PARENT_ID], $storeViewCode);
+            // also resolve the URL paths for the parent category
+            $this->resolveUrlPaths($urlPaths, $parent, $storeViewCode, false);
+        }
+
+        // query whether or not the URL path already
+        // is part of the list (to avoid duplicates)
+        if (in_array($category[MemberNames::URL_PATH], $urlPaths)) {
+            return;
+        }
+
+        // append the URL path, either if we've a direct relation
+        // or the category has the anchor flag actvated
+        if ($directRelation === true || ($category[MemberNames::IS_ANCHOR] === 1 && $directRelation === false)) {
+            $urlPaths[] = $category[MemberNames::URL_PATH];
+        }
     }
 
     /**
@@ -260,23 +294,14 @@ class UrlKeyObserver extends AbstractProductImportObserver
     /**
      * Return's the category with the passed path.
      *
-     * @param string $path The path of the category to return
+     * @param string $path          The path of the category to return
+     * @param string $storeViewCode The code of a store view, defaults to admin
      *
      * @return array The category
      */
-    protected function getCategoryByPath($path)
+    protected function getCategoryByPath($path, $storeViewCode = StoreViewCodes::ADMIN)
     {
         return $this->getSubject()->getCategoryByPath($path);
-    }
-
-    /**
-     * Returns the URL key utility instance.
-     *
-     * @return \TechDivision\Import\Utils\UrlKeyUtilInterface The URL key utility instance
-     */
-    protected function getUrlKeyUtil()
-    {
-        return $this->urlKeyUtil;
     }
 
     /**
@@ -290,5 +315,29 @@ class UrlKeyObserver extends AbstractProductImportObserver
     protected function makeUnique(UrlKeyAwareSubjectInterface $subject, $urlKey)
     {
         return $this->getUrlKeyUtil()->makeUnique($subject, $urlKey);
+    }
+
+    /**
+     * Return's the root category for the actual view store.
+     *
+     * @return array The store's root category
+     * @throws \Exception Is thrown if the root category for the passed store code is NOT available
+     */
+    protected function getRootCategory()
+    {
+        return $this->getSubject()->getRootCategory();
+    }
+
+    /**
+     * Return's the category with the passed ID.
+     *
+     * @param integer $categoryId    The ID of the category to return
+     * @param string  $storeViewCode The code of a store view, defaults to "admin"
+     *
+     * @return array The category data
+     */
+    protected function getCategory($categoryId, $storeViewCode = StoreViewCodes::ADMIN)
+    {
+        return $this->getSubject()->getCategory($categoryId, $storeViewCode);
     }
 }
