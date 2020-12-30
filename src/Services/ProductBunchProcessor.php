@@ -1399,6 +1399,19 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
+     * Persist's the passed URL rewrites in a bulk operation.
+     *
+     * @param array       $rows The URL rewrites that has to be persisted in a bulk operation
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function bulkPersistTemporaryUrlRewrites(array $rows, $name = null)
+    {
+        // bulk update the registry processor here ...
+    }
+
+    /**
      * Clean-Up the repositories to free memory.
      *
      * @return void

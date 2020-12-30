@@ -307,14 +307,15 @@ class UrlKeyObserver extends AbstractProductImportObserver
     /**
      * Make's the passed URL key unique by adding the next number to the end.
      *
-     * @param \TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface $subject The subject to make the URL key unique for
-     * @param string                                                    $urlKey  The URL key to make unique
+     * @param \TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface $subject  The subject to make the URL key unique for
+     * @param string                                                    $urlKey   The URL key to make unique
+     * @param array                                                     $urlPaths The URL paths to make unique
      *
      * @return string The unique URL key
      */
-    protected function makeUnique(UrlKeyAwareSubjectInterface $subject, $urlKey)
+    protected function makeUnique(UrlKeyAwareSubjectInterface $subject, string $urlKey, array $urlPaths = array())
     {
-        return $this->getUrlKeyUtil()->makeUnique($subject, $urlKey);
+        return $this->getUrlKeyUtil()->makeUnique($subject, $urlKey, $urlPaths);
     }
 
     /**
