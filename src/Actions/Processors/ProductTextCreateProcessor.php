@@ -39,7 +39,6 @@ class ProductTextCreateProcessor extends AbstractCreateProcessor
      * Return's the array with the SQL statements that has to be prepared.
      *
      * @return array The SQL statements to be prepared
-     * @see \TechDivision\Import\Actions\Processors\AbstractBaseProcessor::getStatements()
      */
     protected function getStatements()
     {

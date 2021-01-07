@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Actions\Processors;
 
-use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Dbal\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 

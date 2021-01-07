@@ -327,20 +327,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
     }
 
     /**
-     * Return's TRUE, if the passed URL rewrite IS related with the actual entity.
-     *
-     * @param array $urlRewrite The URL rewrite to check
-     *
-     * @return boolean TRUE if the URL rewrite is related, else FALSE
-     */
-    public function isUrlKeyOf(array $urlRewrite)
-    {
-        return ((integer) $urlRewrite[MemberNames::ENTITY_ID]      === (integer) $this->getLastEntityId()) &&
-               ((integer) $urlRewrite[MemberNames::STORE_ID]       === (integer) $this->getRowStoreId()) &&
-               ((integer) $urlRewrite[MemberNames::REDIRECT_TYPE]  === 0);
-    }
-
-    /**
      * Loads and returns the media roles.
      *
      * @return array The array with the media roles

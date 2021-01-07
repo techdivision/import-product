@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Repositories;
 use TechDivision\Import\Product\Utils\CacheKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
-use TechDivision\Import\Repositories\AbstractFinderRepository;
+use TechDivision\Import\Dbal\Repositories\AbstractFinderRepository;
 
 /**
  * Repository implementation to load product text attribute data.

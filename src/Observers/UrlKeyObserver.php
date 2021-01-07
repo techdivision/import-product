@@ -29,6 +29,7 @@ use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Utils\Generators\GeneratorInterface;
 
 /**
  * Observer that extracts the URL key from the product name and adds a two new columns
@@ -65,20 +66,30 @@ class UrlKeyObserver extends AbstractProductImportObserver
     protected $productBunchProcessor;
 
     /**
+     * The reverse sequence generator instance.
+     *
+     * @var \TechDivision\Import\Utils\Generators\GeneratorInterface
+     */
+    protected $reverseSequenceGenerator;
+
+    /**
      * Initialize the observer with the passed product bunch processor and filter instance.
      *
-     * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor   The product bunch processor instance
-     * @param \Zend\Filter\FilterInterface                                         $convertLiteralUrlFilter The URL filter instance
-     * @param \TechDivision\Import\Utils\UrlKeyUtilInterface                       $urlKeyUtil              The URL key utility instance
+     * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor    The product bunch processor instance
+     * @param \Zend\Filter\FilterInterface                                         $convertLiteralUrlFilter  The URL filter instance
+     * @param \TechDivision\Import\Utils\UrlKeyUtilInterface                       $urlKeyUtil               The URL key utility instance
+     * @param \TechDivision\Import\Utils\Generators\GeneratorInterface             $reverseSequenceGenerator The reverse sequence generator instance
      */
     public function __construct(
         ProductBunchProcessorInterface $productBunchProcessor,
         FilterInterface $convertLiteralUrlFilter,
-        UrlKeyUtilInterface $urlKeyUtil
+        UrlKeyUtilInterface $urlKeyUtil,
+        GeneratorInterface $reverseSequenceGenerator
     ) {
         $this->productBunchProcessor = $productBunchProcessor;
         $this->convertLiteralUrlFilter = $convertLiteralUrlFilter;
         $this->urlKeyUtil = $urlKeyUtil;
+        $this->reverseSequenceGenerator = $reverseSequenceGenerator;
     }
 
     /**
@@ -102,6 +113,16 @@ class UrlKeyObserver extends AbstractProductImportObserver
     }
 
     /**
+     * Returns the reverse sequence generator instance.
+     *
+     * @return \TechDivision\Import\Utils\Generators\GeneratorInterface The reverse sequence generator
+     */
+    protected function getReverseSequenceGenerator() : GeneratorInterface
+    {
+        return $this->reverseSequenceGenerator;
+    }
+
+    /**
      * Process the observer's business logic.
      *
      * @return void
@@ -110,18 +131,20 @@ class UrlKeyObserver extends AbstractProductImportObserver
     protected function process()
     {
 
-        // initialize the URL key and the product
+        // initialize the URL key, the entity and the product
         $urlKey = null;
+        $entity = null;
         $product = array();
 
         // prepare the store view code
         $this->getSubject()->prepareStoreViewCode();
 
         // set the entity ID for the product with the passed SKU
-        if ($product = $this->loadProduct($sku = $this->getValue(ColumnKeys::SKU))) {
-            $this->setIds($product);
+        if ($entity = $this->loadProduct($sku = $this->getValue(ColumnKeys::SKU))) {
+            $this->setIds($product = $entity);
         } else {
             $this->setIds(array());
+            $product[MemberNames::ENTITY_ID] = $this->getReverseSequenceGenerator()->generate();
         }
 
         // query whether or not the URL key column has a value
@@ -129,7 +152,7 @@ class UrlKeyObserver extends AbstractProductImportObserver
             $urlKey = $this->getValue(ColumnKeys::URL_KEY);
         } else {
             // query whether or not the existing product `url_key` should be re-created from the product name
-            if ($product && !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)) {
+            if (is_array($entity) && !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)) {
                 // if the product already exists and NO re-creation from the product name has to
                 // be done, load the original `url_key`from the product and use that to proceed
                 $urlKey = $this->loadUrlKey($this->getSubject(), $this->getPrimaryKey());
@@ -155,7 +178,7 @@ class UrlKeyObserver extends AbstractProductImportObserver
         }
 
         // set the unique URL key for further processing
-        $this->setValue(ColumnKeys::URL_KEY, $this->makeUnique($this->getSubject(), $urlKey, $this->getUrlPaths()));
+        $this->setValue(ColumnKeys::URL_KEY, $this->makeUnique($this->getSubject(), $product, $urlKey, $this->getUrlPaths()));
     }
 
     /**
@@ -308,14 +331,15 @@ class UrlKeyObserver extends AbstractProductImportObserver
      * Make's the passed URL key unique by adding the next number to the end.
      *
      * @param \TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface $subject  The subject to make the URL key unique for
+     * @param array                                                     $entity   The entity to make the URL key unique for
      * @param string                                                    $urlKey   The URL key to make unique
      * @param array                                                     $urlPaths The URL paths to make unique
      *
      * @return string The unique URL key
      */
-    protected function makeUnique(UrlKeyAwareSubjectInterface $subject, string $urlKey, array $urlPaths = array())
+    protected function makeUnique(UrlKeyAwareSubjectInterface $subject, array $entity, string $urlKey, array $urlPaths = array())
     {
-        return $this->getUrlKeyUtil()->makeUnique($subject, $urlKey, $urlPaths);
+        return $this->getUrlKeyUtil()->makeUnique($subject, $entity, $urlKey, $urlPaths);
     }
 
     /**

@@ -4,7 +4,8 @@
     "license": "OSL-3.0",
     "require": {
         "php": ">=7.1.0",
-        "techdivision/import": "dev-master"
+        "techdivision/import": "dev-pac-264--pdo-exception as dev-master",
+        "techdivision/import-dbal": "dev-master"
     },
     "require-dev": {
         "doctrine/dbal": "2.5.*",

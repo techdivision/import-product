@@ -23,11 +23,11 @@ namespace TechDivision\Import\Product\Repositories;
 use TechDivision\Import\Product\Utils\CacheKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
-use TechDivision\Import\Repositories\AbstractFinderRepository;
-use TechDivision\Import\Connection\ConnectionInterface;
-use TechDivision\Import\Repositories\SqlStatementRepositoryInterface;
-use TechDivision\Import\Repositories\Finders\FinderFactoryInterface;
-use TechDivision\Import\Utils\PrimaryKeyUtilInterface;
+use TechDivision\Import\Dbal\Utils\PrimaryKeyUtilInterface;
+use TechDivision\Import\Dbal\Connection\ConnectionInterface;
+use TechDivision\Import\Dbal\Repositories\AbstractFinderRepository;
+use TechDivision\Import\Dbal\Repositories\SqlStatementRepositoryInterface;
+use TechDivision\Import\Dbal\Repositories\Finders\FinderFactoryInterface;
 
 /**
  * Repository implementation to load product data.
@@ -44,17 +44,17 @@ class ProductRepository extends AbstractFinderRepository implements ProductRepos
     /**
      * The primary key utility instance.
      *
-     * @var \TechDivision\Import\Utils\PrimaryKeyUtilInterface
+     * @var \TechDivision\Import\Dbal\Utils\PrimaryKeyUtilInterface
      */
     protected $primaryKeyUtil;
 
     /**
      * Initialize the repository with the passed connection and utility class name.
      * .
-     * @param \TechDivision\Import\Connection\ConnectionInterface               $connection             The connection instance
-     * @param \TechDivision\Import\Repositories\SqlStatementRepositoryInterface $sqlStatementRepository The SQL repository instance
-     * @param \TechDivision\Import\Repositories\Finders\FinderFactoryInterface  $finderFactory          The finder factory instance
-     * @param \TechDivision\Import\Utils\PrimaryKeyUtilInterface                $primaryKeyUtil         The primary key utility instance
+     * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface               $connection             The connection instance
+     * @param \TechDivision\Import\Dbal\Repositories\SqlStatementRepositoryInterface $sqlStatementRepository The SQL repository instance
+     * @param \TechDivision\Import\Dbal\Repositories\Finders\FinderFactoryInterface  $finderFactory          The finder factory instance
+     * @param \TechDivision\Import\Dbal\Utils\PrimaryKeyUtilInterface                $primaryKeyUtil         The primary key utility instance
      */
     public function __construct(
         ConnectionInterface $connection,

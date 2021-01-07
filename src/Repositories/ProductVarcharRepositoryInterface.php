@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Repositories\FinderAwareRepositoryInterface;
+use TechDivision\Import\Dbal\Repositories\FinderAwareRepositoryInterface;
 
 /**
  * Interface for repositories providing functionality to load product varchar attribute data.
