@@ -1,4 +1,4 @@
-name: Pacemaker Import Product Library
+name: techdivision/import-product
 
 on:
   push:
