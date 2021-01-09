@@ -260,71 +260,71 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.url.rewrite.create" class="TechDivision\Import\Dbal\Actions\Processors\BlackHoleProcessor">
+        <service id="import_product.action.processor.url.rewrite.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\BlackHoleProcessor">
             <argument type="service" id="import.action.processor.url.rewrite.create"/>
         </service>
-        <service id="import_product.action.processor.url.rewrite.update" class="TechDivision\Import\Dbal\Actions\Processors\BlackHoleProcessor">
+        <service id="import_product.action.processor.url.rewrite.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\BlackHoleProcessor">
             <argument type="service" id="import.action.processor.url.rewrite.update"/>
         </service>
-        <service id="import_product.action.processor.url.rewrite.delete" class="TechDivision\Import\Dbal\Actions\Processors\BlackHoleProcessor">
+        <service id="import_product.action.processor.url.rewrite.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\BlackHoleProcessor">
             <argument type="service" id="import.action.processor.url.rewrite.delete"/>
         </service>
 
         <!--
          | The DI configuration for the actions
          |-->
-        <service id="import_product.action.category.product" class="TechDivision\Import\Dbal\Actions\GenericAction">
+        <service id="import_product.action.category.product" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.category.product.create"/>
             <argument type="service" id="import_product.action.processor.category.product.update"/>
             <argument type="service" id="import_product.action.processor.category.product.delete"/>
         </service>
-        <service id="import_product.action.product" class="TechDivision\Import\Dbal\Actions\GenericIdentifierAction">
+        <service id="import_product.action.product" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.create"/>
             <argument type="service" id="import_product.action.processor.product.update"/>
             <argument type="service" id="import_product.action.processor.product.delete"/>
             <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::ENTITY_ID</argument>
         </service>
-        <service id="import_product.action.product.website" class="TechDivision\Import\Dbal\Actions\GenericAction">
+        <service id="import_product.action.product.website" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.product.website.create"/>
             <argument type="service" id="import_product.action.processor.product.website.update" on-invalid="null"/>
             <argument type="service" id="import_product.action.processor.product.website.delete"/>
         </service>
-        <service id="import_product.action.product.datetime" class="TechDivision\Import\Dbal\Actions\GenericIdentifierAction">
+        <service id="import_product.action.product.datetime" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.datetime.create"/>
             <argument type="service" id="import_product.action.processor.product.datetime.update"/>
             <argument type="service" id="import_product.action.processor.product.datetime.delete"/>
             <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::VALUE_ID</argument>
         </service>
-        <service id="import_product.action.product.decimal" class="TechDivision\Import\Dbal\Actions\GenericIdentifierAction">
+        <service id="import_product.action.product.decimal" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.decimal.create"/>
             <argument type="service" id="import_product.action.processor.product.decimal.update"/>
             <argument type="service" id="import_product.action.processor.product.decimal.delete"/>
             <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::VALUE_ID</argument>
         </service>
-        <service id="import_product.action.product.int" class="TechDivision\Import\Dbal\Actions\GenericIdentifierAction">
+        <service id="import_product.action.product.int" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.int.create"/>
             <argument type="service" id="import_product.action.processor.product.int.update"/>
             <argument type="service" id="import_product.action.processor.product.int.delete"/>
             <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::VALUE_ID</argument>
         </service>
-        <service id="import_product.action.product.text" class="TechDivision\Import\Dbal\Actions\GenericIdentifierAction">
+        <service id="import_product.action.product.text" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.text.create"/>
             <argument type="service" id="import_product.action.processor.product.text.update"/>
             <argument type="service" id="import_product.action.processor.product.text.delete"/>
             <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::VALUE_ID</argument>
         </service>
-        <service id="import_product.action.product.varchar" class="TechDivision\Import\Dbal\Actions\GenericIdentifierAction">
+        <service id="import_product.action.product.varchar" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.varchar.create"/>
             <argument type="service" id="import_product.action.processor.product.varchar.update"/>
             <argument type="service" id="import_product.action.processor.product.varchar.delete"/>
             <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::VALUE_ID</argument>
         </service>
-        <service id="import_product.action.stock.item" class="TechDivision\Import\Dbal\Actions\GenericAction">
+        <service id="import_product.action.stock.item" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.stock.item.create"/>
             <argument type="service" id="import_product.action.processor.stock.item.update"/>
             <argument type="service" id="import_product.action.processor.stock.item.delete"/>
         </service>
-        <service id="import_product.action.product.relation" class="TechDivision\Import\Dbal\Actions\GenericAction">
+        <service id="import_product.action.product.relation" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.product.relation.create"/>
         </service>
 
@@ -333,12 +333,12 @@
          | we do NOT want to persist the URL rewrites here, we ONLY want tempoarily 
          | add them to cache used to make sure we generate unique request paths
          |-->
-        <service id="import_product.action.wrapped.url.rewrite" class="TechDivision\Import\Dbal\Actions\GenericIdentifierAction">
+        <service id="import_product.action.wrapped.url.rewrite" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.url.rewrite.create"/>
             <argument type="service" id="import_product.action.processor.url.rewrite.update"/>
             <argument type="service" id="import_product.action.processor.url.rewrite.delete"/>
         </service>
-        <service id="import_product.action.url.rewrite" class="TechDivision\Import\Dbal\Actions\GenericCachedEventAwareIdentifierAction">
+        <service id="import_product.action.url.rewrite" class="TechDivision\Import\Dbal\Collection\Actions\GenericCachedEventAwareIdentifierAction">
             <argument type="service" id="import.events.emitter"/>
             <argument type="service" id="import_product.action.wrapped.url.rewrite"/>
             <argument type="service" id="import_product.cache.key.url.rewrite"/>

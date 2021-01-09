@@ -25,7 +25,6 @@ use League\Event\EmitterInterface;
 use TechDivision\Import\Loaders\LoaderInterface;
 use TechDivision\Import\Services\RegistryProcessorInterface;
 use TechDivision\Import\Utils\Generators\GeneratorInterface;
-use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\Mappings\MapperInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\RegistryKeys;

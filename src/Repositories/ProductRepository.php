@@ -25,7 +25,7 @@ use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
 use TechDivision\Import\Dbal\Utils\PrimaryKeyUtilInterface;
 use TechDivision\Import\Dbal\Connection\ConnectionInterface;
-use TechDivision\Import\Dbal\Repositories\AbstractFinderRepository;
+use TechDivision\Import\Dbal\Collection\Repositories\AbstractFinderRepository;
 use TechDivision\Import\Dbal\Repositories\SqlStatementRepositoryInterface;
 use TechDivision\Import\Dbal\Repositories\Finders\FinderFactoryInterface;
 
