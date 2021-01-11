@@ -150,99 +150,174 @@
         <!--
          | The DI configuration for the processor actions
          |-->
-        <service id="import_product.action.processor.category.product.create" class="TechDivision\Import\Product\Actions\Processors\CategoryProductCreateProcessor">
+        <service id="import_product.action.processor.product.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
             <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::CREATE_PRODUCT</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.category.product.update" class="TechDivision\Import\Product\Actions\Processors\CategoryProductUpdateProcessor">
+        <service id="import_product.action.processor.product.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
             <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::UPDATE_PRODUCT</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.category.product.delete" class="TechDivision\Import\Product\Actions\Processors\CategoryProductDeleteProcessor">
+        <service id="import_product.action.processor.product.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::DELETE_PRODUCT</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.create" class="TechDivision\Import\Product\Actions\Processors\ProductCreateProcessor">
+        <service id="import_product.action.processor.category.product.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::CREATE_CATEGORY_PRODUCT</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.update" class="TechDivision\Import\Product\Actions\Processors\ProductUpdateProcessor">
+        <service id="import_product.action.processor.category.product.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::UPDATE_CATEGORY_PRODUCT</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.delete" class="TechDivision\Import\Product\Actions\Processors\ProductDeleteProcessor">
+        <service id="import_product.action.processor.category.product.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::DELETE_CATEGORY_PRODUCT</argument>
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::DELETE_CATEGORY_PRODUCT_BY_SKU</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.datetime.create" class="TechDivision\Import\Product\Actions\Processors\ProductDatetimeCreateProcessor">
+        <service id="import_product.action.processor.product.datetime.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::CREATE_PRODUCT_DATETIME</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.datetime.update" class="TechDivision\Import\Product\Actions\Processors\ProductDatetimeUpdateProcessor">
+        <service id="import_product.action.processor.product.datetime.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::UPDATE_PRODUCT_DATETIME</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.datetime.delete" class="TechDivision\Import\Product\Actions\Processors\ProductDatetimeDeleteProcessor">
+        <service id="import_product.action.processor.product.datetime.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::DELETE_PRODUCT_DATETIME</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.decimal.create" class="TechDivision\Import\Product\Actions\Processors\ProductDecimalCreateProcessor">
+        <service id="import_product.action.processor.product.decimal.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::CREATE_PRODUCT_DECIMAL</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.decimal.update" class="TechDivision\Import\Product\Actions\Processors\ProductDecimalUpdateProcessor">
+        <service id="import_product.action.processor.product.decimal.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::UPDATE_PRODUCT_DECIMAL</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.decimal.delete" class="TechDivision\Import\Product\Actions\Processors\ProductDecimalDeleteProcessor">
+        <service id="import_product.action.processor.product.decimal.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::DELETE_PRODUCT_DECIMAL</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.int.create" class="TechDivision\Import\Product\Actions\Processors\ProductIntCreateProcessor">
+        <service id="import_product.action.processor.product.int.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::CREATE_PRODUCT_INT</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.int.update" class="TechDivision\Import\Product\Actions\Processors\ProductIntUpdateProcessor">
+        <service id="import_product.action.processor.product.int.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::UPDATE_PRODUCT_INT</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.int.delete" class="TechDivision\Import\Product\Actions\Processors\ProductIntDeleteProcessor">
+        <service id="import_product.action.processor.product.int.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::DELETE_PRODUCT_INT</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.text.create" class="TechDivision\Import\Product\Actions\Processors\ProductTextCreateProcessor">
+        <service id="import_product.action.processor.product.text.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::CREATE_PRODUCT_TEXT</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.text.update" class="TechDivision\Import\Product\Actions\Processors\ProductTextUpdateProcessor">
+        <service id="import_product.action.processor.product.text.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::UPDATE_PRODUCT_TEXT</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.text.delete" class="TechDivision\Import\Product\Actions\Processors\ProductTextDeleteProcessor">
+        <service id="import_product.action.processor.product.text.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::DELETE_PRODUCT_TEXT</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.varchar.create" class="TechDivision\Import\Product\Actions\Processors\ProductVarcharCreateProcessor">
+        <service id="import_product.action.processor.product.varchar.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::CREATE_PRODUCT_VARCHAR</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.varchar.update" class="TechDivision\Import\Product\Actions\Processors\ProductVarcharUpdateProcessor">
+        <service id="import_product.action.processor.product.varchar.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::UPDATE_PRODUCT_VARCHAR</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.varchar.delete" class="TechDivision\Import\Product\Actions\Processors\ProductVarcharDeleteProcessor">
+        <service id="import_product.action.processor.product.varchar.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
-        <service id="import_product.action.processor.product.website.create" class="TechDivision\Import\Product\Actions\Processors\ProductWebsiteCreateProcessor">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.repository.sql.statement"/>
-        </service>
-        <service id="import_product.action.processor.product.website.delete" class="TechDivision\Import\Product\Actions\Processors\ProductWebsiteDeleteProcessor">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::DELETE_PRODUCT_VARCHAR</argument>
+            </argument>
         </service>
         <service id="import_product.action.processor.stock.item.create" class="TechDivision\Import\Product\Actions\Processors\StockItemCreateProcessor">
             <argument type="service" id="connection"/>
@@ -252,13 +327,38 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
         </service>
-        <service id="import_product.action.processor.stock.item.delete" class="TechDivision\Import\Product\Actions\Processors\StockItemDeleteProcessor">
+        <service id="import_product.action.processor.stock.item.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::DELETE_STOCK_ITEM_BY_SKU</argument>
+            </argument>
         </service>
-        <service id="import_product.action.processor.product.relation.create" class="TechDivision\Import\Product\Actions\Processors\ProductRelationCreateProcessor">
+        <service id="import_product.action.processor.product.relation.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::CREATE_PRODUCT_RELATION</argument>
+            </argument>
+        </service>
+        <service id="import_product.action.processor.product.website.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::CREATE_PRODUCT_WEBSITE</argument>
+            </argument>
+        </service>
+        <service id="import_product.action.processor.product.website.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::DELETE_PRODUCT_WEBSITE</argument>
+                <argument type="constant">TechDivision\Import\Product\Utils\SqlStatementKeys::DELETE_PRODUCT_WEBSITE_BY_SKU</argument>
+            </argument>
         </service>
         <service id="import_product.action.processor.url.rewrite.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\BlackHoleProcessor">
             <argument type="service" id="import.action.processor.url.rewrite.create"/>
@@ -273,16 +373,16 @@
         <!--
          | The DI configuration for the actions
          |-->
-        <service id="import_product.action.category.product" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
-            <argument type="service" id="import_product.action.processor.category.product.create"/>
-            <argument type="service" id="import_product.action.processor.category.product.update"/>
-            <argument type="service" id="import_product.action.processor.category.product.delete"/>
-        </service>
         <service id="import_product.action.product" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product.action.processor.product.create"/>
             <argument type="service" id="import_product.action.processor.product.update"/>
             <argument type="service" id="import_product.action.processor.product.delete"/>
             <argument type="constant">TechDivision\Import\Product\Utils\MemberNames::ENTITY_ID</argument>
+        </service>
+        <service id="import_product.action.category.product" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
+            <argument type="service" id="import_product.action.processor.category.product.create"/>
+            <argument type="service" id="import_product.action.processor.category.product.update"/>
+            <argument type="service" id="import_product.action.processor.category.product.delete"/>
         </service>
         <service id="import_product.action.product.website" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.product.website.create"/>
