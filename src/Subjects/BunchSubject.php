@@ -25,7 +25,6 @@ use League\Event\EmitterInterface;
 use TechDivision\Import\Loaders\LoaderInterface;
 use TechDivision\Import\Services\RegistryProcessorInterface;
 use TechDivision\Import\Utils\Generators\GeneratorInterface;
-use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\Mappings\MapperInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\RegistryKeys;
@@ -324,19 +323,6 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
                 sprintf('Requested entity type "%s" is not available', $entityTypeCode)
             )
         );
-    }
-
-    /**
-     * Return's TRUE, if the passed URL key varchar value IS related with the actual PK.
-     *
-     * @param array $productVarcharAttribute The varchar value to check
-     *
-     * @return boolean TRUE if the URL key is related, else FALSE
-     */
-    public function isUrlKeyOf(array $productVarcharAttribute)
-    {
-        return ((integer) $productVarcharAttribute[MemberNames::ENTITY_ID] === (integer) $this->getLastEntityId()) &&
-               ((integer) $productVarcharAttribute[MemberNames::STORE_ID] === (integer) $this->getRowStoreId(StoreViewCodes::ADMIN));
     }
 
     /**

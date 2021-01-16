@@ -22,7 +22,7 @@ namespace TechDivision\Import\Product\Repositories;
 
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
-use TechDivision\Import\Repositories\AbstractRepository;
+use TechDivision\Import\Dbal\Collection\Repositories\AbstractRepository;
 
 /**
  * Repository implementation to load product website data.

@@ -1,0 +1,15 @@
+{
+  "listeners": [
+    {
+      "action.create.success.create.url_rewrite": [
+        "import_product.listener.cache.url.rewrite"
+      ],
+      "action.create.success.update.url_rewrite": [
+        "import_product.listener.cache.url.rewrite"
+      ],
+      "action.create.success.delete.url_rewrite": [
+        "import_product.listener.cache.url.rewrite"
+      ]
+    }
+  ]
+}

@@ -21,8 +21,9 @@
 namespace TechDivision\Import\Product\Services;
 
 use TechDivision\Import\Loaders\LoaderInterface;
-use TechDivision\Import\Actions\ActionInterface;
-use TechDivision\Import\Connection\ConnectionInterface;
+use TechDivision\Import\Dbal\Actions\ActionInterface;
+use TechDivision\Import\Dbal\Connection\ConnectionInterface;
+use TechDivision\Import\Repositories\UrlRewriteRepositoryInterface;
 use TechDivision\Import\Repositories\EavAttributeRepositoryInterface;
 use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface;
@@ -52,7 +53,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * A PDO connection initialized with the values from the Doctrine EntityManager.
      *
-     * @var \TechDivision\Import\Connection\ConnectionInterface
+     * @var \TechDivision\Import\Dbal\Connection\ConnectionInterface
      */
     protected $connection;
 
@@ -73,70 +74,70 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * The action for product CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $productAction;
 
     /**
      * The action for product varchar attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $productVarcharAction;
 
     /**
      * The action for product text attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $productTextAction;
 
     /**
      * The action for product int attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $productIntAction;
 
     /**
      * The action for product decimal attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $productDecimalAction;
 
     /**
      * The action for product datetime attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $productDatetimeAction;
 
     /**
      * The action for product website CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $productWebsiteAction;
 
     /**
      * The action for category product relation CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $categoryProductAction;
 
     /**
      * The action for stock item CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $stockItemAction;
 
     /**
      * The action for URL rewrite CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $urlRewriteAction;
 
@@ -218,9 +219,16 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     protected $rawEntityLoader;
 
     /**
+     * The repository to load the stock item with.
+     *
+     * @var \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface
+     */
+    protected $urlRewriteRepository;
+
+    /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \TechDivision\Import\Connection\ConnectionInterface                          $connection                        The connection to use
+     * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface                     $connection                        The connection to use
      * @param \TechDivision\Import\Product\Repositories\ProductRepositoryInterface         $productRepository                 The product repository to use
      * @param \TechDivision\Import\Product\Repositories\ProductWebsiteRepositoryInterface  $productWebsiteRepository          The product website repository to use
      * @param \TechDivision\Import\Product\Repositories\ProductDatetimeRepositoryInterface $productDatetimeRepository         The product datetime repository to use
@@ -233,18 +241,19 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface $eavAttributeOptionValueRepository The EAV attribute option value repository to use
      * @param \TechDivision\Import\Repositories\EavAttributeRepositoryInterface            $eavAttributeRepository            The EAV attribute repository to use
      * @param \TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface           $eavEntityTypeRepository           The EAV entity type repository to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                 $categoryProductAction             The category product action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                 $productDatetimeAction             The product datetime action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                 $productDecimalAction              The product decimal action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                 $productIntAction                  The product integer action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                 $productAction                     The product action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                 $productTextAction                 The product text action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                 $productVarcharAction              The product varchar action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                 $productWebsiteAction              The product website action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                 $stockItemAction                   The stock item action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                 $urlRewriteAction                  The URL rewrite action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                            $categoryProductAction             The category product action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                            $productDatetimeAction             The product datetime action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                            $productDecimalAction              The product decimal action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                            $productIntAction                  The product integer action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                            $productAction                     The product action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                            $productTextAction                 The product text action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                            $productVarcharAction              The product varchar action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                            $productWebsiteAction              The product website action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                            $stockItemAction                   The stock item action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                            $urlRewriteAction                  The URL rewrite action to use
      * @param \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface   $productAttributeAssembler         The assembler to load the product attributes with
      * @param \TechDivision\Import\Loaders\LoaderInterface                                 $rawEntityLoader                   The raw entity loader instance
+     * @param \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface              $urlRewriteRepository              The URL rewrite repository to use
      */
     public function __construct(
         ConnectionInterface $connection,
@@ -271,7 +280,8 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         ActionInterface $stockItemAction,
         ActionInterface $urlRewriteAction,
         ProductAttributeAssemblerInterface $productAttributeAssembler,
-        LoaderInterface $rawEntityLoader
+        LoaderInterface $rawEntityLoader,
+        UrlRewriteRepositoryInterface $urlRewriteRepository
     ) {
         $this->setConnection($connection);
         $this->setProductRepository($productRepository);
@@ -298,6 +308,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         $this->setUrlRewriteAction($urlRewriteAction);
         $this->setProductAttributeAssembler($productAttributeAssembler);
         $this->setRawEntityLoader($rawEntityLoader);
+        $this->setUrlRewriteRepository($urlRewriteRepository);
     }
 
     /**
@@ -325,7 +336,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the passed connection.
      *
-     * @param \TechDivision\Import\Connection\ConnectionInterface $connection The connection to set
+     * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface $connection The connection to set
      *
      * @return void
      */
@@ -337,7 +348,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the connection.
      *
-     * @return \TechDivision\Import\Connection\ConnectionInterface The connection instance
+     * @return \TechDivision\Import\Dbal\Connection\ConnectionInterface The connection instance
      */
     public function getConnection()
     {
@@ -655,7 +666,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Set's the action with the URL rewrite CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $urlRewriteAction The action with the URL rewrite CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $urlRewriteAction The action with the URL rewrite CRUD methods
      *
      * @return void
      */
@@ -667,7 +678,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     /**
      * Return's the action with the URL rewrite CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getUrlRewriteAction()
     {
@@ -895,6 +906,28 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
+     * Set's the repository to load the URL rewrites with.
+     *
+     * @param \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface $urlRewriteRepository The repository instance
+     *
+     * @return void
+     */
+    public function setUrlRewriteRepository(UrlRewriteRepositoryInterface $urlRewriteRepository)
+    {
+        $this->urlRewriteRepository = $urlRewriteRepository;
+    }
+
+    /**
+     * Return's the repository to load the URL rewrites with.
+     *
+     * @return \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface The repository instance
+     */
+    public function getUrlRewriteRepository()
+    {
+        return $this->urlRewriteRepository;
+    }
+
+    /**
      * Return's an array with the available EAV attributes for the passed is user defined flag.
      *
      * @param integer $isUserDefined The flag itself
@@ -1054,6 +1087,21 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @param integer $attributeCode The attribute code of the varchar attribute
      * @param integer $entityTypeId  The entity type ID of the varchar attribute
      * @param integer $storeId       The store ID of the varchar attribute
+     * @param string  $primaryKey    The primary key of the product
+     *
+     * @return array|null The varchar attribute
+     */
+    public function loadVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndPrimaryKey($attributeCode, $entityTypeId, $storeId, $primaryKey)
+    {
+        return $this->loadProductVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndPK($attributeCode, $entityTypeId, $storeId, $primaryKey);
+    }
+
+    /**
+     * Load's and return's the varchar attribute with the passed params.
+     *
+     * @param integer $attributeCode The attribute code of the varchar attribute
+     * @param integer $entityTypeId  The entity type ID of the varchar attribute
+     * @param integer $storeId       The store ID of the varchar attribute
      * @param string  $value         The value of the varchar attribute
      *
      * @return array|null The varchar attribute
@@ -1061,6 +1109,21 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function loadProductVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value)
     {
         return $this->getProductVarcharRepository()->findOneByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value);
+    }
+
+    /**
+     * Load's and return's the varchar attribute with the passed params.
+     *
+     * @param integer $attributeCode The attribute code of the varchar attribute
+     * @param integer $entityTypeId  The entity type ID of the varchar attribute
+     * @param integer $storeId       The store ID of the varchar attribute
+     * @param string  $pk            The primary key of the product
+     *
+     * @return array|null The varchar attribute
+     */
+    public function loadProductVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndPK($attributeCode, $entityTypeId, $storeId, $pk)
+    {
+        return $this->getProductVarcharRepository()->findOneByAttributeCodeAndEntityTypeIdAndStoreIdAndPk($attributeCode, $entityTypeId, $storeId, $pk);
     }
 
     /**
@@ -1073,6 +1136,19 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function loadEavEntityTypeByEntityTypeCode($entityTypeCode)
     {
         return $this->getEavEntityTypeRepository()->findOneByEntityTypeCode($entityTypeCode);
+    }
+
+    /**
+     * Load's and return's the URL rewrite for the given request path and store ID
+     *
+     * @param string $requestPath The request path to load the URL rewrite for
+     * @param int    $storeId     The store ID to load the URL rewrite for
+     *
+     * @return array|null The URL rewrite found for the given request path and store ID
+     */
+    public function loadUrlRewriteByRequestPathAndStoreId(string $requestPath, int $storeId)
+    {
+        return $this->getUrlRewriteRepository()->findOneByRequestPathAndStoreId($requestPath, $storeId);
     }
 
     /**
@@ -1190,6 +1266,19 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function persistStockItem($stockItem, $name = null)
     {
         $this->getStockItemAction()->persist($stockItem, $name);
+    }
+
+    /**
+     * Persist's the URL rewrite with the passed data.
+     *
+     * @param array       $row  The URL rewrite to persist
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return string The ID of the persisted entity
+     */
+    public function persistUrlRewrite($row, $name = null)
+    {
+        return $this->getUrlRewriteAction()->persist($row, $name);
     }
 
     /**

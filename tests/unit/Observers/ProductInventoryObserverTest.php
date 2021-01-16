@@ -25,7 +25,6 @@ use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Observers\DynamicAttributeLoader;
 use TechDivision\Import\Subjects\I18n\NumberConverterInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test class for the product inventory observer implementation.

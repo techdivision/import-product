@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Repositories;
 
-use TechDivision\Import\Repositories\FinderAwareEntityRepositoryInterface;
+use TechDivision\Import\Dbal\Repositories\FinderAwareEntityRepositoryInterface;
 
 /**
  * Interface for all product repository implementations.
