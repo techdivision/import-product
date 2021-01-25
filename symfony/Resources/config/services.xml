@@ -22,7 +22,7 @@
         <service id="import_product.entity.merger.empty.columns.product.inventory" class="TechDivision\Import\Observers\EntityMergers\CleanUpColumnsEntityMerger">
             <argument type="service" id="import_product.loader.header.mapping.product.inventory"/>
         </service>
-        <service id="import_product.entity.merger.composite.media.gallery" class="TechDivision\Import\Observers\EntityMergers\GenericCompositeEntityMerger">
+        <service id="import_product.entity.merger.composite.category.product" class="TechDivision\Import\Observers\EntityMergers\GenericCompositeEntityMerger">
             <call method="append">
                 <argument type="service" id="import_product.entity.merger.empty.columns.category.product"/>
             </call>
@@ -530,6 +530,7 @@
             <argument type="service" id="import_product.filter.convert.literal.url"/>
             <argument type="service" id="import_product.util.url.key"/>
             <argument type="service" id="import.generator.reverse.sequence"/>
+            <argument type="service" id="import.utils.category.path"/>
         </service>
         <service id="import_product.observer.clean.up" class="TechDivision\Import\Product\Observers\CleanUpObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
@@ -537,12 +538,14 @@
         <service id="import_product.observer.category.product" class="TechDivision\Import\Product\Observers\CategoryProductObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
             <argument type="service" id="import.observer.dynamic.attribute.loader"/>
-            <argument type="service" id="import_product.entity.merger.composite.media.gallery"/>
+            <argument type="service" id="import_product.entity.merger.composite.category.product"/>
+            <argument type="service" id="import.utils.category.path"/>
         </service>
         <service id="import_product.observer.category.product.update" class="TechDivision\Import\Product\Observers\CategoryProductUpdateObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
             <argument type="service" id="import.observer.dynamic.attribute.loader"/>
-            <argument type="service" id="import_product.entity.merger.composite.media.gallery"/>
+            <argument type="service" id="import_product.entity.merger.composite.category.product"/>
+            <argument type="service" id="import.utils.category.path"/>
         </service>
         <service id="import_product.observer.clear.product" class="TechDivision\Import\Product\Observers\ClearProductObserver">
             <argument type="service" id="import_product.processor.product.bunch"/>
