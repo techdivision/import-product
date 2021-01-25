@@ -30,7 +30,6 @@ use TechDivision\Import\Observers\AttributeLoaderInterface;
 use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
 use TechDivision\Import\Observers\EntityMergers\EntityMergerInterface;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
-use TechDivision\Import\Utils\CategoryPathUtilInterface;
 
 /**
  * Observer that creates/updates the category product relations.
@@ -80,26 +79,17 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
     protected $entityMerger;
 
     /**
-     * The utility to handle catgory paths.
-     *
-     * @var \TechDivision\Import\Utils\CategoryPathUtilInterface
-     */
-    protected $categoryPathUtil;
-
-    /**
      * Initialize the observer with the passed product bunch processor instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
      * @param \TechDivision\Import\Observers\AttributeLoaderInterface|null         $attributeLoader       The attribute loader instance
      * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface   $entityMerger          The entity merger instance
-     * @param \TechDivision\Import\Utils\CategoryPathUtilInterface                 $categoryPathUtil      The utility to handle category paths
      * @param \TechDivision\Import\Observers\StateDetectorInterface|null           $stateDetector         The state detector instance to use
      */
     public function __construct(
         ProductBunchProcessorInterface $productBunchProcessor,
         AttributeLoaderInterface $attributeLoader,
         EntityMergerInterface $entityMerger,
-        CategoryPathUtilInterface $categoryPathUtil,
         StateDetectorInterface $stateDetector = null
     ) {
 
@@ -107,7 +97,6 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
         $this->productBunchProcessor = $productBunchProcessor;
         $this->attributeLoader = $attributeLoader;
         $this->entityMerger = $entityMerger;
-        $this->categoryPathUtil = $categoryPathUtil;
 
         // pass the state detector to the parent method
         parent::__construct($stateDetector);
@@ -140,13 +129,12 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
         $categoryProducts = array();
 
         // explode the categories as well as their positions, if available
-        $categories = $this->categoryPathUtil->fromProduct($this->getValue(ColumnKeys::CATEGORIES));
+        $categories = $this->getValue(ColumnKeys::CATEGORIES, array(), array($this, 'explode'));
         $categoryPositions = $this->getValue(ColumnKeys::CATEGORIES_POSITION, array(), array($this, 'explode'));
 
         // load the category product relations found in the CSV file
-        foreach ($categories as $key => $elements) {
+        foreach ($categories as $key => $this->path) {
             // initialize the category position with the default value
-            $this->path = $this->categoryPathUtil->implode($elements);
             $this->position = 0;
 
             // query whether or not a position for the category has been specified

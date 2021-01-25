@@ -24,13 +24,12 @@ use Zend\Filter\FilterInterface;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\UrlKeyUtilInterface;
 use TechDivision\Import\Utils\Filter\UrlKeyFilterTrait;
+use TechDivision\Import\Utils\Generators\GeneratorInterface;
 use TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
-use TechDivision\Import\Utils\Generators\GeneratorInterface;
-use TechDivision\Import\Utils\CategoryPathUtilInterface;
 
 /**
  * Observer that extracts the URL key from the product name and adds a two new columns
@@ -74,33 +73,23 @@ class UrlKeyObserver extends AbstractProductImportObserver
     protected $reverseSequenceGenerator;
 
     /**
-     * The utility to handle catgory paths.
-     *
-     * @var \TechDivision\Import\Utils\CategoryPathUtilInterface
-     */
-    protected $categoryPathUtil;
-
-    /**
      * Initialize the observer with the passed product bunch processor and filter instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor    The product bunch processor instance
      * @param \Zend\Filter\FilterInterface                                         $convertLiteralUrlFilter  The URL filter instance
      * @param \TechDivision\Import\Utils\UrlKeyUtilInterface                       $urlKeyUtil               The URL key utility instance
      * @param \TechDivision\Import\Utils\Generators\GeneratorInterface             $reverseSequenceGenerator The reverse sequence generator instance
-     * @param \TechDivision\Import\Utils\CategoryPathUtilInterface                 $categoryPathUtil         The utility to handle category paths
      */
     public function __construct(
         ProductBunchProcessorInterface $productBunchProcessor,
         FilterInterface $convertLiteralUrlFilter,
         UrlKeyUtilInterface $urlKeyUtil,
-        GeneratorInterface $reverseSequenceGenerator,
-        CategoryPathUtilInterface $categoryPathUtil
+        GeneratorInterface $reverseSequenceGenerator
     ) {
         $this->productBunchProcessor = $productBunchProcessor;
         $this->convertLiteralUrlFilter = $convertLiteralUrlFilter;
         $this->urlKeyUtil = $urlKeyUtil;
         $this->reverseSequenceGenerator = $reverseSequenceGenerator;
-        $this->categoryPathUtil = $categoryPathUtil;
     }
 
     /**
@@ -205,7 +194,7 @@ class UrlKeyObserver extends AbstractProductImportObserver
         $urlPaths = array();
 
         // extract the categories from the column `categories`
-        $categories = $this->categoryPathUtil->fromProduct($this->getValue(ColumnKeys::CATEGORIES));
+        $paths = $this->getValue(ColumnKeys::CATEGORIES, array(), array($this, 'explode'));
 
         // the URL paths are store view specific, so we need
         // the store view code to load the appropriate ones
@@ -213,9 +202,9 @@ class UrlKeyObserver extends AbstractProductImportObserver
 
         // iterate of the found categories, load their URL path as well as the URL path of
         // parent categories, if they have the anchor flag activated and add it the array
-        foreach ($categories as $elements) {
+        foreach ($paths as $path) {
             // load the category based on the category path
-            $category = $this->getCategoryByPath($this->categoryPathUtil->implode($elements), $storeViewCode);
+            $category = $this->getCategoryByPath($path, $storeViewCode);
             // try to resolve the URL paths recursively
             $this->resolveUrlPaths($urlPaths, $category, $storeViewCode);
         }
