@@ -94,6 +94,8 @@ class NormalizeCategoriesObserver extends AbstractProductImportObserver implemen
      */
     protected function process()
     {
-        $this->setValue(ColumnKeys::CATEGORIES, $this->getValue(ColumnKeys::CATEGORIES, null, function ($value) { return $this->serializer->normalize($value); } ));
+        $this->setValue(ColumnKeys::CATEGORIES, $this->getValue(ColumnKeys::CATEGORIES, null, function ($value) {
+            return $this->serializer->normalize($value);
+        }));
     }
 }

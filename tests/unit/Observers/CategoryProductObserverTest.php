@@ -22,6 +22,8 @@ namespace TechDivision\Import\Product\Observers;
 
 use PHPUnit\Framework\TestCase;
 use TechDivision\Import\Product\Utils\ColumnKeys;
+use TechDivision\Import\Observers\AttributeLoaderInterface;
+use TechDivision\Import\Observers\EntityMergers\EntityMergerInterface;
 
 /**
  * Test class for the product category observer implementation.
@@ -57,8 +59,14 @@ class CategoryProductObserverTest extends TestCase
                                           ->setMethods(get_class_methods('TechDivision\Import\Product\Services\ProductBunchProcessorInterface'))
                                           ->getMock();
 
+        // initialize the mock attribute loader instance
+        $mockAttributeLoader = $this->getMockBuilder(AttributeLoaderInterface::class)->getMock();
+
+        // initialize the mock entity merger instance
+        $mockEntityMerger = $this->getMockBuilder(EntityMergerInterface::class)->getMock();
+
         // initialize the observer
-        $this->observer = new CategoryProductObserver($mockProductBunchProcessor);
+        $this->observer = new CategoryProductObserver($mockProductBunchProcessor, $mockAttributeLoader, $mockEntityMerger);
     }
 
     /**
