@@ -88,8 +88,8 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
      */
     public function __construct(
         ProductBunchProcessorInterface $productBunchProcessor,
-        AttributeLoaderInterface $attributeLoader = null,
-        EntityMergerInterface $entityMerger = null,
+        AttributeLoaderInterface $attributeLoader,
+        EntityMergerInterface $entityMerger,
         StateDetectorInterface $stateDetector = null
     ) {
 
@@ -133,10 +133,7 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
         $categoryPositions = $this->getValue(ColumnKeys::CATEGORIES_POSITION, array(), array($this, 'explode'));
 
         // load the category product relations found in the CSV file
-        foreach ($categories as $key => $path) {
-            // load the and downgrade the category for the found path
-            $this->path = implode('/', $this->explode(trim($path), '/'));
-
+        foreach ($categories as $key => $this->path) {
             // initialize the category position with the default value
             $this->position = 0;
 

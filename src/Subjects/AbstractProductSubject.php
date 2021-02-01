@@ -566,34 +566,6 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
     }
 
     /**
-     * Return's the root category for the actual view store.
-     *
-     * @return array The store's root category
-     * @throws \Exception Is thrown if the root category for the passed store code is NOT available
-     */
-    public function getRootCategory()
-    {
-
-        // load the default store
-        $defaultStore = $this->getDefaultStore();
-
-        // load the actual store view code
-        $storeViewCode = $this->getStoreViewCode($defaultStore[MemberNames::CODE]);
-
-        // query weather or not we've a root category or not
-        if (isset($this->rootCategories[$storeViewCode])) {
-            return $this->rootCategories[$storeViewCode];
-        }
-
-        // throw an exception if the root category is NOT available
-        throw new \Exception(
-            $this->appendExceptionSuffix(
-                sprintf('Root category for %s is not available', $storeViewCode)
-            )
-        );
-    }
-
-    /**
      * Returns an array with the codes of the store views related with the passed website code.
      *
      * @param string $websiteCode The code of the website to return the store view codes for

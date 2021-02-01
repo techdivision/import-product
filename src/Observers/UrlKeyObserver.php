@@ -24,12 +24,14 @@ use Zend\Filter\FilterInterface;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\UrlKeyUtilInterface;
 use TechDivision\Import\Utils\Filter\UrlKeyFilterTrait;
+use TechDivision\Import\Utils\Generators\GeneratorInterface;
 use TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
-use TechDivision\Import\Utils\Generators\GeneratorInterface;
+use TechDivision\Import\Observers\ObserverFactoryInterface;
+use TechDivision\Import\Subjects\SubjectInterface;
 
 /**
  * Observer that extracts the URL key from the product name and adds a two new columns
@@ -41,7 +43,7 @@ use TechDivision\Import\Utils\Generators\GeneratorInterface;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class UrlKeyObserver extends AbstractProductImportObserver
+class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFactoryInterface
 {
 
     /**
@@ -73,6 +75,13 @@ class UrlKeyObserver extends AbstractProductImportObserver
     protected $reverseSequenceGenerator;
 
     /**
+     * The array with the root categories.
+     *
+     * @var array
+     */
+    protected $rootCategories = array();
+
+    /**
      * Initialize the observer with the passed product bunch processor and filter instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor    The product bunch processor instance
@@ -90,6 +99,29 @@ class UrlKeyObserver extends AbstractProductImportObserver
         $this->convertLiteralUrlFilter = $convertLiteralUrlFilter;
         $this->urlKeyUtil = $urlKeyUtil;
         $this->reverseSequenceGenerator = $reverseSequenceGenerator;
+    }
+
+    /**
+     * Will be invoked by the observer visitor when a factory has been defined to create the observer instance.
+     *
+     * @param \TechDivision\Import\Subjects\SubjectInterface $subject The subject instance
+     *
+     * @return \TechDivision\Import\Observers\ObserverInterface The observer instance
+     */
+    public function createObserver(SubjectInterface $subject)
+    {
+
+        // load the root categories
+        $rootCategories = $subject->getRootCategories();
+
+        // initialize the array with the root categories
+        // by using the entity ID as index
+        foreach ($rootCategories as $rootCategory) {
+            $this->rootCategories[(int) $rootCategory[MemberNames::ENTITY_ID]] = $rootCategory;
+        }
+
+        // return the initialized instance
+        return $this;
     }
 
     /**
@@ -194,7 +226,7 @@ class UrlKeyObserver extends AbstractProductImportObserver
         $urlPaths = array();
 
         // extract the categories from the column `categories`
-        $categories = $this->getValue(ColumnKeys::CATEGORIES, array(), array($this, 'explode'));
+        $paths = $this->getValue(ColumnKeys::CATEGORIES, array(), array($this, 'explode'));
 
         // the URL paths are store view specific, so we need
         // the store view code to load the appropriate ones
@@ -202,7 +234,7 @@ class UrlKeyObserver extends AbstractProductImportObserver
 
         // iterate of the found categories, load their URL path as well as the URL path of
         // parent categories, if they have the anchor flag activated and add it the array
-        foreach ($categories as $path) {
+        foreach ($paths as $path) {
             // load the category based on the category path
             $category = $this->getCategoryByPath($path, $storeViewCode);
             // try to resolve the URL paths recursively
@@ -228,13 +260,11 @@ class UrlKeyObserver extends AbstractProductImportObserver
     protected function resolveUrlPaths(array &$urlPaths, array $category, string $storeViewCode, bool $directRelation = true)
     {
 
-        // load the root category
-        $rootCategory = $this->getRootCategory();
-
-        // try to resolve the parent category IDs, but only if either
-        // the actual category nor it's parent is a root category
-        if ($rootCategory[MemberNames::ENTITY_ID] !== $category[MemberNames::ENTITY_ID] &&
-            $rootCategory[MemberNames::ENTITY_ID] !== $category[MemberNames::PARENT_ID]
+        // try to resolve the parent category IDs, but only if the parent or
+        // the category itself is NOT a root category. The last case is
+        // possible if the column directly contains the root category only
+        if (isset($this->rootCategories[(int) $category[MemberNames::ENTITY_ID]]) === false &&
+            isset($this->rootCategories[(int) $category[MemberNames::PARENT_ID]]) === false
         ) {
             // load the parent category
             $parent = $this->getCategory($category[MemberNames::PARENT_ID], $storeViewCode);
@@ -343,14 +373,13 @@ class UrlKeyObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Return's the root category for the actual view store.
+     * Return's the array with the root categories.
      *
-     * @return array The store's root category
-     * @throws \Exception Is thrown if the root category for the passed store code is NOT available
+     * @return array The array with the root categories
      */
-    protected function getRootCategory()
+    public function getRootCategories()
     {
-        return $this->getSubject()->getRootCategory();
+        return $this->getSubject()->getRootCategories();
     }
 
     /**
