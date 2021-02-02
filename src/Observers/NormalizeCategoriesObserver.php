@@ -94,11 +94,13 @@ class NormalizeCategoriesObserver extends AbstractProductImportObserver implemen
      */
     protected function process()
     {
+
         // do nothing if the categories column is not specified
         if (!$this->hasHeader(ColumnKeys::CATEGORIES)) {
             return;
         }
 
+        // normalize the category path, if categories are availble
         $this->setValue(ColumnKeys::CATEGORIES, $this->getValue(ColumnKeys::CATEGORIES, null, function ($value) {
             return $this->serializer->normalize($value);
         }));
