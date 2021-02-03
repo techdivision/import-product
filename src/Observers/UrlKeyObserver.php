@@ -117,7 +117,6 @@ class UrlKeyObserver extends AbstractProductImportObserver
 
         // initialize the URL key and the product
         $urlKey = null;
-        $product = array();
 
         // query whether or not the existing product `url_key` should be re-created from the product name
         if ($product && !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)) {
