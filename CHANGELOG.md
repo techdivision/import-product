@@ -1,3 +1,13 @@
+# Version 24.0.8
+
+## Bugfixes
+
+* Fixed: update-url-key-from-name=false functionality
+
+## Features
+
+* None
+
 # Version 24.0.7
 
 ## Bugfixes
