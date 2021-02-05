@@ -26,11 +26,13 @@ use TechDivision\Import\Actions\Processors\AbstractDeleteProcessor;
 /**
  * The product integer attribute delete processor implementation.
  *
- * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @link      https://github.com/techdivision/import-product
- * @link      http://www.techdivision.com
+ * @author     Tim Wagner <t.wagner@techdivision.com>
+ * @copyright  2021 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       https://github.com/techdivision/import-product
+ * @link       http://www.techdivision.com
+ * @deprecated 24.0.8
+ * @see        \TechDivision\Import\Actions\Processors\GenericProcessor
  */
 class ProductTextDeleteProcessor extends AbstractDeleteProcessor
 {
