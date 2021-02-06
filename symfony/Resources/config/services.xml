@@ -37,6 +37,7 @@
          | The DI configuration for the utilities
          |-->
         <service id="import_product.filter.convert.literal.url" class="TechDivision\Import\Utils\Filter\ConvertLiteralUrl"/>
+        <service id="import_product.enum.url.rewrite.entity.type" class="TechDivision\Import\Utils\UrlRewriteEntityType"/>
         <service id="import_product.utils.entity.type.code.mapping" class="TechDivision\Import\Product\Utils\Mappings\EntityTypeCodeMapper"/>
         <service id="import_product.utils.sku.to.pk.mapping" class="TechDivision\Import\Product\Utils\SkuToPkMappingUtil">
             <argument type="service" id="configuration"/>
@@ -45,6 +46,7 @@
             <argument type="service" id="import_product.processor.product.bunch"/>
             <argument type="service" id="import.loader.core.config.data"/>
             <argument type="service" id="import.loader.store.view.id"/>
+            <argument type="service" id="import_product.enum.url.rewrite.entity.type"/>
         </service>
 
         <!--
