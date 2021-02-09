@@ -86,9 +86,6 @@
             <argument type="service" id="import.processor.registry"/>
             <argument type="service" id="import_product.utils.sku.to.pk.mapping"/>
         </service>
-        <service id="import_product.listener.cache.url.rewrite" class="TechDivision\Import\Product\Listeners\CacheUrlRewriteListener">
-            <argument type="service" id="cache.static"/>
-        </service>
 
         <!--
          | The DI configuration for the finder based repositories

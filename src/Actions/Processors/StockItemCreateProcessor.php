@@ -22,7 +22,7 @@ namespace TechDivision\Import\Product\Actions\Processors;
 
 use TechDivision\Import\Dbal\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\SqlStatementKeys;
-use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
+use TechDivision\Import\Dbal\Collection\Actions\Processors\AbstractBaseProcessor;
 
 /**
  * The stock item create processor implementation.
@@ -33,7 +33,7 @@ use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
-class StockItemCreateProcessor extends AbstractCreateProcessor
+class StockItemCreateProcessor extends AbstractBaseProcessor
 {
 
     /**
