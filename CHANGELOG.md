@@ -1,3 +1,13 @@
+# Version 24.0.9
+
+## Bugfixes
+
+* Fixed: getPrimaryKey returned null
+
+## Features
+
+* None
+
 # Version 24.0.8
 
 ## Bugfixes
