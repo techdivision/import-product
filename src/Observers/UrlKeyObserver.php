@@ -316,7 +316,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
      */
     protected function getPrimaryKey()
     {
-        $this->getSubject()->getLastEntityId();
+        return $this->getSubject()->getLastEntityId();
     }
 
     /**
