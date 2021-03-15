@@ -39,7 +39,6 @@ use TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface;
 use TechDivision\Import\Subjects\CleanUpColumnsSubjectInterface;
 use TechDivision\Import\Utils\FileUploadConfigurationKeys;
 
-
 /**
  * The subject implementation that handles the business logic to persist products.
  *
