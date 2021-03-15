@@ -37,6 +37,8 @@ use TechDivision\Import\Subjects\ExportableSubjectInterface;
 use TechDivision\Import\Subjects\FileUploadSubjectInterface;
 use TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface;
 use TechDivision\Import\Subjects\CleanUpColumnsSubjectInterface;
+use TechDivision\Import\Utils\FileUploadConfigurationKeys;
+
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -191,32 +193,36 @@ class BunchSubject extends AbstractProductSubject implements ExportableSubjectIn
         $this->entityTypes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ENTITY_TYPES];
 
         // initialize the flag whether to copy images or not
-        if ($this->getConfiguration()->hasParam(ConfigurationKeys::COPY_IMAGES)) {
-            $this->setCopyImages($this->getConfiguration()->getParam(ConfigurationKeys::COPY_IMAGES));
+        if ($this->getConfiguration()->hasParam(FileUploadConfigurationKeys::COPY_IMAGES)) {
+            $this->setCopyImages($this->getConfiguration()->getParam(FileUploadConfigurationKeys::COPY_IMAGES));
         }
 
         // initialize the flag whether to override images or not
-        // @todo https://github.com/techdivision/import/issues/181
-        //       Create new constant ConfigurationKeys::OVERRIDE_IMAGES for future release
-        if ($this->getConfiguration()->hasParam('override-images')) {
-            $this->setOverrideImages($this->getConfiguration()->getParam('override-images'));
+        if ($this->getConfiguration()->hasParam(FileUploadConfigurationKeys::OVERRIDE_IMAGES)) {
+            $this->setOverrideImages($this->getConfiguration()->getParam(FileUploadConfigurationKeys::OVERRIDE_IMAGES));
         }
 
         // initialize media directory => can be absolute or relative
-        if ($this->getConfiguration()->hasParam(ConfigurationKeys::MEDIA_DIRECTORY)) {
+        if ($this->getConfiguration()->hasParam(FileUploadConfigurationKeys::MEDIA_DIRECTORY)) {
             try {
-                $this->setMediaDir($this->resolvePath($this->getConfiguration()->getParam(ConfigurationKeys::MEDIA_DIRECTORY)));
+                $this->setMediaDir($this->resolvePath($this->getConfiguration()->getParam(FileUploadConfigurationKeys::MEDIA_DIRECTORY)));
             } catch (\InvalidArgumentException $iae) {
-                $this->getSystemLogger()->warning($iae->getMessage());
+                // only if we wanna copy images we need directories
+                if ($this->hasCopyImages()) {
+                    $this->getSystemLogger()->warning($iae->getMessage());
+                }
             }
         }
 
         // initialize images directory => can be absolute or relative
-        if ($this->getConfiguration()->hasParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)) {
+        if ($this->getConfiguration()->hasParam(FileUploadConfigurationKeys::IMAGES_FILE_DIRECTORY)) {
             try {
-                $this->setImagesFileDir($this->resolvePath($this->getConfiguration()->getParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)));
+                $this->setImagesFileDir($this->resolvePath($this->getConfiguration()->getParam(FileUploadConfigurationKeys::IMAGES_FILE_DIRECTORY)));
             } catch (\InvalidArgumentException $iae) {
-                $this->getSystemLogger()->warning($iae->getMessage());
+                // only if we wanna copy images we need directories
+                if ($this->hasCopyImages()) {
+                    $this->getSystemLogger()->warning($iae->getMessage());
+                }
             }
         }
 
