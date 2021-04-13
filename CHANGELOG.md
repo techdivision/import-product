@@ -1,3 +1,13 @@
+# Version 25.1.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add missing validation for qty fields
+
 # Version 25.0.0
 
 ## Bugfixes
