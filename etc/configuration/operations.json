@@ -415,7 +415,13 @@
                       "special_price" : [ "import.callback.validator.number" ],
                       "map_price" : [ "import.callback.validator.number" ],
                       "msrp_price" : [ "import.callback.validator.number" ],
-                      "qty" : [ "import.callback.validator.number" ]
+                      "qty" : [ "import.callback.validator.number" ],
+                      "min_qty" : [ "import.callback.validator.number" ],
+                      "min_sale_qty" : [ "import.callback.validator.number" ],
+                      "max_sale_qty" : [ "import.callback.validator.number" ],
+                      "notify_stock_qty" : [ "import.callback.validator.number" ],
+                      "qty_increments" : [ "import.callback.validator.number" ],
+                      "weight" : [ "import.callback.validator.number" ]
                     }
                   ]
                 }

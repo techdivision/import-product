@@ -1,3 +1,13 @@
+# Version 24.0.11
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add missing validation for min_qty, min_sale_qty, max_sale_qty, notify_stock_qty, qty_increments, weight fields
+
 # Version 24.0.10
 
 ## Improvement
