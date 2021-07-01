@@ -205,7 +205,8 @@ class PreLoadEntityIdObserverTest extends TestCase
                                     'getLastSku',
                                     'getRow',
                                     'preLoadEntityId',
-                                    'isDebugMode'
+                                    'isDebugMode',
+                                    'isStrictMode'
                                 )
                             )
                             ->disableOriginalConstructor()
@@ -223,9 +224,12 @@ class PreLoadEntityIdObserverTest extends TestCase
                     ->method('getHeader')
                     ->with(ColumnKeys::SKU)
                     ->willReturn(0);
-        $mockSubject->expects($this->once())
+        $mockSubject->expects($this->atLeastOnce())
                     ->method('isDebugMode')
                     ->willReturn(false);
+        $mockSubject->expects($this->once())
+            ->method('isStrictMode')
+            ->willReturn(true);
 
         // invoke the handle() method
         $this->assertSame($row, $this->observer->handle($mockSubject));

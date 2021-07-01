@@ -87,7 +87,7 @@ class PreLoadEntityIdObserver extends AbstractProductImportObserver
             // query whether or not debug mode has been enabled
             if ($subject->isDebugMode()) {
                 $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($message));
-            } else {
+            } elseif ($subject->isStrictMode()) {
                 throw new \Exception($message);
             }
         }
