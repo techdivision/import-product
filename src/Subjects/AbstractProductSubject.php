@@ -507,6 +507,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
      * @param string $path The path of the category to query
      *
      * @return boolean TRUE if the category is available, else FALSE
+     * @deprecated Can never used cause $this->categories based on storecode not on path
      */
     public function hasCategoryByPath($path)
     {

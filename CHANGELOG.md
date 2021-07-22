@@ -1,3 +1,13 @@
+# Version 24.0.12
+
+## Improvement
+
+* Prepare optimze performance cache
+
+## Bugfixes
+
+* None
+
 # Version 24.0.11
 
 ## Bugfixes
