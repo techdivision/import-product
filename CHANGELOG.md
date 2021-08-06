@@ -3,7 +3,8 @@
 ## Bugfixes
 
 * Fixed #PAC-206: Prevent finder mappings of different libraries to be overwritten
-
+* Fix website relation clean up on Magento Commerce
+* 
 ## Features
 
 * Add techdivision/import-product-variant#22
