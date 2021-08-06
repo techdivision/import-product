@@ -51,7 +51,7 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                 FROM ${table:catalog_product_website} t0
           INNER JOIN ${table:catalog_product_entity} t1
                WHERE t1.sku = :sku
-                 AND t0.product_id = t1.${pk:entity_id}',
+                 AND t0.product_id = t1.entity_id',
         SqlStatementKeys::PRODUCT_DATETIMES =>
             'SELECT *
                FROM ${table:catalog_product_entity_datetime}

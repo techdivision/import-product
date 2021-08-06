@@ -1,3 +1,13 @@
+# Version 24.0.13
+
+## Improvement
+
+* None
+
+## Bugfixes
+
+* Fix website relation clean up on Magento Commerce
+
 # Version 24.0.12
 
 ## Improvement
