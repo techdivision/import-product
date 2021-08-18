@@ -518,7 +518,10 @@
             <argument>%array_validator.nullable.false%</argument>
             <argument>%array_validator.nullable.true%</argument>
         </service>
-
+        <service id="import_product.callback.validator.related" class="TechDivision\Import\Callbacks\RelatedValuesValidatorCallback">
+            <argument type="service" id="import_product.loader.sku"/>
+            <argument>%array_validator.nullable.true%</argument>
+        </service>
         <!--
          | The DI observer configuration
          |-->
