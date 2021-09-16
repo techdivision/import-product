@@ -1,9 +1,9 @@
 {
     "name": "techdivision/import-product",
     "description": "Pacemaker library providing basic Magento 2 product import functionality",
-    "license": "OSL-3.0",
+    "license": "MIT",
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.2.0",
         "techdivision/import": "dev-master"
     },
     "require-dev": {
