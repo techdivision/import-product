@@ -45,7 +45,7 @@ class ProductWebsiteObserverTest extends TestCase
      * @return void
      * @see \PHPUnit\Framework\TestCase::setUp()
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         // initialize a mock processor instance

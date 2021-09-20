@@ -51,7 +51,7 @@ class PreLoadEntityIdObserverTest extends TestCase
      * @return void
      * @see \PHPUnit\Framework\TestCase::setUp()
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         // initialize a mock processor instance
@@ -172,11 +172,11 @@ class PreLoadEntityIdObserverTest extends TestCase
      *
      * @return void
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Can't pre-load product with SKU TEST-02
      */
     public function testHandleWithException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Can't pre-load product with SKU TEST-02");
 
         // create a dummy CSV file header
         $row = array(
