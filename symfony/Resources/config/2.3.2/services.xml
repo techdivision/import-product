@@ -44,6 +44,13 @@
             </call>
         </service>
 
+        <service id="import_product.observer.general.multistore.convert" class="TechDivision\Import\Product\Observers\ProductMultiStoreObserver"/>
+        <service id="import_product.observer.composite.multistore.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product.observer.general.multistore.convert" type="service"/>
+            </call>
+        </service>
+
         <!--
          | The DI configuration for the composite observers of the replace operation.
          |-->
