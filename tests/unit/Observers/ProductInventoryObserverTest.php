@@ -15,7 +15,7 @@
 namespace TechDivision\Import\Product\Observers;
 
 use PHPUnit\Framework\TestCase;
-use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Dbal\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Observers\DynamicAttributeLoader;
 use TechDivision\Import\Subjects\I18n\NumberConverterInterface;

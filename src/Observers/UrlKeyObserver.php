@@ -159,7 +159,6 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
 
         // initialize the URL key, the entity and the product
         $urlKey = null;
-        $entity = null;
         $product = array();
 
         // prepare the store view code

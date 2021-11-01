@@ -23,7 +23,7 @@ use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 use TechDivision\Import\Subjects\SubjectInterface;
 use TechDivision\Import\Observers\ObserverFactoryInterface;
 use TechDivision\Import\Observers\StateDetectorAwareObserverInterface;
-use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Dbal\Utils\EntityStatus;
 use TechDivision\Import\Observers\EntityMergers\EntityMergerInterface;
 use TechDivision\Import\Product\Utils\EntityTypeCodes;
 

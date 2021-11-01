@@ -7,6 +7,7 @@
 * 
 ## Features
 
+* Refactoring deprecated classes. see https://github.com/techdivision/import-cli-simple/blob/master/UPGRADE-4.0.0.md
 * Add techdivision/import-product-variant#22
 * Add default configuration for tier price import
 * Remove stack trace of exception for missing media directories > log a simple debug message instead
