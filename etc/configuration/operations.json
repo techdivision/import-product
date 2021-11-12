@@ -422,9 +422,9 @@
                       "notify_stock_qty" : [ "import.callback.validator.number" ],
                       "qty_increments" : [ "import.callback.validator.number" ],
                       "weight" : [ "import.callback.validator.number" ],
-                      "configurable_variations" : [ "import_product.callback.validator.related" ],
-                      "bundle_values" : [ "import_product.callback.validator.related" ],
-                      "associated_skus" : [ "import_product.callback.validator.related" ]
+                      "configurable_variations" : [ "import_product.callback.validator.pipe.related" ],
+                      "bundle_values" : [ "import_product.callback.validator.pipe.related" ],
+                      "associated_skus" : [ "import_product.callback.validator.comma.related" ]
                     }
                   ]
                 }

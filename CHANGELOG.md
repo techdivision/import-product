@@ -17,6 +17,7 @@
 * PAC-361: Don't check file system if copy-images defined as false
     * https://github.com/techdivision/import-cli-simple/issues/262
 * Add missing validation for min_qty, min_sale_qty, max_sale_qty, notify_stock_qty, qty_increments, weight fields
+* Add PAC-299: create validation callback for sku relations for grouped, configurables and bundles
 
 
 # Version 24.0.2

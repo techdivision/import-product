@@ -25,14 +25,6 @@ namespace TechDivision\Import\Product\Utils;
  */
 class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
 {
-
-    /**
-     * Name for the column 'sku'.
-     *
-     * @var string
-     */
-    const SKU = 'sku';
-
     /**
      * Name for the column 'categories'.
      *
