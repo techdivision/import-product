@@ -589,6 +589,12 @@
             <argument type="service" id="import.serializer.factory.csv.product.category"/>
         </service>
 
+        <service id="import_product_ee.observer.general.multistore.convert" class="TechDivision\Import\Product\Ee\Observers\ProductMultiStoreObserver"/>
+        <service id="import_product_ee.observer.composite.multistore.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product_ee.observer.general.multistore.convert" type="service"/>
+            </call>
+        </service>
         <!--
          | The DI configuration for the composite observers of the inventory add-update operation.
          |-->

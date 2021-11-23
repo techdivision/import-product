@@ -87,6 +87,28 @@
         }
       },
       "catalog_product": {
+        "convert.multistore": {
+          "plugins": {
+            "subject": {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "product-import-multistore"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product.observer.composite.multistore.add_update"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
         "collect-data": {
           "plugins": {
             "subject": {
