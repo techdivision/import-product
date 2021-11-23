@@ -334,7 +334,7 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
     /**
      * Initializes the SQL statement repository with the primary key and table prefix utility.
      *
-     * @param \IteratorAggregate<\TechDivision\Import\Utils\SqlCompilerInterface> $compilers The array with the compiler instances
+     * @param \IteratorAggregate<\TechDivision\Import\Dbal\Utils\SqlCompilerInterface> $compilers The array with the compiler instances
      */
     public function __construct(\IteratorAggregate $compilers)
     {

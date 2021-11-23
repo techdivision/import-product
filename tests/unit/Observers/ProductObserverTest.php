@@ -15,7 +15,7 @@
 namespace TechDivision\Import\Product\Observers;
 
 use PHPUnit\Framework\TestCase;
-use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Dbal\Utils\EntityStatus;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Subjects\I18n\DateConverterInterface;
