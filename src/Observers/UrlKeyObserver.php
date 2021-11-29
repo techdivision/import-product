@@ -202,6 +202,10 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
             return;
         }
 
+        // if header not exists create it
+        if (!$this->hasHeader(ColumnKeys::URL_KEY)) {
+            $this->addHeader(ColumnKeys::URL_KEY);
+        }
         // set the unique URL key for further processing
         $this->setValue(ColumnKeys::URL_KEY, $this->makeUnique($this->getSubject(), $product, $urlKey, $this->getUrlPaths()));
     }
