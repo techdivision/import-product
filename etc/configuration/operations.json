@@ -87,6 +87,28 @@
         }
       },
       "catalog_product": {
+        "convert.multistore": {
+          "plugins": {
+            "subject": {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "product-import-multistore"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product.observer.composite.multistore.add_update"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
         "collect-data": {
           "plugins": {
             "subject": {
@@ -421,7 +443,10 @@
                       "max_sale_qty" : [ "import.callback.validator.number" ],
                       "notify_stock_qty" : [ "import.callback.validator.number" ],
                       "qty_increments" : [ "import.callback.validator.number" ],
-                      "weight" : [ "import.callback.validator.number" ]
+                      "weight" : [ "import.callback.validator.number" ],
+                      "configurable_variations" : [ "import_product.callback.validator.pipe.related" ],
+                      "bundle_values" : [ "import_product.callback.validator.pipe.related" ],
+                      "associated_skus" : [ "import_product.callback.validator.comma.related" ]
                     }
                   ]
                 }

@@ -3,17 +3,11 @@
 /**
  * TechDivision\Import\Product\Utils\SqlStatements
  *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- *
- * PHP version 5
+ * PHP version 7
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @license   https://opensource.org/licenses/MIT
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
@@ -27,7 +21,7 @@ use TechDivision\Import\Product\Utils\SqlStatementKeys;
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @license   https://opensource.org/licenses/MIT
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
@@ -51,7 +45,7 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                 FROM ${table:catalog_product_website} t0
           INNER JOIN ${table:catalog_product_entity} t1
                WHERE t1.sku = :sku
-                 AND t0.product_id = t1.${pk:entity_id}',
+                 AND t0.product_id = t1.entity_id',
         SqlStatementKeys::PRODUCT_DATETIMES =>
             'SELECT *
                FROM ${table:catalog_product_entity_datetime}
@@ -332,14 +326,15 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
               WHERE t2.attribute_code = :attribute_code
                 AND t2.entity_type_id = :entity_type_id
                 AND t1.attribute_id = t2.attribute_id
-                AND t1.store_id = :store_id
-                AND t1.entity_id = :pk',
+                AND (t1.store_id = :store_id OR t1.store_id = 0)
+                AND t1.entity_id = :pk
+           ORDER BY t1.store_id DESC'
     );
 
     /**
      * Initializes the SQL statement repository with the primary key and table prefix utility.
      *
-     * @param \IteratorAggregate<\TechDivision\Import\Utils\SqlCompilerInterface> $compilers The array with the compiler instances
+     * @param \IteratorAggregate<\TechDivision\Import\Dbal\Utils\SqlCompilerInterface> $compilers The array with the compiler instances
      */
     public function __construct(\IteratorAggregate $compilers)
     {

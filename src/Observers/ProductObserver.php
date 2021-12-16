@@ -3,17 +3,11 @@
 /**
  * TechDivision\Import\Product\Observers\ProductObserver
  *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- *
- * PHP version 5
+ * PHP version 7
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @license   https://opensource.org/licenses/MIT
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
@@ -30,7 +24,7 @@ use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @license   https://opensource.org/licenses/MIT
  * @link      https://github.com/techdivision/import-product
  * @link      http://www.techdivision.com
  */
@@ -155,6 +149,15 @@ class ProductObserver extends AbstractProductImportObserver
 
         // load the product with the passed SKU and merge it with the attributes
         if ($entity = $this->loadProduct($attr[MemberNames::SKU])) {
+
+            // wanna update and have no required type_id? use origin
+            if (!isset($attr[MemberNames::TYPE_ID]) || empty($attr[MemberNames::TYPE_ID])) {
+                unset($attr[MemberNames::TYPE_ID]);
+            }
+            // wanna update and have no required attribute_set_id? use origin
+            if (!isset($attr[MemberNames::ATTRIBUTE_SET_ID]) || empty($attr[MemberNames::ATTRIBUTE_SET_ID])) {
+                unset($attr[MemberNames::ATTRIBUTE_SET_ID]);
+            }
             // remove the created at date from the attributes, when we update the entity
             unset($attr[MemberNames::CREATED_AT]);
             // merge the entity with the passed attributes

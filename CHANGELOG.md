@@ -3,9 +3,11 @@
 ## Bugfixes
 
 * Fixed #PAC-206: Prevent finder mappings of different libraries to be overwritten
-
+* Fix website relation clean up on Magento Commerce
+* 
 ## Features
 
+* Refactoring deprecated classes. see https://github.com/techdivision/import-cli-simple/blob/master/UPGRADE-4.0.0.md
 * Add techdivision/import-product-variant#22
 * Add default configuration for tier price import
 * Remove stack trace of exception for missing media directories > log a simple debug message instead
@@ -15,7 +17,9 @@
 * PAC-361: Don't check file system if copy-images defined as false
     * https://github.com/techdivision/import-cli-simple/issues/262
 * Add missing validation for min_qty, min_sale_qty, max_sale_qty, notify_stock_qty, qty_increments, weight fields
+* Add PAC-299: create validation callback for sku relations for grouped, configurables and bundles
 
+* Add new Observer for Multiple Store View with comma separated.
 
 # Version 24.0.2
 
