@@ -16,6 +16,7 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Services\ProductRelationAwareProcessorInterface;
+use TechDivision\Import\Utils\RegistryKeys;
 
 /**
  * Oberserver that provides abstract functionality for the product relation replace operation.
@@ -79,8 +80,8 @@ abstract class AbstractProductRelationObserver extends AbstractProductImportObse
     {
 
         // load the parent/child SKUs
-        $parentSku = $parentSku = $this->getValue($parentSkuColumnName = $this->getParentSkuColumnName());
-        $childSku = $childSku = $this->getValue($childSkuColumnName = $this->getChildSkuColumnName());
+        $parentSku = $this->getValue($parentSkuColumnName = $this->getParentSkuColumnName());
+        $childSku = $this->getValue($childSkuColumnName = $this->getChildSkuColumnName());
 
         // query whether or not the product relation has already been processed
         if ($this->hasBeenProcessedRelation($parentSku, $childSku)) {
@@ -115,11 +116,22 @@ abstract class AbstractProductRelationObserver extends AbstractProductImportObse
             );
 
             // query whether or not, debug mode is enabled
-            if ($this->isDebugMode()) {
+            if (!$this->isStrictMode()) {
                 // stop processing the row
                 $this->skipRow();
                 // log a warning and return immediately
                 $this->getSystemLogger()->warning($wrappedException->getMessage());
+                $this->mergeStatus(
+                    array(
+                        RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                            basename($this->getFilename()) => array(
+                                $this->getLineNumber() => array(
+                                    $childSkuColumnName => $wrappedException->getMessage()
+                                )
+                            )
+                        )
+                    )
+                );
                 return;
             }
 
