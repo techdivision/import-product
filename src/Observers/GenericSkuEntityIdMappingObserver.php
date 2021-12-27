@@ -114,7 +114,7 @@ class GenericSkuEntityIdMappingObserver extends AbstractProductImportObserver
                         RegistryKeys::NO_STRICT_VALIDATIONS => array(
                             basename($this->getSubject()->getFilename()) => array(
                                 $this->getSubject()->getLineNumber() => array(
-                                    $sku  => $message
+                                    $this->getSkuColumnName()  => $message
                                 )
                             )
                         )

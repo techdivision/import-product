@@ -149,7 +149,6 @@ class ProductObserver extends AbstractProductImportObserver
 
         // load the product with the passed SKU and merge it with the attributes
         if ($entity = $this->loadProduct($attr[MemberNames::SKU])) {
-
             // wanna update and have no required type_id? use origin
             if (!isset($attr[MemberNames::TYPE_ID]) || empty($attr[MemberNames::TYPE_ID])) {
                 unset($attr[MemberNames::TYPE_ID]);
