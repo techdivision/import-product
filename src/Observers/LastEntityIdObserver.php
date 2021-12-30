@@ -17,6 +17,7 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Utils\RegistryKeys;
 
 /**
  * Observer that pre-loads the entity ID of the product with the SKU found in the CSV file.
@@ -80,9 +81,20 @@ class LastEntityIdObserver extends AbstractProductImportObserver
             // load the subject
             $subject = $this->getSubject();
             // query whether or not debug mode has been enabled
-            if ($subject->isDebugMode()) {
+            if (!$subject->isStrictMode()) {
                 // log a warning, that the product with the given SKU can not be loaded
                 $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($message));
+                $this->mergeStatus(
+                    array(
+                        RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                            basename($this->getFilename()) => array(
+                                $this->getLineNumber() => array(
+                                    ColumnKeys::SKU => $message
+                                )
+                            )
+                        )
+                    )
+                );
                 // skip processing the actual row
                 $subject->skipRow();
             } else {
