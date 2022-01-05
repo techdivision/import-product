@@ -239,7 +239,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
                 // try to resolve the URL paths recursively
                 $this->resolveUrlPaths($urlPaths, $category, $storeViewCode);
             }
-        } catch (\Exception $ex){
+        } catch (\Exception $ex) {
             if (!$this->getSubject()->isStrictMode()) {
                 $this->getSystemLogger()->warning($ex->getMessage());
                 $this->mergeStatus(
