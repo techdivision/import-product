@@ -14,6 +14,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Utils\RegistryKeys;
 use Zend\Filter\FilterInterface;
 use TechDivision\Import\Utils\ConfigurationKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
@@ -229,14 +230,34 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
         // the store view code to load the appropriate ones
         $storeViewCode = $this->getStoreViewCode(StoreViewCodes::ADMIN);
 
-        // iterate of the found categories, load their URL path as well as the URL path of
-        // parent categories, if they have the anchor flag activated and add it the array
-        foreach ($paths as $path) {
-            // load the category based on the category path
-            $category = $this->getCategoryByPath($path, $storeViewCode);
-            // try to resolve the URL paths recursively
-            $this->resolveUrlPaths($urlPaths, $category, $storeViewCode);
+        try {
+            // iterate of the found categories, load their URL path as well as the URL path of
+            // parent categories, if they have the anchor flag activated and add it the array
+            foreach ($paths as $path) {
+                // load the category based on the category path
+                $category = $this->getCategoryByPath($path, $storeViewCode);
+                // try to resolve the URL paths recursively
+                $this->resolveUrlPaths($urlPaths, $category, $storeViewCode);
+            }
+        } catch (\Exception $ex){
+            if (!$this->getSubject()->isStrictMode()) {
+                $this->getSystemLogger()->warning($ex->getMessage());
+                $this->mergeStatus(
+                    array(
+                        RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                            basename($this->getFilename()) => array(
+                                $this->getLineNumber() => array(
+                                    ColumnKeys::CATEGORIES => $ex->getMessage()
+                                )
+                            )
+                        )
+                    )
+                );
+                return $this->getRow();
+            }
+            throw new $ex;
         }
+
 
         // return the array with the recursively resolved URL paths
         // of the categories that are related with the products

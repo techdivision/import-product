@@ -24,6 +24,7 @@ use TechDivision\Import\Observers\AttributeLoaderInterface;
 use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
 use TechDivision\Import\Observers\EntityMergers\EntityMergerInterface;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Utils\RegistryKeys;
 
 /**
  * Observer that creates/updates the category product relations.
@@ -249,8 +250,20 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
             );
         } catch (\Exception $e) {
             // query whether or not debug mode has been enabled
-            if ($subject->isDebugMode()) {
+            if (!$subject->isStrictMode()) {
                 $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($e->getMessage()));
+                $this->mergeStatus(
+                    array(
+                        RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                            basename($this->getFilename()) => array(
+                                $this->getLineNumber() => array(
+                                    ColumnKeys::CATEGORIES =>  $e->getMessage()
+                                )
+                            )
+                        )
+                    )
+                );
+                return $this->getRow();
             } else {
                 throw $e;
             }
