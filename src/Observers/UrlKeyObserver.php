@@ -253,7 +253,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
                         )
                     )
                 );
-                return $this->getRow();
+                return $urlPaths;
             }
             throw new $ex;
         }

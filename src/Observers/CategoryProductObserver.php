@@ -263,7 +263,7 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
                         )
                     )
                 );
-                return $this->getRow();
+                return null;
             } else {
                 throw $e;
             }
