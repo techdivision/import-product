@@ -17,6 +17,7 @@ namespace TechDivision\Import\Product\Observers;
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Utils\RegistryKeys;
 
 /**
  * A generic oberserver implementation that provides functionality to add the SKU => entity ID
@@ -104,9 +105,21 @@ class GenericSkuEntityIdMappingObserver extends AbstractProductImportObserver
             $message = sprintf('Can\'t load product with SKU "%s"', $sku);
             // load the subject
             $subject = $this->getSubject();
-            // query whether or not debug mode has been enabled
-            if ($subject->isDebugMode()) {
+            // query whether or not strict mode has been enabled
+            if (!$subject->isStrictMode()) {
                 $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($message));
+
+                $this->getSubject()->mergeStatus(
+                    array(
+                        RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                            basename($this->getSubject()->getFilename()) => array(
+                                $this->getSubject()->getLineNumber() => array(
+                                    $this->getSkuColumnName()  => $message
+                                )
+                            )
+                        )
+                    )
+                );
             } else {
                 throw new \Exception($message);
             }
