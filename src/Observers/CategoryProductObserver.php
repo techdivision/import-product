@@ -263,7 +263,7 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
                         )
                     )
                 );
-                return null;
+                return [];
             } else {
                 throw $e;
             }
