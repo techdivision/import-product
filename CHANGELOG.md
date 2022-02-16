@@ -20,6 +20,7 @@
 * Add PAC-299: create validation callback for sku relations for grouped, configurables and bundles
 * Add new Observer for Multiple Store View with comma separated.
 * Integration strict mode
+* Extensions of `import_product.callback.validator.pipe.related`, `import_product.callback.validator.comma.related` and `import_product.callback.validator.link` with `ignoreStrictMode` false
 
 # Version 24.0.2
 

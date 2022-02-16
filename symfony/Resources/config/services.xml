@@ -509,6 +509,8 @@
         <service id="import_product.callback.validator.link" class="TechDivision\Import\Callbacks\MultipleValuesValidatorCallback">
             <argument type="service" id="import_product.loader.sku"/>
             <argument>%array_validator.nullable.true%</argument>
+            <argument>%array_validator.nullable.false%</argument>
+            <argument>%array_validator.nullable.false%</argument>
         </service>
         <service id="import_product.callback.validator.tax.class" class="TechDivision\Import\Product\Callbacks\TaxClassValidatorCallback">
             <argument type="service" id="import_product.loader.tax.class"/>
@@ -521,10 +523,14 @@
         <service id="import_product.callback.validator.pipe.related" class="TechDivision\Import\Callbacks\PipeDelimiterSkuRelationsValidatorCallback">
             <argument type="service" id="import_product.loader.sku"/>
             <argument>%array_validator.nullable.true%</argument>
+            <argument>%array_validator.nullable.false%</argument>
+            <argument>%array_validator.nullable.false%</argument>
         </service>
         <service id="import_product.callback.validator.comma.related" class="TechDivision\Import\Callbacks\CommaDelimiterSkuRelationsValidatorCallback">
             <argument type="service" id="import_product.loader.sku"/>
             <argument>%array_validator.nullable.true%</argument>
+            <argument>%array_validator.nullable.false%</argument>
+            <argument>%array_validator.nullable.false%</argument>
         </service>
 
         <!--
