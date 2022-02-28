@@ -207,8 +207,32 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
         if (!$this->hasHeader(ColumnKeys::URL_KEY)) {
             $this->addHeader(ColumnKeys::URL_KEY);
         }
+
+        // generate the unique URL key
+        $uniqueUrlKey = $this->makeUnique($this->getSubject(), $product, $urlKey, $this->getUrlPaths());
+
+        if ($urlKey !== $uniqueUrlKey && !$this->getSubject()->isStrictMode()) {
+            $message = sprintf('Generate new unique URL key "%s" for store "%s" and product with SKU "%s"',
+                $uniqueUrlKey,
+                $this->getStoreViewCode(StoreViewCodes::ADMIN),
+                $sku
+            );
+            $this->getSubject()->getSystemLogger()->warning($message);
+            $this->mergeStatus(
+                array(
+                    RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                        basename($this->getFilename()) => array(
+                            $this->getLineNumber() => array(
+                                ColumnKeys::URL_KEY => $message
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
         // set the unique URL key for further processing
-        $this->setValue(ColumnKeys::URL_KEY, $this->makeUnique($this->getSubject(), $product, $urlKey, $this->getUrlPaths()));
+        $this->setValue(ColumnKeys::URL_KEY, $uniqueUrlKey);
     }
 
     /**
