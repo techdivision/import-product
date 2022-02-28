@@ -212,7 +212,8 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
         $uniqueUrlKey = $this->makeUnique($this->getSubject(), $product, $urlKey, $this->getUrlPaths());
 
         if ($urlKey !== $uniqueUrlKey && !$this->getSubject()->isStrictMode()) {
-            $message = sprintf('Generate new unique URL key "%s" for store "%s" and product with SKU "%s"',
+            $message = sprintf(
+                'Generate new unique URL key "%s" for store "%s" and product with SKU "%s"',
                 $uniqueUrlKey,
                 $this->getStoreViewCode(StoreViewCodes::ADMIN),
                 $sku
