@@ -280,7 +280,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
                 );
                 return $urlPaths;
             }
-            throw new $ex;
+            throw $ex;
         }
 
 
