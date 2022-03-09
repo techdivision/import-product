@@ -14,6 +14,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Utils\RegistryKeys;
 use Zend\Filter\FilterInterface;
 use TechDivision\Import\Utils\ConfigurationKeys;
@@ -208,6 +209,11 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
             $this->addHeader(ColumnKeys::URL_KEY);
         }
 
+        // If not visible we do not need unique URL key
+        if (!$this->isVisible($this->getValue(ColumnKeys::VISIBILITY))) {
+            $this->setValue(ColumnKeys::URL_KEY, $urlKey);
+            return;
+        }
         // generate the unique URL key
         $uniqueUrlKey = $this->makeUnique($this->getSubject(), $product, $urlKey, $this->getUrlPaths());
 
@@ -234,6 +240,15 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
 
         // set the unique URL key for further processing
         $this->setValue(ColumnKeys::URL_KEY, $uniqueUrlKey);
+    }
+
+    /**
+     * @param $visibility
+     * @return bool
+     */
+    private function isVisible($visibility)
+    {
+        return $this->getSubject()->getVisibilityIdByValue($visibility) !== VisibilityKeys::VISIBILITY_NOT_VISIBLE;
     }
 
     /**
