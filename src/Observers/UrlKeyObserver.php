@@ -209,7 +209,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
             $this->addHeader(ColumnKeys::URL_KEY);
         }
 
-        // If not visible we do not need unique URL key
+        // If not visible or we are in we do not need unique URL key
         if (!$this->isVisible($this->getValue(ColumnKeys::VISIBILITY))) {
             $this->setValue(ColumnKeys::URL_KEY, $urlKey);
             return;
@@ -281,13 +281,14 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
             }
         } catch (\Exception $ex) {
             if (!$this->getSubject()->isStrictMode()) {
-                $this->getSystemLogger()->warning($ex->getMessage());
+                $message = sprintf('Category error on SKU "%s"! Detail: %s', $this->getValue(ColumnKeys::SKU), $ex->getMessage());
+                $this->getSystemLogger()->warning($message);
                 $this->mergeStatus(
                     array(
                         RegistryKeys::NO_STRICT_VALIDATIONS => array(
                             basename($this->getFilename()) => array(
                                 $this->getLineNumber() => array(
-                                    ColumnKeys::CATEGORIES => $ex->getMessage()
+                                    ColumnKeys::CATEGORIES => $message
                                 )
                             )
                         )

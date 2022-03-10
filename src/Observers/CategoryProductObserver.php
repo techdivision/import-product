@@ -251,13 +251,14 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
         } catch (\Exception $e) {
             // query whether or not debug mode has been enabled
             if (!$subject->isStrictMode()) {
-                $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($e->getMessage()));
+                $message = sprintf('Category error on SKU "%s"! Detail: %s', $this->getValue(ColumnKeys::SKU), $e->getMessage());
+                $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($message));
                 $this->mergeStatus(
                     array(
                         RegistryKeys::NO_STRICT_VALIDATIONS => array(
                             basename($this->getFilename()) => array(
                                 $this->getLineNumber() => array(
-                                    ColumnKeys::CATEGORIES =>  $e->getMessage()
+                                    ColumnKeys::CATEGORIES =>  $message
                                 )
                             )
                         )
