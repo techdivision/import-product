@@ -243,8 +243,10 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
     }
 
     /**
-     * @param $visibility
-     * @return bool
+     * Query whether or not the actual entity is visible.
+     *
+     * @param string $visibility Value from csv
+     * @return boolean TRUE if the entity is visible, else FALSE
      */
     private function isVisible($visibility)
     {
