@@ -210,7 +210,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
         }
 
         // If not visible or we are in we do not need unique URL key
-        if (!$this->isVisible($this->getValue(ColumnKeys::VISIBILITY))) {
+        if ($this->hasValue(ColumnKeys::VISIBILITY) && !$this->isVisible($this->getValue(ColumnKeys::VISIBILITY))) {
             $this->setValue(ColumnKeys::URL_KEY, $urlKey);
             return;
         }
