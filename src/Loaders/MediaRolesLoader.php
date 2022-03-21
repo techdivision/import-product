@@ -79,7 +79,7 @@ class MediaRolesLoader implements LoaderInterface
         // derive media roles form image types
         foreach ($this->importProcessor->getImageTypes() as $imageColumnName => $imageLabelColumnName) {
             // create the role based prefix for the image columns
-            $role = str_replace('_image', null, $imageColumnName);
+            $role = str_replace('_image', '', $imageColumnName);
 
             // initialize the values for the corresponding media role
             $mediaRoles[$role] = array(
