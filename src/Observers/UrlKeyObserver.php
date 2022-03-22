@@ -16,7 +16,7 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Utils\RegistryKeys;
-use Zend\Filter\FilterInterface;
+use Laminas\Filter\FilterInterface;
 use TechDivision\Import\Utils\ConfigurationKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\UrlKeyUtilInterface;
@@ -81,7 +81,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
      * Initialize the observer with the passed product bunch processor and filter instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor    The product bunch processor instance
-     * @param \Zend\Filter\FilterInterface                                         $convertLiteralUrlFilter  The URL filter instance
+     * @param \Laminas\Filter\FilterInterface                                         $convertLiteralUrlFilter  The URL filter instance
      * @param \TechDivision\Import\Utils\UrlKeyUtilInterface                       $urlKeyUtil               The URL key utility instance
      * @param \TechDivision\Import\Utils\Generators\GeneratorInterface             $reverseSequenceGenerator The reverse sequence generator instance
      */
