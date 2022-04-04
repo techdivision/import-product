@@ -52,6 +52,11 @@ class ProductValueLoader implements LoaderInterface
     protected $registryLoader;
 
     /**
+     * @var bool
+     */
+    private $loaded = false;
+
+    /**
      * Construct that initializes the iterator with the product processor instance.
      *
      * @param \TechDivision\Import\Loaders\LoaderInterface                         $registryLoader   The registry loader instance
@@ -78,6 +83,11 @@ class ProductValueLoader implements LoaderInterface
      */
     public function load()
     {
+        if ($this->loaded) {
+            // return the values
+            return $this->values;
+        }
+
         // load the already processed SKUs from the registry, merge
         // them with the ones from the DB and return them
         $collectedColumns = $this->getRegistryLoader()->load();
@@ -96,6 +106,8 @@ class ProductValueLoader implements LoaderInterface
             }
         }
 
+        // all SKUs loaded from DB and import files
+        $this->loaded = true;
         // return the values
         return $this->values;
     }

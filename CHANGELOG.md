@@ -22,6 +22,7 @@
 * Integration strict mode
 * Extensions of `import_product.callback.validator.pipe.related`, `import_product.callback.validator.comma.related` and `import_product.callback.validator.link` with `ignoreStrictMode` false
 * Update composer with php Version >=^7.3
+* Optimize ProductValueLoader with bunches of import files
 
 # Version 24.0.2
 
