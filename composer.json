@@ -4,7 +4,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.3.0",
-        "techdivision/import": "dev-master"
+        "techdivision/import": "^17.0.0"
     },
     "require-dev": {
         "doctrine/dbal": "2.5.*",
