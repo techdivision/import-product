@@ -1,3 +1,14 @@
+# Version 25.0.1
+
+## Bugfixes
+
+* Fix category assignments, if column categories does not exit:
+  * If categories column not exit and clean-up-category-product-relations is true, the assignment is not deleted.
+
+## Features
+
+* None
+
 # Version 25.0.0
 
 ## Bugfixes

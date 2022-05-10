@@ -152,7 +152,7 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
         }
 
         // query whether or not we've to clean up existing category product relations
-        if ($this->getSubject()->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_CATEGORY_PRODUCT_RELATIONS) &&
+        if ($this->hasHeader(ColumnKeys::CATEGORIES) && $this->getSubject()->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_CATEGORY_PRODUCT_RELATIONS) &&
             $this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_CATEGORY_PRODUCT_RELATIONS)
         ) {
             // load the existing category product relations for the product with the given SKU
