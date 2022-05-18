@@ -1,3 +1,14 @@
+# Version 25.0.1
+
+## Bugfixes
+
+* Fixed techdivision/import-product
+  * Fix error url-rewrite-import for an existing article on another store.
+
+## Features
+
+* None
+
 # Version 25.0.0
 
 ## Bugfixes
