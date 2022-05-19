@@ -1,9 +1,20 @@
-# Version 25.0.1
+# Version 25.0.2
 
 ## Bugfixes
 
 * Fixed techdivision/import-product
   * Fix error url-rewrite-import for an existing article on another store.
+
+## Features
+
+* None
+
+# Version 25.0.1
+
+## Bugfixes
+
+* Fix category assignments, if column categories does not exit:
+  * If categories column not exit and clean-up-category-product-relations is true, the assignment is not deleted.
 
 ## Features
 
@@ -32,6 +43,8 @@
 * Add new Observer for Multiple Store View with comma separated.
 * Integration strict mode
 * Extensions of `import_product.callback.validator.pipe.related`, `import_product.callback.validator.comma.related` and `import_product.callback.validator.link` with `ignoreStrictMode` false
+* Update composer with php Version >=^7.3
+* Optimize ProductValueLoader with bunches of import files
 
 # Version 24.0.2
 

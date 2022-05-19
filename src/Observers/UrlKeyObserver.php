@@ -14,8 +14,9 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Product\Utils\VisibilityKeys;
 use TechDivision\Import\Utils\RegistryKeys;
-use Zend\Filter\FilterInterface;
+use Laminas\Filter\FilterInterface;
 use TechDivision\Import\Utils\ConfigurationKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\UrlKeyUtilInterface;
@@ -87,7 +88,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
      * Initialize the observer with the passed product bunch processor and filter instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor    The product bunch processor instance
-     * @param \Zend\Filter\FilterInterface                                         $convertLiteralUrlFilter  The URL filter instance
+     * @param \Laminas\Filter\FilterInterface                                      $convertLiteralUrlFilter  The URL filter instance
      * @param \TechDivision\Import\Utils\UrlKeyUtilInterface                       $urlKeyUtil               The URL key utility instance
      * @param \TechDivision\Import\Utils\Generators\GeneratorInterface             $reverseSequenceGenerator The reverse sequence generator instance
      */
@@ -224,8 +225,49 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
         if (!$this->hasHeader(ColumnKeys::URL_KEY)) {
             $this->addHeader(ColumnKeys::URL_KEY);
         }
+
+        // If not visible or we are in we do not need unique URL key
+        if ($this->hasValue(ColumnKeys::VISIBILITY) && !$this->isVisible($this->getValue(ColumnKeys::VISIBILITY))) {
+            $this->setValue(ColumnKeys::URL_KEY, $urlKey);
+            return;
+        }
+        // generate the unique URL key
+        $uniqueUrlKey = $this->makeUnique($this->getSubject(), $product, $urlKey, $this->getUrlPaths());
+
+        if ($urlKey !== $uniqueUrlKey && !$this->getSubject()->isStrictMode()) {
+            $message = sprintf(
+                'Generate new unique URL key "%s" for store "%s" and product with SKU "%s"',
+                $uniqueUrlKey,
+                $this->getStoreViewCode(StoreViewCodes::ADMIN),
+                $sku
+            );
+            $this->getSubject()->getSystemLogger()->warning($message);
+            $this->mergeStatus(
+                array(
+                    RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                        basename($this->getFilename()) => array(
+                            $this->getLineNumber() => array(
+                                ColumnKeys::URL_KEY => $message
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
         // set the unique URL key for further processing
-        $this->setValue(ColumnKeys::URL_KEY, $this->makeUnique($this->getSubject(), $product, $urlKey, $this->getUrlPaths()));
+        $this->setValue(ColumnKeys::URL_KEY, $uniqueUrlKey);
+    }
+
+    /**
+     * Query whether or not the actual entity is visible.
+     *
+     * @param string $visibility Value from csv
+     * @return boolean TRUE if the entity is visible, else FALSE
+     */
+    private function isVisible($visibility)
+    {
+        return $this->getSubject()->getVisibilityIdByValue($visibility) !== VisibilityKeys::VISIBILITY_NOT_VISIBLE;
     }
 
     /**
@@ -258,13 +300,14 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
             }
         } catch (\Exception $ex) {
             if (!$this->getSubject()->isStrictMode()) {
-                $this->getSystemLogger()->warning($ex->getMessage());
+                $message = sprintf('Category error on SKU "%s"! Detail: %s', $this->getValue(ColumnKeys::SKU), $ex->getMessage());
+                $this->getSystemLogger()->warning($message);
                 $this->mergeStatus(
                     array(
                         RegistryKeys::NO_STRICT_VALIDATIONS => array(
                             basename($this->getFilename()) => array(
                                 $this->getLineNumber() => array(
-                                    ColumnKeys::CATEGORIES => $ex->getMessage()
+                                    ColumnKeys::CATEGORIES => $message
                                 )
                             )
                         )
@@ -272,7 +315,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
                 );
                 return $urlPaths;
             }
-            throw new $ex;
+            throw $ex;
         }
 
 
