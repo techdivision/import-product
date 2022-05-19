@@ -207,9 +207,9 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
                 throw new \Exception(sprintf('Can\'t initialize the URL key for product "%s" because columns "url_key" or "name" have a value set for default store view', $sku));
             }
 
-            // stop processing, because we're in a store
-            // view row and a URL key is not mandatory
             if (!isset($this->adminRow[$sku][ColumnKeys::URL_KEY])) {
+                // stop processing, because we're in a store
+                // view row and a URL key is not mandatory and now URL-Key from admin row exists
                 return;
             }
             // set url_key from admin
