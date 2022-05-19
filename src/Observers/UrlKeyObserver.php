@@ -78,6 +78,13 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
     protected $rootCategories = array();
 
     /**
+     * The admin row
+     *
+     * @var array
+     */
+    protected $adminRow = array();
+
+    /**
      * Initialize the observer with the passed product bunch processor and filter instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor    The product bunch processor instance
@@ -199,9 +206,19 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
             if ($this->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
                 throw new \Exception(sprintf('Can\'t initialize the URL key for product "%s" because columns "url_key" or "name" have a value set for default store view', $sku));
             }
-            // stop processing, because we're in a store
-            // view row and a URL key is not mandatory
-            return;
+
+            if (!isset($this->adminRow[$sku][ColumnKeys::URL_KEY])) {
+                // stop processing, because we're in a store
+                // view row and a URL key is not mandatory and now URL-Key from admin row exists
+                return;
+            }
+            // set url_key from admin
+            $urlKey = $this->adminRow[$sku][ColumnKeys::URL_KEY];
+        }
+
+        // remember the admin row on SKU with url_key to be safe on later process
+        if ($this->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
+            $this->adminRow[$sku][ColumnKeys::URL_KEY] = $urlKey;
         }
 
         // if header not exists create it
