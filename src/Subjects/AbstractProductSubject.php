@@ -444,7 +444,12 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         if (isset($this->taxClasses[$taxClassName])) {
             return (integer) $this->taxClasses[$taxClassName][MemberNames::CLASS_ID];
         }
-
+        
+        // if product has no tax_class_name ("none") set class_id as 0
+        if (strtolower((string)$taxClassName) === 'none') {
+            return 0;
+        }
+        
         // throw an exception, if not
         throw new \Exception(
             $this->appendExceptionSuffix(
