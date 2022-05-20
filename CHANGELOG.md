@@ -1,3 +1,14 @@
+# Version 24.0.14
+
+## Bugfixes
+
+* Fixed techdivision/import-product in `TaxClassCallback`
+  * Product import can have a tax_class_name `None`
+
+## Features
+
+* None
+
 # Version 24.0.13
 
 ## Improvement
