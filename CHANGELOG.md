@@ -1,3 +1,13 @@
+# Version 25.0.4
+
+## Bugfixes
+
+* Implement Strict Mode in FileUploadObserver on missing file
+
+## Features
+
+* None
+
 # Version 25.0.3
 
 ## Bugfixes

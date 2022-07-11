@@ -82,8 +82,21 @@ class FileUploadObserver extends AbstractProductImportObserver
                              );
                     } catch (\Exception $e) {
                         // query whether or not debug mode has been enabled
-                        if ($subject->isDebugMode()) {
-                            $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($e->getMessage()));
+                        if (!$subject->isStrictMode()) {
+                            // log a warning, that the image with the given name can not be loaded
+                            $message = $e->getMessage();
+                            $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($message));
+                            $this->mergeStatus(
+                                array(
+                                    RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                                        basename($this->getFilename()) => array(
+                                            $this->getLineNumber() => array(
+                                                $imageColumnName => $message
+                                            )
+                                        )
+                                    )
+                                )
+                            );
                         } else {
                             throw $subject->wrapException(array($imageColumnName), $e);
                         }
@@ -123,8 +136,21 @@ class FileUploadObserver extends AbstractProductImportObserver
                                  );
                         } catch (\Exception $e) {
                             // query whether or not debug mode has been enabled
-                            if ($subject->isDebugMode()) {
-                                $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($e->getMessage()));
+                            if (!$subject->isStrictMode()) {
+                                // log a warning, that the image with the given name can not be loaded
+                                $message = $e->getMessage();
+                                $subject->getSystemLogger()->warning($subject->appendExceptionSuffix($message));
+                                $this->mergeStatus(
+                                    array(
+                                        RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                                            basename($this->getFilename()) => array(
+                                                $this->getLineNumber() => array(
+                                                    ColumnKeys::ADDITIONAL_IMAGES => $message
+                                                )
+                                            )
+                                        )
+                                    )
+                                );
                             } else {
                                 throw $subject->wrapException(array(ColumnKeys::ADDITIONAL_IMAGES), $e);
                             }
