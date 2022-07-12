@@ -1,3 +1,13 @@
+# Version 25.0.5
+
+## Bugfixes
+
+* Fix crash on Strict Mode definition in FileUploadObserver
+
+## Features
+
+* None
+
 # Version 25.0.4
 
 ## Bugfixes

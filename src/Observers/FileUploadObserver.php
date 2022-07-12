@@ -16,6 +16,7 @@ namespace TechDivision\Import\Product\Observers;
 
 use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\ConfigurationKeys;
+use TechDivision\Import\Utils\RegistryKeys;
 
 /**
  * Observer that uploads the product image files specified in a CSV file to a
