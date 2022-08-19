@@ -49,6 +49,9 @@
     "catalog_product_super_attribute_label" : {
       "variant_variation_label": "value",
       "variant_variation_use_default": "use_default"
+    },
+    "cataloginventory_stock_item" : {
+      "allow_backorders": "backorders"
     }
   }
 }
