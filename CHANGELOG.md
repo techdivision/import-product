@@ -1,8 +1,17 @@
-# Version 25.0.6
+# Version 25.0.7
 
 ## Bugfixes
 
 * Fix has_options and required_options cleanup on product update
+
+## Features
+
+* None
+
+# Version 25.0.6
+
+## Bugfixes
+
 * Fix header-mapping.json `"allow_backorders": "backorders"`
 
 ## Features
