@@ -158,6 +158,9 @@ class ProductObserver extends AbstractProductImportObserver
             }
             // remove the created at date from the attributes, when we update the entity
             unset($attr[MemberNames::CREATED_AT]);
+            // Remove has_options and required_options flag from the attributes, when we update the entity
+            unset($attr[MemberNames::HAS_OPTIONS]);
+            unset($attr[MemberNames::REQUIRED_OPTIONS]);
             // merge the entity with the passed attributes
             return $this->mergeEntity($entity, $attr);
         }
