@@ -112,7 +112,7 @@ abstract class AbstractProductRelationObserver extends AbstractProductImportObse
             // if we're NOT in debug mode, re-throw a more detailed exception
             $wrappedException = $this->wrapException(
                 array($parentSkuColumnName, $childSkuColumnName),
-                new \Exception($message, null, $e)
+                new \Exception($message, 0, $e)
             );
 
             // query whether or not, debug mode is enabled

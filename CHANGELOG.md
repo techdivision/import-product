@@ -1,3 +1,13 @@
+# Version 25.0.8
+
+## Bugfixes
+
+* Fix #PAC-684: set \Exception() parameter Compatible with php8.1
+
+## Features
+
+* none
+
 # Version 25.0.7
 
 ## Bugfixes
