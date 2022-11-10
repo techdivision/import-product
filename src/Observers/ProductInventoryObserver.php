@@ -153,6 +153,11 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
         if ($this->hasChanges($entity = $this->initializeStockItem($this->prepareStockItemAttributes()))) {
             $this->persistStockItem($entity);
         }
+
+        // prepare, initialize and persist the stock status/item status
+        if ($this->hasChanges($entity = $this->initializeStockItemStatus($this->prepareStatusAttributes()))) {
+            $this->persistStockItemStatus($entity);
+        }
     }
 
     /**
@@ -181,6 +186,36 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
         );
     }
 
+   /**
+     * Prepare the basic attributes of the stock status/item entity that has to be persisted.
+     *
+     * @return array The prepared stock status/item attributes
+     */
+    protected function prepareStatusAttributes()
+    {
+
+        // load the ID of the product that has been created recently
+        $lastEntityId = $this->getSubject()->getLastEntityId();
+
+        // initialize the stock status data
+        $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID, 0);
+        $stockStatus =  $this->getValue(ColumnKeys::IS_IN_STOCK, 0);
+        $quantity =  $this->getValue(ColumnKeys::QTY, 0);
+
+        // return the prepared stock status
+        return $this->initializeEntity(
+            $this->loadRawStatusEntity(
+                array(
+                    MemberNames::PRODUCT_ID   => $lastEntityId,
+                    MemberNames::WEBSITE_ID   => $websiteId,
+                    MemberNames::STOCK_ID     => 1,
+                    MemberNames::STOCK_STATUS => (int) $stockStatus,
+                    MemberNames::QTY          => $quantity
+                )
+            ),
+        );
+    }
+
     /**
      * Merge's and return's the entity with the passed attributes and set's the
      * passed status.
@@ -199,6 +234,21 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
             $this->entityMerger ? $this->entityMerger->merge($this, $entity, $attr) : $attr,
             array(EntityStatus::MEMBER_NAME => $this->detectState($entity, $attr, $changeSetName))
         );
+    }
+
+    /**
+     * Merge's and return's the entity with the passed attributes and set's the
+     * passed status.
+     *
+     * @param array       $entity        The entity to merge the attributes into
+     * @param array       $attr          The attributes to be merged
+     * @param string|null $changeSetName The change set name to use
+     *
+     * @return array The merged entity
+     */
+    protected function mergeEntityStatus(array $entity, array $attr, $changeSetName = null)
+    {
+        return parent::mergeEntity($entity, $attr, $changeSetName);
     }
 
     /**
@@ -224,6 +274,18 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
     }
 
     /**
+     * Load's and return's a raw customer entity without primary key but the mandatory members only and nulled values.
+     *
+     * @param array $data An array with data that will be used to initialize the raw entity with
+     *
+     * @return array The initialized entity
+     */
+    protected function loadRawStatusEntity(array $data = array())
+    {
+        return $this->getProductBunchProcessor()->loadRawEntity(EntityTypeCodes::CATALOGINVENTORY_STOCK_ITEM_STATUS, $data);
+    }
+
+    /**
      * Initialize the stock item with the passed attributes and returns an instance.
      *
      * @param array $attr The stock item attributes
@@ -231,6 +293,18 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
      * @return array The initialized stock item
      */
     protected function initializeStockItem(array $attr)
+    {
+        return $attr;
+    }
+
+    /**
+     * Initialize the stock item status with the passed attributes and returns an instance.
+     *
+     * @param array $attr The stock item attributes
+     *
+     * @return array The initialized stock item
+     */
+    protected function initializeStockItemStatus(array $attr)
     {
         return $attr;
     }
@@ -255,5 +329,17 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
     protected function persistStockItem($stockItem)
     {
         $this->getProductBunchProcessor()->persistStockItem($stockItem);
+    }
+
+    /**
+     * Persist's the passed stock item data and return's the ID.
+     *
+     * @param array $stockItemStatus The stock item data to persist
+     *
+     * @return void
+     */
+    protected function persistStockItemStatus($stockItemStatus)
+    {
+        $this->getProductBunchProcessor()->persistStockItemStatus($stockItemStatus);
     }
 }

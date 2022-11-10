@@ -220,6 +220,13 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     protected $urlRewriteRepository;
 
     /**
+     * The action for stock item CRUD methods.
+     *
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
+     */
+    private $stockItemStatusAction;
+
+    /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
      * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface                     $connection                        The connection to use
@@ -248,6 +255,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @param \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface   $productAttributeAssembler         The assembler to load the product attributes with
      * @param \TechDivision\Import\Loaders\LoaderInterface                                 $rawEntityLoader                   The raw entity loader instance
      * @param \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface              $urlRewriteRepository              The URL rewrite repository to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                            $stockItemStatusAction             The stock item status action to use
      */
     public function __construct(
         ConnectionInterface $connection,
@@ -275,7 +283,8 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         ActionInterface $urlRewriteAction,
         ProductAttributeAssemblerInterface $productAttributeAssembler,
         LoaderInterface $rawEntityLoader,
-        UrlRewriteRepositoryInterface $urlRewriteRepository
+        UrlRewriteRepositoryInterface $urlRewriteRepository,
+        ActionInterface $stockItemStatusAction = null
     ) {
         $this->setConnection($connection);
         $this->setProductRepository($productRepository);
@@ -303,6 +312,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         $this->setProductAttributeAssembler($productAttributeAssembler);
         $this->setRawEntityLoader($rawEntityLoader);
         $this->setUrlRewriteRepository($urlRewriteRepository);
+        $this->setStockItemStatusAction($stockItemStatusAction);
     }
 
     /**
@@ -656,6 +666,29 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     {
         return $this->stockItemAction;
     }
+
+    /**
+     * Set's the action with the stock item status CRUD methods.
+     *
+     * @param ActionInterface $stockItemStatusAction The action with the stock item CRUD methods
+     *
+     * @return void
+     */
+    public function setStockItemStatusAction($stockItemStatusAction)
+    {
+        $this->stockItemStatusAction = $stockItemStatusAction;
+    }
+
+    /**
+     * Return's the action with the stock item status CRUD methods.
+     *
+     * @return ActionInterface
+     */
+    public function getStockItemStatusAction()
+    {
+        return $this->stockItemStatusAction;
+    }
+
 
     /**
      * Set's the action with the URL rewrite CRUD methods.
@@ -1047,7 +1080,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
-     * Load's and return's the stock status with the passed product/website/stock ID.
+     * Load's and return's the stock item with the passed product/website/stock ID.
      *
      * @param integer $productId The product ID of the stock item to load
      * @param integer $websiteId The website ID of the stock item to load
@@ -1058,6 +1091,20 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function loadStockItem($productId, $websiteId, $stockId)
     {
         return $this->getStockItemRepository()->findOneByProductIdAndWebsiteIdAndStockId($productId, $websiteId, $stockId);
+    }
+
+    /**
+     * Load's and return's the stock item status with the passed product/website/stock ID.
+     *
+     * @param integer $productId The product ID of the stock item to load
+     * @param integer $websiteId The website ID of the stock item to load
+     * @param integer $stockId   The stock ID of the stock item to load
+     *
+     * @return array The stock item
+     */
+    public function loadStockItemStatus($productId, $websiteId, $stockId)
+    {
+        return $this->getStockItemRepository()->findOneStockStatusByProductIdAndWebsiteIdAndStockId($productId, $websiteId, $stockId);
     }
 
     /**
@@ -1263,6 +1310,23 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     }
 
     /**
+     * Persist's the passed stock item status data and return's the ID.
+     *
+     * @param array       $stockItem The stock item data to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function persistStockItemStatus($stockItem, $name = null)
+    {
+        $stockItemStatus = $this->getStockItemStatusAction();
+        // backward compatibility for symfony di
+        if ($stockItemStatus) {
+            $stockItemStatus->persist($stockItem, $name);
+        }
+    }
+
+    /**
      * Persist's the URL rewrite with the passed data.
      *
      * @param array       $row  The URL rewrite to persist
@@ -1312,6 +1376,11 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     public function deleteStockItem($row, $name = null)
     {
         $this->getStockItemAction()->delete($row, $name);
+        $stockItemStatus = $this->getStockItemStatusAction();
+        // backward compatibility for symfony di
+        if ($stockItemStatus) {
+            $stockItemStatus->delete($row, $name);
+        }
     }
 
     /**

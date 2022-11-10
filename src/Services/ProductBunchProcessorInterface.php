@@ -382,6 +382,16 @@ interface ProductBunchProcessorInterface extends ProductProcessorInterface, EavA
     public function persistStockItem($stockItem, $name = null);
 
     /**
+     * Persist's the passed stock item status data and return's the ID.
+     *
+     * @param array       $stockItem The stock item data to persist
+     * @param string|null $name      The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function persistStockItemStatus($stockItem, $name = null);
+
+    /**
      * Delete's the entity with the passed attributes.
      *
      * @param array       $row  The attributes of the entity to delete

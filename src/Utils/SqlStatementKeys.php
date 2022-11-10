@@ -170,6 +170,33 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const STOCK_ITEM = 'stock_item';
 
     /**
+     * The SQL statement to load the stock item with the passed product/website/stock ID.
+     *
+     * @var string
+     */
+    const STOCK_ITEM_STATUS = 'stock_item_status';
+
+    /**
+     * The SQL statement to create a product's stock status.
+     *
+     * @var string
+     */
+    const CREATE_STOCK_ITEM_STATUS = 'create.stock_item_status';
+
+    /**
+     * The SQL statement to create a product's stock status.
+     *
+     * @var string
+     */
+    const UPDATE_STOCK_ITEM_STATUS = 'update.stock_item_status';
+
+    /**
+     * The SQL statement to remove all existing stock item related with the SKU passed as parameter.
+     *
+     * @var string
+     */
+    const DELETE_STOCK_ITEM_STATUS_BY_SKU = 'delete.stock_item_status.by.sku';
+    /**
      * The SQL statement to load an existing product relation with the passed parent/child ID.
      *
      * @var string

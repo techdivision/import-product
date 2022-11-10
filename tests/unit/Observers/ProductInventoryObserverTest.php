@@ -156,7 +156,7 @@ class ProductInventoryObserverTest extends TestCase
         $mockSubject->expects($this->any())
                     ->method('getRow')
                     ->willReturn($row);
-        $mockSubject->expects($this->once())
+        $mockSubject->expects($this->exactly(2))
                     ->method('getLastEntityId')
                     ->willReturn($lastEntityId = 12345);
         $mockSubject->expects($this->any())
