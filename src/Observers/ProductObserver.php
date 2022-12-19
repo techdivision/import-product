@@ -156,6 +156,16 @@ class ProductObserver extends AbstractProductImportObserver
             if (!isset($attr[MemberNames::ATTRIBUTE_SET_ID]) || empty($attr[MemberNames::ATTRIBUTE_SET_ID])) {
                 unset($attr[MemberNames::ATTRIBUTE_SET_ID]);
             }
+            //unset attribute updated_at if older than entity updated_at
+            if (isset($attr[MemberNames::UPDATED_AT])) {
+                $updatedAtEntity = date_create($entity['updated_at']);
+                $updatedAtAttribute = date_create($attr['updated_at']);
+
+                if ($updatedAtEntity->format('Y/m/d H:i:s') >= $updatedAtAttribute->format('Y/m/d H:i:s')){
+                    unset($attr['updated_at']);
+                }
+            }
+
             // remove the created at date from the attributes, when we update the entity
             unset($attr[MemberNames::CREATED_AT]);
             // Remove has_options and required_options flag from the attributes, when we update the entity
