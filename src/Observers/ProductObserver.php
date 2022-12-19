@@ -161,7 +161,7 @@ class ProductObserver extends AbstractProductImportObserver
                 $updatedAtEntity = date_create($entity['updated_at']);
                 $updatedAtAttribute = date_create($attr['updated_at']);
 
-                if ($updatedAtEntity->format('Y/m/d H:i:s') >= $updatedAtAttribute->format('Y/m/d H:i:s')){
+                if ($updatedAtEntity->format('Y/m/d H:i:s') >= $updatedAtAttribute->format('Y/m/d H:i:s')) {
                     unset($attr['updated_at']);
                 }
             }
