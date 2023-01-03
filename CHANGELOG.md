@@ -1,3 +1,12 @@
+# Version 25.1.1
+
+## Bugfixes
+
+* None
+## Features
+
+* PAC-309: unset update_at from attribute by update statement to avoid old data
+
 # Version 25.1.0
 
 ## Bugfixes
