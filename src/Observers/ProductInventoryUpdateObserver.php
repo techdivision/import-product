@@ -14,6 +14,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Product\Utils\EntityTypeCodes;
 use TechDivision\Import\Product\Utils\MemberNames;
 
 /**
@@ -73,7 +74,7 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
 
         // merge the attributes with the entity, if available
         if ($entity) {
-            return $this->mergeEntityStatus($entity, $attr);
+            return $this->mergeEntityStatus($entity, $attr, EntityTypeCodes::CATALOGINVENTORY_STOCK_ITEM_STATUS);
         }
 
         // otherwise simply return the attributes

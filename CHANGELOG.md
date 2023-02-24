@@ -1,3 +1,9 @@
+# Version 25.1.2
+
+## Bugfixes
+
+* Prepare legacy stock status import with change-set-dedection 
+
 # Version 25.1.1
 
 ## Bugfixes
