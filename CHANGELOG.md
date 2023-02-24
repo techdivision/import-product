@@ -2,7 +2,7 @@
 
 ## Bugfixes
 
-* Prepare legacy stock status import with change-set-dedection 
+* Prepare legacy stock status import with change-set-detection 
 
 # Version 25.1.1
 
