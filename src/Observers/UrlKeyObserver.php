@@ -85,6 +85,11 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
     protected $adminRow = array();
 
     /**
+     * @var bool The flag to check if the URL key has been read from database
+     */
+    protected $originUrlKey = false;
+
+    /**
      * Initialize the observer with the passed product bunch processor and filter instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor    The product bunch processor instance
@@ -167,7 +172,6 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
     {
 
         // initialize the URL key, the entity and the product
-        $urlKey = null;
         $product = array();
 
         // prepare the store view code
@@ -181,23 +185,8 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
             $product[MemberNames::ENTITY_ID] = $this->getReverseSequenceGenerator()->generate();
         }
 
-        // query whether or not the URL key column has a value
-        if ($this->hasValue(ColumnKeys::URL_KEY)) {
-            $urlKey = $this->getValue(ColumnKeys::URL_KEY);
-        } else {
-            // query whether or not the existing product `url_key` should be re-created from the product name
-            if (is_array($entity) && !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)) {
-                // if the product already exists and NO re-creation from the product name has to
-                // be done, load the original `url_key`from the product and use that to proceed
-                $urlKey = $this->loadUrlKey($this->getSubject(), $this->getPrimaryKey());
-            }
-
-            // try to load the value from column `name` if URL key is still
-            // empty, because we need it to process the the rewrites later on
-            if ($urlKey === null || $urlKey === '' && $this->hasValue(ColumnKeys::NAME)) {
-                $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
-            }
-        }
+        // load the URL key from the actual row.
+        $urlKey = $this->getUrlKeyFromRow($entity);
 
         // stop processing, if no URL key is available
         if ($urlKey === null || $urlKey === '') {
@@ -257,6 +246,37 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
 
         // set the unique URL key for further processing
         $this->setValue(ColumnKeys::URL_KEY, $uniqueUrlKey);
+    }
+
+    /**
+     * @param array|null $entity
+     * @return mixed|string
+     * @throws \Exception
+     */
+    protected function getUrlKeyFromRow($entity)
+    {
+        $this->originUrlKey = false;
+        $urlKey = null;
+        // query whether or not the URL key column has a value
+        if ($this->hasValue(ColumnKeys::URL_KEY)) {
+            $urlKey = $this->getValue(ColumnKeys::URL_KEY);
+        } else {
+            // query whether or not the existing product `url_key` should be re-created from the product name
+            if (is_array($entity) && !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)) {
+                // if the product already exists and NO re-creation from the product name has to
+                // be done, load the original `url_key`from the product and use that to proceed
+                $urlKey = $this->loadUrlKey($this->getSubject(), $this->getPrimaryKey());
+                $this->originUrlKey = !empty($urlKey);
+            }
+
+            // try to load the value from column `name` if URL key is still
+            // empty, because we need it to process the the rewrites later on
+            if ($urlKey === null || $urlKey === '' && $this->hasValue(ColumnKeys::NAME)) {
+                $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
+            }
+        }
+
+        return $urlKey;
     }
 
     /**

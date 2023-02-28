@@ -1,3 +1,9 @@
+# Version 25.1.3
+
+## Bugfixes
+
+* UrlKeyObserver: Optimize url_key function to extend in own calculation
+
 # Version 25.1.2
 
 ## Bugfixes
