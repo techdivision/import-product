@@ -1,3 +1,9 @@
+# Version 25.1.4
+
+## Bugfixes
+
+* ProductInventory Mapping: extend header-mapping.json with cataloginventory_stock_item
+
 # Version 25.1.3
 
 ## Bugfixes

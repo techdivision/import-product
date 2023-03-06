@@ -21,6 +21,14 @@
       "thumbnail_image_label": "thumbnail_label",
       "allow_backorders": "backorders"
     },
+    "cataloginventory_stock_item": {
+      "out_of_stock_qty": "min_qty",
+      "allow_backorders": "backorders",
+      "min_cart_qty": "min_sale_qty",
+      "max_cart_qty": "max_sale_qty",
+      "notify_on_stock_below": "notify_stock_qty",
+      "allow_backorders": "backorders"
+    },
     "catalog_category_product" : {
       "categories_position": "position"
     },
