@@ -68,6 +68,13 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
     protected $columns = array();
 
     /**
+     * The array with the column that has to be in csv header.
+     *
+     * @var array
+     */
+    protected $csvColumns = array();
+
+    /**
      * Initialize the observer with the passed product bunch processor instance.
      *
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface    $productBunchProcessor The product bunch processor instance
@@ -107,9 +114,11 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
         // prepare the array with column name => type mapping
         foreach ($headerStockMappings as $columnName => $mappings) {
             // explode the mapping details
-            list (, $type) = $mappings;
+            list ($csvColumnName, $type) = $mappings;
             // add the column name => type mapping
             $this->columns[$columnName] = $type;
+            // add the csv column name => type mapping
+            $this->csvColumns[$csvColumnName] = $columnName;
         }
 
         // return the instance itself
@@ -123,7 +132,14 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
      */
     public function getColumns()
     {
-        return array_intersect_key($this->columns, $this->getHeaders());
+        $inventoryColumns = [];
+        foreach ($this->getHeaders() as $header => $value) {
+            if (isset($this->csvColumns[$header])) {
+                $inventoryColumns[ $this->csvColumns[$header] ] = $header;
+            }
+        }
+
+        return array_intersect_key($this->columns, $inventoryColumns);
     }
 
     /**

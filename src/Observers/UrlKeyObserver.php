@@ -249,7 +249,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
     }
 
     /**
-     * @param array|null $entity
+     * @param array|null $entity Product entity
      * @return mixed|string
      * @throws \Exception
      */

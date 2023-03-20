@@ -1,3 +1,9 @@
+# Version 25.1.5
+
+## Bugfixes
+
+* ProductInventory Mapping: fix header mapping for change set detection in cataloginventory_stock_item
+
 # Version 25.1.4
 
 ## Bugfixes
