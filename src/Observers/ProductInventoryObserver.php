@@ -215,19 +215,21 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
 
         // initialize the stock status data
         $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID, 0);
-        $stockStatus =  $this->getValue(ColumnKeys::IS_IN_STOCK, 0);
-        $quantity =  $this->getValue(ColumnKeys::QTY, 0);
+        $stockStatus =  $this->getValue(ColumnKeys::IS_IN_STOCK);
+        $quantity =  $this->getValue(ColumnKeys::QTY);
+
+        $stockEntityDataArray = array(
+            MemberNames::PRODUCT_ID   => $lastEntityId,
+            MemberNames::WEBSITE_ID   => $websiteId,
+            MemberNames::STOCK_ID     => 1,
+            MemberNames::QTY          => $quantity,
+            MemberNames::STOCK_STATUS => $stockStatus
+        );
 
         // return the prepared stock status
         return $this->initializeEntity(
             $this->loadRawStatusEntity(
-                array(
-                    MemberNames::PRODUCT_ID   => $lastEntityId,
-                    MemberNames::WEBSITE_ID   => $websiteId,
-                    MemberNames::STOCK_ID     => 1,
-                    MemberNames::STOCK_STATUS => (int) $stockStatus,
-                    MemberNames::QTY          => $quantity
-                )
+                $stockEntityDataArray
             ),
         );
     }
@@ -310,6 +312,10 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
      */
     protected function initializeStockItem(array $attr)
     {
+        if (!isset($attr[MemberNames::QTY])) {
+            $attr[MemberNames::QTY] = 0;
+        }
+
         return $attr;
     }
 
@@ -322,6 +328,12 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
      */
     protected function initializeStockItemStatus(array $attr)
     {
+        $attr[MemberNames::STOCK_STATUS] = (int)$attr[MemberNames::STOCK_STATUS];
+
+        if (!isset($attr[MemberNames::QTY])) {
+            $attr[MemberNames::QTY] = 0;
+        }
+
         return $attr;
     }
 

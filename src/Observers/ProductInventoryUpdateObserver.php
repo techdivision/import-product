@@ -28,7 +28,6 @@ use TechDivision\Import\Product\Utils\MemberNames;
  */
 class ProductInventoryUpdateObserver extends ProductInventoryObserver
 {
-
     /**
      * Initialize the stock item with the passed attributes and returns an instance.
      *
@@ -38,7 +37,6 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
      */
     protected function initializeStockItem(array $attr)
     {
-
         // load the stock item with the passed item/product/stock ID
         $entity = $this->loadStockItem(
             $attr[MemberNames::PRODUCT_ID],
@@ -48,11 +46,14 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
 
         // merge the attributes with the entity, if available
         if ($entity) {
+            // clear row elements that are not allowed to be updated
+            $attr = $this->clearRowData($attr, true);
+
             return $this->mergeEntity($entity, $attr);
         }
 
         // otherwise simply return the attributes
-        return $attr;
+        return parent::initializeStockItem($attr);
     }
 
     /**
@@ -64,7 +65,6 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
      */
     protected function initializeStockItemStatus(array $attr)
     {
-
         // load the stock item with the passed item/product/stock ID
         $entity = $this->loadStockItemStatus(
             $attr[MemberNames::PRODUCT_ID],
@@ -74,11 +74,18 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
 
         // merge the attributes with the entity, if available
         if ($entity) {
+            // clear row elements that are not allowed to be updated
+            $attr = $this->clearRowData($attr, true);
+
+            if (isset($attr[MemberNames::STOCK_STATUS])) {
+                $attr[MemberNames::STOCK_STATUS] = (int)$attr[MemberNames::STOCK_STATUS];
+            }
+
             return $this->mergeEntityStatus($entity, $attr, EntityTypeCodes::CATALOGINVENTORY_STOCK_ITEM_STATUS);
         }
 
         // otherwise simply return the attributes
-        return $attr;
+        return parent::initializeStockItemStatus($attr);
     }
 
     /**

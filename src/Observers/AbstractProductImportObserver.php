@@ -18,6 +18,7 @@ use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\RelationTypes;
 use TechDivision\Import\Subjects\SubjectInterface;
 use TechDivision\Import\Observers\AbstractObserver;
+use TechDivision\Import\Observers\CleanUpEmptyColumnsTrait;
 
 /**
  * Abstract category observer that handles the process to import product bunches.
@@ -30,6 +31,7 @@ use TechDivision\Import\Observers\AbstractObserver;
  */
 abstract class AbstractProductImportObserver extends AbstractObserver implements ProductImportObserverInterface
 {
+    use CleanUpEmptyColumnsTrait;
 
     /**
      * Will be invoked by the action on the events the listener has been registered for.
