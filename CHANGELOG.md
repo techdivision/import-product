@@ -1,3 +1,9 @@
+# Version 25.1.6
+
+## Bugfixes
+
+* Don't reset Inventory Stock quantity and status if csv column are empty
+
 # Version 25.1.5
 
 ## Bugfixes
