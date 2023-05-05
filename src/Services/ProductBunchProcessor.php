@@ -66,6 +66,13 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
     protected $eavAttributeRepository;
 
     /**
+     * The repository to access the EAV entity types.
+     *
+     * @var \TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface
+     */
+    protected $eavEntityTypeRepository;
+
+    /**
      * The action for product CRUD methods.
      *
      * @var \TechDivision\Import\Dbal\Actions\ActionInterface
