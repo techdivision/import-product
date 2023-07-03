@@ -68,6 +68,13 @@ class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
     const QTY = 'qty';
 
     /**
+     * Name for the column 'qty_relative'.
+     *
+     * @var string
+     */
+    const QTY_RELATIVE = 'qty_relative';
+
+    /**
      * Name for the column 'is_in_stock'.
      *
      * @var string

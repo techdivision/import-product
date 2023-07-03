@@ -14,6 +14,7 @@
 
 namespace TechDivision\Import\Product\Observers;
 
+use TechDivision\Import\Product\Utils\ColumnKeys;
 use TechDivision\Import\Product\Utils\EntityTypeCodes;
 use TechDivision\Import\Product\Utils\MemberNames;
 
@@ -46,6 +47,13 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
 
         // merge the attributes with the entity, if available
         if ($entity) {
+            if (\array_key_exists(ColumnKeys::QTY_RELATIVE, $attr)) {
+                if (((int) $attr[ColumnKeys::QTY_RELATIVE]) === 1) {
+                    $attr[MemberNames::QTY] += $entity[MemberNames::QTY];
+                }
+                unset($attr[ColumnKeys::QTY_RELATIVE]);
+            }
+
             // clear row elements that are not allowed to be updated
             $attr = $this->clearRowData($attr, true);
 
@@ -74,6 +82,12 @@ class ProductInventoryUpdateObserver extends ProductInventoryObserver
 
         // merge the attributes with the entity, if available
         if ($entity) {
+            if (\array_key_exists(ColumnKeys::QTY_RELATIVE, $attr)) {
+                if (((int) $attr[ColumnKeys::QTY_RELATIVE]) === 1) {
+                    $attr[MemberNames::QTY] += $entity[MemberNames::QTY];
+                }
+                unset($attr[ColumnKeys::QTY_RELATIVE]);
+            }
             // clear row elements that are not allowed to be updated
             $attr = $this->clearRowData($attr, true);
 

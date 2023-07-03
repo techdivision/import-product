@@ -189,6 +189,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
 
         // initialize the stock status data
         $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID, 0);
+        $relativQty =  $this->getValue(ColumnKeys::QTY_RELATIVE);
 
         // return the prepared stock status
         return $this->initializeEntity(
@@ -196,7 +197,8 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
                 array(
                     MemberNames::PRODUCT_ID   => $lastEntityId,
                     MemberNames::WEBSITE_ID   => $websiteId,
-                    MemberNames::STOCK_ID     => 1
+                    MemberNames::STOCK_ID     => 1,
+                    ColumnKeys::QTY_RELATIVE  => $relativQty,
                 )
             )
         );
@@ -217,13 +219,15 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
         $websiteId =  $this->getValue(ColumnKeys::WEBSITE_ID, 0);
         $stockStatus =  $this->getValue(ColumnKeys::IS_IN_STOCK);
         $quantity =  $this->getValue(ColumnKeys::QTY);
+        $relativQty =  $this->getValue(ColumnKeys::QTY_RELATIVE);
 
         $stockEntityDataArray = array(
             MemberNames::PRODUCT_ID   => $lastEntityId,
             MemberNames::WEBSITE_ID   => $websiteId,
             MemberNames::STOCK_ID     => 1,
             MemberNames::QTY          => $quantity,
-            MemberNames::STOCK_STATUS => $stockStatus
+            MemberNames::STOCK_STATUS => $stockStatus,
+            ColumnKeys::QTY_RELATIVE  => $relativQty,
         );
 
         // return the prepared stock status
@@ -315,6 +319,9 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
         if (!isset($attr[MemberNames::QTY])) {
             $attr[MemberNames::QTY] = 0;
         }
+        if (\array_key_exists(ColumnKeys::QTY_RELATIVE, $attr)) {
+            unset($attr[ColumnKeys::QTY_RELATIVE]);
+        }
 
         return $attr;
     }
@@ -332,6 +339,9 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
 
         if (!isset($attr[MemberNames::QTY])) {
             $attr[MemberNames::QTY] = 0;
+        }
+        if (\array_key_exists(ColumnKeys::QTY_RELATIVE, $attr)) {
+            unset($attr[ColumnKeys::QTY_RELATIVE]);
         }
 
         return $attr;

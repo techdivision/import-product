@@ -1,3 +1,9 @@
+# Version 25.2.0
+
+## Features
+
+* Allow to import stock quantity to calculate relative. Column in csv: `qty_relative` with value `1`
+
 # Version 25.1.7
 
 ## Bugfixes
