@@ -237,7 +237,7 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
 
         try {
             // load the category for the found path
-            $category = $this->getCategoryByPath($this->path);
+            $category = $this->getCategoryByValue($this->path);
             // return the prepared category product relation
             return $this->initializeEntity(
                 $this->loadRawEntity(
@@ -317,5 +317,17 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
     protected function persistCategoryProduct($categoryProduct)
     {
         return $this->getProductBunchProcessor()->persistCategoryProduct($categoryProduct);
+    }
+
+    /**
+     * Generic method for loading categories based on different values.
+     *
+     * @param string $value the value of column
+     *
+     * @return array
+     */
+    protected function getCategoryByValue(string $value)
+    {
+        return $this->getCategoryByPath($value);
     }
 }

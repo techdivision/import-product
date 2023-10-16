@@ -1,3 +1,9 @@
+# Version 25.2.1
+
+## Features
+
+* Add a generic method `getCategoryByValue` for loading categories based on different values.
+
 # Version 25.2.0
 
 ## Features
