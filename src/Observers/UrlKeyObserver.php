@@ -314,7 +314,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
             // parent categories, if they have the anchor flag activated and add it the array
             foreach ($paths as $path) {
                 // load the category based on the category path
-                $category = $this->getCategoryByPath($path, $storeViewCode);
+                $category = $this->getCategoryByValue($path);
                 // try to resolve the URL paths recursively
                 $this->resolveUrlPaths($urlPaths, $category, $storeViewCode);
             }
@@ -450,7 +450,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
      *
      * @return array The category
      */
-    protected function getCategoryByPath($path, $storeViewCode = StoreViewCodes::ADMIN)
+    protected function getCategoryByPath($path)
     {
         return $this->getSubject()->getCategoryByPath($path);
     }
@@ -491,5 +491,17 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
     protected function getCategory($categoryId, $storeViewCode = StoreViewCodes::ADMIN)
     {
         return $this->getSubject()->getCategory($categoryId, $storeViewCode);
+    }
+
+    /**
+     * Generic method for loading categories based on different values.
+     *
+     * @param string $value
+     *
+     * @return array
+     */
+    protected function getCategoryByValue(string $value)
+    {
+        return $this->getCategoryByPath($value);
     }
 }
