@@ -446,7 +446,6 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
      * Return's the category with the passed path.
      *
      * @param string $path          The path of the category to return
-     * @param string $storeViewCode The code of a store view, defaults to admin
      *
      * @return array The category
      */
