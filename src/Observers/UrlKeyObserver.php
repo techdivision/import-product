@@ -445,7 +445,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
     /**
      * Return's the category with the passed path.
      *
-     * @param string $path          The path of the category to return
+     * @param string $path The path of the category to return
      *
      * @return array The category
      */
