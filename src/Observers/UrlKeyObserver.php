@@ -496,7 +496,7 @@ class UrlKeyObserver extends AbstractProductImportObserver implements ObserverFa
     /**
      * Generic method for loading categories based on different values.
      *
-     * @param string $value
+     * @param string $value the value of column
      *
      * @return array
      */

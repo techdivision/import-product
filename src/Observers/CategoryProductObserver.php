@@ -322,7 +322,7 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
     /**
      * Generic method for loading categories based on different values.
      *
-     * @param string $value
+     * @param string $value the value of column
      *
      * @return array
      */
