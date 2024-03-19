@@ -1,3 +1,9 @@
+# Version 25.2.2
+
+## Bugfixes
+
+* Get delimiter value from configuration `\TechDivision\Import\Product\Observers\FileUploadObserver:process()`
+
 # Version 25.2.1
 
 ## Features

@@ -159,8 +159,7 @@ class FileUploadObserver extends AbstractProductImportObserver
                     }
 
                     // override the image paths with the new one
-                    $this->setValue(ColumnKeys::ADDITIONAL_IMAGES, implode(',', $additionalImages));
-                }
+                    $this->setValue(ColumnKeys::ADDITIONAL_IMAGES, implode($this->getSubject()->getConfiguration()->getConfiguration()->getDelimiter(), $additionalImages));                }
             }
         }
     }
