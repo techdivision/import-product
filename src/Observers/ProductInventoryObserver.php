@@ -134,11 +134,15 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
     {
         $inventoryColumns = [];
         foreach ($this->getHeaders() as $header => $value) {
+            // Check fields from inventory import context
             if (isset($this->csvColumns[$header])) {
                 $inventoryColumns[ $this->csvColumns[$header] ] = $header;
             }
+            // Check fields from product import context
+            if (isset($this->columns[$header])) {
+                $inventoryColumns[ $header ] = $header;
+            }
         }
-
         return array_intersect_key($this->columns, $inventoryColumns);
     }
 

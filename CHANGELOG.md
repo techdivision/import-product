@@ -1,3 +1,9 @@
+# Version 25.2.3
+
+## Bugfixes
+
+* Compatibility stock information on produkt import and stock import
+
 # Version 25.2.2
 
 ## Bugfixes
