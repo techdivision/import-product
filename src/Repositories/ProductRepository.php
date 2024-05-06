@@ -126,8 +126,11 @@ class ProductRepository extends AbstractFinderRepository implements ProductRepos
      *
      * @return array|null The product
      */
-    public function findOneBySku($sku)
+    public function findOneBySku($sku, $clearCache = false)
     {
+        if ($clearCache) {
+            $this->getFinder(SqlStatementKeys::PRODUCT)->removeCache(array($this->getUniqueKeyName() => $sku));
+        }
         return $this->getFinder(SqlStatementKeys::PRODUCT)->find(array($this->getUniqueKeyName() => $sku));
     }
 }

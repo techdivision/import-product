@@ -42,5 +42,5 @@ interface ProductRepositoryInterface extends FinderAwareEntityRepositoryInterfac
      *
      * @return array The product
      */
-    public function findOneBySku($sku);
+    public function findOneBySku($sku, $clearCache = false);
 }

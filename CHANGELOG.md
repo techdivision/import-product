@@ -1,3 +1,9 @@
+# Version 25.2.4
+
+## Bugfixes
+
+* Remove product entity from cache to update the product_custom_option correctly
+
 # Version 25.2.3
 
 ## Bugfixes
