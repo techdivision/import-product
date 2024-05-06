@@ -38,7 +38,8 @@ interface ProductRepositoryInterface extends FinderAwareEntityRepositoryInterfac
     /**
      * Return's the product with the passed SKU.
      *
-     * @param string $sku The SKU of the product to return
+     * @param string $sku        The SKU of the product to return
+     * @param bool   $clearCache The flag to clear caching for product entity
      *
      * @return array The product
      */
