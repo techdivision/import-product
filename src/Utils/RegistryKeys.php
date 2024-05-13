@@ -42,14 +42,13 @@ class RegistryKeys extends \TechDivision\Import\Utils\RegistryKeys
 
     /**
      * Key for the registry entry containing the SKU => primary entity ID mapping.
-     * string
+     * @var string
      */
     const PRIMARY_SKU_TO_PK_MAPPINGS = 'primarySkuPkMappings';
-    
+
     /**
      * Key for the registry entry containing the SKU => primary row ID mapping.
-     * 
-     * string
+     * @var string
      */
     const PRIMARY_SKU_TO_ROW_PK_MAPPINGS = 'primarySkuRowPkMappings';
 }
