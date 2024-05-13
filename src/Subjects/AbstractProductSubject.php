@@ -288,10 +288,17 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         $this->skuEntityIdMapping[$sku] = $entityId == null ? $this->getLastEntityId() : $entityId;
     }
 
-    public function addPrimarySkuToPkMapping($sku, $entityId = null)
+    /**
+     * Add the passed SKU => primary entity ID mapping.
+     * @param string       $sku      The SKU
+     * @param integer|null $entityId The optional entity ID, the last processed entity ID is used, if not set
+     * @return void
+     */
+    public function addPrimarySkuToPkMapping($sku, $primaryEntityId = null)
     {
-        $this->primarySkuToPkMappings[$sku] = $entityId == null ? $this->getLastEntityId() : $entityId;
+        $this->primarySkuToPkMappings[$sku] = $primaryEntityId == null ? $this->getLastEntityId() : $primaryEntityId;
     }
+    
     /**
      * Add the passed SKU => store view code mapping.
      *
