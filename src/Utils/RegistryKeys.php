@@ -39,4 +39,9 @@ class RegistryKeys extends \TechDivision\Import\Utils\RegistryKeys
      * @var string
      */
     const PROCESSED_SKUS = 'processed_skus';
+
+    /**
+     * string
+     */
+    const PRIMARY_SKU_TO_PK_MAPPINGS = 'primary_sku_to_pk_mappings';
 }

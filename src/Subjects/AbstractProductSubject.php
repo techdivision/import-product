@@ -15,6 +15,7 @@
 namespace TechDivision\Import\Product\Subjects;
 
 use TechDivision\Import\Utils\RegistryKeys;
+use TechDivision\Import\Product\Utils\RegistryKeys as ProductRegistryKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\FrontendInputTypes;
 use TechDivision\Import\Product\Utils\MemberNames;
@@ -107,6 +108,13 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
      * @var array
      */
     protected $skuEntityIdMapping = array();
+
+    /**
+     * The Sarray witht he KU => PK mappings.
+     *
+     * @var array
+     */
+    protected $primarySkuToPkMappings = array();
 
     /**
      * The mapping for the SKUs to the store view codes.
@@ -280,6 +288,10 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         $this->skuEntityIdMapping[$sku] = $entityId == null ? $this->getLastEntityId() : $entityId;
     }
 
+    public function addPrimarySkuToPkMapping($sku, $entityId = null)
+    {
+        $this->primarySkuToPkMappings[$sku] = $entityId == null ? $this->getLastEntityId() : $entityId;
+    }
     /**
      * Add the passed SKU => store view code mapping.
      *
@@ -343,7 +355,8 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
             RegistryKeys::STATUS,
             array(
                 RegistryKeys::SKU_ENTITY_ID_MAPPING => $this->skuEntityIdMapping,
-                RegistryKeys::SKU_STORE_VIEW_CODE_MAPPING => $this->skuStoreViewCodeMapping
+                RegistryKeys::SKU_STORE_VIEW_CODE_MAPPING => $this->skuStoreViewCodeMapping,
+                ProductRegistryKeys::PRIMARY_SKU_TO_PK_MAPPINGS => $this->primarySkuToPkMappings
             )
         );
 
@@ -444,12 +457,12 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         if (isset($this->taxClasses[$taxClassName])) {
             return (integer) $this->taxClasses[$taxClassName][MemberNames::CLASS_ID];
         }
-        
+
         // if product has no tax_class_name ("none") set class_id as 0
         if (strtolower((string)$taxClassName) === 'none') {
             return 0;
         }
-        
+
         // throw an exception, if not
         throw new \Exception(
             $this->appendExceptionSuffix(

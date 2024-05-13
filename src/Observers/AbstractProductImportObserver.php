@@ -124,6 +124,19 @@ abstract class AbstractProductImportObserver extends AbstractObserver implements
     }
 
     /**
+     * Adds the passed SKU => PK mapping to the implementing instance.
+     *
+     * @param string  $sku The SKU to map
+     * @param integer $pk  The PK to be mapped
+     *
+     * @return void
+     */
+    protected function addPrimarySkuToPkMapping($sku, $pk)
+    {
+        $this->getSubject()->addPrimarySkuToPkMapping($sku, $pk);
+    }
+
+    /**
      * Add the passed SKU => store view code mapping.
      *
      * @param string $sku           The SKU
