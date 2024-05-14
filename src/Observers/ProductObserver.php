@@ -81,7 +81,21 @@ class ProductObserver extends AbstractProductImportObserver
         if ($this->hasChanges($product = $this->initializeProduct($this->prepareAttributes()))) {
             $this->persistProduct($product);
         }
-        $this->addPrimarySkuToPkMapping($this->getValue(ColumnKeys::SKU), $product[MemberNames::ENTITY_ID]);
+        // mapping primary sku with entity/row id
+        $this->savePrimarySkuMapping();
+    }
+
+    /**
+     * mapping the sku with entity_id
+     *
+     * @return void
+     */
+    protected function savePrimarySkuMapping()
+    {
+        $this->addPrimarySkuToPkMapping(
+            $this->getValue(ColumnKeys::SKU),
+            isset($product[MemberNames::ENTITY_ID]) ? $product[MemberNames::ENTITY_ID] : $this->getSubject()->getLastEntityId()
+        );
     }
 
     /**
