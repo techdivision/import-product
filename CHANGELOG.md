@@ -1,3 +1,15 @@
+# Version 25.3.1
+
+## Bugfixes
+
+* Fix issue: Remove the tier price for all products that are available through the fired listner
+  * Define a new method `addPrimarySkuToRowPkMapping` to map the SKU with the primary SKU of the row
+  * Define a new method `addPrimarySkuToPkMapping` to map the SKU with the primary SKU of the row for enterprise edition
+
+## Features
+
+* none
+
 # Version 25.3.0
 
 ## Bugfixes
