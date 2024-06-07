@@ -815,6 +815,9 @@
                 <argument id="import_product_bundle.observer.product.bundle" type="service"/>
             </call>
             <call method="addObserver">
+                <argument id="import_product_bundle.observer.clean.up.product.bundle" type="service"/>
+            </call>
+            <call method="addObserver">
                 <argument id="import_product_media.observer.product.media" type="service"/>
             </call>
             <call method="addObserver">
@@ -828,6 +831,9 @@
             </call>
             <call method="addObserver">
                 <argument id="import_product_grouped.observer.product.grouped" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_product_grouped.observer.clean.up.product.grouped" type="service"/>
             </call>
             <call method="addObserver">
                 <argument id="import_product_tier_price.observer.product.tier_price" type="service"/>
