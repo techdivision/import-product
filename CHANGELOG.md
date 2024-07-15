@@ -1,3 +1,15 @@
+# Version 25.3.3
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add #PAC-354 new feature:
+    * Validation whether the product of the website is assigned to the current store view line
+        * `TechDivision\Import\Callbacks\StoreWebsiteValidatorCallback`
+
 # Version 25.3.2
 
 ## Bugfixes
