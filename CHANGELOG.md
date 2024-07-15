@@ -7,8 +7,8 @@
 ## Features
 
 * Add #PAC-354 new feature:
-    * Validation whether the product of the website is assigned to the current store view line
-        * `TechDivision\Import\Callbacks\StoreWebsiteValidatorCallback`
+    * extend the validation für catalog_product entity
+        * `"import.callback.store.in.website.validator"`
 
 # Version 25.3.2
 

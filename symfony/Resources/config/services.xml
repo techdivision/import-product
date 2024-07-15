@@ -459,8 +459,8 @@
         </service>
 
         <!--
-         | The DI configuration for the black hole enabled URL rewrite action because 
-         | we do NOT want to persist the URL rewrites here, we ONLY want tempoarily 
+         | The DI configuration for the black hole enabled URL rewrite action because
+         | we do NOT want to persist the URL rewrites here, we ONLY want tempoarily
          | add them to cache used to make sure we generate unique request paths
          |-->
         <service id="import_product.action.wrapped.url.rewrite" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
@@ -472,7 +472,7 @@
             <argument type="service" id="import.events.emitter"/>
             <argument type="service" id="import_product.action.wrapped.url.rewrite"/>
             <argument type="service" id="import_product.cache.key.url.rewrite"/>
-        </service>  
+        </service>
 
         <!--
          | The DI configuration for the assemblers
@@ -560,13 +560,6 @@
         </service>
         <service id="import_product.callback.validator.comma.related" class="TechDivision\Import\Callbacks\CommaDelimiterSkuRelationsValidatorCallback">
             <argument type="service" id="import_product.loader.sku"/>
-            <argument>%array_validator.nullable.true%</argument>
-            <argument>%array_validator.nullable.false%</argument>
-            <argument>%array_validator.nullable.false%</argument>
-        </service>
-        <service id="import.callback.store.in.website.validator" class="TechDivision\Import\Callbacks\StoreWebsiteValidatorCallback">
-            <argument type="service" id="import.loader.store"/>
-            <argument type="service" id="import.processor.import"/>
             <argument>%array_validator.nullable.true%</argument>
             <argument>%array_validator.nullable.false%</argument>
             <argument>%array_validator.nullable.false%</argument>
