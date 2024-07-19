@@ -417,8 +417,7 @@
                     {
                       "sku": [ "import.callback.custom.regex.validator" ],
                       "store_view_code": [
-                        "import.callback.store.view.code.validator",
-                        "import.callback.store.in.website.validator"
+                        "import.callback.store.view.code.validator"
                       ],
                       "attribute_set_code": [ "import.callback.attribute.set.name.validator" ],
                       "product_type": [ "import_product.callback.validator.product_type" ],

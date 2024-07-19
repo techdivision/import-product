@@ -1,3 +1,14 @@
+# Version 25.3.4
+
+## Bugfixes
+
+ * remove from the validation for catalog_product entity the callback
+        * `"import.callback.store.in.website.validator"`
+
+## Features
+
+* None
+
 # Version 25.3.3
 
 ## Bugfixes
