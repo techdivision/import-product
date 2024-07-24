@@ -4,7 +4,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "techdivision/import": "dev-compatibility-php-81"
+        "techdivision/import": "^18.0.0"
     },
     "require-dev": {
         "doctrine/dbal": "^4.0.4",
@@ -14,8 +14,8 @@
         "sebastian/phpcpd": "^2.0.1",
         "squizlabs/php_codesniffer": "^3.10.1",
         "consolidation/robo": "^4.0.2",
-        "mikey179/vfsstream": "v1.6.11",
-        "symfony/http-kernel": "v4.4.51"
+        "mikey179/vfsstream": "~1.6.11",
+        "symfony/http-kernel": "~4.4.51"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
