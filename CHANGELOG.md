@@ -1,18 +1,8 @@
-# Version 26.0.1
+# Version 25.3.5
 
 ## Bugfixes
 
 * refactoring clean-up-links and clean-up-variants to remove old data from relation table
-
-# Version 26.0.0
-
-## Features
-
-### PHP 8.1 Compatibility
-
-* Update dependencies
-* Add PHP ">=8.1" support
-* Remove PHP 7.3 support
 
 # Version 25.3.4
 
