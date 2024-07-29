@@ -3,19 +3,19 @@
     "description": "Pacemaker library providing basic Magento 2 product import functionality",
     "license": "MIT",
     "require": {
-        "php": ">=7.3.0",
-        "techdivision/import": "^17.0.0"
+        "php": "^8.1",
+        "techdivision/import": "^18.0.0"
     },
     "require-dev": {
-        "doctrine/dbal": "2.5.*",
-        "pdepend/pdepend": "2.5.2",
-        "phpmd/phpmd": "@stable",
-        "phpunit/phpunit": "^6.5.0|^8.0.0|~9.5.0",
-        "sebastian/phpcpd": "~3.0|~4.0|~5.0|~6.0",
-        "squizlabs/php_codesniffer": "~3.4.0|~3.6.0",
-        "consolidation/robo": "~1.0",
-        "mikey179/vfsstream": "~1.0",
-        "symfony/http-kernel": "~2.0|~3.0|~4.0"
+        "doctrine/dbal": "^4.0.4",
+        "pdepend/pdepend": "^2.16.2",
+        "phpmd/phpmd": "^2.15.0",
+        "phpunit/phpunit": "^11.2.5",
+        "sebastian/phpcpd": "^2.0.1",
+        "squizlabs/php_codesniffer": "^3.10.1",
+        "consolidation/robo": "^4.0.2",
+        "mikey179/vfsstream": "~1.6.11",
+        "symfony/http-kernel": "~4.4.51"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
