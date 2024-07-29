@@ -1,3 +1,9 @@
+# Version 25.3.5
+
+## Bugfixes
+
+* refactoring clean-up-links and clean-up-variants to remove old data from relation table
+
 # Version 25.3.4
 
 ## Bugfixes
