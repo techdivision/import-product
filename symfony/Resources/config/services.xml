@@ -454,9 +454,6 @@
             <argument type="service" id="import_product.action.processor.stock.item.status.update"/>
             <argument type="service" id="import_product.action.processor.stock.item.status.delete"/>
         </service>
-        <service id="import_product.action.product.relation.bundle" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
-            <argument type="service" id="import_product.action.processor.product.relation.create"/>
-        </service>
         <service id="import_product.action.product.relation.variant" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
             <argument type="service" id="import_product.action.processor.product.relation.create"/>
         </service>
