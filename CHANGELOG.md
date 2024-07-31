@@ -1,3 +1,9 @@
+# Version 25.3.6
+
+## Bugfixes
+
+* Bugfix of remove service
+
 # Version 25.3.5
 
 ## Bugfixes
