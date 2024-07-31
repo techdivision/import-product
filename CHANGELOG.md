@@ -1,3 +1,9 @@
+# Version 26.0.2
+
+## Bugfixes
+
+* Bugfix of remove service
+
 # Version 26.0.1
 
 ## Bugfixes
