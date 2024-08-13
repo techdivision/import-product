@@ -54,6 +54,9 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
     /** @var string */
     protected string $lastEntityId;
 
+    /** @var ImportProcessorInterface */
+    protected $importProcessor;
+
     /**
      * @param ImportProcessorInterface $importProcessor
      * @param StateDetectorInterface|null $stateDetector
@@ -65,12 +68,9 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
     ) {
         // initialize the bunch processor instance
         $this->productBunchProcessor = $productBunchProcessor;
+        $this->importProcessor = $importProcessor;
         // pass the processor and the state detector to the parent constructor
         parent::__construct($stateDetector);
-        // initialize the array with the store websites
-        foreach ($importProcessor->getStoreWebsites() as $storeWebsite) {
-            $this->storeWebsites[$storeWebsite[MemberNames::CODE]] = $storeWebsite;
-        }
     }
 
     /**
@@ -84,6 +84,7 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
         $websiteCodes = $this->getValue(ColumnKeys::PRODUCT_WEBSITES, array(), array($this, 'explode'));
 
         $this->setLastEntityRowId();
+        $this->getStoreWebsites();
 
         if ($this->isNullable($storeViewCode)) {
             $storeViewCode = $this->getSubject()->getDefaultStoreViewCode();
@@ -138,40 +139,6 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
     protected function isNullable($attributeValue)
     {
         return $attributeValue === '' || $attributeValue === null || empty($attributeValue);
-    }
-
-    /**
-     * Loads and returns data.
-     *
-     * @return \ArrayAccess The array with the data
-     */
-    public function loadStoreWebsites()
-    {
-        return $this->storeWebsites;
-    }
-
-    /**
-     * @param string $websiteCode website code
-     * @return int
-     * @throws \Exception
-     */
-    public function getWebsiteId($websiteCode)
-    {
-        // Get website_id from website_code
-        return $this->getStoreWebsiteIdByCode($websiteCode);
-    }
-
-    /**
-     * Return's the store website for the passed code.
-     *
-     * @param string $code The code of the store website to return the ID for
-     *
-     * @return integer The store website ID
-     * @throws \Exception
-     */
-    protected function getStoreWebsiteIdByCode($code)
-    {
-        return $this->getSubject()->getStoreWebsiteIdByCode($code);
     }
 
     /**
@@ -239,6 +206,17 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
             $this->entity = $this->loadProduct($this->getValue(MemberNames::SKU));
             $this->setLastEntityId($this->entity['entity_id']);
             $this->lastEntityId = $this->getLastEntityId();
+        }
+    }
+
+    /**
+     * @return void
+     */
+    protected function getStoreWebsites()
+    {
+        // initialize the array with the store websites
+        foreach ($this->importProcessor->getStoreWebsites() as $storeWebsite) {
+            $this->storeWebsites[$storeWebsite[MemberNames::CODE]] = $storeWebsite;
         }
     }
 }
