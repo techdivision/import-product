@@ -204,7 +204,7 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
     {
         if (!$this->hasBeenProcessed($this->getValue(ColumnKeys::SKU))) {
             $this->entity = $this->loadProduct($this->getValue(MemberNames::SKU));
-            $this->setLastEntityId($this->entity['entity_id']);
+            $this->setLastEntityId($this->entity[MemberNames::ENTITY_ID]);
             $this->lastEntityId = $this->getLastEntityId();
         }
     }
