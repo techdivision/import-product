@@ -22,9 +22,10 @@ use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 use TechDivision\Import\Services\ImportProcessorInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Utils\RegistryKeys;
+use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
- * storeview validator callback implementation.
+ * storeview validator implementation.
  *
  * @author    MET <met@techdivision.com>
  * @copyright 2024 TechDivision GmbH <info@techdivision.com>
@@ -40,6 +41,13 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
      * @var array
      */
     protected $storeWebsites = array();
+
+    /**
+     * The admin row
+     *
+     * @var array
+     */
+    protected $adminRow = array();
 
     /**
      * The product bunch processor instance.
@@ -79,55 +87,124 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
      */
     public function process()
     {
-        $storeViewCodesByWebsiteCode = array();
-        $storeViewCode = $this->getValue(ColumnKeys::STORE_VIEW_CODE);
-        $websiteCodes = $this->getValue(ColumnKeys::PRODUCT_WEBSITES, array(), array($this, 'explode'));
+        $sku = $this->getValue(ColumnKeys::SKU);
+        $storeViewCode = $this->resolveStoreViewCode();
+        $productWebsites = $this->getValue(ColumnKeys::PRODUCT_WEBSITES, [], [$this, 'explode']);
+
+        // Initialize the store view code
+        $this->getSubject()->prepareStoreViewCode();
+
+        // Handle product websites for admin store view
+        if ($this->isAdminStoreView()) {
+            $this->setAdminProductWebsites($sku, $productWebsites);
+        }
 
         $this->setLastEntityRowId();
-        $this->getStoreWebsites();
+        $this->setStoreWebsites();
 
+        // Get or resolve product websites
+        $productWebsites = $this->resolveProductWebsites($productWebsites, $sku);
+
+        // Validate store view codes by website code
+        $storeViewCodesByWebsiteCode = $this->getStoreViewCodesForWebsites($productWebsites);
+
+        $this->validateStoreViewCode($storeViewCode, $storeViewCodesByWebsiteCode, $productWebsites);
+    }
+
+    /**
+     * @return array|mixed|null
+     */
+    private function resolveStoreViewCode()
+    {
+        $storeViewCode = $this->getValue(ColumnKeys::STORE_VIEW_CODE);
         if ($this->isNullable($storeViewCode)) {
             $storeViewCode = $this->getSubject()->getDefaultStoreViewCode();
         }
+        return $storeViewCode;
+    }
 
-        // If website_code null that mean the website code from default row
-        if ($this->isNullable($websiteCodes) && $this->entity[MemberNames::ENTITY_ID] === (int)$this->lastEntityId ) {
-            $websiteCodes = $this->storeWebsites;
-            foreach ($websiteCodes as $websiteCode) {
-                if ($websiteCode['is_default'] === 1) {
-                    $storeViewCodesByWebsiteCode = $this->getStoreViewCodesByWebsiteCode($websiteCode['code']);
-                }
+    /**
+     * @return bool
+     */
+    private function isAdminStoreView()
+    {
+        return $this->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN;
+    }
 
-            }
-        } else {
-            foreach ($websiteCodes as $websiteCode) {
-                $storeViewCodesByWebsiteCode = array_merge($storeViewCodesByWebsiteCode, $this->getStoreViewCodesByWebsiteCode($websiteCode));
+    /**
+     * @param $sku
+     * @param $productWebsites
+     * @return void
+     */
+    private function setAdminProductWebsites($sku, $productWebsites)
+    {
+        $this->adminRow[$sku][ColumnKeys::PRODUCT_WEBSITES] = $productWebsites;
+    }
+
+    /**
+     * @param $productWebsites
+     * @param $sku
+     * @return mixed
+     */
+    private function resolveProductWebsites($productWebsites, $sku)
+    {
+        if ($this->isNullable($productWebsites) && $this->entity[MemberNames::ENTITY_ID] === (int)$this->lastEntityId) {
+            return $this->adminRow[$sku][ColumnKeys::PRODUCT_WEBSITES];
+        }
+        return $productWebsites;
+    }
+
+    /**
+     * @param $productWebsites
+     * @return array
+     */
+    private function getStoreViewCodesForWebsites($productWebsites)
+    {
+        $storeViewCodesByWebsiteCode = [];
+        foreach ($productWebsites as $productWebsite) {
+            if (isset($this->storeWebsites[$productWebsite])) {
+                $websiteCode = $this->storeWebsites[$productWebsite]['code'];
+                $storeViewCodesByWebsiteCode = array_merge(
+                    $storeViewCodesByWebsiteCode,
+                    $this->getStoreViewCodesByWebsiteCode($websiteCode)
+                );
             }
         }
+        return $storeViewCodesByWebsiteCode;
+    }
 
+    /**
+     * @param $storeViewCode
+     * @param $storeViewCodesByWebsiteCode
+     * @param $productWebsites
+     * @return void
+     * @throws \Exception
+     */
+    private function validateStoreViewCode($storeViewCode, $storeViewCodesByWebsiteCode, $productWebsites)
+    {
         if (!in_array($storeViewCode, $storeViewCodesByWebsiteCode)) {
             $message = sprintf(
-                'The store "%s" does not belong to the website "%s" . Please check your data.',
-                $attributeValue,
-                $productWebsite
+                'The store "%s" does not belong to the website "%s". Please check your data.',
+                $storeViewCode,
+                implode(", ", $productWebsites)
             );
 
             $this->getSubject()
                 ->getSystemLogger()
                 ->warning($this->getSubject()->appendExceptionSuffix($message));
-            $this->getSubject()->mergeStatus(
-                array(
-                    RegistryKeys::NO_STRICT_VALIDATIONS => array(
-                        basename($this->getSubject()->getFilename()) => array(
-                            $this->getSubject()->getLineNumber() => array(
-                                $attributeCode  => $message
-                            )
-                        )
-                    )
-                )
-            );
+
+            $this->getSubject()->mergeStatus([
+                RegistryKeys::NO_STRICT_VALIDATIONS => [
+                    basename($this->getSubject()->getFilename()) => [
+                        $this->getSubject()->getLineNumber() => [
+                            ColumnKeys::STORE_VIEW_CODE => $message
+                        ]
+                    ]
+                ]
+            ]);
         }
     }
+
 
     /**
      * Query whether or not the passed value IS empty and empty values are allowed.
@@ -212,7 +289,7 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
     /**
      * @return void
      */
-    protected function getStoreWebsites()
+    protected function setStoreWebsites()
     {
         // initialize the array with the store websites
         foreach ($this->importProcessor->getStoreWebsites() as $storeWebsite) {
