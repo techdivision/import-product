@@ -107,8 +107,9 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
 
         // Validate store view codes by website code
         $storeViewCodesByWebsiteCode = $this->getStoreViewCodesForWebsites($productWebsites);
-
-        $this->validateStoreViewCode($storeViewCode, $storeViewCodesByWebsiteCode, $productWebsites);
+        foreach ($productWebsites as $productWebsite) {
+            $this->validateStoreViewCode($storeViewCode, $storeViewCodesByWebsiteCode, $productWebsite, $sku);
+        }
     }
 
     /**
@@ -164,8 +165,14 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
         foreach ($productWebsites as $productWebsite) {
             if (isset($this->storeWebsites[$productWebsite])) {
                 $websiteCode = $this->storeWebsites[$productWebsite]['code'];
-                $storeViewCodesByWebsiteCode = array_merge(
-                    $storeViewCodesByWebsiteCode,
+
+                if (!isset($storeViewCodesByWebsiteCode[$productWebsite])) {
+                    $storeViewCodesByWebsiteCode[$productWebsite] = [];
+                }
+
+                // Merge the store view codes
+                $storeViewCodesByWebsiteCode[$productWebsite] = array_merge(
+                    $storeViewCodesByWebsiteCode[$productWebsite],
                     $this->getStoreViewCodesByWebsiteCode($websiteCode)
                 );
             }
@@ -180,13 +187,14 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
      * @return void
      * @throws \Exception
      */
-    private function validateStoreViewCode($storeViewCode, $storeViewCodesByWebsiteCode, $productWebsites)
+    private function validateStoreViewCode($storeViewCode, $storeViewCodesByWebsiteCode, $productWebsite, $sku)
     {
-        if (!in_array($storeViewCode, $storeViewCodesByWebsiteCode)) {
+        if (!in_array($storeViewCode, $storeViewCodesByWebsiteCode[$productWebsite])) {
             $message = sprintf(
-                'The store "%s" does not belong to the website "%s". Please check your data.',
+                'The store "%s" for SKU "%s" does not belong to the website "%s". Please check your data.',
                 $storeViewCode,
-                implode(", ", $productWebsites)
+                $sku,
+                $productWebsite
             );
 
             $this->getSubject()
