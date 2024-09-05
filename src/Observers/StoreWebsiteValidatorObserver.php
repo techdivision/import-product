@@ -88,7 +88,7 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
     public function process()
     {
         $sku = $this->getValue(ColumnKeys::SKU);
-        $storeViewCode = $this->resolveStoreViewCode();
+        $storeViewCode = $this->getValue(ColumnKeys::STORE_VIEW_CODE);
         $productWebsites = $this->getValue(ColumnKeys::PRODUCT_WEBSITES, [], [$this, 'explode']);
 
         // Initialize the store view code
@@ -98,9 +98,14 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
         if ($this->isAdminStoreView()) {
             $this->setAdminProductWebsites($sku, $productWebsites);
         }
-
-        $this->setLastEntityRowId();
+        // Init data
+        $this->setLastEntityRowId($sku);
         $this->setStoreWebsites();
+
+        // if the value is null or empty, it is not processed
+        if ($this->isNullable($storeViewCode)) {
+           return;
+        }
 
         // Get or resolve product websites
         $productWebsites = $this->resolveProductWebsites($productWebsites, $sku);
@@ -285,10 +290,10 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
     /**
      * @return void
      */
-    public function setLastEntityRowId(): void
+    public function setLastEntityRowId($sku): void
     {
-        if (!$this->hasBeenProcessed($this->getValue(ColumnKeys::SKU))) {
-            $this->entity = $this->loadProduct($this->getValue(MemberNames::SKU));
+        if (!$this->hasBeenProcessed($sku)) {
+            $this->entity = $this->loadProduct($sku);
             $this->setLastEntityId($this->entity[MemberNames::ENTITY_ID]);
             $this->lastEntityId = $this->getLastEntityId();
         }
