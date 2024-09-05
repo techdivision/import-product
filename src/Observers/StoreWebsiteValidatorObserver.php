@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Callbacks\ArrayValidatorCallback
+ * TechDivision\Import\Product\Observers\StoreWebsiteValidatorObserver
  *
  * PHP version 7
  *
@@ -14,10 +14,9 @@
 
 namespace TechDivision\Import\Product\Observers;
 
-use TechDivision\Import\Loaders\LoaderInterface;
+use Exception;
 use TechDivision\Import\Observers\StateDetectorInterface;
 use TechDivision\Import\Product\Msi\Utils\ColumnKeys;
-use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
 use TechDivision\Import\Services\ImportProcessorInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
@@ -25,7 +24,7 @@ use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
- * storeview validator implementation.
+ * Store view validator implementation.
  *
  * @author    MET <met@techdivision.com>
  * @copyright 2024 TechDivision GmbH <info@techdivision.com>
@@ -52,7 +51,7 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
     /**
      * The product bunch processor instance.
      *
-     * @var \TechDivision\Import\Product\Services\ProductBunchProcessorInterface
+     * @var ProductBunchProcessorInterface
      */
     protected $productBunchProcessor;
 
@@ -66,6 +65,7 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
     protected $importProcessor;
 
     /**
+     * @param ProductBunchProcessorInterface $productBunchProcessor
      * @param ImportProcessorInterface $importProcessor
      * @param StateDetectorInterface|null $stateDetector
      */
@@ -183,9 +183,10 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
     /**
      * @param $storeViewCode
      * @param $storeViewCodesByWebsiteCode
-     * @param $productWebsites
+     * @param $productWebsite
+     * @param $sku
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     private function validateStoreViewCode($storeViewCode, $storeViewCodesByWebsiteCode, $productWebsite, $sku)
     {
@@ -212,7 +213,6 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
             ]);
         }
     }
-
 
     /**
      * Query whether or not the passed value IS empty and empty values are allowed.
@@ -263,7 +263,7 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
     /**
      * Return's the product bunch processor instance.
      *
-     * @return \TechDivision\Import\Product\Services\ProductBunchProcessorInterface The product bunch processor instance
+     * @return ProductBunchProcessorInterface The product bunch processor instance
      */
     protected function getProductBunchProcessor()
     {
