@@ -1,3 +1,14 @@
+# Version 26.1.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* New validation added, whether the product of the website is assigned to the current shop view line
+  * `"import.callback.store.in.website.validator"`
+
 # Version 26.0.2
 
 ## Bugfixes

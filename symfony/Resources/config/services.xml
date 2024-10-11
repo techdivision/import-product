@@ -858,6 +858,11 @@
             <argument type="service" id="import_product.utils.entity.type.code.mapping"/>
         </service>
 
+        <service id="import_product.store.in.website.validator.observer" class="TechDivision\Import\Product\Observers\StoreWebsiteValidatorObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+            <argument type="service" id="import.processor.import"/>
+        </service>
+
     </services>
 
 </container>
