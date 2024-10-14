@@ -7,7 +7,7 @@
 ## Features
 
 * New validation added, whether the product of the website is assigned to the current shop view line
-  * `"import.callback.store.in.website.validator"`
+  * `"import_product.store.in.website.validator.observer"`
 
 # Version 26.0.2
 
