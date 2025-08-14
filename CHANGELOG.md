@@ -1,3 +1,13 @@
+# Version 26.1.1
+
+## Bugfixes
+
+* PAC-959: Fix warning from `StoreWebsiteValidatorObserver` in multi website import 
+
+## Features
+
+* None
+
 # Version 26.1.0
 
 ## Bugfixes
@@ -5,8 +15,8 @@
 * None
 
 ## Features
-
-* New validation added, whether the product of the website is assigned to the current shop view line
+ 
+New validation added, whether the product of the website is assigned to the current shop view line
   * `"import_product.store.in.website.validator.observer"`
 
 # Version 26.0.2

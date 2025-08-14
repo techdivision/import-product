@@ -108,12 +108,45 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
         }
 
         // Get or resolve product websites
-        $productWebsites = $this->resolveProductWebsites($productWebsites, $sku);
+        if ($this->isNullable($productWebsites)) {
+            $productWebsitesToCheck = $this->resolveProductWebsites($productWebsites, $sku);
+        }
+        else {
+            $productWebsitesToCheck = $productWebsites;
+        }
 
         // Validate store view codes by website code
-        $storeViewCodesByWebsiteCode = $this->getStoreViewCodesForWebsites($productWebsites);
-        foreach ($productWebsites as $productWebsite) {
-            $this->validateStoreViewCode($storeViewCode, $storeViewCodesByWebsiteCode, $productWebsite, $sku);
+        $noStoreviewOnWebsite=[];
+        $storeViewCodesByWebsiteCode = $this->getStoreViewCodesForWebsites($productWebsitesToCheck);
+        foreach ($productWebsitesToCheck as $productWebsite) {
+            if (!in_array($storeViewCode, $storeViewCodesByWebsiteCode[$productWebsite])) {
+                $noStoreviewOnWebsite[] = $productWebsite;
+            }
+        }
+
+        // if the defined website in "$productWebsitesToCheck" are identical to the unassigned ones,
+        // then the "$storeViewCode" is incorrectly defined for the website
+        if (count($noStoreviewOnWebsite) == count($productWebsitesToCheck)) {
+            $message = sprintf(
+                'The store "%s" for SKU "%s" does not belong to the website "%s". Please check your data.',
+                $storeViewCode,
+                $sku,
+                \implode('" or "', $noStoreviewOnWebsite)
+            );
+
+            $this->getSubject()
+                ->getSystemLogger()
+                ->warning($this->getSubject()->appendExceptionSuffix($message));
+
+            $this->getSubject()->mergeStatus([
+                RegistryKeys::NO_STRICT_VALIDATIONS => [
+                    basename($this->getSubject()->getFilename()) => [
+                        $this->getSubject()->getLineNumber() => [
+                            ColumnKeys::STORE_VIEW_CODE => $message
+                        ]
+                    ]
+                ]
+            ]);
         }
     }
 
@@ -183,40 +216,6 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
             }
         }
         return $storeViewCodesByWebsiteCode;
-    }
-
-    /**
-     * @param $storeViewCode
-     * @param $storeViewCodesByWebsiteCode
-     * @param $productWebsite
-     * @param $sku
-     * @return void
-     * @throws Exception
-     */
-    private function validateStoreViewCode($storeViewCode, $storeViewCodesByWebsiteCode, $productWebsite, $sku)
-    {
-        if (!in_array($storeViewCode, $storeViewCodesByWebsiteCode[$productWebsite])) {
-            $message = sprintf(
-                'The store "%s" for SKU "%s" does not belong to the website "%s". Please check your data.',
-                $storeViewCode,
-                $sku,
-                $productWebsite
-            );
-
-            $this->getSubject()
-                ->getSystemLogger()
-                ->warning($this->getSubject()->appendExceptionSuffix($message));
-
-            $this->getSubject()->mergeStatus([
-                RegistryKeys::NO_STRICT_VALIDATIONS => [
-                    basename($this->getSubject()->getFilename()) => [
-                        $this->getSubject()->getLineNumber() => [
-                            ColumnKeys::STORE_VIEW_CODE => $message
-                        ]
-                    ]
-                ]
-            ]);
-        }
     }
 
     /**
