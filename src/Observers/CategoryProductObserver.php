@@ -79,13 +79,13 @@ class CategoryProductObserver extends AbstractProductImportObserver implements D
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
      * @param \TechDivision\Import\Observers\AttributeLoaderInterface|null         $attributeLoader       The attribute loader instance
      * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface   $entityMerger          The entity merger instance
-     * @param \TechDivision\Import\Observers\StateDetectorInterface|null           $stateDetector         The state detector instance to use
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null $stateDetector         The state detector instance to use
      */
     public function __construct(
         ProductBunchProcessorInterface $productBunchProcessor,
         AttributeLoaderInterface $attributeLoader,
         EntityMergerInterface $entityMerger,
-        StateDetectorInterface $stateDetector = null
+        ?StateDetectorInterface $stateDetector = null
     ) {
 
         // initialize the bunch processor and the attribute loader instance

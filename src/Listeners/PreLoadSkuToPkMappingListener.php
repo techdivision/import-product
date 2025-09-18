@@ -87,11 +87,11 @@ class PreLoadSkuToPkMappingListener extends \League\Event\AbstractListener
      * and which were not part of the tier price import.
      *
      * @param \League\Event\EventInterface                                              $event   The event that triggered the listener
-     * @param \TechDivision\Import\Product\Subjects\SkuToPkMappingAwareSubjectInterface $subject The subject that triggered the listener
+     * @param \TechDivision\Import\Product\Subjects\SkuToPkMappingAwareSubjectInterface|null $subject The subject that triggered the listener
      *
      * @return void
      */
-    public function handle(\League\Event\EventInterface $event, SkuToPkMappingAwareSubjectInterface $subject = null)
+    public function handle(\League\Event\EventInterface $event, ?SkuToPkMappingAwareSubjectInterface $subject = null)
     {
         if ($subject != null) {
             $subject->setSkuToPkMappings($this->getSkuToPkMappingUtil()->getSkuToPkMapping($this->getRegistryProcessor(), $subject->getSerial()));

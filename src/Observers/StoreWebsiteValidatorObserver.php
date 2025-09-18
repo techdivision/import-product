@@ -72,7 +72,7 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
     public function __construct(
         ProductBunchProcessorInterface $productBunchProcessor,
         ImportProcessorInterface $importProcessor,
-        StateDetectorInterface $stateDetector = null
+        ?StateDetectorInterface $stateDetector = null
     ) {
         // initialize the bunch processor instance
         $this->productBunchProcessor = $productBunchProcessor;

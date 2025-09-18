@@ -71,7 +71,7 @@ class ProductAttributeObserver extends AbstractAttributeObserver implements Stat
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface $productBunchProcessor The product bunch processor instance
      * @param \TechDivision\Import\Observers\StateDetectorInterface|null           $stateDetector         The state detector instance to use
      */
-    public function __construct(ProductBunchProcessorInterface $productBunchProcessor, StateDetectorInterface $stateDetector = null)
+    public function __construct(ProductBunchProcessorInterface $productBunchProcessor, ?StateDetectorInterface $stateDetector = null)
     {
 
         // initialize the bunch processor instance

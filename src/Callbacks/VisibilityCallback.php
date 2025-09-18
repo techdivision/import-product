@@ -35,7 +35,7 @@ class VisibilityCallback extends AbstractProductImportCallback
      *
      * @return mixed The modified value
      */
-    public function handle(AttributeCodeAndValueAwareObserverInterface $observer = null)
+    public function handle(?AttributeCodeAndValueAwareObserverInterface $observer = null)
     {
 
         // set the observer

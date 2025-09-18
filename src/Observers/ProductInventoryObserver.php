@@ -80,13 +80,13 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
      * @param \TechDivision\Import\Product\Services\ProductBunchProcessorInterface    $productBunchProcessor The product bunch processor instance
      * @param \TechDivision\Import\Observers\AttributeLoaderInterface                 $attributeLoader       The attribute loader instance
      * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface|null $entityMerger          The entity merger instance
-     * @param \TechDivision\Import\Observers\StateDetectorInterface|null              $stateDetector         The state detector instance to use
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null $stateDetector         The state detector instance to use
      */
     public function __construct(
         ProductBunchProcessorInterface $productBunchProcessor,
         AttributeLoaderInterface $attributeLoader,
-        EntityMergerInterface $entityMerger = null,
-        StateDetectorInterface $stateDetector = null
+        ?EntityMergerInterface $entityMerger = null,
+        ?StateDetectorInterface $stateDetector = null
     ) {
 
         // initialize the bunch processor and the attribute loader instance
@@ -114,7 +114,7 @@ class ProductInventoryObserver extends AbstractProductImportObserver implements 
         // prepare the array with column name => type mapping
         foreach ($headerStockMappings as $columnName => $mappings) {
             // explode the mapping details
-            list ($csvColumnName, $type) = $mappings;
+            [$csvColumnName, $type] = $mappings;
             // add the column name => type mapping
             $this->columns[$columnName] = $type;
             // add the csv column name => type mapping
