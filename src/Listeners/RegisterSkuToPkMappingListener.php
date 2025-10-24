@@ -93,7 +93,7 @@ class RegisterSkuToPkMappingListener extends \League\Event\AbstractListener
      *
      * @return void
      */
-    public function handle(\League\Event\EventInterface $event, SkuToPkMappingAwareSubjectInterface $subject = null)
+    public function handle(\League\Event\EventInterface $event, ?SkuToPkMappingAwareSubjectInterface $subject = null)
     {
         if ($subject != null) {
             $this->getSkuToPkMappingUtil()->setSkuToPkMapping($this->getRegistryProcessor(), $subject->getSerial(), $subject->getSkuToPkMappings());

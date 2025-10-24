@@ -1,3 +1,11 @@
+# Version 26.2.0
+
+## Features
+
+### PHP 8.4 Compatibility
+
+* Add PHP 8.4 support
+
 # Version 26.1.1
 
 ## Bugfixes

@@ -262,7 +262,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
      * @param \TechDivision\Import\Product\Assemblers\ProductAttributeAssemblerInterface   $productAttributeAssembler         The assembler to load the product attributes with
      * @param \TechDivision\Import\Loaders\LoaderInterface                                 $rawEntityLoader                   The raw entity loader instance
      * @param \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface              $urlRewriteRepository              The URL rewrite repository to use
-     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                            $stockItemStatusAction             The stock item status action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface|null $stockItemStatusAction             The stock item status action to use
      */
     public function __construct(
         ConnectionInterface $connection,
@@ -291,7 +291,7 @@ class ProductBunchProcessor implements ProductBunchProcessorInterface
         ProductAttributeAssemblerInterface $productAttributeAssembler,
         LoaderInterface $rawEntityLoader,
         UrlRewriteRepositoryInterface $urlRewriteRepository,
-        ActionInterface $stockItemStatusAction = null
+        ?ActionInterface $stockItemStatusAction = null
     ) {
         $this->setConnection($connection);
         $this->setProductRepository($productRepository);
