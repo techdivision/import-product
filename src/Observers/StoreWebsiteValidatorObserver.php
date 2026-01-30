@@ -18,6 +18,7 @@ use Exception;
 use TechDivision\Import\Observers\StateDetectorInterface;
 use TechDivision\Import\Product\Msi\Utils\ColumnKeys;
 use TechDivision\Import\Product\Services\ProductBunchProcessorInterface;
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Services\ImportProcessorInterface;
 use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Utils\RegistryKeys;
@@ -87,6 +88,10 @@ class StoreWebsiteValidatorObserver extends AbstractProductImportObserver
      */
     public function process()
     {
+        if (!$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::VALIDATE_STORE_WEBSITE, true)) {
+            return;
+        }
+
         $sku = $this->getValue(ColumnKeys::SKU);
         $storeViewCode = $this->getValue(ColumnKeys::STORE_VIEW_CODE);
         $productWebsites = $this->getValue(ColumnKeys::PRODUCT_WEBSITES, [], [$this, 'explode']);

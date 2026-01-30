@@ -76,6 +76,13 @@ class ConfigurationKeys extends \TechDivision\Import\Utils\ConfigurationKeys
     const CLEAN_UP_LINKS = 'clean-up-links';
 
     /**
+     * Name for the configuration key 'validate-store-website'.
+     *
+     * @var string
+     */
+    const VALIDATE_STORE_WEBSITE = 'validate-store-website';
+
+    /**
      * Name for the column 'override-images'.
      *
      * @var string
