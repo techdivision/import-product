@@ -1,3 +1,11 @@
+# Version 26.2.1
+
+## Features
+
+### Optional product website store mapping validation
+
+* Add import parameter to make product website store mapping validation optional
+
 # Version 26.2.0
 
 ## Features
