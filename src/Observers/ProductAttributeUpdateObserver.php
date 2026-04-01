@@ -39,7 +39,7 @@ class ProductAttributeUpdateObserver extends ProductAttributeObserver
     {
 
         // try to load the attribute with the passed attribute ID and merge it with the attributes
-        if (isset($this->attributes[$attributeId = (integer) $attr[MemberNames::ATTRIBUTE_ID]])) {
+        if (isset($this->attributes[$attributeId = (int)$attr[MemberNames::ATTRIBUTE_ID]])) {
             return $this->mergeEntity($this->attributes[$attributeId], $attr);
         }
 

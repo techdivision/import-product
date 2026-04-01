@@ -431,7 +431,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // query whether or not, the requested store is available
         if (isset($this->stores[$storeViewCode])) {
-            return (integer) $this->stores[$storeViewCode][MemberNames::STORE_ID];
+            return (int)$this->stores[$storeViewCode][MemberNames::STORE_ID];
         }
 
         // throw an exception, if not
@@ -479,7 +479,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // query whether or not, the requested tax class is available
         if (isset($this->taxClasses[$taxClassName])) {
-            return (integer) $this->taxClasses[$taxClassName][MemberNames::CLASS_ID];
+            return (int)$this->taxClasses[$taxClassName][MemberNames::CLASS_ID];
         }
 
         // if product has no tax_class_name ("none") set class_id as 0
@@ -508,7 +508,7 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
 
         // query whether or not, the requested store website is available
         if (isset($this->storeWebsites[$code])) {
-            return (integer) $this->storeWebsites[$code][MemberNames::WEBSITE_ID];
+            return (int)$this->storeWebsites[$code][MemberNames::WEBSITE_ID];
         }
 
         // throw an exception, if not
@@ -613,11 +613,11 @@ abstract class AbstractProductSubject extends AbstractEavSubject implements Enti
         $storeViewCodes = array();
 
         // load the website ID
-        $websiteId = (integer) $this->storeWebsites[$websiteCode][MemberNames::WEBSITE_ID];
+        $websiteId = (int)$this->storeWebsites[$websiteCode][MemberNames::WEBSITE_ID];
 
         // iterate over the available stores to find the one of the website
         foreach ($this->stores as $storeCode => $store) {
-            if ((integer) $store[MemberNames::WEBSITE_ID] === $websiteId) {
+            if ((int)$store[MemberNames::WEBSITE_ID] === $websiteId) {
                 $storeViewCodes[] = $storeCode;
             }
         }

@@ -1,3 +1,13 @@
+# Version 26.3.0
+
+## Features
+
+### PHP 8.5 Compatibility
+
+* Update dependencies
+* Remove PHP 8.2 support
+* Use the project-specific XML loader class instead of the one removed in `symfony/dependency-injection` v8
+
 # Version 26.2.1
 
 ## Features
