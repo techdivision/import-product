@@ -61,10 +61,10 @@ class LastEntityIdObserver extends AbstractProductImportObserver
     /**
      * Process the observer's business logic.
      *
-     * @return array The processed row
+     * @return void The processed row
      * @throws \Exception Is thrown, if the product with the SKU can not be loaded
      */
-    protected function process()
+    protected function process(): void
     {
 
         // query whether or not, we've found a new SKU => means we've found a new product
