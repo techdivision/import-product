@@ -3,8 +3,8 @@
     "description": "Pacemaker library providing basic Magento 2 product import functionality",
     "license": "MIT",
     "require": {
-        "php": "^8.1",
-        "techdivision/import": "^18.1"
+        "php": "^8.3",
+        "techdivision/import": "^18.2"
     },
     "require-dev": {
         "doctrine/dbal": "^4.0.4",
